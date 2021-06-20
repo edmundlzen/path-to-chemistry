@@ -18,6 +18,10 @@ _global_script_class_icons={
 config/name="path-of-chemistry"
 config/icon="res://icon.png"
 
+[gdnative]
+
+singletons=[ "res://addons/godot-openvr/godot_openvr.gdnlib" ]
+
 [rendering]
 
 quality/driver/driver_name="GLES2"
