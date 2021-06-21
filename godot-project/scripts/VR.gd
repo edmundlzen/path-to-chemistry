@@ -1,4 +1,7 @@
 extends ARVROrigin
 
 func _ready():
-	pass
+	var VR_Interface = ARVRServer.find_interface("OpenVR")
+	if (VR_Interface and VR_Interface.initialize()):
+		get_viewport().arvr = true
+		get_viewport().hdr = false
