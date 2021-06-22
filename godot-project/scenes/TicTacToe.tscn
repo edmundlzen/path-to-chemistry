@@ -134,6 +134,8 @@ text = "Exit"
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="Timer" type="Timer" parent="."]
 [connection signal="pressed" from="ColorRect/Button1" to="." method="_on_Button1_pressed"]
 [connection signal="pressed" from="ColorRect/Button2" to="." method="_on_Button2_pressed"]
 [connection signal="pressed" from="ColorRect/Button3" to="." method="_on_Button3_pressed"]
@@ -145,3 +147,4 @@ __meta__ = {
 [connection signal="pressed" from="ColorRect/Button9" to="." method="_on_Button9_pressed"]
 [connection signal="pressed" from="ColorRect/ButtonRestart" to="." method="_on_ButtonRestart_pressed"]
 [connection signal="pressed" from="ColorRect/ButtonExit" to="." method="_on_ButtonExit_pressed"]
+[connection signal="timeout" from="Timer" to="." method="TimerTimeout"]
