@@ -1,0 +1,36 @@
+[remap]
+
+importer="texture"
+type="StreamTexture"
+path.s3tc="res://.import/Marble021_1K_Normal.jpg-76848072785d8dbda66f6c38a286df13.s3tc.stex"
+path.etc="res://.import/Marble021_1K_Normal.jpg-76848072785d8dbda66f6c38a286df13.etc.stex"
+metadata={
+"imported_formats": [ "s3tc", "etc" ],
+"vram_texture": true
+}
+
+[deps]
+
+source_file="res://assets/Table Textures2/Marble021_1K_Normal.jpg"
+dest_files=[ "res://.import/Marble021_1K_Normal.jpg-76848072785d8dbda66f6c38a286df13.s3tc.stex", "res://.import/Marble021_1K_Normal.jpg-76848072785d8dbda66f6c38a286df13.etc.stex" ]
+
+[params]
+
+compress/mode=2
+compress/lossy_quality=0.7
+compress/hdr_mode=0
+compress/bptc_ldr=0
+compress/normal_map=1
+flags/repeat=true
+flags/filter=true
+flags/mipmaps=true
+flags/anisotropic=false
+flags/srgb=2
+process/fix_alpha_border=true
+process/premult_alpha=false
+process/HDR_as_SRGB=false
+process/invert_color=false
+stream=false
+size_limit=0
+detect_3d=false
+svg/scale=1.0

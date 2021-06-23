@@ -1,15 +1,141 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=23 format=2]
 
-[ext_resource path="res://assets/Lab Table.glb" type="PackedScene" id=1]
+[ext_resource path="res://scenes/Player.tscn" type="PackedScene" id=1]
+[ext_resource path="res://assets/Lab Floor Textures/Tiles107_1K_Normal.jpg" type="Texture" id=2]
+[ext_resource path="res://assets/Lab Floor Textures/Tiles107_1K_Roughness.jpg" type="Texture" id=3]
+[ext_resource path="res://assets/Lab Floor Textures/Tiles107_1K_Color.jpg" type="Texture" id=4]
+[ext_resource path="res://assets/Table Textures1/Marble020_1K_Color.jpg" type="Texture" id=5]
+[ext_resource path="res://assets/Table Textures1/Marble020_1K_Normal.jpg" type="Texture" id=6]
+[ext_resource path="res://assets/Table Textures1/Marble020_1K_Roughness.jpg" type="Texture" id=7]
+[ext_resource path="res://assets/Table Textures2/Marble021_1K_Normal.jpg" type="Texture" id=8]
+[ext_resource path="res://assets/Table Textures2/Marble021_1K_Color.jpg" type="Texture" id=9]
+[ext_resource path="res://assets/Table Textures2/Marble021_1K_Roughness.jpg" type="Texture" id=10]
 
-[sub_resource type="CubeMesh" id=1]
+[sub_resource type="BoxShape" id=1]
+extents = Vector3( 20, 0.5, 20 )
 
-[node name="Spatial" type="Spatial"]
+[sub_resource type="CubeMesh" id=2]
+size = Vector3( 40, 1, 40 )
 
-[node name="MeshInstance" type="MeshInstance" parent="."]
-transform = Transform( 20, 0, 0, 0, 1, 0, 0, 0, 20, 0, 1, 0 )
-mesh = SubResource( 1 )
+[sub_resource type="SpatialMaterial" id=3]
+albedo_texture = ExtResource( 4 )
+roughness_texture = ExtResource( 3 )
+normal_enabled = true
+normal_scale = -5.0
+normal_texture = ExtResource( 2 )
+uv1_scale = Vector3( 0.1, 0.1, 0.1 )
+uv1_triplanar = true
+
+[sub_resource type="CylinderShape" id=4]
+radius = 5.0
+height = 1.5
+
+[sub_resource type="CylinderMesh" id=5]
+top_radius = 5.0
+bottom_radius = 5.0
+height = 0.3
+
+[sub_resource type="SpatialMaterial" id=6]
+albedo_texture = ExtResource( 5 )
+roughness_texture = ExtResource( 7 )
+normal_enabled = true
+normal_scale = 1.0
+normal_texture = ExtResource( 6 )
+uv1_scale = Vector3( 0.1, 0.1, 0.1 )
+uv1_triplanar = true
+
+[sub_resource type="CylinderMesh" id=7]
+top_radius = 4.5
+bottom_radius = 2.7
+height = 1.0
+
+[sub_resource type="SpatialMaterial" id=8]
+albedo_texture = ExtResource( 9 )
+roughness_texture = ExtResource( 10 )
+normal_enabled = true
+normal_scale = 1.0
+normal_texture = ExtResource( 8 )
+uv1_scale = Vector3( 0.1, 0.1, 0.1 )
+uv1_triplanar = true
+
+[sub_resource type="CylinderMesh" id=9]
+top_radius = 4.0
+bottom_radius = 4.0
+height = 0.1
+
+[sub_resource type="SpatialMaterial" id=10]
+albedo_texture = ExtResource( 9 )
+roughness_texture = ExtResource( 10 )
+normal_enabled = true
+normal_scale = 1.0
+normal_texture = ExtResource( 8 )
+uv1_scale = Vector3( 0.1, 0.1, 0.1 )
+uv1_triplanar = true
+
+[sub_resource type="SphereShape" id=11]
+
+[sub_resource type="SphereMesh" id=12]
+
+[node name="Lab" type="Spatial"]
+
+[node name="Player" parent="." instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0 )
+
+[node name="Floor" type="StaticBody" parent="."]
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape" type="CollisionShape" parent="Floor"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0 )
+shape = SubResource( 1 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Floor"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0 )
+mesh = SubResource( 2 )
+material/0 = SubResource( 3 )
+
+[node name="Table" type="StaticBody" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.999, -12 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape" type="CollisionShape" parent="Table"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.3, 0 )
+shape = SubResource( 4 )
+
+[node name="TableAbove" type="MeshInstance" parent="Table"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.7, 0 )
+mesh = SubResource( 5 )
+material/0 = SubResource( 6 )
+
+[node name="TableMiddle" type="MeshInstance" parent="Table"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.3, 0 )
+mesh = SubResource( 7 )
+material/0 = SubResource( 8 )
+
+[node name="TableUnder" type="MeshInstance" parent="Table"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.9, 0 )
+mesh = SubResource( 9 )
+material/0 = SubResource( 10 )
+
+[node name="DirectionalLight" type="DirectionalLight" parent="."]
+transform = Transform( 1, 0, 0, 0, -0.939692, 0.342021, 0, -0.342021, -0.939692, 0, 9, -20 )
+light_color = Color( 1, 0.701961, 0, 1 )
+light_energy = 0.5
+shadow_enabled = true
+directional_shadow_blend_splits = true
+directional_shadow_max_distance = 40.0
+
+[node name="Element" type="StaticBody" parent="." groups=[
+"Item",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.44037, -8.26819 )
+
+[node name="CollisionShape" type="CollisionShape" parent="Element"]
+shape = SubResource( 11 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Element"]
+mesh = SubResource( 12 )
 material/0 = null
-
-[node name="Lab Table" parent="." instance=ExtResource( 1 )]
-transform = Transform( 0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 2, -10 )
