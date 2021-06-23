@@ -11,6 +11,11 @@ var Rotation = 0
 var Score = 1
 var Style = StyleBoxFlat.new()
 var Original = StyleBoxFlat.new()
+var Store = {
+		'Slot1':'','Slot2':'','Slot3':'',
+		'Slot4':'','Slot5':'','Slot6':'',
+		'Slot7':'','Slot8':''
+		}
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -29,22 +34,30 @@ func _input(event):
 		Rotation += Delta
 	if Input.is_action_pressed("Scroll_Up"):
 		if Score < 8:
+			get_node("Hotbar/GridContainer/Panel"+str(Score)).set('custom_styles/panel', Original)
 			Score += 1
 			get_node("Hotbar/GridContainer/Panel"+str(Score)).set('custom_styles/panel', Style)
-			get_node("Hotbar/GridContainer/Panel"+str(Score-1)).set('custom_styles/panel', Original)
 		else:
+			get_node("Hotbar/GridContainer/Panel8").set('custom_styles/panel', Original)
 			Score = 1
 			get_node("Hotbar/GridContainer/Panel"+str(Score)).set('custom_styles/panel', Style)
-			get_node("Hotbar/GridContainer/Panel8").set('custom_styles/panel', Original)
-	elif Input.is_action_pressed("Scroll_Down"):
+	if Input.is_action_pressed("Scroll_Down"):
 		if Score > 1:
+			get_node("Hotbar/GridContainer/Panel"+str(Score)).set('custom_styles/panel', Original)
 			Score -= 1
 			get_node("Hotbar/GridContainer/Panel"+str(Score)).set('custom_styles/panel', Style)
-			get_node("Hotbar/GridContainer/Panel"+str(Score+1)).set('custom_styles/panel', Original)
 		else:
+			get_node("Hotbar/GridContainer/Panel1").set('custom_styles/panel', Original)
 			Score = 8
 			get_node("Hotbar/GridContainer/Panel"+str(Score)).set('custom_styles/panel', Style)
-			get_node("Hotbar/GridContainer/Panel1").set('custom_styles/panel', Original)
+	if Input.is_action_pressed("leftMouse"):
+		if $Crosshair.texture.resource_path == 'res://assets/Hand.png':
+			var Collider = $Head/Camera/RayCast.get_collider()
+			if Collider.is_in_group('Item'):
+				Collider.queue_free()
+				Store['Slot'+str(Score)] == 'Mg'
+				get_node("Hotbar/GridContainer/Panel"+str(Score)+"/Sprite").texture = load("res://assets/Mg.png")
+				get_node("Head/Camera/Sprite3D").texture = load("res://assets/Mg.png")
 
 func _process(_delta):
 	if Input.is_action_just_pressed("Escape"):
@@ -86,5 +99,7 @@ func checkCollide():
 		var Collider = $Head/Camera/RayCast.get_collider()
 		if Collider.is_in_group('Item'):
 			$Label.text = 'Magnesium'
+			$Crosshair.set_texture(preload("res://assets/Hand.png"))
 	else:
 		$Label.text = ''
+		$Crosshair.set_texture(preload("res://assets/Crosshair.png"))
