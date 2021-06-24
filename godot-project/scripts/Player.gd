@@ -33,7 +33,7 @@ func _input(event):
 		if Rotation + Delta > -90 and Rotation + Delta < 90:    
 			$Head/Camera.rotate_x(deg2rad(-Delta))
 			Rotation += Delta
-	if Input.is_action_pressed("Scroll_Up"):
+	if Input.is_action_pressed("scrollUp"):
 		if Scroll < 8:
 			get_node("Hotbar/GridContainer/Panel"+str(Scroll)).set('custom_styles/panel', Original)
 			Scroll += 1
@@ -42,7 +42,7 @@ func _input(event):
 			get_node("Hotbar/GridContainer/Panel8").set('custom_styles/panel', Original)
 			Scroll = 1
 			get_node("Hotbar/GridContainer/Panel"+str(Scroll)).set('custom_styles/panel', Style)
-	if Input.is_action_pressed("Scroll_Down"):
+	if Input.is_action_pressed("scrollDown"):
 		if Scroll > 1:
 			get_node("Hotbar/GridContainer/Panel"+str(Scroll)).set('custom_styles/panel', Original)
 			Scroll -= 1

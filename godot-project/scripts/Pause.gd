@@ -5,5 +5,10 @@ func Resume():
 	queue_free()
 	get_tree().paused = false
 
-func Quit():
-	get_tree().quit()
+func Restart():
+	get_tree().change_scene("res://scenes/Lab.tscn")
+	get_tree().paused = false
+
+func Main():
+	get_tree().change_scene("res://scenes/Main.tscn")
+	get_tree().paused = false

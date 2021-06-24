@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://scripts/Player.gd" type="Script" id=1]
 [ext_resource path="res://assets/Enviroments/Day.tres" type="Environment" id=2]
 [ext_resource path="res://assets/Crosshair.png" type="Texture" id=3]
+[ext_resource path="res://assets/Font/RobotoSlabBold-PKGJr.ttf" type="DynamicFontData" id=4]
 
 [sub_resource type="CapsuleShape" id=1]
 radius = 0.5
@@ -12,7 +13,11 @@ height = 1.5
 radius = 0.5
 mid_height = 1.5
 
-[sub_resource type="StyleBoxFlat" id=3]
+[sub_resource type="DynamicFont" id=3]
+size = 20
+font_data = ExtResource( 4 )
+
+[sub_resource type="StyleBoxFlat" id=4]
 bg_color = Color( 0.294118, 0.294118, 0.294118, 1 )
 corner_radius_top_left = 8
 corner_radius_top_right = 8
@@ -60,9 +65,8 @@ margin_left = 566.054
 margin_top = 575.73
 margin_right = 694.054
 margin_bottom = 607.73
+custom_fonts/font = SubResource( 3 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
-custom_colors/font_outline_modulate = Color( 0, 1, 0.623529, 1 )
-custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 align = 1
 valign = 1
 autowrap = true
@@ -96,7 +100,7 @@ __meta__ = {
 margin_right = 40.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 40, 40 )
-custom_styles/panel = SubResource( 3 )
+custom_styles/panel = SubResource( 4 )
 
 [node name="Sprite" type="Sprite" parent="Hotbar/GridContainer/Panel1"]
 position = Vector2( 20, 20 )
@@ -107,7 +111,7 @@ margin_left = 44.0
 margin_right = 84.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 40, 40 )
-custom_styles/panel = SubResource( 3 )
+custom_styles/panel = SubResource( 4 )
 
 [node name="Sprite" type="Sprite" parent="Hotbar/GridContainer/Panel2"]
 position = Vector2( 20, 20 )
@@ -118,7 +122,7 @@ margin_left = 88.0
 margin_right = 128.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 40, 40 )
-custom_styles/panel = SubResource( 3 )
+custom_styles/panel = SubResource( 4 )
 
 [node name="Sprite" type="Sprite" parent="Hotbar/GridContainer/Panel3"]
 position = Vector2( 20, 20 )
@@ -129,7 +133,7 @@ margin_left = 132.0
 margin_right = 172.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 40, 40 )
-custom_styles/panel = SubResource( 3 )
+custom_styles/panel = SubResource( 4 )
 
 [node name="Sprite" type="Sprite" parent="Hotbar/GridContainer/Panel4"]
 position = Vector2( 20, 20 )
@@ -140,7 +144,7 @@ margin_left = 176.0
 margin_right = 216.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 40, 40 )
-custom_styles/panel = SubResource( 3 )
+custom_styles/panel = SubResource( 4 )
 
 [node name="Sprite" type="Sprite" parent="Hotbar/GridContainer/Panel5"]
 position = Vector2( 20, 20 )
@@ -151,7 +155,7 @@ margin_left = 220.0
 margin_right = 260.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 40, 40 )
-custom_styles/panel = SubResource( 3 )
+custom_styles/panel = SubResource( 4 )
 
 [node name="Sprite" type="Sprite" parent="Hotbar/GridContainer/Panel6"]
 position = Vector2( 20, 20 )
@@ -162,7 +166,7 @@ margin_left = 264.0
 margin_right = 304.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 40, 40 )
-custom_styles/panel = SubResource( 3 )
+custom_styles/panel = SubResource( 4 )
 
 [node name="Sprite" type="Sprite" parent="Hotbar/GridContainer/Panel7"]
 position = Vector2( 20, 20 )
@@ -173,7 +177,7 @@ margin_left = 308.0
 margin_right = 348.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 40, 40 )
-custom_styles/panel = SubResource( 3 )
+custom_styles/panel = SubResource( 4 )
 
 [node name="Sprite" type="Sprite" parent="Hotbar/GridContainer/Panel8"]
 position = Vector2( 20, 20 )
