@@ -7,4 +7,5 @@
 *.obj
 *.TMP
 logs
+android
 Thumbs.db

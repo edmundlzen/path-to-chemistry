@@ -1,0 +1,64 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://scripts/LocationTest.gd" type="Script" id=1]
+[ext_resource path="res://assets/robotomed.tres" type="DynamicFont" id=2]
+
+[node name="Node2D" type="Node2D"]
+script = ExtResource( 1 )
+
+[node name="startupdate" type="Button" parent="."]
+margin_left = 76.0346
+margin_top = 474.878
+margin_right = 468.035
+margin_bottom = 574.878
+custom_fonts/font = ExtResource( 2 )
+text = "Start Location Update"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="stopupdate" type="Button" parent="."]
+margin_left = 607.496
+margin_top = 474.438
+margin_right = 985.496
+margin_bottom = 574.438
+custom_fonts/font = ExtResource( 2 )
+text = "Stop Locaton Update"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="currentLongitude" type="Label" parent="."]
+margin_left = 224.232
+margin_top = 121.119
+margin_right = 723.232
+margin_bottom = 169.119
+custom_fonts/font = ExtResource( 2 )
+text = "Longitude:"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="currentLatitude" type="Label" parent="."]
+margin_left = 234.132
+margin_top = 217.845
+margin_right = 733.132
+margin_bottom = 265.845
+custom_fonts/font = ExtResource( 2 )
+text = "Latitude:"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="warning" type="Label" parent="."]
+margin_left = 254.271
+margin_top = 629.321
+margin_right = 836.271
+margin_bottom = 676.321
+custom_fonts/font = ExtResource( 2 )
+text = "THIS ONLY WORKS ON ANDROID"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+[connection signal="pressed" from="startupdate" to="." method="_on_startupdate_pressed"]
+[connection signal="pressed" from="stopupdate" to="." method="_on_stopupdate_pressed"]
