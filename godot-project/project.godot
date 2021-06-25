@@ -16,7 +16,7 @@ _global_script_class_icons={
 [application]
 
 config/name="path-of-chemistry"
-run/main_scene="res://scenes/Location_Test.tscn"
+run/main_scene="res://lab/scenes/Lab.tscn"
 config/icon="res://icon.png"
 
 [display]
@@ -81,4 +81,3 @@ leftMouse={
 quality/driver/driver_name="GLES2"
 vram_compression/import_etc=true
 vram_compression/import_etc2=false
-environment/default_environment="res://assets/Enviroments/Day.tres"
