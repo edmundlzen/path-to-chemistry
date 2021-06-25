@@ -9,17 +9,26 @@ export var Sensitivity = 0.3
 var Velocity = Vector3()
 var Scroll = 1
 var Rotation = 0
+var Pickable = false
+const fileDir = "user://Data/"
+var filePath = fileDir+"Save.dat"
+var dir = Directory.new()
+var file = File.new()
 var Style = StyleBoxFlat.new()
 var Original = StyleBoxFlat.new()
-var Pickable = false
-var Store = {
-		'Slot1':'','Slot2':'','Slot3':'',
-		'Slot4':'K','Slot5':'','Slot6':'',
-		'Slot7':'Water','Slot8':''
-		}
+var Data = {
+	"Slot1": "", "Slot2": "", "Slot3":"", "Slot4":"",
+	"Slot5": "", "Slot6": "", "Slot7":"", "Slot8":"",
+}
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	if !dir.dir_exists(fileDir):
+		dir.make_dir_recursive(fileDir)
+	if !file.file_exists(filePath):
+		file.open(filePath, File.WRITE)
+		file.store_var(Data)
+		file.close()
 	Style.set_corner_radius_all(8)
 	Style.set_bg_color(Color("#17e9a9"))
 	Original.set_corner_radius_all(8)
@@ -71,13 +80,15 @@ func _process(_delta):
 		if Pickable == true:
 			var Collider = $Head/Camera/RayCast.get_collider()
 			if Collider.is_in_group('Element'):
-				if Store['Slot'+str(Scroll)] == '':
+				file.open(filePath, File.READ)
+				var data = file.get_var()
+				if data['Slot'+str(Scroll)] == '':
 					Collider.queue_free()
-					Store['Slot'+str(Scroll)] = 'Mg'
-					print(Store['Slot'+str(Scroll)])
-					get_node("Hotbar/GridContainer/Panel"+str(Scroll)+"/Sprite").texture = load("res://assets/"+Store['Slot'+str(Scroll)]+".png")
-					get_node("Head/Camera/Sprite3D").texture = load("res://assets/"+Store['Slot'+str(Scroll)]+".png")
+					data['Slot'+str(Scroll)] = 'Mg'
+					get_node("Hotbar/GridContainer/Panel"+str(Scroll)+"/Sprite").texture = load("res://assets/"+data['Slot'+str(Scroll)]+".png")
+					get_node("Head/Camera/Sprite3D").texture = load("res://assets/"+data['Slot'+str(Scroll)]+".png")
 					$Crosshair.texture = load("res://assets/Crosshair.png")
+					file.close()
 
 func _physics_process(delta):
 	var headBasis = $Head.get_global_transform().basis

@@ -40,10 +40,10 @@ __meta__ = {
 }
 
 [node name="currentLatitude" type="Label" parent="."]
-margin_left = 234.132
-margin_top = 217.845
-margin_right = 733.132
-margin_bottom = 265.845
+margin_left = 229.092
+margin_top = 215.325
+margin_right = 728.092
+margin_bottom = 263.325
 custom_fonts/font = ExtResource( 2 )
 text = "Latitude:"
 __meta__ = {
