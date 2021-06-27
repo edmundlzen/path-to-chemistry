@@ -1,1 +1,0 @@
-Please follow the instructions in the video I sent you on how to set this up. Thanks.
