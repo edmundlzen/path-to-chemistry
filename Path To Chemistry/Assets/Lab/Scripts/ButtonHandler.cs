@@ -6,12 +6,26 @@ using UnityEngine.UI;
 public static class Variable
 {
     public static string Hotbar { get; set; }
+    public static Dictionary<string, string> Data { get; set; }
 }
 
 public class ButtonHandler : MonoBehaviour
 {
     public void Start()
     {
+        Variable.Data = new Dictionary<string, string>()
+        {
+            { "Slot1", "" },
+            { "Slot2", "" },
+            { "Slot3", "" },
+            { "Slot4", "" },
+            { "Slot5", "" },
+            { "Slot6", "" },
+            { "Slot7", "" },
+            { "Slot8", "" }
+        };
+        Variable.Data["Slot1"] = "MG";
+        print(Variable.Data["Slot1"]);
         Variable.Hotbar = "1";
         GameObject.Find("Button" + Variable.Hotbar).GetComponent<Image>().color = Color.cyan;
     }

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 
@@ -11,14 +12,17 @@ public class Lab : MonoBehaviour
     private Pose Pose;
     private ARRaycastManager arRaycastManager;
     private bool isPoseValid = false;
-    int Hotbar = 1;
-
+ 
     void Start()
     {
         arRaycastManager = FindObjectOfType<ARRaycastManager>();
     }
     void Update()
     {
+        if ((Input.GetTouch(0).phase == TouchPhase.Stationary) || (Input.GetTouch(0).phase == TouchPhase.Moved && Input.GetTouch(0).deltaPosition.magnitude < 1.2f))
+        { 
+            GameObject.Find("Label").GetComponent<Text>().text = Input.GetTouch(0).position.ToString(); 
+        }
         if (objectSpawn == null && isPoseValid && Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
         {
             placeObject();
