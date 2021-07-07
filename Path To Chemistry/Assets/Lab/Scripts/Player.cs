@@ -34,11 +34,13 @@ public class Player : MonoBehaviour
             var potion = GameObject.Find("Flask").GetComponent<Transform>();
             Data.raycastObject = selection.name;
             GameObject.Find("Label1").GetComponent<Text>().text = Data.raycastObject;
-            if (Data.raycastObject == "Reaction")
+            if ((Input.GetMouseButtonDown(0)) && (Data.raycastObject == "Reaction"))
             {
                 GameObject.Find("Label2").GetComponent<Text>().text = "Flask Detected!";
                 Instantiate(explosionEffect, potion.position, potion.rotation);
                 Destroy(GameObject.Find("Flask"));
+                Destroy(GameObject.Find("Reaction"));
+                Data.raycastObject = "";
             }
             else
             {
