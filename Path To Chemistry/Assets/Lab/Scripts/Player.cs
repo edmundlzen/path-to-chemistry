@@ -14,7 +14,7 @@ public class Player : MonoBehaviour
     float xRotation = 0f;
     void Start()
     {
-        Cursor.lockState = CursorLockMode.Locked;
+        //Cursor.lockState = CursorLockMode.Locked;
         Data.raycastObject = "";
     }
 
@@ -40,7 +40,6 @@ public class Player : MonoBehaviour
                 Instantiate(explosionEffect, potion.position, potion.rotation);
                 Destroy(GameObject.Find("Flask"));
                 Destroy(GameObject.Find("Reaction"));
-                Data.raycastObject = "";
             }
             else
             {
