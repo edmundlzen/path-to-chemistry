@@ -2,12 +2,11 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public static class Data
+public static class playerData
 {
     public static string raycastObject { get; set; }
-    public static List<string> Elements { get; set; }
+    public static List<string> flaskElements { get; set; }
 }
-
 public class Player : MonoBehaviour
 {
     public float mouseSensitivity = 100f;
@@ -16,11 +15,10 @@ public class Player : MonoBehaviour
     float xRotation = 0f;
     void Start()
     {
-        Data.Elements = new List<string>();
         //Cursor.lockState = CursorLockMode.Locked;
-        Data.raycastObject = "";
+        playerData.raycastObject = "";
+        playerData.flaskElements = new List<string>();
     }
-
     void Update()
     {
         float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
@@ -35,29 +33,29 @@ public class Player : MonoBehaviour
         {
             var selection = hit.transform;
             var potion = GameObject.Find("Flask").GetComponent<Transform>();
-            Data.raycastObject = selection.name;
-            GameObject.Find("Label1").GetComponent<Text>().text = Data.raycastObject;
-            if ((Input.GetMouseButtonDown(0)) && (Data.raycastObject == "Placement"))
+            playerData.raycastObject = selection.name;
+            GameObject.Find("Label1").GetComponent<Text>().text = playerData.raycastObject;
+            if ((Input.GetMouseButtonDown(0)) && (playerData.raycastObject == "Add"))
             {
-                if (Variable.hotbarData[$"Slot{Variable.Hotbar}"] != "")
+                if (hotbarData.slotItem[$"Slot{hotbarData.slotNum}"] != "")
                 {
-                    Data.Elements.Add(Variable.hotbarData[$"Slot{Variable.Hotbar}"]);
-                    Variable.hotbarData[$"Slot{Variable.Hotbar}"] = "";
+                    playerData.flaskElements.Add(hotbarData.slotItem[$"Slot{hotbarData.slotNum}"]);
+                    hotbarData.slotItem[$"Slot{hotbarData.slotNum}"] = "";
                     for (int i = 1; i <= 9; i = i + 1)
                     {
-                        GameObject.Find($"Text{i}").GetComponent<Text>().text = Variable.hotbarData[$"Slot{i}"];
+                        GameObject.Find($"Text{i}").GetComponent<Text>().text = hotbarData.slotItem[$"Slot{i}"];
                     }
                 }
             }
-            if ((Input.GetMouseButtonDown(0)) && (Data.raycastObject == "Reaction"))
+            if ((Input.GetMouseButtonDown(0)) && (playerData.raycastObject == "React"))
             {
-                if ((Data.Elements.Contains("K") && (Data.Elements.Contains("H2O"))))
+                if ((playerData.flaskElements.Contains("K") && (playerData.flaskElements.Contains("H2O")) && (playerData.flaskElements.Count == 2)))
                 {
                     GameObject.Find("Label2").GetComponent<Text>().text = "Explosion!";
                     Instantiate(explosionEffect, potion.position, potion.rotation);
                     Destroy(GameObject.Find("Flask"));
-                    Destroy(GameObject.Find("Reaction"));
-                    Destroy(GameObject.Find("Placement"));
+                    Destroy(GameObject.Find("Add"));
+                    Destroy(GameObject.Find("React"));
                 }
                 else
                 {
