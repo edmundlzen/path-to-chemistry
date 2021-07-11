@@ -11,12 +11,12 @@ public static class Variable
 
 public class ButtonHandler : MonoBehaviour
 {
-    public void Start()
+    void Start()
     {
         Variable.hotbarData = new Dictionary<string, string>()
         {
             { "Slot1", "" },
-            { "Slot2", "NaCl" },
+            { "Slot2", "Cl" },
             { "Slot3", "H2O" },
             { "Slot4", "Fe" },
             { "Slot5", "He" },
@@ -113,41 +113,9 @@ public class ButtonHandler : MonoBehaviour
     }
     void Check()
     {
-        if (Variable.hotbarData["Slot1"] != "")
+        for (int i = 1; i <= 9; i = i + 1)
         {
-            GameObject.Find("Text1").GetComponent<Text>().text = Variable.hotbarData["Slot1"];
-        }
-        if (Variable.hotbarData["Slot2"] != "")
-        {
-            GameObject.Find("Text2").GetComponent<Text>().text = Variable.hotbarData["Slot2"];
-        }
-        if (Variable.hotbarData["Slot3"] != "")
-        {
-            GameObject.Find("Text3").GetComponent<Text>().text = Variable.hotbarData["Slot3"];
-        }
-        if (Variable.hotbarData["Slot4"] != "")
-        {
-            GameObject.Find("Text4").GetComponent<Text>().text = Variable.hotbarData["Slot4"];
-        }
-        if (Variable.hotbarData["Slot5"] != "")
-        {
-            GameObject.Find("Text5").GetComponent<Text>().text = Variable.hotbarData["Slot5"];
-        }
-        if (Variable.hotbarData["Slot6"] != "")
-        {
-            GameObject.Find("Text6").GetComponent<Text>().text = Variable.hotbarData["Slot6"];
-        }
-        if (Variable.hotbarData["Slot7"] != "")
-        {
-            GameObject.Find("Text7").GetComponent<Text>().text = Variable.hotbarData["Slot7"];
-        }
-        if (Variable.hotbarData["Slot8"] != "")
-        {
-            GameObject.Find("Text8").GetComponent<Text>().text = Variable.hotbarData["Slot8"];
-        }
-        if (Variable.hotbarData["Slot9"] != "")
-        {
-            GameObject.Find("Text9").GetComponent<Text>().text = Variable.hotbarData["Slot9"];
+            GameObject.Find($"Text{i}").GetComponent<Text>().text = Variable.hotbarData[$"Slot{i}"];
         }
     }
 }
