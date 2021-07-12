@@ -16,11 +16,11 @@ public class Hotbar : MonoBehaviour
         hotbarData.slotItem = new Dictionary<string, string>()
         {
             { "Slot1", "MG" },
-            { "Slot2", "Cl" },
-            { "Slot3", "H2O" },
+            { "Slot2", "H" },
+            { "Slot3", "H" },
             { "Slot4", "Fe" },
             { "Slot5", "He" },
-            { "Slot6", "Li" },
+            { "Slot6", "O" },
             { "Slot7", "K" },
             { "Slot8", "C" },
             { "Slot9", "Be" }
