@@ -16,6 +16,8 @@ public class Player : MonoBehaviour
     public float mouseSensitivity = 100f;
     public Transform playerBody;
     public GameObject explosionEffect;
+    public GameObject smokeEffect;
+    public GameObject sprayEffect;
     float xRotation = 0f;
     void Start()
     {
@@ -66,6 +68,7 @@ public class Player : MonoBehaviour
             else if ((Input.GetMouseButtonDown(0)) && (playerData.raycastObject == "React") && (GameObject.Find("Flask") != null))
             {
                 var potion = GameObject.Find("Flask").GetComponent<Transform>();
+                var flaskMouth = GameObject.Find("Flask Mouth").GetComponent<Transform>();
                 if ((playerData.flaskElements.Contains("K") && (playerData.flaskElements.Contains("Water")) && (playerData.flaskElements.Count == 2)))
                 {
                     GameObject.Find("Label2").GetComponent<Text>().text = "Explosion!";
@@ -76,11 +79,25 @@ public class Player : MonoBehaviour
                 }
                 else if ((playerData.flaskElements.Contains("Potassium Iodide")) && (playerData.flaskElements.Contains("Hydrogen Peroxide")) && (playerData.flaskElements.Contains("Soup")) && (playerData.flaskElements.Count == 3))
                 {
-                    print("Elephant Toothpaste!");
+                    print("Elephant Toothpaste");
                 }
                 else if ((playerData.flaskElements.Contains("Sodium Acetate")) && (playerData.flaskElements.Contains("Water")) && (playerData.flaskElements.Count == 2))
                 {
                     print("Hot Ice");
+                }
+                else if ((playerData.flaskElements.Contains("Hydrochloric Acid")) && (playerData.flaskElements.Contains("Ammonia")) && (playerData.flaskElements.Count == 2))
+                {
+                    GameObject.Find("Label2").GetComponent<Text>().text = "Smoke!";
+                    Instantiate(smokeEffect, flaskMouth.position, flaskMouth.rotation);
+                    Destroy(GameObject.Find("Add"));
+                    Destroy(GameObject.Find("React"));
+                }
+                else if ((playerData.flaskElements.Contains("Hydrogen Peroxide")) && (playerData.flaskElements.Contains("Sodium Iodide")) && (playerData.flaskElements.Count == 2))
+                {
+                    GameObject.Find("Label2").GetComponent<Text>().text = "Splash!";
+                    Instantiate(sprayEffect, flaskMouth.position, flaskMouth.rotation);
+                    Destroy(GameObject.Find("Add"));
+                    Destroy(GameObject.Find("React"));
                 }
                 else
                 {
@@ -232,6 +249,22 @@ public class Player : MonoBehaviour
                     if ((playerData.moleculeCount["C"] == 2) && (playerData.moleculeCount["H"] == 3) && (playerData.moleculeCount["Na"] == 1) && (playerData.moleculeCount["O"] == 2))
                     {
                         playerData.craftedMolecule = "Sodium Acetate";
+                        playerData.Molecule.Clear();
+                    }
+                }
+                else if ((playerData.Molecule.Contains("H")) && (playerData.Molecule.Contains("Cl")))
+                {
+                    if ((playerData.moleculeCount["H"] == 1) && (playerData.moleculeCount["Cl"] == 1))
+                    {
+                        playerData.craftedMolecule = "Hydrochloric Acid";
+                        playerData.Molecule.Clear();
+                    }
+                }
+                else if ((playerData.Molecule.Contains("Na")) && (playerData.Molecule.Contains("I")))
+                {
+                    if ((playerData.moleculeCount["Na"] == 1) && (playerData.moleculeCount["I"] == 1))
+                    {
+                        playerData.craftedMolecule = "Sodium Iodide";
                         playerData.Molecule.Clear();
                     }
                 }

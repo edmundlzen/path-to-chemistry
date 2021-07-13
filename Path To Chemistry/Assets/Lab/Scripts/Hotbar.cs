@@ -15,12 +15,12 @@ public class Hotbar : MonoBehaviour
         hotbarData.slotNum = "1";
         hotbarData.slotItem = new Dictionary<string, string>()
         {
-            { "Slot1", "S" },
-            { "Slot2", "H" },
-            { "Slot3", "H" },
-            { "Slot4", "O" },
-            { "Slot5", "Cl" },
-            { "Slot6", "O" },
+            { "Slot1", "Hydrochloric Acid" },
+            { "Slot2", "Ammonia" },
+            { "Slot3", "Hydrogen Peroxide" },
+            { "Slot4", "Sodium Iodide" },
+            { "Slot5", "H" },
+            { "Slot6", "H" },
             { "Slot7", "K" },
             { "Slot8", "O" },
             { "Slot9", "O" }
