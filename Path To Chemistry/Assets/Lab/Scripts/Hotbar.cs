@@ -15,15 +15,15 @@ public class Hotbar : MonoBehaviour
         hotbarData.slotNum = "1";
         hotbarData.slotItem = new Dictionary<string, string>()
         {
-            { "Slot1", "MG" },
+            { "Slot1", "S" },
             { "Slot2", "H" },
             { "Slot3", "H" },
-            { "Slot4", "Fe" },
-            { "Slot5", "He" },
+            { "Slot4", "O" },
+            { "Slot5", "Cl" },
             { "Slot6", "O" },
             { "Slot7", "K" },
-            { "Slot8", "C" },
-            { "Slot9", "Be" }
+            { "Slot8", "O" },
+            { "Slot9", "O" }
         };
         GameObject.Find("Button" + hotbarData.slotNum).GetComponent<Image>().color = Color.cyan;
         for (int i = 1; i <= 9; i = i + 1)
