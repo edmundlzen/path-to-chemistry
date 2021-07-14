@@ -17,7 +17,6 @@ public class Player : MonoBehaviour
     public Transform playerBody;
     public GameObject explosionEffect;
     public GameObject smokeEffect;
-    public GameObject sprayEffect;
     float xRotation = 0f;
     void Start()
     {
@@ -69,35 +68,57 @@ public class Player : MonoBehaviour
             {
                 var potion = GameObject.Find("Flask").GetComponent<Transform>();
                 var flaskMouth = GameObject.Find("Flask Mouth").GetComponent<Transform>();
-                if ((playerData.flaskElements.Contains("K") && (playerData.flaskElements.Contains("Water")) && (playerData.flaskElements.Count == 2)))
+                if (levelData.levelAvailable.Contains("Level 1"))
                 {
-                    GameObject.Find("Label2").GetComponent<Text>().text = "Explosion!";
-                    Instantiate(explosionEffect, potion.position, potion.rotation);
-                    Destroy(GameObject.Find("Flask"));
-                    Destroy(GameObject.Find("Add"));
-                    Destroy(GameObject.Find("React"));
+                    if ((playerData.flaskElements.Contains("K") && (playerData.flaskElements.Contains("Water")) && (playerData.flaskElements.Count == 2)))
+                    {
+                        GameObject.Find("Label2").GetComponent<Text>().text = "Explosion!";
+                        Instantiate(explosionEffect, potion.position, potion.rotation);
+                        playerData.flaskElements.Clear();
+                        levelData.Level += 1;
+                        levelData.levelAvailable.Add($"Level {levelData.Level}");
+                    }
                 }
-                else if ((playerData.flaskElements.Contains("Potassium Iodide")) && (playerData.flaskElements.Contains("Hydrogen Peroxide")) && (playerData.flaskElements.Contains("Soup")) && (playerData.flaskElements.Count == 3))
+                if (levelData.levelAvailable.Contains("Level 2"))
                 {
-                    print("Elephant Toothpaste");
+                    if ((playerData.flaskElements.Contains("Hydrochloric Acid")) && (playerData.flaskElements.Contains("Ammonia")) && (playerData.flaskElements.Count == 2))
+                    {
+                        GameObject.Find("Label2").GetComponent<Text>().text = "Smoke!";
+                        Instantiate(smokeEffect, flaskMouth.position, flaskMouth.rotation);
+                        playerData.flaskElements.Clear();
+                        levelData.Level += 1;
+                        levelData.levelAvailable.Add($"Level {levelData.Level}");
+                    }
                 }
-                else if ((playerData.flaskElements.Contains("Sodium Acetate")) && (playerData.flaskElements.Contains("Water")) && (playerData.flaskElements.Count == 2))
+                if (levelData.levelAvailable.Contains("Level 3"))
                 {
-                    print("Hot Ice");
+                    if ((playerData.flaskElements.Contains("Hydrogen Peroxide")) && (playerData.flaskElements.Contains("Sodium Iodide")) && (playerData.flaskElements.Count == 2))
+                    {
+                        GameObject.Find("Label2").GetComponent<Text>().text = "Splash!";
+                        playerData.flaskElements.Clear();
+                        levelData.Level += 1;
+                        levelData.levelAvailable.Add($"Level {levelData.Level}");
+                    }
                 }
-                else if ((playerData.flaskElements.Contains("Hydrochloric Acid")) && (playerData.flaskElements.Contains("Ammonia")) && (playerData.flaskElements.Count == 2))
+                if (levelData.levelAvailable.Contains("Level 4"))
                 {
-                    GameObject.Find("Label2").GetComponent<Text>().text = "Smoke!";
-                    Instantiate(smokeEffect, flaskMouth.position, flaskMouth.rotation);
-                    Destroy(GameObject.Find("Add"));
-                    Destroy(GameObject.Find("React"));
+                    if ((playerData.flaskElements.Contains("Sodium Acetate")) && (playerData.flaskElements.Contains("Water")) && (playerData.flaskElements.Count == 2))
+                    {
+                        GameObject.Find("Label2").GetComponent<Text>().text = "Hot Ice";
+                        playerData.flaskElements.Clear();
+                        levelData.Level += 1;
+                        levelData.levelAvailable.Add($"Level {levelData.Level}");
+                    }
                 }
-                else if ((playerData.flaskElements.Contains("Hydrogen Peroxide")) && (playerData.flaskElements.Contains("Sodium Iodide")) && (playerData.flaskElements.Count == 2))
+                if (levelData.levelAvailable.Contains("Level 5"))
                 {
-                    GameObject.Find("Label2").GetComponent<Text>().text = "Splash!";
-                    Instantiate(sprayEffect, flaskMouth.position, flaskMouth.rotation);
-                    Destroy(GameObject.Find("Add"));
-                    Destroy(GameObject.Find("React"));
+                    if ((playerData.flaskElements.Contains("Potassium Iodide")) && (playerData.flaskElements.Contains("Hydrogen Peroxide")) && (playerData.flaskElements.Contains("Soup")) && (playerData.flaskElements.Count == 3))
+                    {
+                        GameObject.Find("Label2").GetComponent<Text>().text = "Elephant Toothpaste";
+                        playerData.flaskElements.Clear();
+                        levelData.Level += 1;
+                        levelData.levelAvailable.Add($"Level {levelData.Level}");
+                    }
                 }
                 else
                 {

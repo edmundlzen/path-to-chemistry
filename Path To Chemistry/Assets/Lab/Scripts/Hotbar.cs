@@ -19,11 +19,11 @@ public class Hotbar : MonoBehaviour
             { "Slot2", "Ammonia" },
             { "Slot3", "Hydrogen Peroxide" },
             { "Slot4", "Sodium Iodide" },
-            { "Slot5", "H" },
-            { "Slot6", "H" },
+            { "Slot5", "Water" },
+            { "Slot6", "Water" },
             { "Slot7", "K" },
-            { "Slot8", "O" },
-            { "Slot9", "O" }
+            { "Slot8", "" },
+            { "Slot9", "Sodium Acetate" }
         };
         GameObject.Find("Button" + hotbarData.slotNum).GetComponent<Image>().color = Color.cyan;
         for (int i = 1; i <= 9; i = i + 1)
