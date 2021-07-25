@@ -1,46 +1,41 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 
-public static class levelData
-{
-    public static int Level { get; set; }
-    public static List<string> levelAvailable { get; set; }
-}
 public class Levels : MonoBehaviour
 {
+    public static PlayerData playerData;
     void Start()
     {
-        levelData.Level = 1;
-        levelData.levelAvailable = new List<string>();
-        levelData.levelAvailable.Add($"Level {levelData.Level}");
+        playerData = new PlayerData();
     }
     void Update()
     {
-        GameObject.Find("Level").GetComponent<Text>().text = levelData.Level.ToString();
-        if (levelData.Level == 1)
+        GameObject.Find("Level").GetComponent<Text>().text = playerData.Level.ToString();
+        if (playerData.Level == 1)
         {
+            print("In1");
             GameObject.Find("Guide").GetComponent<TextMeshPro>().text = "K + H2O";
         }
-        else if (levelData.Level == 2)
+        else if (playerData.Level == 2)
         {
+            print("In2");
             GameObject.Find("Guide").GetComponent<TextMeshPro>().text = "HCl + NH3";
         }
-        else if (levelData.Level == 3)
+        else if (playerData.Level == 3)
         {
+            print("In3");
             GameObject.Find("Guide").GetComponent<TextMeshPro>().text = "H2O2 + NaI";
         }
-        else if (levelData.Level == 4)
+        else if (playerData.Level == 4)
         {
             GameObject.Find("Guide").GetComponent<TextMeshPro>().text = "C2H3NaO2 + H2O";
         }
-        else if (levelData.Level == 5)
+        else if (playerData.Level == 5)
         {
             GameObject.Find("Guide").GetComponent<TextMeshPro>().text = "KI + H2O2 + C18H35NaO2";
         }
-        else if (levelData.Level > 5)
+        else if (playerData.Level > 5)
         {
             GameObject.Find("Guide").GetComponent<TextMeshPro>().text = "Under Constaruction!";
         }

@@ -2,17 +2,9 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public static class playerData
-{
-    public static string raycastObject { get; set; }
-    public static List<string> flaskElements { get; set; }
-    public static string Seat { get; set; }
-    public static List<string> Molecule { get; set; }
-    public static Dictionary<string, int> moleculeCount { get; set; }
-    public static string craftedMolecule { get; set; }
-}
 public class Player : MonoBehaviour
 {
+    public static PlayerData playerData;
     public float mouseSensitivity = 100f;
     public Transform playerBody;
     public GameObject explosionEffect;
@@ -20,13 +12,8 @@ public class Player : MonoBehaviour
     float xRotation = 0f;
     void Start()
     {
+        playerData = new PlayerData();
         //Cursor.lockState = CursorLockMode.Locked;
-        playerData.raycastObject = "";
-        playerData.flaskElements = new List<string>();
-        playerData.Seat = "Main";
-        playerData.Molecule = new List<string>();
-        playerData.moleculeCount = new Dictionary<string, int>();
-        playerData.craftedMolecule = "";
     }
     void Update()
     {
@@ -45,22 +32,22 @@ public class Player : MonoBehaviour
             GameObject.Find("Label1").GetComponent<Text>().text = playerData.raycastObject;
             if ((Input.GetMouseButtonDown(0)) && (playerData.raycastObject == "Add"))
             {
-                if (hotbarData.slotItem[$"Slot{hotbarData.slotNum}"] != "")
+                if (playerData.slotItem[$"Slot{hotbarData.slotNum}"] != "")
                 {
-                    playerData.flaskElements.Add(hotbarData.slotItem[$"Slot{hotbarData.slotNum}"]);
-                    hotbarData.slotItem[$"Slot{hotbarData.slotNum}"] = "";
+                    playerData.flaskElements.Add(playerData.slotItem[$"Slot{hotbarData.slotNum}"]);
+                    playerData.slotItem[$"Slot{hotbarData.slotNum}"] = "";
                     slotCheck();
                 }
             }
             else if ((Input.GetMouseButtonDown(0)) && (playerData.raycastObject == "Add2"))
             {
-                if (hotbarData.slotItem[$"Slot{hotbarData.slotNum}"] != "")
+                if (playerData.slotItem[$"Slot{hotbarData.slotNum}"] != "")
                 {
-                    playerData.Molecule.Add(hotbarData.slotItem[$"Slot{hotbarData.slotNum}"]);
-                    hotbarData.slotItem[$"Slot{hotbarData.slotNum}"] = "";
+                    playerData.Molecule.Add(playerData.slotItem[$"Slot{hotbarData.slotNum}"]);
+                    playerData.slotItem[$"Slot{hotbarData.slotNum}"] = "";
                     for (int i = 1; i <= 9; i = i + 1)
                     {
-                        GameObject.Find($"Text{i}").GetComponent<Text>().text = hotbarData.slotItem[$"Slot{i}"];
+                        GameObject.Find($"Text{i}").GetComponent<Text>().text = playerData.slotItem[$"Slot{i}"];
                     }
                 }
             }
@@ -68,56 +55,56 @@ public class Player : MonoBehaviour
             {
                 var potion = GameObject.Find("Flask").GetComponent<Transform>();
                 var flaskMouth = GameObject.Find("Flask Mouth").GetComponent<Transform>();
-                if (levelData.levelAvailable.Contains("Level 1"))
+                if (playerData.levelAvailable.Contains("Level 1"))
                 {
                     if ((playerData.flaskElements.Contains("K") && (playerData.flaskElements.Contains("Water")) && (playerData.flaskElements.Count == 2)))
                     {
                         GameObject.Find("Label2").GetComponent<Text>().text = "Explosion!";
                         Instantiate(explosionEffect, potion.position, potion.rotation);
                         playerData.flaskElements.Clear();
-                        levelData.Level += 1;
-                        levelData.levelAvailable.Add($"Level {levelData.Level}");
+                        playerData.Level += 1;
+                        playerData.levelAvailable.Add($"Level {playerData.Level}");
                     }
                 }
-                if (levelData.levelAvailable.Contains("Level 2"))
+                if (playerData.levelAvailable.Contains("Level 2"))
                 {
                     if ((playerData.flaskElements.Contains("Hydrochloric Acid")) && (playerData.flaskElements.Contains("Ammonia")) && (playerData.flaskElements.Count == 2))
                     {
                         GameObject.Find("Label2").GetComponent<Text>().text = "Smoke!";
                         Instantiate(smokeEffect, flaskMouth.position, flaskMouth.rotation);
                         playerData.flaskElements.Clear();
-                        levelData.Level += 1;
-                        levelData.levelAvailable.Add($"Level {levelData.Level}");
+                        playerData.Level += 1;
+                        playerData.levelAvailable.Add($"Level {playerData.Level}");
                     }
                 }
-                if (levelData.levelAvailable.Contains("Level 3"))
+                if (playerData.levelAvailable.Contains("Level 3"))
                 {
                     if ((playerData.flaskElements.Contains("Hydrogen Peroxide")) && (playerData.flaskElements.Contains("Sodium Iodide")) && (playerData.flaskElements.Count == 2))
                     {
                         GameObject.Find("Label2").GetComponent<Text>().text = "Splash!";
                         playerData.flaskElements.Clear();
-                        levelData.Level += 1;
-                        levelData.levelAvailable.Add($"Level {levelData.Level}");
+                        playerData.Level += 1;
+                        playerData.levelAvailable.Add($"Level {playerData.Level}");
                     }
                 }
-                if (levelData.levelAvailable.Contains("Level 4"))
+                if (playerData.levelAvailable.Contains("Level 4"))
                 {
                     if ((playerData.flaskElements.Contains("Sodium Acetate")) && (playerData.flaskElements.Contains("Water")) && (playerData.flaskElements.Count == 2))
                     {
                         GameObject.Find("Label2").GetComponent<Text>().text = "Hot Ice";
                         playerData.flaskElements.Clear();
-                        levelData.Level += 1;
-                        levelData.levelAvailable.Add($"Level {levelData.Level}");
+                        playerData.Level += 1;
+                        playerData.levelAvailable.Add($"Level {playerData.Level}");
                     }
                 }
-                if (levelData.levelAvailable.Contains("Level 5"))
+                if (playerData.levelAvailable.Contains("Level 5"))
                 {
                     if ((playerData.flaskElements.Contains("Potassium Iodide")) && (playerData.flaskElements.Contains("Hydrogen Peroxide")) && (playerData.flaskElements.Contains("Soup")) && (playerData.flaskElements.Count == 3))
                     {
                         GameObject.Find("Label2").GetComponent<Text>().text = "Elephant Toothpaste";
                         playerData.flaskElements.Clear();
-                        levelData.Level += 1;
-                        levelData.levelAvailable.Add($"Level {levelData.Level}");
+                        playerData.Level += 1;
+                        playerData.levelAvailable.Add($"Level {playerData.Level}");
                     }
                 }
                 else
@@ -291,9 +278,9 @@ public class Player : MonoBehaviour
                 }
                 for (int i = 1; i <= 9; i = i + 1)
                 {
-                    if ((hotbarData.slotItem[$"Slot{i}"] == ""))
+                    if ((playerData.slotItem[$"Slot{i}"] == ""))
                     {
-                        hotbarData.slotItem[$"Slot{i}"] = playerData.craftedMolecule;
+                        playerData.slotItem[$"Slot{i}"] = playerData.craftedMolecule;
                         break;
                     }
                 }
@@ -321,7 +308,7 @@ public class Player : MonoBehaviour
     {
         for (int i = 1; i <= 9; i = i + 1)
         {
-            GameObject.Find($"Text{i}").GetComponent<Text>().text = hotbarData.slotItem[$"Slot{i}"];
+            GameObject.Find($"Text{i}").GetComponent<Text>().text = playerData.slotItem[$"Slot{i}"];
         }
     }
 }

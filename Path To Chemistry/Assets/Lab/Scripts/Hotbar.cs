@@ -1,34 +1,23 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
+
 
 public static class hotbarData
 {
     public static string slotNum { get; set; }
-    public static Dictionary<string, string> slotItem { get; set; }
 }
 
 public class Hotbar : MonoBehaviour
 {
+    public static PlayerData playerData;
     void Start()
     {
+        playerData = new PlayerData();
         hotbarData.slotNum = "1";
-        hotbarData.slotItem = new Dictionary<string, string>()
-        {
-            { "Slot1", "Hydrochloric Acid" },
-            { "Slot2", "Ammonia" },
-            { "Slot3", "Hydrogen Peroxide" },
-            { "Slot4", "Sodium Iodide" },
-            { "Slot5", "Water" },
-            { "Slot6", "Water" },
-            { "Slot7", "K" },
-            { "Slot8", "" },
-            { "Slot9", "Sodium Acetate" }
-        };
         GameObject.Find("Button" + hotbarData.slotNum).GetComponent<Image>().color = Color.cyan;
         for (int i = 1; i <= 9; i = i + 1)
         {
-            GameObject.Find($"Text{i}").GetComponent<Text>().text = hotbarData.slotItem[$"Slot{i}"];
+            GameObject.Find($"Text{i}").GetComponent<Text>().text = playerData.slotItem[$"Slot{i}"];
         }
     }
     public void Button1()
