@@ -4,7 +4,20 @@ using System.Runtime.Serialization;
 [DataContract]
 public class PlayerData
 {
-    public PlayerData()
+    private static readonly object threadlock = new object();
+    private static PlayerData instance = null;
+    public static PlayerData Instance()
+    {
+        lock (threadlock)
+        {
+            if (instance == null)
+            {
+                instance = new PlayerData();
+            }
+            return instance;
+        }
+    }
+    private PlayerData()
     {
         Level = 1;
         Seat = "Main";

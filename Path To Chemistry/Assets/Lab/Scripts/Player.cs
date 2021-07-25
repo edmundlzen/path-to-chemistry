@@ -4,7 +4,6 @@ using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
-    public static PlayerData playerData;
     public float mouseSensitivity = 100f;
     public Transform playerBody;
     public GameObject explosionEffect;
@@ -12,11 +11,11 @@ public class Player : MonoBehaviour
     float xRotation = 0f;
     void Start()
     {
-        playerData = new PlayerData();
-        //Cursor.lockState = CursorLockMode.Locked;
+    //Cursor.lockState = CursorLockMode.Locked;
     }
     void Update()
     {
+        var playerData = PlayerData.Instance();
         float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
         float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
         xRotation -= mouseY;
@@ -306,6 +305,7 @@ public class Player : MonoBehaviour
     }
     public void slotCheck()
     {
+        var playerData = PlayerData.Instance();
         for (int i = 1; i <= 9; i = i + 1)
         {
             GameObject.Find($"Text{i}").GetComponent<Text>().text = playerData.slotItem[$"Slot{i}"];

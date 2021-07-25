@@ -4,27 +4,20 @@ using UnityEngine.UI;
 
 public class Levels : MonoBehaviour
 {
-    public static PlayerData playerData;
-    void Start()
-    {
-        playerData = new PlayerData();
-    }
     void Update()
     {
+        var playerData = PlayerData.Instance();
         GameObject.Find("Level").GetComponent<Text>().text = playerData.Level.ToString();
         if (playerData.Level == 1)
         {
-            print("In1");
             GameObject.Find("Guide").GetComponent<TextMeshPro>().text = "K + H2O";
         }
         else if (playerData.Level == 2)
         {
-            print("In2");
             GameObject.Find("Guide").GetComponent<TextMeshPro>().text = "HCl + NH3";
         }
         else if (playerData.Level == 3)
         {
-            print("In3");
             GameObject.Find("Guide").GetComponent<TextMeshPro>().text = "H2O2 + NaI";
         }
         else if (playerData.Level == 4)
