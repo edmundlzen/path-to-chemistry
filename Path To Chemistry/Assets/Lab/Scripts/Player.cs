@@ -1,6 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System.IO;
+using System.Xml;
+using System.Collections.Generic;
+using System.Runtime.Serialization;
 using UnityEngine;
 using UnityEngine.UI;
+
+public static class player
+{
+    public static string raycastObject { get; set; }
+    public static Dictionary<string, int> moleculeCount { get; set; }
+}
 
 public class Player : MonoBehaviour
 {
@@ -11,7 +20,9 @@ public class Player : MonoBehaviour
     float xRotation = 0f;
     void Start()
     {
-    //Cursor.lockState = CursorLockMode.Locked;
+        player.raycastObject = "";
+        player.moleculeCount = new Dictionary<string, int>();
+        //Cursor.lockState = CursorLockMode.Locked;
     }
     void Update()
     {
@@ -27,9 +38,9 @@ public class Player : MonoBehaviour
         if (Physics.Raycast(ray, out hit))
         {
             var selection = hit.transform;
-            playerData.raycastObject = selection.name;
-            GameObject.Find("Label1").GetComponent<Text>().text = playerData.raycastObject;
-            if ((Input.GetMouseButtonDown(0)) && (playerData.raycastObject == "Add"))
+            player.raycastObject = selection.name;
+            GameObject.Find("Label1").GetComponent<Text>().text = player.raycastObject;
+            if ((Input.GetMouseButtonDown(0)) && (player.raycastObject == "Add"))
             {
                 if (playerData.slotItem[$"Slot{hotbarData.slotNum}"] != "")
                 {
@@ -38,7 +49,7 @@ public class Player : MonoBehaviour
                     slotCheck();
                 }
             }
-            else if ((Input.GetMouseButtonDown(0)) && (playerData.raycastObject == "Add2"))
+            else if ((Input.GetMouseButtonDown(0)) && (player.raycastObject == "Add2"))
             {
                 if (playerData.slotItem[$"Slot{hotbarData.slotNum}"] != "")
                 {
@@ -50,7 +61,7 @@ public class Player : MonoBehaviour
                     }
                 }
             }
-            else if ((Input.GetMouseButtonDown(0)) && (playerData.raycastObject == "React") && (GameObject.Find("Flask") != null))
+            else if ((Input.GetMouseButtonDown(0)) && (player.raycastObject == "React") && (GameObject.Find("Flask") != null))
             {
                 var potion = GameObject.Find("Flask").GetComponent<Transform>();
                 var flaskMouth = GameObject.Find("Flask Mouth").GetComponent<Transform>();
@@ -111,195 +122,195 @@ public class Player : MonoBehaviour
                     GameObject.Find("Label2").GetComponent<Text>().text = "Nothing Happened!";
                 }
             }
-            else if ((Input.GetMouseButtonDown(0)) && (playerData.raycastObject == "Craft"))
+            else if ((Input.GetMouseButtonDown(0)) && (player.raycastObject == "Craft"))
             {
                 foreach (string Item in playerData.Molecule)
                 {
-                    if (!playerData.moleculeCount.ContainsKey(Item))
+                    if (!player.moleculeCount.ContainsKey(Item))
                     {
-                        playerData.moleculeCount.Add(Item, 1);
+                        player.moleculeCount.Add(Item, 1);
                     }
                     else
                     {
                         int Count = 0;
-                        playerData.moleculeCount.TryGetValue(Item, out Count);
-                        playerData.moleculeCount.Remove(Item);
-                        playerData.moleculeCount.Add(Item, Count + 1);
+                        player.moleculeCount.TryGetValue(Item, out Count);
+                        player.moleculeCount.Remove(Item);
+                        player.moleculeCount.Add(Item, Count + 1);
                     }
                 }
-                foreach (KeyValuePair<string, int> entry in playerData.moleculeCount)
+                foreach (KeyValuePair<string, int> entry in player.moleculeCount)
                 {
                     print(entry.Key + entry.Value);
                 }
                 if ((playerData.Molecule.Contains("H")) && (playerData.Molecule.Contains("O")))
                 {
-                    if ((playerData.moleculeCount["H"] == 2) && (playerData.moleculeCount["O"] == 1))
+                    if ((player.moleculeCount["H"] == 2) && (player.moleculeCount["O"] == 1))
                     {
-                        playerData.craftedMolecule = "Water";
+                        Product("Water");
                         playerData.Molecule.Clear();
                     }
                 }
                 else if ((playerData.Molecule.Contains("Na")) && (playerData.Molecule.Contains("Cl")))
                 {
-                    if ((playerData.moleculeCount["Na"] == 1) && (playerData.moleculeCount["Cl"] == 1))
+                    if ((player.moleculeCount["Na"] == 1) && (player.moleculeCount["Cl"] == 1))
                     {
-                        playerData.craftedMolecule = "Salt";
+                        Product("Salt");
                         playerData.Molecule.Clear();
                     }
                 }
                 else if ((playerData.Molecule.Contains("N")) && (playerData.Molecule.Contains("H")))
                 {
-                    if ((playerData.moleculeCount["N"] == 1) && (playerData.moleculeCount["H"] == 3))
+                    if ((player.moleculeCount["N"] == 1) && (player.moleculeCount["H"] == 3))
                     {
-                        playerData.craftedMolecule = "Ammonia";
+                        Product("Ammonia");
                         playerData.Molecule.Clear();
                     }
                 }
                 else if ((playerData.Molecule.Contains("C")) && (playerData.Molecule.Contains("H")) && (playerData.Molecule.Contains("O")))
                 {
-                    if ((playerData.moleculeCount["C"] == 7) && (playerData.moleculeCount["H"] == 4) && (playerData.moleculeCount["O"] == 1))
+                    if ((player.moleculeCount["C"] == 7) && (player.moleculeCount["H"] == 4) && (player.moleculeCount["O"] == 1))
                     {
-                        playerData.craftedMolecule = "Charcoal";
+                        Product("Charcoal");
                         playerData.Molecule.Clear();
                     }
                 }
                 else if ((playerData.Molecule.Contains("C")) && (playerData.Molecule.Contains("H")) && (playerData.Molecule.Contains("N")) && (playerData.Molecule.Contains("O")))
                 {
-                    if ((playerData.moleculeCount["C"] == 5) && (playerData.moleculeCount["H"] == 5) && (playerData.moleculeCount["N"] == 1) && (playerData.moleculeCount["O"] == 2))
+                    if ((player.moleculeCount["C"] == 5) && (player.moleculeCount["H"] == 5) && (player.moleculeCount["N"] == 1) && (player.moleculeCount["O"] == 2))
                     {
-                        playerData.craftedMolecule = "Glue";
+                        Product("Glue");
                         playerData.Molecule.Clear();
                     }
                 }
                 else if ((playerData.Molecule.Contains("C")) && (playerData.Molecule.Contains("H")) && (playerData.Molecule.Contains("N")) && (playerData.Molecule.Contains("O")))
                 {
-                    if ((playerData.moleculeCount["C"] == 8) && (playerData.moleculeCount["H"] == 7) && (playerData.moleculeCount["N"] == 3) && (playerData.moleculeCount["O"] == 2))
+                    if ((player.moleculeCount["C"] == 8) && (player.moleculeCount["H"] == 7) && (player.moleculeCount["N"] == 3) && (player.moleculeCount["O"] == 2))
                     {
-                        playerData.craftedMolecule = "Luminol";
+                        Product("Luminol");
                         playerData.Molecule.Clear();
                     }
                 }
                 else if ((playerData.Molecule.Contains("Fe")) && (playerData.Molecule.Contains("S")) && (playerData.Molecule.Contains("O")))
                 {
-                    if ((playerData.moleculeCount["Fe"] == 1) && (playerData.moleculeCount["S"] == 1) && (playerData.moleculeCount["O"] == 4))
+                    if ((player.moleculeCount["Fe"] == 1) && (player.moleculeCount["S"] == 1) && (player.moleculeCount["O"] == 4))
                     {
-                        playerData.craftedMolecule = "Ink";
+                        Product("Ink");
                         playerData.Molecule.Clear();
                     }
                 }
                 else if ((playerData.Molecule.Contains("C")) && (playerData.Molecule.Contains("H")))
                 {
-                    if ((playerData.moleculeCount["C"] == 5) && (playerData.moleculeCount["H"] == 8))
+                    if ((player.moleculeCount["C"] == 5) && (player.moleculeCount["H"] == 8))
                     {
-                        playerData.craftedMolecule = "Latex";
+                        Product("Latex");
                         playerData.Molecule.Clear();
                     }
                 }
                 else if ((playerData.Molecule.Contains("C")) && (playerData.Molecule.Contains("H")))
                 {
-                    if ((playerData.moleculeCount["C"] == 9) && (playerData.moleculeCount["H"] == 20))
+                    if ((player.moleculeCount["C"] == 9) && (player.moleculeCount["H"] == 20))
                     {
-                        playerData.craftedMolecule = "Crude Oil";
+                        Product("Crude Oil");
                         playerData.Molecule.Clear();
                     }
                 }
                 else if ((playerData.Molecule.Contains("Na")) && (playerData.Molecule.Contains("O")) && (playerData.Molecule.Contains("H")))
                 {
-                    if ((playerData.moleculeCount["Na"] == 1) && (playerData.moleculeCount["O"] == 1) && (playerData.moleculeCount["H"] == 1))
+                    if ((player.moleculeCount["Na"] == 1) && (player.moleculeCount["O"] == 1) && (player.moleculeCount["H"] == 1))
                     {
-                        playerData.craftedMolecule = "Lye";
+                        Product("Lye");
                         playerData.Molecule.Clear();
                     }
                 }
                 else if ((playerData.Molecule.Contains("C")) && (playerData.Molecule.Contains("H")) && (playerData.Molecule.Contains("Na")) && (playerData.Molecule.Contains("O")))
                 {
-                    if ((playerData.moleculeCount["C"] == 18) && (playerData.moleculeCount["H"] == 35) && (playerData.moleculeCount["Na"] == 1) && (playerData.moleculeCount["O"] == 2))
+                    if ((player.moleculeCount["C"] == 18) && (player.moleculeCount["H"] == 35) && (player.moleculeCount["Na"] == 1) && (player.moleculeCount["O"] == 2))
                     {
-                        playerData.craftedMolecule = "Soup";
+                        Product("Soap");
                         playerData.Molecule.Clear();
                     }
                 }
                 else if ((playerData.Molecule.Contains("C")) && (playerData.Molecule.Contains("H")) && (playerData.Molecule.Contains("O")))
                 {
-                    if ((playerData.moleculeCount["C"] == 6) && (playerData.moleculeCount["H"] == 12) && (playerData.moleculeCount["O"] == 6))
+                    if ((player.moleculeCount["C"] == 6) && (player.moleculeCount["H"] == 12) && (player.moleculeCount["O"] == 6))
                     {
-                        playerData.craftedMolecule = "Sugar";
+                        Product("Sugar");
                         playerData.Molecule.Clear();
                     }
                 }
                 else if ((playerData.Molecule.Contains("S")) && (playerData.Molecule.Contains("O")))
                 {
-                    if ((playerData.moleculeCount["S"] == 1) && (playerData.moleculeCount["O"] == 4))
+                    if ((player.moleculeCount["S"] == 1) && (player.moleculeCount["O"] == 4))
                     {
-                        playerData.craftedMolecule = "Sulfate";
+                        Product("Sulfate");
                         playerData.Molecule.Clear();
                     }
                 }
                 else if ((playerData.Molecule.Contains("K")) && (playerData.Molecule.Contains("I")))
                 {
-                    if ((playerData.moleculeCount["K"] == 1) && (playerData.moleculeCount["I"] == 1))
+                    if ((player.moleculeCount["K"] == 1) && (player.moleculeCount["I"] == 1))
                     {
-                        playerData.craftedMolecule = "Potassium Iodide";
+                        Product("Potassium Iodide");
                         playerData.Molecule.Clear();
                     }
                 }
                 else if ((playerData.Molecule.Contains("H")) && (playerData.Molecule.Contains("O")))
                 {
-                    if ((playerData.moleculeCount["H"] == 2) && (playerData.moleculeCount["O"] == 2))
+                    if ((player.moleculeCount["H"] == 2) && (player.moleculeCount["O"] == 2))
                     {
-                        playerData.craftedMolecule = "Hydrogen Peroxide";
+                        Product("Hydrogen Peroxide");
                         playerData.Molecule.Clear();
                     }
                 }
                 else if ((playerData.Molecule.Contains("C")) && (playerData.Molecule.Contains("H")) && (playerData.Molecule.Contains("Na")) && (playerData.Molecule.Contains("O")))
                 {
-                    if ((playerData.moleculeCount["C"] == 2) && (playerData.moleculeCount["H"] == 3) && (playerData.moleculeCount["Na"] == 1) && (playerData.moleculeCount["O"] == 2))
+                    if ((player.moleculeCount["C"] == 2) && (player.moleculeCount["H"] == 3) && (player.moleculeCount["Na"] == 1) && (player.moleculeCount["O"] == 2))
                     {
-                        playerData.craftedMolecule = "Sodium Acetate";
+                        Product("Sodium Acetate");
                         playerData.Molecule.Clear();
                     }
                 }
                 else if ((playerData.Molecule.Contains("H")) && (playerData.Molecule.Contains("Cl")))
                 {
-                    if ((playerData.moleculeCount["H"] == 1) && (playerData.moleculeCount["Cl"] == 1))
+                    if ((player.moleculeCount["H"] == 1) && (player.moleculeCount["Cl"] == 1))
                     {
-                        playerData.craftedMolecule = "Hydrochloric Acid";
+                        Product("Hydrochloric Acid");
                         playerData.Molecule.Clear();
                     }
                 }
                 else if ((playerData.Molecule.Contains("Na")) && (playerData.Molecule.Contains("I")))
                 {
-                    if ((playerData.moleculeCount["Na"] == 1) && (playerData.moleculeCount["I"] == 1))
+                    if ((player.moleculeCount["Na"] == 1) && (player.moleculeCount["I"] == 1))
                     {
-                        playerData.craftedMolecule = "Sodium Iodide";
+                        Product("Sodium Iodide");
                         playerData.Molecule.Clear();
                     }
                 }
-                for (int i = 1; i <= 9; i = i + 1)
-                {
-                    if ((playerData.slotItem[$"Slot{i}"] == ""))
-                    {
-                        playerData.slotItem[$"Slot{i}"] = playerData.craftedMolecule;
-                        break;
-                    }
-                }
-                playerData.moleculeCount.Clear();
+                player.moleculeCount.Clear();
                 slotCheck();
             }
-            else if ((Input.GetMouseButtonDown(0)) && (playerData.raycastObject == "Left Chair") && playerData.Seat != "Left")
+            else if ((Input.GetMouseButtonDown(0)) && (player.raycastObject == "Left Chair") && playerData.Seat != "Left")
             {
                 GameObject.Find("Player").GetComponent<Transform>().position = new Vector3(5f, 0.6f, 6.3f);
                 playerData.Seat = "Left";
             }
-            else if ((Input.GetMouseButtonDown(0)) && (playerData.raycastObject == "Main Chair") && playerData.Seat != "Main")
+            else if ((Input.GetMouseButtonDown(0)) && (player.raycastObject == "Main Chair") && playerData.Seat != "Main")
             {
                 GameObject.Find("Player").GetComponent<Transform>().position = new Vector3(7.5f, 0.6f, 6.3f);
                 playerData.Seat = "Main";
             }
-            else if ((Input.GetMouseButtonDown(0)) && (playerData.raycastObject == "Right Chair") && playerData.Seat != "Right")
+            else if ((Input.GetMouseButtonDown(0)) && (player.raycastObject == "Right Chair") && playerData.Seat != "Right")
             {
                 GameObject.Find("Player").GetComponent<Transform>().position = new Vector3(9.79f, 0.6f, 6.3f);
                 playerData.Seat = "Right";
+            }
+            if (Input.GetKeyDown(KeyCode.S))
+            {
+                Save();
+            }
+            if (Input.GetKeyDown(KeyCode.L))
+            {
+                Load();
             }
         }
     }
@@ -309,6 +320,42 @@ public class Player : MonoBehaviour
         for (int i = 1; i <= 9; i = i + 1)
         {
             GameObject.Find($"Text{i}").GetComponent<Text>().text = playerData.slotItem[$"Slot{i}"];
+        }
+    }
+    public void Product(string molecule)
+    {
+        var playerData = PlayerData.Instance();
+        for (int i = 1; i <= 9; i = i + 1)
+        {
+            if ((playerData.slotItem[$"Slot{i}"] == ""))
+            {
+                playerData.slotItem[$"Slot{i}"] = molecule;
+                break;
+            }
+        }
+    }
+    public void Save()
+    {
+        using (var StrWriter = new StringWriter())
+        {
+            using (var XmlWriter = new XmlTextWriter(StrWriter))
+            {
+                var Serializer = new DataContractSerializer(typeof(PlayerData));
+                Serializer.WriteObject(XmlWriter, PlayerData.Instance());
+                XmlWriter.Flush();
+                File.WriteAllText($"{Application.persistentDataPath}/Saves.xml", StrWriter.ToString());
+            }
+        }
+    }
+    public void Load()
+    {
+        if (File.Exists($"{Application.persistentDataPath}/Saves.xml"))
+        {
+            var playerData = PlayerData.Instance();
+            var Serializer = new DataContractSerializer(typeof(PlayerData));
+            var Stream = new FileStream($"{Application.persistentDataPath}/Saves.xml", FileMode.Open);
+            playerData = Serializer.ReadObject(Stream) as PlayerData;
+            Stream.Close();
         }
     }
 }

@@ -73,8 +73,6 @@ public class DataStore : MonoBehaviour
             Stream.Close();
             GameObject.Find("Text1").GetComponent<Text>().text = data.Counter.ToString();
             GameObject.Find("Label2").GetComponent<Text>().text = data.InputText.ToString();
-            print(data.Array);
-            print(data.Dict);
         }
     }
 }
