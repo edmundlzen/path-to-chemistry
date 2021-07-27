@@ -40,6 +40,7 @@ public class PlayerData
             { "Slot9", "" }
         };
     }
+
     [DataMember]
     public int Level { get; set; }
     [DataMember]
@@ -51,5 +52,15 @@ public class PlayerData
     [DataMember]
     public List<string> levelAvailable { get; set; }
     [DataMember]
+    public Dictionary<string, string> slotItem { get; set; }
+}
+
+public class PlayerData2
+{
+    public int Level { get; set; }
+    public string Seat { get; set; }
+    public List<string> Molecule { get; set; }
+    public List<string> flaskElements { get; set; }
+    public List<string> levelAvailable { get; set; }
     public Dictionary<string, string> slotItem { get; set; }
 }

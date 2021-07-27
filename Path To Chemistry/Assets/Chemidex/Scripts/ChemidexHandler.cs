@@ -12,6 +12,7 @@ public class ChemidexHandler : MonoBehaviour
 {
     void Start()
     {
+        var playerData = PlayerData.Instance();
         Chemidex.chemNum = "1";
         Chemidex.chemRecipes = new Dictionary<string, string>()
         {
@@ -21,7 +22,6 @@ public class ChemidexHandler : MonoBehaviour
             { "Recipe 4", "C2H3NaO2 + H2O" },
             { "Recipe 5", "KI + H2O2 + C18H35NaO2" }
         };
-        var playerData = PlayerData.Instance();
         GameObject.Find("Chem" + Chemidex.chemNum).GetComponent<Image>().color = Color.cyan;
         for (int i = 1; i <= 5; i++)
         {

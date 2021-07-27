@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Xml;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
@@ -17,9 +18,11 @@ public class Player : MonoBehaviour
     public Transform playerBody;
     public GameObject explosionEffect;
     public GameObject smokeEffect;
+    public PlayerData jdata;
     float xRotation = 0f;
     void Start()
     {
+        print(DateTime.Now.ToString("dd/MM/yyyy"));
         player.raycastObject = "";
         player.moleculeCount = new Dictionary<string, int>();
         //Cursor.lockState = CursorLockMode.Locked;
@@ -42,19 +45,19 @@ public class Player : MonoBehaviour
             GameObject.Find("Label1").GetComponent<Text>().text = player.raycastObject;
             if ((Input.GetMouseButtonDown(0)) && (player.raycastObject == "Add"))
             {
-                if (playerData.slotItem[$"Slot{hotbarData.slotNum}"] != "")
+                if (playerData.slotItem[$"Slot{hotbar.slotNum}"] != "")
                 {
-                    playerData.flaskElements.Add(playerData.slotItem[$"Slot{hotbarData.slotNum}"]);
-                    playerData.slotItem[$"Slot{hotbarData.slotNum}"] = "";
+                    playerData.flaskElements.Add(playerData.slotItem[$"Slot{hotbar.slotNum}"]);
+                    playerData.slotItem[$"Slot{hotbar.slotNum}"] = "";
                     slotCheck();
                 }
             }
             else if ((Input.GetMouseButtonDown(0)) && (player.raycastObject == "Add2"))
             {
-                if (playerData.slotItem[$"Slot{hotbarData.slotNum}"] != "")
+                if (playerData.slotItem[$"Slot{hotbar.slotNum}"] != "")
                 {
-                    playerData.Molecule.Add(playerData.slotItem[$"Slot{hotbarData.slotNum}"]);
-                    playerData.slotItem[$"Slot{hotbarData.slotNum}"] = "";
+                    playerData.Molecule.Add(playerData.slotItem[$"Slot{hotbar.slotNum}"]);
+                    playerData.slotItem[$"Slot{hotbar.slotNum}"] = "";
                     for (int i = 1; i <= 9; i = i + 1)
                     {
                         GameObject.Find($"Text{i}").GetComponent<Text>().text = playerData.slotItem[$"Slot{i}"];
@@ -291,17 +294,17 @@ public class Player : MonoBehaviour
             }
             else if ((Input.GetMouseButtonDown(0)) && (player.raycastObject == "Left Chair") && playerData.Seat != "Left")
             {
-                GameObject.Find("Player").GetComponent<Transform>().position = new Vector3(5f, 0.6f, 6.3f);
+                GameObject.Find("Player").GetComponent<Transform>().position = new Vector3(5f, 0.6f, 6.2f);
                 playerData.Seat = "Left";
             }
             else if ((Input.GetMouseButtonDown(0)) && (player.raycastObject == "Main Chair") && playerData.Seat != "Main")
             {
-                GameObject.Find("Player").GetComponent<Transform>().position = new Vector3(7.5f, 0.6f, 6.3f);
+                GameObject.Find("Player").GetComponent<Transform>().position = new Vector3(7.5f, 0.6f, 6.2f);
                 playerData.Seat = "Main";
             }
             else if ((Input.GetMouseButtonDown(0)) && (player.raycastObject == "Right Chair") && playerData.Seat != "Right")
             {
-                GameObject.Find("Player").GetComponent<Transform>().position = new Vector3(9.79f, 0.6f, 6.3f);
+                GameObject.Find("Player").GetComponent<Transform>().position = new Vector3(9.79f, 0.6f, 6.2f);
                 playerData.Seat = "Right";
             }
             if (Input.GetKeyDown(KeyCode.S))
@@ -351,10 +354,12 @@ public class Player : MonoBehaviour
     {
         if (File.Exists($"{Application.persistentDataPath}/Saves.xml"))
         {
-            var playerData = PlayerData.Instance();
+            //PlayerData2 playerData2 = new PlayerData2();
+            //var jdata = JsonConvert.SerializeObject(playerData2);
             var Serializer = new DataContractSerializer(typeof(PlayerData));
             var Stream = new FileStream($"{Application.persistentDataPath}/Saves.xml", FileMode.Open);
-            playerData = Serializer.ReadObject(Stream) as PlayerData;
+            //jdata = Serializer.ReadObject(Stream) as PlayerData;
+            //PlayerData.LoadData(jdata);
             Stream.Close();
         }
     }
