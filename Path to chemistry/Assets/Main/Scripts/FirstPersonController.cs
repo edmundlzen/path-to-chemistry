@@ -1,126 +1,124 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class FirstPersonController : MonoBehaviour
-{
-    public float speed = 10f;
-    public float gravity = 5f;
-    public VariableJoystick variableJoystick;
-    public CharacterController characterController;
-    public Transform cameraTransform;
-    public float cameraSensitivity;
-    Vector3 moveDirection = Vector3.zero;
-    int leftFingerId, rightFingerId;
-    float halfScreenWidth;
-    Vector2 lookInput;
-    float cameraPitch;
-    // Start is called before the first frame update
-    void Start()
+    public class FirstPersonController : MonoBehaviour
     {
-
-        leftFingerId = -1;
-        rightFingerId = -1;
-
-        halfScreenWidth = Screen.width / 2;
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-        GetTouchInput();
-        JoystickMove();
-
-        if (rightFingerId != -1)
+        public float speed = 10f;
+        public float gravity = 5f;
+        public VariableJoystick variableJoystick;
+        public CharacterController characterController;
+        public Transform cameraTransform;
+        public float cameraSensitivity;
+        private Vector3 _moveDirection = Vector3.zero;
+        int _leftFingerId, _rightFingerId;
+        float halfScreenWidth;
+        Vector2 lookInput;
+        float cameraPitch;
+        // Start is called before the first frame update
+        void Start()
         {
 
-            LookAround();
+            _leftFingerId = -1;
+            _rightFingerId = -1;
+
+            halfScreenWidth = Screen.width / 2;
+
         }
 
-    }
-
-    void JoystickMove()
-    {
-        moveDirection = new Vector3(variableJoystick.Horizontal, 0, variableJoystick.Vertical);
-        moveDirection = transform.TransformDirection(moveDirection);
-        moveDirection *= speed;
-
-        moveDirection.y -= gravity * Time.deltaTime;
-        characterController.Move(moveDirection * Time.deltaTime);
-    }
-
-    void GetTouchInput()
-    {
-        for (int i = 0; i < Input.touchCount; i++)
+        // Update is called once per frame
+        void Update()
         {
 
-            Touch t = Input.GetTouch(i);
+            GetTouchInput();
+            JoystickMove();
 
-            switch (t.phase)
+            if (_rightFingerId != -1)
             {
-                case TouchPhase.Began:
 
-                    if (t.position.x < halfScreenWidth && leftFingerId == -1)
-                    {
-                        leftFingerId = t.fingerId;
-                        print("Tracking left finger");
-                    }
+                LookAround();
+            }
 
-                    else if (t.position.x > halfScreenWidth && rightFingerId == -1)
-                    {
+        }
 
-                        rightFingerId = t.fingerId;
-                        Debug.Log("Tracking right finger");
+        void JoystickMove()
+        {
+            _moveDirection = new Vector3(variableJoystick.Horizontal, 0, variableJoystick.Vertical);
+            _moveDirection = transform.TransformDirection(_moveDirection);
+            _moveDirection *= speed;
 
-                    }
+            _moveDirection.y -= gravity * Time.deltaTime;
+            characterController.Move(_moveDirection * Time.deltaTime);
+        }
 
-                    break;
+        void GetTouchInput()
+        {
+            for (int i = 0; i < Input.touchCount; i++)
+            {
 
-                case TouchPhase.Ended:
-                case TouchPhase.Canceled:
+                Touch t = Input.GetTouch(i);
 
-                    if (t.fingerId == leftFingerId)
-                    {
+                switch (t.phase)
+                {
+                    case TouchPhase.Began:
 
-                        leftFingerId = -1;
-                        Debug.Log("Stopped tracking left finger");
-                    }
+                        if (t.position.x < halfScreenWidth && _leftFingerId == -1)
+                        {
+                            _leftFingerId = t.fingerId;
+                            print("Tracking left finger");
+                        }
 
-                    else if (t.fingerId == rightFingerId)
-                    {
+                        else if (t.position.x > halfScreenWidth && _rightFingerId == -1)
+                        {
 
-                        rightFingerId = -1;
-                        Debug.Log("Stopped tracking right finger");
-                    }
+                            _rightFingerId = t.fingerId;
+                            Debug.Log("Tracking right finger");
 
-                    break;
-                case TouchPhase.Moved:
+                        }
 
-                    if (t.fingerId == rightFingerId)
-                    {
-                        lookInput = t.deltaPosition * cameraSensitivity * Time.deltaTime;
-                    }
+                        break;
 
-                    break;
-                case TouchPhase.Stationary:
+                    case TouchPhase.Ended:
+                    case TouchPhase.Canceled:
 
-                    if (t.fingerId == rightFingerId)
-                    {
+                        if (t.fingerId == _leftFingerId)
+                        {
 
-                        lookInput = Vector2.zero;
-                    }
-                    break;
+                            _leftFingerId = -1;
+                            Debug.Log("Stopped tracking left finger");
+                        }
+
+                        else if (t.fingerId == _rightFingerId)
+                        {
+
+                            _rightFingerId = -1;
+                            Debug.Log("Stopped tracking right finger");
+                        }
+
+                        break;
+                    case TouchPhase.Moved:
+
+                        if (t.fingerId == _rightFingerId)
+                        {
+                            lookInput = t.deltaPosition * cameraSensitivity * Time.deltaTime;
+                        }
+
+                        break;
+                    case TouchPhase.Stationary:
+
+                        if (t.fingerId == _rightFingerId)
+                        {
+
+                            lookInput = Vector2.zero;
+                        }
+                        break;
+                }
             }
         }
-    }
 
-    void LookAround()
-    {
-        cameraPitch = Mathf.Clamp(cameraPitch - lookInput.y, -90f, 90f);
-        cameraTransform.localRotation = Quaternion.Euler(cameraPitch, 0, 0);
+        void LookAround()
+        {
+            cameraPitch = Mathf.Clamp(cameraPitch - lookInput.y, -90f, 90f);
+            cameraTransform.localRotation = Quaternion.Euler(cameraPitch, 0, 0);
 
-        transform.Rotate(transform.up, lookInput.x);
+            transform.Rotate(transform.up, lookInput.x);
+        }
     }
-}
