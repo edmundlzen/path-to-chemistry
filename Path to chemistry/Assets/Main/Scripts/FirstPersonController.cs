@@ -5,6 +5,7 @@
         public float speed = 10f;
         public float gravity = 5f;
         public VariableJoystick variableJoystick;
+        public GameObject joystick;
         public CharacterController characterController;
         public Transform cameraTransform;
         public float cameraSensitivity;
@@ -12,104 +13,156 @@
         int _leftFingerId, _rightFingerId;
         float halfScreenWidth;
         Vector2 lookInput;
-        float cameraPitch;
+        private float cameraPitch;
+        public bool canMove = true;
+        [SerializeField]
+        private float jumpSpeed = 5f;
+        [SerializeField]
+        private bool desktopInput = false;
         // Start is called before the first frame update
         void Start()
         {
+            if (!desktopInput)
+            {
+                _leftFingerId = -1;
+                _rightFingerId = -1;
 
-            _leftFingerId = -1;
-            _rightFingerId = -1;
-
-            halfScreenWidth = Screen.width / 2;
-
+                halfScreenWidth = Screen.width / 2;
+                return;
+            }
+            
+            joystick.SetActive(false);
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
         }
 
         // Update is called once per frame
         void Update()
         {
-
-            GetTouchInput();
-            JoystickMove();
-
-            if (_rightFingerId != -1)
+            if (!desktopInput)
             {
+                GetTouchInput();
+                JoystickMove();
 
-                LookAround();
+                if (_rightFingerId != -1)
+                {
+
+                    LookAround();
+                }
+
+                return;
             }
 
-        }
+            // We are grounded, so recalculate move direction based on axes
+            Vector3 forward = transform.TransformDirection(Vector3.forward);
+            Vector3 right = transform.TransformDirection(Vector3.right);
+            float curSpeedX = canMove ? (speed) * Input.GetAxis("Vertical") : 0;
+            float curSpeedY = canMove ? (speed) * Input.GetAxis("Horizontal") : 0;
+            float movementDirectionY = _moveDirection.y;
+            _moveDirection = (forward * curSpeedX) + (right * curSpeedY);
 
-        void JoystickMove()
-        {
-            _moveDirection = new Vector3(variableJoystick.Horizontal, 0, variableJoystick.Vertical);
-            _moveDirection = transform.TransformDirection(_moveDirection);
-            _moveDirection *= speed;
-
-            _moveDirection.y -= gravity * Time.deltaTime;
-            characterController.Move(_moveDirection * Time.deltaTime);
-        }
-
-        void GetTouchInput()
-        {
-            for (int i = 0; i < Input.touchCount; i++)
+            if (Input.GetButton("Jump") && canMove && characterController.isGrounded)
             {
+                _moveDirection.y = jumpSpeed;
+            }
+            else
+            {
+                _moveDirection.y = movementDirectionY;
+            }
 
-                Touch t = Input.GetTouch(i);
+            // Apply gravity. Gravity is multiplied by deltaTime twice (once here, and once below
+            // when the moveDirection is multiplied by deltaTime). This is because gravity should be applied
+            // as an acceleration (ms^-2)
+            if (!characterController.isGrounded)
+            {
+                _moveDirection.y -= gravity * Time.deltaTime;
+            }
 
-                switch (t.phase)
+            // Move the controller
+            characterController.Move(_moveDirection * Time.deltaTime);
+
+            // Player and Camera rotation
+            if (canMove)
+            {
+                cameraPitch += -Input.GetAxis("Mouse Y") * cameraSensitivity;
+                cameraPitch = Mathf.Clamp(cameraPitch, -90f, 90f);
+                cameraTransform.localRotation = Quaternion.Euler(cameraPitch, 0, 0);
+                transform.rotation *= Quaternion.Euler(0, Input.GetAxis("Mouse X") * cameraSensitivity, 0);
+            }
+
+            void JoystickMove()
+            {
+                _moveDirection = new Vector3(variableJoystick.Horizontal, 0, variableJoystick.Vertical);
+                _moveDirection = transform.TransformDirection(_moveDirection);
+                _moveDirection *= speed;
+
+                _moveDirection.y -= gravity * Time.deltaTime;
+                characterController.Move(_moveDirection * Time.deltaTime);
+            }
+
+            void GetTouchInput()
+            {
+                for (int i = 0; i < Input.touchCount; i++)
                 {
-                    case TouchPhase.Began:
 
-                        if (t.position.x < halfScreenWidth && _leftFingerId == -1)
-                        {
-                            _leftFingerId = t.fingerId;
-                            print("Tracking left finger");
-                        }
+                    Touch t = Input.GetTouch(i);
 
-                        else if (t.position.x > halfScreenWidth && _rightFingerId == -1)
-                        {
+                    switch (t.phase)
+                    {
+                        case TouchPhase.Began:
 
-                            _rightFingerId = t.fingerId;
-                            Debug.Log("Tracking right finger");
+                            if (t.position.x < halfScreenWidth && _leftFingerId == -1)
+                            {
+                                _leftFingerId = t.fingerId;
+                                print("Tracking left finger");
+                            }
 
-                        }
+                            else if (t.position.x > halfScreenWidth && _rightFingerId == -1)
+                            {
 
-                        break;
+                                _rightFingerId = t.fingerId;
+                                Debug.Log("Tracking right finger");
 
-                    case TouchPhase.Ended:
-                    case TouchPhase.Canceled:
+                            }
 
-                        if (t.fingerId == _leftFingerId)
-                        {
+                            break;
 
-                            _leftFingerId = -1;
-                            Debug.Log("Stopped tracking left finger");
-                        }
+                        case TouchPhase.Ended:
+                        case TouchPhase.Canceled:
 
-                        else if (t.fingerId == _rightFingerId)
-                        {
+                            if (t.fingerId == _leftFingerId)
+                            {
 
-                            _rightFingerId = -1;
-                            Debug.Log("Stopped tracking right finger");
-                        }
+                                _leftFingerId = -1;
+                                Debug.Log("Stopped tracking left finger");
+                            }
 
-                        break;
-                    case TouchPhase.Moved:
+                            else if (t.fingerId == _rightFingerId)
+                            {
 
-                        if (t.fingerId == _rightFingerId)
-                        {
-                            lookInput = t.deltaPosition * cameraSensitivity * Time.deltaTime;
-                        }
+                                _rightFingerId = -1;
+                                Debug.Log("Stopped tracking right finger");
+                            }
 
-                        break;
-                    case TouchPhase.Stationary:
+                            break;
+                        case TouchPhase.Moved:
 
-                        if (t.fingerId == _rightFingerId)
-                        {
+                            if (t.fingerId == _rightFingerId)
+                            {
+                                lookInput = t.deltaPosition * cameraSensitivity * Time.deltaTime;
+                            }
 
-                            lookInput = Vector2.zero;
-                        }
-                        break;
+                            break;
+                        case TouchPhase.Stationary:
+
+                            if (t.fingerId == _rightFingerId)
+                            {
+
+                                lookInput = Vector2.zero;
+                            }
+
+                            break;
+                    }
                 }
             }
         }
