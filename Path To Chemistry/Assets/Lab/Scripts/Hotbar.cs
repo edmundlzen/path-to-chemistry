@@ -10,9 +10,9 @@ public class Hotbar : MonoBehaviour
 {
     void Start()
     {
-        var playerData = PlayerData.Instance();
         hotbar.slotNum = "1";
         GameObject.Find("Button" + hotbar.slotNum).GetComponent<Image>().color = Color.cyan;
+        var playerData = PlayerData.Instance();
         for (int i = 1; i <= 9; i = i + 1)
         {
             GameObject.Find($"Text{i}").GetComponent<Text>().text = playerData.slotItem[$"Slot{i}"];

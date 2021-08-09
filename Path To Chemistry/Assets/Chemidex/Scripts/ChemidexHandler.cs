@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Newtonsoft.Json;
+using System.IO;
 
 public static class Chemidex
 {
@@ -102,5 +104,13 @@ public class ChemidexHandler : MonoBehaviour
         {
             GameObject.Find("Statistic").GetComponent<Text>().text = "?";
         }
+    }
+    public void Load()
+    {
+        string directory = $"{Application.persistentDataPath}/Data";
+        var filePath = Path.Combine(directory, "Saves.json");
+        var fileContent = File.ReadAllText(filePath);
+        var saveObject = JsonConvert.DeserializeObject<SaveObject>(fileContent);
+        SaveObject.Instance().UpdateSaveObject(saveObject);
     }
 }

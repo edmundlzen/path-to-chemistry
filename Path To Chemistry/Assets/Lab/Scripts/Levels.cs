@@ -1,13 +1,19 @@
-﻿using UnityEngine;
+﻿using Newtonsoft.Json;
+using System.IO;
 using TMPro;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class Levels : MonoBehaviour
 {
-    void Update()
+    void Start()
     {
         var playerData = PlayerData.Instance();
         GameObject.Find("Level").GetComponent<Text>().text = playerData.Level.ToString();
+    }
+    void Update()
+    {
+        var playerData = PlayerData.Instance();
         if (playerData.Level == 1)
         {
             GameObject.Find("Guide").GetComponent<TextMeshPro>().text = "K + H2O";

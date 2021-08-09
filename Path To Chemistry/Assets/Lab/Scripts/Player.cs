@@ -1,8 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json;
 using System.IO;
-using System.Xml;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -18,11 +16,23 @@ public class Player : MonoBehaviour
     public Transform playerBody;
     public GameObject explosionEffect;
     public GameObject smokeEffect;
-    public PlayerData jdata;
     float xRotation = 0f;
     void Start()
     {
-        print(DateTime.Now.ToString("dd/MM/yyyy"));
+        Load();
+        var playerData = PlayerData.Instance();
+        if (playerData.Seat == "Left")
+        {
+            GameObject.Find("Player").GetComponent<Transform>().position = new Vector3(5f, 0.6f, 6.2f);
+        }
+        if (playerData.Seat == "Main")
+        {
+            GameObject.Find("Player").GetComponent<Transform>().position = new Vector3(7.5f, 0.6f, 6.2f);
+        }
+        if (playerData.Seat == "Right")
+        {
+            GameObject.Find("Player").GetComponent<Transform>().position = new Vector3(9.79f, 0.6f, 6.2f);
+        }
         player.raycastObject = "";
         player.moleculeCount = new Dictionary<string, int>();
         //Cursor.lockState = CursorLockMode.Locked;
@@ -74,9 +84,7 @@ public class Player : MonoBehaviour
                     {
                         GameObject.Find("Label2").GetComponent<Text>().text = "Explosion!";
                         Instantiate(explosionEffect, potion.position, potion.rotation);
-                        playerData.flaskElements.Clear();
-                        playerData.Level += 1;
-                        playerData.levelAvailable.Add($"Level {playerData.Level}");
+                        updateLevel();
                     }
                 }
                 if (playerData.levelAvailable.Contains("Level 2"))
@@ -85,9 +93,7 @@ public class Player : MonoBehaviour
                     {
                         GameObject.Find("Label2").GetComponent<Text>().text = "Smoke!";
                         Instantiate(smokeEffect, flaskMouth.position, flaskMouth.rotation);
-                        playerData.flaskElements.Clear();
-                        playerData.Level += 1;
-                        playerData.levelAvailable.Add($"Level {playerData.Level}");
+                        updateLevel();
                     }
                 }
                 if (playerData.levelAvailable.Contains("Level 3"))
@@ -95,9 +101,7 @@ public class Player : MonoBehaviour
                     if ((playerData.flaskElements.Contains("Hydrogen Peroxide")) && (playerData.flaskElements.Contains("Sodium Iodide")) && (playerData.flaskElements.Count == 2))
                     {
                         GameObject.Find("Label2").GetComponent<Text>().text = "Splash!";
-                        playerData.flaskElements.Clear();
-                        playerData.Level += 1;
-                        playerData.levelAvailable.Add($"Level {playerData.Level}");
+                        updateLevel();
                     }
                 }
                 if (playerData.levelAvailable.Contains("Level 4"))
@@ -105,9 +109,7 @@ public class Player : MonoBehaviour
                     if ((playerData.flaskElements.Contains("Sodium Acetate")) && (playerData.flaskElements.Contains("Water")) && (playerData.flaskElements.Count == 2))
                     {
                         GameObject.Find("Label2").GetComponent<Text>().text = "Hot Ice";
-                        playerData.flaskElements.Clear();
-                        playerData.Level += 1;
-                        playerData.levelAvailable.Add($"Level {playerData.Level}");
+                        updateLevel();
                     }
                 }
                 if (playerData.levelAvailable.Contains("Level 5"))
@@ -115,9 +117,7 @@ public class Player : MonoBehaviour
                     if ((playerData.flaskElements.Contains("Potassium Iodide")) && (playerData.flaskElements.Contains("Hydrogen Peroxide")) && (playerData.flaskElements.Contains("Soup")) && (playerData.flaskElements.Count == 3))
                     {
                         GameObject.Find("Label2").GetComponent<Text>().text = "Elephant Toothpaste";
-                        playerData.flaskElements.Clear();
-                        playerData.Level += 1;
-                        playerData.levelAvailable.Add($"Level {playerData.Level}");
+                        updateLevel();
                     }
                 }
                 else
@@ -337,30 +337,35 @@ public class Player : MonoBehaviour
             }
         }
     }
+    public void updateLevel()
+    {
+        var playerData = PlayerData.Instance();
+        playerData.flaskElements.Clear();
+        playerData.Level += 1;
+        playerData.levelAvailable.Add($"Level {playerData.Level}");
+        GameObject.Find("Level").GetComponent<Text>().text = playerData.Level.ToString();
+    }
     public void Save()
     {
-        using (var StrWriter = new StringWriter())
+        var playerData = PlayerData.Instance();
+        string directory = $"{Application.persistentDataPath}/Data";
+        if (!Directory.Exists(directory))
         {
-            using (var XmlWriter = new XmlTextWriter(StrWriter))
-            {
-                var Serializer = new DataContractSerializer(typeof(PlayerData));
-                Serializer.WriteObject(XmlWriter, PlayerData.Instance());
-                XmlWriter.Flush();
-                File.WriteAllText($"{Application.persistentDataPath}/Saves.xml", StrWriter.ToString());
-            }
+            Directory.CreateDirectory(directory);
         }
+        var Settings = new JsonSerializerSettings();
+        Settings.Formatting = Formatting.Indented;
+        Settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+        var Json = JsonConvert.SerializeObject(playerData, Settings);
+        var filePath = Path.Combine(directory, "Saves.json");
+        File.WriteAllText(filePath, Json);
     }
     public void Load()
     {
-        if (File.Exists($"{Application.persistentDataPath}/Saves.xml"))
-        {
-            //PlayerData2 playerData2 = new PlayerData2();
-            //var jdata = JsonConvert.SerializeObject(playerData2);
-            var Serializer = new DataContractSerializer(typeof(PlayerData));
-            var Stream = new FileStream($"{Application.persistentDataPath}/Saves.xml", FileMode.Open);
-            //jdata = Serializer.ReadObject(Stream) as PlayerData;
-            //PlayerData.LoadData(jdata);
-            Stream.Close();
-        }
+        string directory = $"{Application.persistentDataPath}/Data";
+        var filePath = Path.Combine(directory, "Saves.json");
+        var fileContent = File.ReadAllText(filePath);
+        var playerData = JsonConvert.DeserializeObject<PlayerData>(fileContent);
+        PlayerData.Instance().UpdatePlayerData(playerData);
     }
 }

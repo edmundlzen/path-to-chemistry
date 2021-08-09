@@ -19,6 +19,10 @@ public class SaveObject
             return instance;
         }
     }
+    public void UpdateSaveObject(SaveObject saveObject)
+    {
+        instance = saveObject;
+    }
     private SaveObject()
     {
         Counter = 0;
@@ -50,14 +54,13 @@ public class JsonData : MonoBehaviour
 {
     void Start()
     {
-        var saveObject = SaveObject.Instance();
-        GameObject.Find("Text1").GetComponent<Text>().text = saveObject.Counter.ToString();
         GameObject.Find("Label1").GetComponent<Text>().text = $"{Application.persistentDataPath}/Save Data/Saves.txt";
     }
     void Update()
     {
         var saveObject = SaveObject.Instance();
-        saveObject.InputText = GameObject.Find("Text2").GetComponent<Text>().text;
+        GameObject.Find("Text1").GetComponent<Text>().text = saveObject.Counter.ToString();
+        GameObject.Find("Text2").GetComponent<Text>().text = saveObject.InputText;
     }
     public void onButtonPressed()
     {
@@ -68,6 +71,7 @@ public class JsonData : MonoBehaviour
     public void Save()
     {
         var saveObject = SaveObject.Instance();
+        saveObject.InputText = GameObject.Find("Text2").GetComponent<Text>().text;
         string directory = $"{Application.persistentDataPath}/Data";
         if (!Directory.Exists(directory))
         {
@@ -82,13 +86,10 @@ public class JsonData : MonoBehaviour
     }
     public void Load()
     {
-        var saveObject = SaveObject.Instance();
         string directory = $"{Application.persistentDataPath}/Data";
-        var Settings = new JsonSerializerSettings();
         var filePath = Path.Combine(directory, "Saves.json");
         var fileContent = File.ReadAllText(filePath);
-        saveObject = JsonConvert.DeserializeObject<SaveObject>(fileContent);
-        GameObject.Find("Text1").GetComponent<Text>().text = saveObject.Counter.ToString();
-        GameObject.Find("Label2").GetComponent<Text>().text = saveObject.InputText.ToString();
+        var saveObject = JsonConvert.DeserializeObject<SaveObject>(fileContent);
+        SaveObject.Instance().UpdateSaveObject(saveObject);
     }
 }
