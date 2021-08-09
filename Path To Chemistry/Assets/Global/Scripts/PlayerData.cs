@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Runtime.Serialization;
 
-[DataContract]
 public class PlayerData
 {
     private static readonly object threadlock = new object();
@@ -17,9 +15,14 @@ public class PlayerData
             return instance;
         }
     }
+    public void UpdatePlayerData(PlayerData playerData)
+    {
+        instance = playerData;
+    }
     private PlayerData()
     {
         Level = 1;
+        Counter = 0;
         Seat = "Main";
         Molecule = new List<string>();
         flaskElements = new List<string>();
@@ -40,24 +43,8 @@ public class PlayerData
             { "Slot9", "" }
         };
     }
-
-    [DataMember]
     public int Level { get; set; }
-    [DataMember]
-    public string Seat { get; set; }
-    [DataMember]
-    public List<string> Molecule { get; set; }
-    [DataMember]
-    public List<string> flaskElements { get; set; }
-    [DataMember]
-    public List<string> levelAvailable { get; set; }
-    [DataMember]
-    public Dictionary<string, string> slotItem { get; set; }
-}
-
-public class PlayerData2
-{
-    public int Level { get; set; }
+    public int Counter { get; set; }
     public string Seat { get; set; }
     public List<string> Molecule { get; set; }
     public List<string> flaskElements { get; set; }
