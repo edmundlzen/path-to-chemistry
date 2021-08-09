@@ -48,14 +48,15 @@ public class Player : MonoBehaviour
         playerBody.Rotate(Vector3.up * mouseX);
         var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
-        if (Physics.Raycast(ray, out hit))
+        if (Physics.Raycast(ray, out hit, 2))
         {
+            Debug.DrawLine(ray.origin, hit.point, Color.red);
             var selection = hit.transform;
             player.raycastObject = selection.name;
             GameObject.Find("Label1").GetComponent<Text>().text = player.raycastObject;
             if ((Input.GetMouseButtonDown(0)) && (player.raycastObject == "Add"))
             {
-                if (playerData.slotItem[$"Slot{hotbar.slotNum}"] != "")
+                if ((playerData.slotItem[$"Slot{hotbar.slotNum}"] != "") && (playerData.flaskElements.Count <= 10))
                 {
                     playerData.flaskElements.Add(playerData.slotItem[$"Slot{hotbar.slotNum}"]);
                     playerData.slotItem[$"Slot{hotbar.slotNum}"] = "";
