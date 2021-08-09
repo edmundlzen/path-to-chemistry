@@ -1101,8 +1101,9 @@ GameObject:
   - component: {fileID: 98834944}
   - component: {fileID: 98834943}
   - component: {fileID: 98834942}
+  - component: {fileID: 98834945}
   m_Layer: 5
-  m_Name: Slot1 (1)
+  m_Name: Slot2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1170,7 +1171,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 98834943}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 98834945}
+        m_MethodName: flaskSlot2
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &98834943
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1208,6 +1220,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 98834940}
   m_CullTransparentMesh: 0
+--- !u!114 &98834945
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 98834940}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5bf3708da9dd9a4ca7db22c55a0e10e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &99007338
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3368,7 +3392,7 @@ GameObject:
   - component: {fileID: 314578834}
   - component: {fileID: 314578833}
   m_Layer: 5
-  m_Name: Item1
+  m_Name: Item6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5050,7 +5074,7 @@ GameObject:
   - component: {fileID: 467195688}
   - component: {fileID: 467195687}
   m_Layer: 5
-  m_Name: Item1
+  m_Name: Item2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5330,8 +5354,9 @@ GameObject:
   - component: {fileID: 505276520}
   - component: {fileID: 505276519}
   - component: {fileID: 505276518}
+  - component: {fileID: 505276521}
   m_Layer: 5
-  m_Name: Slot1 (7)
+  m_Name: Slot8
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5399,7 +5424,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 505276519}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 505276521}
+        m_MethodName: flaskSlot8
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &505276519
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5437,6 +5473,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 505276516}
   m_CullTransparentMesh: 0
+--- !u!114 &505276521
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 505276516}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5bf3708da9dd9a4ca7db22c55a0e10e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &511620290
 GameObject:
   m_ObjectHideFlags: 0
@@ -5449,7 +5497,7 @@ GameObject:
   - component: {fileID: 511620293}
   - component: {fileID: 511620292}
   m_Layer: 5
-  m_Name: Item1
+  m_Name: Item7
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5719,8 +5767,9 @@ GameObject:
   - component: {fileID: 533447127}
   - component: {fileID: 533447126}
   - component: {fileID: 533447125}
+  - component: {fileID: 533447128}
   m_Layer: 5
-  m_Name: Slot1 (5)
+  m_Name: Slot6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5788,7 +5837,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 533447126}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 533447128}
+        m_MethodName: flaskSlot6
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &533447126
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5826,6 +5886,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 533447123}
   m_CullTransparentMesh: 0
+--- !u!114 &533447128
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 533447123}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5bf3708da9dd9a4ca7db22c55a0e10e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &542574906
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6210,7 +6282,7 @@ GameObject:
   - component: {fileID: 603444053}
   - component: {fileID: 603444052}
   m_Layer: 5
-  m_Name: Item1
+  m_Name: Item3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6355,8 +6427,9 @@ GameObject:
   - component: {fileID: 607720657}
   - component: {fileID: 607720656}
   - component: {fileID: 607720655}
+  - component: {fileID: 607720658}
   m_Layer: 5
-  m_Name: Slot1 (8)
+  m_Name: Slot9
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6424,7 +6497,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 607720656}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 607720658}
+        m_MethodName: flaskSlot9
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &607720656
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6462,6 +6546,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 607720653}
   m_CullTransparentMesh: 0
+--- !u!114 &607720658
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 607720653}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5bf3708da9dd9a4ca7db22c55a0e10e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &611390561
 GameObject:
   m_ObjectHideFlags: 0
@@ -7797,7 +7893,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -732}
+  m_AnchoredPosition: {x: 0, y: 8.320679}
   m_SizeDelta: {x: -1189.1233, y: -963.3586}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &753546393
@@ -10818,7 +10914,7 @@ GameObject:
   - component: {fileID: 1070847838}
   - component: {fileID: 1070847837}
   m_Layer: 5
-  m_Name: Item1
+  m_Name: Item4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11657,7 +11753,7 @@ GameObject:
   - component: {fileID: 1223414809}
   - component: {fileID: 1223414808}
   m_Layer: 5
-  m_Name: Item1
+  m_Name: Item8
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14246,8 +14342,9 @@ GameObject:
   - component: {fileID: 1523205651}
   - component: {fileID: 1523205650}
   - component: {fileID: 1523205649}
+  - component: {fileID: 1523205652}
   m_Layer: 5
-  m_Name: Slot1 (3)
+  m_Name: Slot4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14315,7 +14412,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1523205650}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1523205652}
+        m_MethodName: flaskSlot4
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1523205650
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14353,6 +14461,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1523205647}
   m_CullTransparentMesh: 0
+--- !u!114 &1523205652
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1523205647}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5bf3708da9dd9a4ca7db22c55a0e10e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1526231474
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14906,8 +15026,9 @@ GameObject:
   - component: {fileID: 1572678795}
   - component: {fileID: 1572678794}
   - component: {fileID: 1572678793}
+  - component: {fileID: 1572678796}
   m_Layer: 5
-  m_Name: Slot1 (4)
+  m_Name: Slot5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14975,7 +15096,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1572678794}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1572678796}
+        m_MethodName: flaskSlot5
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1572678794
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15013,6 +15145,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1572678791}
   m_CullTransparentMesh: 0
+--- !u!114 &1572678796
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1572678791}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5bf3708da9dd9a4ca7db22c55a0e10e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1576121361
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -15731,7 +15875,7 @@ GameObject:
   - component: {fileID: 1693233168}
   - component: {fileID: 1693233167}
   m_Layer: 5
-  m_Name: Item1
+  m_Name: Item10
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -17134,8 +17278,9 @@ GameObject:
   - component: {fileID: 1829873023}
   - component: {fileID: 1829873022}
   - component: {fileID: 1829873021}
+  - component: {fileID: 1829873024}
   m_Layer: 5
-  m_Name: Slot1 (6)
+  m_Name: Slot7
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -17203,7 +17348,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1829873022}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1829873024}
+        m_MethodName: flaskSlot7
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1829873022
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17241,6 +17397,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1829873019}
   m_CullTransparentMesh: 0
+--- !u!114 &1829873024
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1829873019}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5bf3708da9dd9a4ca7db22c55a0e10e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1839904236
 GameObject:
   m_ObjectHideFlags: 0
@@ -17253,8 +17421,9 @@ GameObject:
   - component: {fileID: 1839904240}
   - component: {fileID: 1839904239}
   - component: {fileID: 1839904238}
+  - component: {fileID: 1839904241}
   m_Layer: 5
-  m_Name: Slot1 (9)
+  m_Name: Slot10
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -17322,7 +17491,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1839904239}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1839904241}
+        m_MethodName: flaskSlot10
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1839904239
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17360,6 +17540,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1839904236}
   m_CullTransparentMesh: 0
+--- !u!114 &1839904241
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1839904236}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5bf3708da9dd9a4ca7db22c55a0e10e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1841188585 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4222951798390138, guid: 63bc87997658c4bcc8bc204d70a7ffd1,
@@ -17668,7 +17860,7 @@ GameObject:
   - component: {fileID: 1871857649}
   - component: {fileID: 1871857648}
   m_Layer: 5
-  m_Name: Item1
+  m_Name: Item5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -18399,6 +18591,7 @@ GameObject:
   - component: {fileID: 1906471062}
   - component: {fileID: 1906471061}
   - component: {fileID: 1906471060}
+  - component: {fileID: 1906471063}
   m_Layer: 5
   m_Name: Slot1
   m_TagString: Untagged
@@ -18468,7 +18661,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1906471061}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1906471063}
+        m_MethodName: flaskSlot1
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1906471061
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18506,6 +18710,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1906471058}
   m_CullTransparentMesh: 0
+--- !u!114 &1906471063
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1906471058}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5bf3708da9dd9a4ca7db22c55a0e10e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1929633003
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -18651,7 +18867,7 @@ GameObject:
   - component: {fileID: 1947683357}
   - component: {fileID: 1947683356}
   m_Layer: 5
-  m_Name: Item1
+  m_Name: Item9
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -20040,8 +20256,9 @@ GameObject:
   - component: {fileID: 2042809897}
   - component: {fileID: 2042809896}
   - component: {fileID: 2042809895}
+  - component: {fileID: 2042809898}
   m_Layer: 5
-  m_Name: Slot1 (2)
+  m_Name: Slot3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -20109,7 +20326,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2042809896}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2042809898}
+        m_MethodName: flaskSlot3
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2042809896
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20147,6 +20375,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2042809893}
   m_CullTransparentMesh: 0
+--- !u!114 &2042809898
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2042809893}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5bf3708da9dd9a4ca7db22c55a0e10e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &2046777852
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -19,17 +19,17 @@ public class Player : MonoBehaviour
     float xRotation = 0f;
     void Start()
     {
-        Load();
+        //Load();
         var playerData = PlayerData.Instance();
         if (playerData.Seat == "Left")
         {
             GameObject.Find("Player").GetComponent<Transform>().position = new Vector3(5f, 0.6f, 6.2f);
         }
-        if (playerData.Seat == "Main")
+        else if (playerData.Seat == "Main")
         {
             GameObject.Find("Player").GetComponent<Transform>().position = new Vector3(7.5f, 0.6f, 6.2f);
         }
-        if (playerData.Seat == "Right")
+        else if (playerData.Seat == "Right")
         {
             GameObject.Find("Player").GetComponent<Transform>().position = new Vector3(9.79f, 0.6f, 6.2f);
         }
@@ -60,6 +60,7 @@ public class Player : MonoBehaviour
                     playerData.flaskElements.Add(playerData.slotItem[$"Slot{hotbar.slotNum}"]);
                     playerData.slotItem[$"Slot{hotbar.slotNum}"] = "";
                     slotCheck();
+                    flaskCheck();
                 }
             }
             else if ((Input.GetMouseButtonDown(0)) && (player.raycastObject == "Add2"))
@@ -330,11 +331,20 @@ public class Player : MonoBehaviour
         var playerData = PlayerData.Instance();
         for (int i = 1; i <= 9; i = i + 1)
         {
-            if ((playerData.slotItem[$"Slot{i}"] == ""))
+            if (playerData.slotItem[$"Slot{i}"] == "")
             {
                 playerData.slotItem[$"Slot{i}"] = molecule;
                 break;
             }
+        }
+    }
+    public void flaskCheck()
+    {
+        var playerData = PlayerData.Instance();
+        print(playerData.flaskElements.Count);
+        for (int i = 1; i <= playerData.flaskElements.Count; i = i + 1)
+        {
+            GameObject.Find($"Item{i}").GetComponent<Text>().text = playerData.flaskElements[i - 1];
         }
     }
     public void updateLevel()
