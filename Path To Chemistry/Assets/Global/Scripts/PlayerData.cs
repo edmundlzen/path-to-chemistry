@@ -30,17 +30,62 @@ public class PlayerData
         {
             { $"Level {Level}" }
         };
-        slotItem = new Dictionary<string, string>()
+        slotItem = new Dictionary<string, Dictionary<string, object>>()
         {
-            { "Slot1", "K" },
-            { "Slot2", "H" },
-            { "Slot3", "O" },
-            { "Slot4", "H" },
-            { "Slot5", "" },
-            { "Slot6", "" },
-            { "Slot7", "" },
-            { "Slot8", "" },
-            { "Slot9", "" }
+            { "Slot1", new Dictionary<string, object>()
+                {
+                    { "Element", "K"},
+                    { "Quantity", 1 }
+                }
+            },
+            { "Slot2", new Dictionary<string, object>()
+                {
+                    { "Element", "H" },
+                    { "Quantity", 1 }
+                }
+            },
+            { "Slot3", new Dictionary<string, object>()
+                {
+                    { "Element", "O" },
+                    { "Quantity", 1 }
+                }
+            },
+            { "Slot4", new Dictionary<string, object>()
+                {
+                    { "Element", "H" },
+                    { "Quantity", 1 }
+                }
+            },
+            { "Slot5", new Dictionary<string, object>()
+                {
+                    { "Element", null },
+                    { "Quantity", null }
+                }
+            },
+            { "Slot6", new Dictionary<string, object>()
+                {
+                    { "Element", null },
+                    { "Quantity", null }
+                }
+            },
+            { "Slot7", new Dictionary<string, object>()
+                {
+                    { "Element", null },
+                    { "Quantity", null }
+                }
+            },
+            { "Slot8", new Dictionary<string, object>()
+                {
+                    { "Element", null },
+                    { "Quantity", null }
+                }
+            },
+            { "Slot9", new Dictionary<string, object>()
+                {
+                    { "Element", null },
+                    { "Quantity", null }
+                }
+            },
         };
     }
     public int Level { get; set; }
@@ -49,5 +94,5 @@ public class PlayerData
     public List<string> Molecule { get; set; }
     public List<string> flaskElements { get; set; }
     public List<string> levelAvailable { get; set; }
-    public Dictionary<string, string> slotItem { get; set; }
+    public Dictionary<string, Dictionary<string, object>> slotItem { get; set; }
 }
