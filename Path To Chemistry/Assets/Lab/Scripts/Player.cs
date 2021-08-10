@@ -3,6 +3,7 @@ using System.IO;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 public static class player
 {
@@ -48,32 +49,45 @@ public class Player : MonoBehaviour
         playerBody.Rotate(Vector3.up * mouseX);
         var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, 2))
+        if (Physics.Raycast(ray, out hit))
         {
-            Debug.DrawLine(ray.origin, hit.point, Color.red);
+            //Debug.DrawLine(ray.origin, hit.point, Color.red);
             var selection = hit.transform;
             player.raycastObject = selection.name;
             GameObject.Find("Label1").GetComponent<Text>().text = player.raycastObject;
             if ((Input.GetMouseButtonDown(0)) && (player.raycastObject == "Add"))
             {
-                if ((playerData.slotItem[$"Slot{hotbar.slotNum}"] != "") && (playerData.flaskElements.Count <= 10))
+                if ((playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"] != null) && (playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"] != null) && (playerData.flaskElements.Count <= 10))
                 {
-                    playerData.flaskElements.Add(playerData.slotItem[$"Slot{hotbar.slotNum}"]);
-                    playerData.slotItem[$"Slot{hotbar.slotNum}"] = "";
+                    playerData.flaskElements.Add(playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"].ToString());
+                    if (Convert.ToInt32(playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"]) > 1)
+                    {
+                        playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"] = Convert.ToInt32(playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"]) - 1;
+                    }
+                    else
+                    {
+                        playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"] = null;
+                        playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"] = null;
+                    }
                     slotCheck();
                     flaskCheck();
                 }
             }
             else if ((Input.GetMouseButtonDown(0)) && (player.raycastObject == "Add2"))
             {
-                if (playerData.slotItem[$"Slot{hotbar.slotNum}"] != "")
+                if ((playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"] != null) && (playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"] != null))
                 {
-                    playerData.Molecule.Add(playerData.slotItem[$"Slot{hotbar.slotNum}"]);
-                    playerData.slotItem[$"Slot{hotbar.slotNum}"] = "";
-                    for (int i = 1; i <= 9; i = i + 1)
+                    playerData.Molecule.Add(playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"].ToString());
+                    if (Convert.ToInt32(playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"]) > 1)
                     {
-                        GameObject.Find($"Text{i}").GetComponent<Text>().text = playerData.slotItem[$"Slot{i}"];
+                        playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"] = Convert.ToInt32(playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"]) - 1;
                     }
+                    else
+                    {
+                        playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"] = null;
+                        playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"] = null;
+                    }
+                    slotCheck();
                 }
             }
             else if ((Input.GetMouseButtonDown(0)) && (player.raycastObject == "React") && (GameObject.Find("Flask") != null))
@@ -152,7 +166,6 @@ public class Player : MonoBehaviour
                     if ((player.moleculeCount["H"] == 2) && (player.moleculeCount["O"] == 1))
                     {
                         Product("Water");
-                        playerData.Molecule.Clear();
                     }
                 }
                 else if ((playerData.Molecule.Contains("Na")) && (playerData.Molecule.Contains("Cl")))
@@ -160,7 +173,6 @@ public class Player : MonoBehaviour
                     if ((player.moleculeCount["Na"] == 1) && (player.moleculeCount["Cl"] == 1))
                     {
                         Product("Salt");
-                        playerData.Molecule.Clear();
                     }
                 }
                 else if ((playerData.Molecule.Contains("N")) && (playerData.Molecule.Contains("H")))
@@ -168,7 +180,6 @@ public class Player : MonoBehaviour
                     if ((player.moleculeCount["N"] == 1) && (player.moleculeCount["H"] == 3))
                     {
                         Product("Ammonia");
-                        playerData.Molecule.Clear();
                     }
                 }
                 else if ((playerData.Molecule.Contains("C")) && (playerData.Molecule.Contains("H")) && (playerData.Molecule.Contains("O")))
@@ -176,7 +187,6 @@ public class Player : MonoBehaviour
                     if ((player.moleculeCount["C"] == 7) && (player.moleculeCount["H"] == 4) && (player.moleculeCount["O"] == 1))
                     {
                         Product("Charcoal");
-                        playerData.Molecule.Clear();
                     }
                 }
                 else if ((playerData.Molecule.Contains("C")) && (playerData.Molecule.Contains("H")) && (playerData.Molecule.Contains("N")) && (playerData.Molecule.Contains("O")))
@@ -184,7 +194,6 @@ public class Player : MonoBehaviour
                     if ((player.moleculeCount["C"] == 5) && (player.moleculeCount["H"] == 5) && (player.moleculeCount["N"] == 1) && (player.moleculeCount["O"] == 2))
                     {
                         Product("Glue");
-                        playerData.Molecule.Clear();
                     }
                 }
                 else if ((playerData.Molecule.Contains("C")) && (playerData.Molecule.Contains("H")) && (playerData.Molecule.Contains("N")) && (playerData.Molecule.Contains("O")))
@@ -192,7 +201,6 @@ public class Player : MonoBehaviour
                     if ((player.moleculeCount["C"] == 8) && (player.moleculeCount["H"] == 7) && (player.moleculeCount["N"] == 3) && (player.moleculeCount["O"] == 2))
                     {
                         Product("Luminol");
-                        playerData.Molecule.Clear();
                     }
                 }
                 else if ((playerData.Molecule.Contains("Fe")) && (playerData.Molecule.Contains("S")) && (playerData.Molecule.Contains("O")))
@@ -200,7 +208,6 @@ public class Player : MonoBehaviour
                     if ((player.moleculeCount["Fe"] == 1) && (player.moleculeCount["S"] == 1) && (player.moleculeCount["O"] == 4))
                     {
                         Product("Ink");
-                        playerData.Molecule.Clear();
                     }
                 }
                 else if ((playerData.Molecule.Contains("C")) && (playerData.Molecule.Contains("H")))
@@ -208,7 +215,6 @@ public class Player : MonoBehaviour
                     if ((player.moleculeCount["C"] == 5) && (player.moleculeCount["H"] == 8))
                     {
                         Product("Latex");
-                        playerData.Molecule.Clear();
                     }
                 }
                 else if ((playerData.Molecule.Contains("C")) && (playerData.Molecule.Contains("H")))
@@ -216,7 +222,6 @@ public class Player : MonoBehaviour
                     if ((player.moleculeCount["C"] == 9) && (player.moleculeCount["H"] == 20))
                     {
                         Product("Crude Oil");
-                        playerData.Molecule.Clear();
                     }
                 }
                 else if ((playerData.Molecule.Contains("Na")) && (playerData.Molecule.Contains("O")) && (playerData.Molecule.Contains("H")))
@@ -224,7 +229,6 @@ public class Player : MonoBehaviour
                     if ((player.moleculeCount["Na"] == 1) && (player.moleculeCount["O"] == 1) && (player.moleculeCount["H"] == 1))
                     {
                         Product("Lye");
-                        playerData.Molecule.Clear();
                     }
                 }
                 else if ((playerData.Molecule.Contains("C")) && (playerData.Molecule.Contains("H")) && (playerData.Molecule.Contains("Na")) && (playerData.Molecule.Contains("O")))
@@ -232,7 +236,6 @@ public class Player : MonoBehaviour
                     if ((player.moleculeCount["C"] == 18) && (player.moleculeCount["H"] == 35) && (player.moleculeCount["Na"] == 1) && (player.moleculeCount["O"] == 2))
                     {
                         Product("Soap");
-                        playerData.Molecule.Clear();
                     }
                 }
                 else if ((playerData.Molecule.Contains("C")) && (playerData.Molecule.Contains("H")) && (playerData.Molecule.Contains("O")))
@@ -240,7 +243,6 @@ public class Player : MonoBehaviour
                     if ((player.moleculeCount["C"] == 6) && (player.moleculeCount["H"] == 12) && (player.moleculeCount["O"] == 6))
                     {
                         Product("Sugar");
-                        playerData.Molecule.Clear();
                     }
                 }
                 else if ((playerData.Molecule.Contains("S")) && (playerData.Molecule.Contains("O")))
@@ -248,7 +250,6 @@ public class Player : MonoBehaviour
                     if ((player.moleculeCount["S"] == 1) && (player.moleculeCount["O"] == 4))
                     {
                         Product("Sulfate");
-                        playerData.Molecule.Clear();
                     }
                 }
                 else if ((playerData.Molecule.Contains("K")) && (playerData.Molecule.Contains("I")))
@@ -256,7 +257,6 @@ public class Player : MonoBehaviour
                     if ((player.moleculeCount["K"] == 1) && (player.moleculeCount["I"] == 1))
                     {
                         Product("Potassium Iodide");
-                        playerData.Molecule.Clear();
                     }
                 }
                 else if ((playerData.Molecule.Contains("H")) && (playerData.Molecule.Contains("O")))
@@ -264,7 +264,6 @@ public class Player : MonoBehaviour
                     if ((player.moleculeCount["H"] == 2) && (player.moleculeCount["O"] == 2))
                     {
                         Product("Hydrogen Peroxide");
-                        playerData.Molecule.Clear();
                     }
                 }
                 else if ((playerData.Molecule.Contains("C")) && (playerData.Molecule.Contains("H")) && (playerData.Molecule.Contains("Na")) && (playerData.Molecule.Contains("O")))
@@ -272,7 +271,6 @@ public class Player : MonoBehaviour
                     if ((player.moleculeCount["C"] == 2) && (player.moleculeCount["H"] == 3) && (player.moleculeCount["Na"] == 1) && (player.moleculeCount["O"] == 2))
                     {
                         Product("Sodium Acetate");
-                        playerData.Molecule.Clear();
                     }
                 }
                 else if ((playerData.Molecule.Contains("H")) && (playerData.Molecule.Contains("Cl")))
@@ -280,7 +278,6 @@ public class Player : MonoBehaviour
                     if ((player.moleculeCount["H"] == 1) && (player.moleculeCount["Cl"] == 1))
                     {
                         Product("Hydrochloric Acid");
-                        playerData.Molecule.Clear();
                     }
                 }
                 else if ((playerData.Molecule.Contains("Na")) && (playerData.Molecule.Contains("I")))
@@ -288,11 +285,8 @@ public class Player : MonoBehaviour
                     if ((player.moleculeCount["Na"] == 1) && (player.moleculeCount["I"] == 1))
                     {
                         Product("Sodium Iodide");
-                        playerData.Molecule.Clear();
                     }
                 }
-                player.moleculeCount.Clear();
-                slotCheck();
             }
             else if ((Input.GetMouseButtonDown(0)) && (player.raycastObject == "Left Chair") && playerData.Seat != "Left")
             {
@@ -324,7 +318,21 @@ public class Player : MonoBehaviour
         var playerData = PlayerData.Instance();
         for (int i = 1; i <= 9; i = i + 1)
         {
-            GameObject.Find($"Text{i}").GetComponent<Text>().text = playerData.slotItem[$"Slot{i}"];
+            if ((playerData.slotItem[$"Slot{i}"]["Element"] != null) && (Convert.ToInt32(playerData.slotItem[$"Slot{i}"]["Quantity"]) == 1))
+            {
+                GameObject.Find($"Text{i}").GetComponent<Text>().text = playerData.slotItem[$"Slot{i}"]["Element"].ToString();
+                GameObject.Find($"ItemNum{i}").GetComponent<Text>().text = "";
+            }
+            else if ((playerData.slotItem[$"Slot{i}"]["Element"] != null) && (Convert.ToInt32(playerData.slotItem[$"Slot{i}"]["Quantity"]) > 1))
+            {
+                GameObject.Find($"Text{i}").GetComponent<Text>().text = playerData.slotItem[$"Slot{i}"]["Element"].ToString();
+                GameObject.Find($"ItemNum{i}").GetComponent<Text>().text = playerData.slotItem[$"Slot{i}"]["Quantity"].ToString();
+            }
+            else if ((playerData.slotItem[$"Slot{i}"]["Element"] == null) && (playerData.slotItem[$"Slot{i}"]["Quantity"] == null))
+            {
+                GameObject.Find($"Text{i}").GetComponent<Text>().text = "";
+                GameObject.Find($"ItemNum{i}").GetComponent<Text>().text = "";
+            }
         }
     }
     public void Product(string molecule)
@@ -332,29 +340,42 @@ public class Player : MonoBehaviour
         var playerData = PlayerData.Instance();
         for (int i = 1; i <= 9; i = i + 1)
         {
-            if (playerData.slotItem[$"Slot{i}"] == "")
+            if (Convert.ToString(playerData.slotItem[$"Slot{i}"]["Element"]) == molecule)
             {
-                playerData.slotItem[$"Slot{i}"] = molecule;
+                playerData.slotItem[$"Slot{i}"]["Quantity"] = Convert.ToInt32(playerData.slotItem[$"Slot{i}"]["Quantity"]) + 1;
+                break;
+            }
+            else if ((playerData.slotItem[$"Slot{i}"]["Element"] == null) && (playerData.slotItem[$"Slot{i}"]["Quantity"] == null))
+            {
+                playerData.slotItem[$"Slot{i}"]["Element"] = molecule;
+                playerData.slotItem[$"Slot{i}"]["Quantity"] = 1;
                 break;
             }
         }
+        slotCheck();
+        playerData.Molecule.Clear();
+        player.moleculeCount.Clear();
     }
     public void flaskCheck()
     {
         var playerData = PlayerData.Instance();
-        print(playerData.flaskElements.Count);
+        for (int i = 1; i <= 10; i = i + 1)
+        {
+            GameObject.Find($"Item{i}").GetComponent<Text>().text = "";
+        }
         for (int i = 1; i <= playerData.flaskElements.Count; i = i + 1)
         {
             GameObject.Find($"Item{i}").GetComponent<Text>().text = playerData.flaskElements[i - 1];
         }
     }
-    public void updateLevel()
+public void updateLevel()
     {
         var playerData = PlayerData.Instance();
         playerData.flaskElements.Clear();
         playerData.Level += 1;
         playerData.levelAvailable.Add($"Level {playerData.Level}");
         GameObject.Find("Level").GetComponent<Text>().text = playerData.Level.ToString();
+        flaskCheck();
     }
     public void Save()
     {

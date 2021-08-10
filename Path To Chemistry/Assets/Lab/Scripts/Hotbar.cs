@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
 
 public static class hotbar
@@ -103,9 +104,15 @@ public class Hotbar : MonoBehaviour
         {
             for (int i = 1; i <= 9; i = i + 1)
             {
-                if (playerData.slotItem[$"Slot{i}"] == "")
+                if (Convert.ToString(playerData.slotItem[$"Slot{i}"]["Element"]) == playerData.flaskElements[0])
                 {
-                    playerData.slotItem[$"Slot{i}"] = playerData.flaskElements[0];
+                    playerData.slotItem[$"Slot{i}"]["Quantity"] = Convert.ToInt32(playerData.slotItem[$"Slot{i}"]["Quantity"]) + 1;
+                    break;
+                }
+                else if ((playerData.slotItem[$"Slot{i}"]["Element"] == null) && (playerData.slotItem[$"Slot{i}"]["Quantity"] == null))
+                {
+                    playerData.slotItem[$"Slot{i}"]["Element"] = playerData.flaskElements[0];
+                    playerData.slotItem[$"Slot{i}"]["Quantity"] = 1;
                     break;
                 }
             }
@@ -121,9 +128,15 @@ public class Hotbar : MonoBehaviour
         {
             for (int i = 1; i <= 9; i = i + 1)
             {
-                if (playerData.slotItem[$"Slot{i}"] == "")
+                if (Convert.ToString(playerData.slotItem[$"Slot{i}"]["Element"]) == playerData.flaskElements[1])
                 {
-                    playerData.slotItem[$"Slot{i}"] = playerData.flaskElements[1];
+                    playerData.slotItem[$"Slot{i}"]["Quantity"] = Convert.ToInt32(playerData.slotItem[$"Slot{i}"]["Quantity"]) + 1;
+                    break;
+                }
+                else if ((playerData.slotItem[$"Slot{i}"]["Element"] == null) && (playerData.slotItem[$"Slot{i}"]["Quantity"] == null))
+                {
+                    playerData.slotItem[$"Slot{i}"]["Element"] = playerData.flaskElements[1];
+                    playerData.slotItem[$"Slot{i}"]["Quantity"] = 1;
                     break;
                 }
             }
@@ -139,9 +152,15 @@ public class Hotbar : MonoBehaviour
         {
             for (int i = 1; i <= 9; i = i + 1)
             {
-                if (playerData.slotItem[$"Slot{i}"] == "")
+                if (Convert.ToString(playerData.slotItem[$"Slot{i}"]["Element"]) == playerData.flaskElements[2])
                 {
-                    playerData.slotItem[$"Slot{i}"] = playerData.flaskElements[2];
+                    playerData.slotItem[$"Slot{i}"]["Quantity"] = Convert.ToInt32(playerData.slotItem[$"Slot{i}"]["Quantity"]) + 1;
+                    break;
+                }
+                else if ((playerData.slotItem[$"Slot{i}"]["Element"] == null) && (playerData.slotItem[$"Slot{i}"]["Quantity"] == null))
+                {
+                    playerData.slotItem[$"Slot{i}"]["Element"] = playerData.flaskElements[2];
+                    playerData.slotItem[$"Slot{i}"]["Quantity"] = 1;
                     break;
                 }
             }
@@ -157,9 +176,15 @@ public class Hotbar : MonoBehaviour
         {
             for (int i = 1; i <= 9; i = i + 1)
             {
-                if (playerData.slotItem[$"Slot{i}"] == "")
+                if (Convert.ToString(playerData.slotItem[$"Slot{i}"]["Element"]) == playerData.flaskElements[3])
                 {
-                    playerData.slotItem[$"Slot{i}"] = playerData.flaskElements[3];
+                    playerData.slotItem[$"Slot{i}"]["Quantity"] = Convert.ToInt32(playerData.slotItem[$"Slot{i}"]["Quantity"]) + 1;
+                    break;
+                }
+                else if ((playerData.slotItem[$"Slot{i}"]["Element"] == null) && (playerData.slotItem[$"Slot{i}"]["Quantity"] == null))
+                {
+                    playerData.slotItem[$"Slot{i}"]["Element"] = playerData.flaskElements[3];
+                    playerData.slotItem[$"Slot{i}"]["Quantity"] = 1;
                     break;
                 }
             }
@@ -175,9 +200,15 @@ public class Hotbar : MonoBehaviour
         {
             for (int i = 1; i <= 9; i = i + 1)
             {
-                if (playerData.slotItem[$"Slot{i}"] == "")
+                if (Convert.ToString(playerData.slotItem[$"Slot{i}"]["Element"]) == playerData.flaskElements[4])
                 {
-                    playerData.slotItem[$"Slot{i}"] = playerData.flaskElements[4];
+                    playerData.slotItem[$"Slot{i}"]["Quantity"] = Convert.ToInt32(playerData.slotItem[$"Slot{i}"]["Quantity"]) + 1;
+                    break;
+                }
+                else if ((playerData.slotItem[$"Slot{i}"]["Element"] == null) && (playerData.slotItem[$"Slot{i}"]["Quantity"] == null))
+                {
+                    playerData.slotItem[$"Slot{i}"]["Element"] = playerData.flaskElements[4];
+                    playerData.slotItem[$"Slot{i}"]["Quantity"] = 1;
                     break;
                 }
             }
@@ -193,9 +224,15 @@ public class Hotbar : MonoBehaviour
         {
             for (int i = 1; i <= 9; i = i + 1)
             {
-                if (playerData.slotItem[$"Slot{i}"] == "")
+                if (Convert.ToString(playerData.slotItem[$"Slot{i}"]["Element"]) == playerData.flaskElements[5])
                 {
-                    playerData.slotItem[$"Slot{i}"] = playerData.flaskElements[5];
+                    playerData.slotItem[$"Slot{i}"]["Quantity"] = Convert.ToInt32(playerData.slotItem[$"Slot{i}"]["Quantity"]) + 1;
+                    break;
+                }
+                else if ((playerData.slotItem[$"Slot{i}"]["Element"] == null) && (playerData.slotItem[$"Slot{i}"]["Quantity"] == null))
+                {
+                    playerData.slotItem[$"Slot{i}"]["Element"] = playerData.flaskElements[5];
+                    playerData.slotItem[$"Slot{i}"]["Quantity"] = 1;
                     break;
                 }
             }
@@ -211,9 +248,15 @@ public class Hotbar : MonoBehaviour
         {
             for (int i = 1; i <= 9; i = i + 1)
             {
-                if (playerData.slotItem[$"Slot{i}"] == "")
+                if (Convert.ToString(playerData.slotItem[$"Slot{i}"]["Element"]) == playerData.flaskElements[6])
                 {
-                    playerData.slotItem[$"Slot{i}"] = playerData.flaskElements[6];
+                    playerData.slotItem[$"Slot{i}"]["Quantity"] = Convert.ToInt32(playerData.slotItem[$"Slot{i}"]["Quantity"]) + 1;
+                    break;
+                }
+                else if ((playerData.slotItem[$"Slot{i}"]["Element"] == null) && (playerData.slotItem[$"Slot{i}"]["Quantity"] == null))
+                {
+                    playerData.slotItem[$"Slot{i}"]["Element"] = playerData.flaskElements[6];
+                    playerData.slotItem[$"Slot{i}"]["Quantity"] = 1;
                     break;
                 }
             }
@@ -229,9 +272,15 @@ public class Hotbar : MonoBehaviour
         {
             for (int i = 1; i <= 9; i = i + 1)
             {
-                if (playerData.slotItem[$"Slot{i}"] == "")
+                if (Convert.ToString(playerData.slotItem[$"Slot{i}"]["Element"]) == playerData.flaskElements[7])
                 {
-                    playerData.slotItem[$"Slot{i}"] = playerData.flaskElements[7];
+                    playerData.slotItem[$"Slot{i}"]["Quantity"] = Convert.ToInt32(playerData.slotItem[$"Slot{i}"]["Quantity"]) + 1;
+                    break;
+                }
+                else if ((playerData.slotItem[$"Slot{i}"]["Element"] == null) && (playerData.slotItem[$"Slot{i}"]["Quantity"] == null))
+                {
+                    playerData.slotItem[$"Slot{i}"]["Element"] = playerData.flaskElements[7];
+                    playerData.slotItem[$"Slot{i}"]["Quantity"] = 1;
                     break;
                 }
             }
@@ -247,9 +296,15 @@ public class Hotbar : MonoBehaviour
         {
             for (int i = 1; i <= 9; i = i + 1)
             {
-                if (playerData.slotItem[$"Slot{i}"] == "")
+                if (Convert.ToString(playerData.slotItem[$"Slot{i}"]["Element"]) == playerData.flaskElements[8])
                 {
-                    playerData.slotItem[$"Slot{i}"] = playerData.flaskElements[8];
+                    playerData.slotItem[$"Slot{i}"]["Quantity"] = Convert.ToInt32(playerData.slotItem[$"Slot{i}"]["Quantity"]) + 1;
+                    break;
+                }
+                else if ((playerData.slotItem[$"Slot{i}"]["Element"] == null) && (playerData.slotItem[$"Slot{i}"]["Quantity"] == null))
+                {
+                    playerData.slotItem[$"Slot{i}"]["Element"] = playerData.flaskElements[8];
+                    playerData.slotItem[$"Slot{i}"]["Quantity"] = 1;
                     break;
                 }
             }
@@ -265,9 +320,15 @@ public class Hotbar : MonoBehaviour
         {
             for (int i = 1; i <= 9; i = i + 1)
             {
-                if (playerData.slotItem[$"Slot{i}"] == "")
+                if (Convert.ToString(playerData.slotItem[$"Slot{i}"]["Element"]) == playerData.flaskElements[9])
                 {
-                    playerData.slotItem[$"Slot{i}"] = playerData.flaskElements[9];
+                    playerData.slotItem[$"Slot{i}"]["Quantity"] = Convert.ToInt32(playerData.slotItem[$"Slot{i}"]["Quantity"]) + 1;
+                    break;
+                }
+                else if ((playerData.slotItem[$"Slot{i}"]["Element"] == null) && (playerData.slotItem[$"Slot{i}"]["Quantity"] == null))
+                {
+                    playerData.slotItem[$"Slot{i}"]["Element"] = playerData.flaskElements[9];
+                    playerData.slotItem[$"Slot{i}"]["Quantity"] = 1;
                     break;
                 }
             }
@@ -281,7 +342,21 @@ public class Hotbar : MonoBehaviour
         var playerData = PlayerData.Instance();
         for (int i = 1; i <= 9; i = i + 1)
         {
-            GameObject.Find($"Text{i}").GetComponent<Text>().text = playerData.slotItem[$"Slot{i}"];
+            if ((playerData.slotItem[$"Slot{i}"]["Element"] != null) && (Convert.ToInt32(playerData.slotItem[$"Slot{i}"]["Quantity"]) == 1))
+            {
+                GameObject.Find($"Text{i}").GetComponent<Text>().text = playerData.slotItem[$"Slot{i}"]["Element"].ToString();
+                GameObject.Find($"ItemNum{i}").GetComponent<Text>().text = "";
+            }
+            else if ((playerData.slotItem[$"Slot{i}"]["Element"] != null) && (Convert.ToInt32(playerData.slotItem[$"Slot{i}"]["Quantity"]) > 1))
+            {
+                GameObject.Find($"Text{i}").GetComponent<Text>().text = playerData.slotItem[$"Slot{i}"]["Element"].ToString();
+                GameObject.Find($"ItemNum{i}").GetComponent<Text>().text = playerData.slotItem[$"Slot{i}"]["Quantity"].ToString();
+            }
+            else if ((playerData.slotItem[$"Slot{i}"]["Element"] == null) && (playerData.slotItem[$"Slot{i}"]["Quantity"] == null))
+            {
+                GameObject.Find($"Text{i}").GetComponent<Text>().text = "";
+                GameObject.Find($"ItemNum{i}").GetComponent<Text>().text = "";
+            }
         }
     }
     public void flaskCheck()
