@@ -40,55 +40,31 @@ public class ChemidexHandler : MonoBehaviour
     }
     public void Chem1()
     {
-        var playerData = PlayerData.Instance();
-        if (Chemidex.chemNum != "1")
-        {
-            GameObject.Find("Chem" + Chemidex.chemNum).GetComponent<Image>().color = Color.white;
-            Chemidex.chemNum = "1";
-            GameObject.Find("Chem" + Chemidex.chemNum).GetComponent<Image>().color = Color.cyan;
-            chemCheck();
-        }
+        chemButton("1");
     }
     public void Chem2()
     {
-        var playerData = PlayerData.Instance();
-        if (Chemidex.chemNum != "2")
-        {
-            GameObject.Find("Chem" + Chemidex.chemNum).GetComponent<Image>().color = Color.white;
-            Chemidex.chemNum = "2";
-            GameObject.Find("Chem" + Chemidex.chemNum).GetComponent<Image>().color = Color.cyan;
-            chemCheck();
-        }
+        chemButton("2");
     }
     public void Chem3()
     {
-        var playerData = PlayerData.Instance();
-        if (Chemidex.chemNum != "3")
-        {
-            GameObject.Find("Chem" + Chemidex.chemNum).GetComponent<Image>().color = Color.white;
-            Chemidex.chemNum = "3";
-            GameObject.Find("Chem" + Chemidex.chemNum).GetComponent<Image>().color = Color.cyan;
-            chemCheck();
-        }
+        chemButton("3");
     }
     public void Chem4()
     {
-        var playerData = PlayerData.Instance();
-        if (Chemidex.chemNum != "4")
-        {
-            GameObject.Find("Chem" + Chemidex.chemNum).GetComponent<Image>().color = Color.white;
-            Chemidex.chemNum = "4";
-            GameObject.Find("Chem" + Chemidex.chemNum).GetComponent<Image>().color = Color.cyan;
-            chemCheck();
-        }
+        chemButton("4");
     }
     public void Chem5()
     {
+        chemButton("5");
+    }
+    void chemButton(string Num)
+    {
         var playerData = PlayerData.Instance();
-        if (Chemidex.chemNum != "5")
+        if (Chemidex.chemNum != Num)
         {
             GameObject.Find("Chem" + Chemidex.chemNum).GetComponent<Image>().color = Color.white;
-            Chemidex.chemNum = "5";
+            Chemidex.chemNum = Num;
             GameObject.Find("Chem" + Chemidex.chemNum).GetComponent<Image>().color = Color.cyan;
             chemCheck();
         }

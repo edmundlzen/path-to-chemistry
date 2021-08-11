@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System.Linq;
+using Newtonsoft.Json;
 using System.IO;
 using System.Collections.Generic;
 using UnityEngine;
@@ -49,9 +50,9 @@ public class Player : MonoBehaviour
         playerBody.Rotate(Vector3.up * mouseX);
         var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
-        if (Physics.Raycast(ray, out hit))
+        if (Physics.Raycast(ray, out hit, 2))
         {
-            //Debug.DrawLine(ray.origin, hit.point, Color.red);
+            Debug.DrawLine(ray.origin, hit.point, Color.red);
             var selection = hit.transform;
             player.raycastObject = selection.name;
             GameObject.Find("Label1").GetComponent<Text>().text = player.raycastObject;
@@ -59,7 +60,14 @@ public class Player : MonoBehaviour
             {
                 if ((playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"] != null) && (playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"] != null) && (playerData.flaskElements.Count <= 10))
                 {
-                    playerData.flaskElements.Add(playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"].ToString());
+                    if (playerData.flaskElements.ContainsKey(playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"].ToString()))
+                    {
+                        playerData.flaskElements[playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"].ToString()] = Convert.ToInt32(playerData.flaskElements[playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"].ToString()]) + 1;
+                    }
+                    else
+                    {
+                        playerData.flaskElements.Add(playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"].ToString(), 1);
+                    }
                     if (Convert.ToInt32(playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"]) > 1)
                     {
                         playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"] = Convert.ToInt32(playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"]) - 1;
@@ -96,7 +104,7 @@ public class Player : MonoBehaviour
                 var flaskMouth = GameObject.Find("Flask Mouth").GetComponent<Transform>();
                 if (playerData.levelAvailable.Contains("Level 1"))
                 {
-                    if ((playerData.flaskElements.Contains("K") && (playerData.flaskElements.Contains("Water")) && (playerData.flaskElements.Count == 2)))
+                    if ((playerData.flaskElements.ContainsKey("K") && (playerData.flaskElements.ContainsKey("Water")) && (playerData.flaskElements.Count == 2)))
                     {
                         GameObject.Find("Label2").GetComponent<Text>().text = "Explosion!";
                         Instantiate(explosionEffect, potion.position, potion.rotation);
@@ -105,7 +113,7 @@ public class Player : MonoBehaviour
                 }
                 if (playerData.levelAvailable.Contains("Level 2"))
                 {
-                    if ((playerData.flaskElements.Contains("Hydrochloric Acid")) && (playerData.flaskElements.Contains("Ammonia")) && (playerData.flaskElements.Count == 2))
+                    if ((playerData.flaskElements.ContainsKey("Hydrochloric Acid")) && (playerData.flaskElements.ContainsKey("Ammonia")) && (playerData.flaskElements.Count == 2))
                     {
                         GameObject.Find("Label2").GetComponent<Text>().text = "Smoke!";
                         Instantiate(smokeEffect, flaskMouth.position, flaskMouth.rotation);
@@ -114,7 +122,7 @@ public class Player : MonoBehaviour
                 }
                 if (playerData.levelAvailable.Contains("Level 3"))
                 {
-                    if ((playerData.flaskElements.Contains("Hydrogen Peroxide")) && (playerData.flaskElements.Contains("Sodium Iodide")) && (playerData.flaskElements.Count == 2))
+                    if ((playerData.flaskElements.ContainsKey("Hydrogen Peroxide")) && (playerData.flaskElements.ContainsKey("Sodium Iodide")) && (playerData.flaskElements.Count == 2))
                     {
                         GameObject.Find("Label2").GetComponent<Text>().text = "Splash!";
                         updateLevel();
@@ -122,7 +130,7 @@ public class Player : MonoBehaviour
                 }
                 if (playerData.levelAvailable.Contains("Level 4"))
                 {
-                    if ((playerData.flaskElements.Contains("Sodium Acetate")) && (playerData.flaskElements.Contains("Water")) && (playerData.flaskElements.Count == 2))
+                    if ((playerData.flaskElements.ContainsKey("Sodium Acetate")) && (playerData.flaskElements.ContainsKey("Water")) && (playerData.flaskElements.Count == 2))
                     {
                         GameObject.Find("Label2").GetComponent<Text>().text = "Hot Ice";
                         updateLevel();
@@ -130,7 +138,7 @@ public class Player : MonoBehaviour
                 }
                 if (playerData.levelAvailable.Contains("Level 5"))
                 {
-                    if ((playerData.flaskElements.Contains("Potassium Iodide")) && (playerData.flaskElements.Contains("Hydrogen Peroxide")) && (playerData.flaskElements.Contains("Soup")) && (playerData.flaskElements.Count == 3))
+                    if ((playerData.flaskElements.ContainsKey("Potassium Iodide")) && (playerData.flaskElements.ContainsKey("Hydrogen Peroxide")) && (playerData.flaskElements.ContainsKey("Soup")) && (playerData.flaskElements.Count == 3))
                     {
                         GameObject.Find("Label2").GetComponent<Text>().text = "Elephant Toothpaste";
                         updateLevel();
@@ -156,10 +164,6 @@ public class Player : MonoBehaviour
                         player.moleculeCount.Remove(Item);
                         player.moleculeCount.Add(Item, Count + 1);
                     }
-                }
-                foreach (KeyValuePair<string, int> entry in player.moleculeCount)
-                {
-                    print(entry.Key + entry.Value);
                 }
                 if ((playerData.Molecule.Contains("H")) && (playerData.Molecule.Contains("O")))
                 {
@@ -313,7 +317,7 @@ public class Player : MonoBehaviour
             }
         }
     }
-    public void slotCheck()
+    void slotCheck()
     {
         var playerData = PlayerData.Instance();
         for (int i = 1; i <= 9; i = i + 1)
@@ -335,7 +339,7 @@ public class Player : MonoBehaviour
             }
         }
     }
-    public void Product(string molecule)
+    void Product(string molecule)
     {
         var playerData = PlayerData.Instance();
         for (int i = 1; i <= 9; i = i + 1)
@@ -356,19 +360,29 @@ public class Player : MonoBehaviour
         playerData.Molecule.Clear();
         player.moleculeCount.Clear();
     }
-    public void flaskCheck()
+    void flaskCheck()
     {
         var playerData = PlayerData.Instance();
         for (int i = 1; i <= 10; i = i + 1)
         {
             GameObject.Find($"Item{i}").GetComponent<Text>().text = "";
+            GameObject.Find($"Invenum{i}").GetComponent<Text>().text = "";
         }
         for (int i = 1; i <= playerData.flaskElements.Count; i = i + 1)
         {
-            GameObject.Find($"Item{i}").GetComponent<Text>().text = playerData.flaskElements[i - 1];
+            if (playerData.flaskElements.Values.ElementAt(i - 1) > 1)
+            {
+                GameObject.Find($"Item{i}").GetComponent<Text>().text = playerData.flaskElements.Keys.ElementAt(i - 1);
+                GameObject.Find($"Invenum{i}").GetComponent<Text>().text = playerData.flaskElements.Values.ElementAt(i - 1).ToString();
+            }
+            else
+            {
+                GameObject.Find($"Item{i}").GetComponent<Text>().text = playerData.flaskElements.Keys.ElementAt(i - 1);
+                GameObject.Find($"Invenum{i}").GetComponent<Text>().text = "";
+            }
         }
     }
-public void updateLevel()
+    void updateLevel()
     {
         var playerData = PlayerData.Instance();
         playerData.flaskElements.Clear();
@@ -377,7 +391,7 @@ public void updateLevel()
         GameObject.Find("Level").GetComponent<Text>().text = playerData.Level.ToString();
         flaskCheck();
     }
-    public void Save()
+    void Save()
     {
         var playerData = PlayerData.Instance();
         string directory = $"{Application.persistentDataPath}/Data";
@@ -392,7 +406,7 @@ public void updateLevel()
         var filePath = Path.Combine(directory, "Saves.json");
         File.WriteAllText(filePath, Json);
     }
-    public void Load()
+    void Load()
     {
         string directory = $"{Application.persistentDataPath}/Data";
         var filePath = Path.Combine(directory, "Saves.json");
