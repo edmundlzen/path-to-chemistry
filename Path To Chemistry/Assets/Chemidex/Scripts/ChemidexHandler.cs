@@ -1,13 +1,18 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using Newtonsoft.Json;
-using System.IO;
 
 public static class Chemidex
 {
     public static string chemNum { get; set; }
-    public static Dictionary<string, string> chemRecipes { get; set; }
+    public static Dictionary<string, string> chemRecipes = new Dictionary<string, string>()
+    {
+        { "Recipe 1", "K + H2O" },
+        { "Recipe 2", "HCl + NH3" },
+        { "Recipe 3", "H2O2 + NaI" },
+        { "Recipe 4", "C2H3NaO2 + H2O" },
+        { "Recipe 5", "KI + H2O2 + C18H35NaO2" }
+    };
 }
 
 public class ChemidexHandler : MonoBehaviour
@@ -16,14 +21,6 @@ public class ChemidexHandler : MonoBehaviour
     {
         var playerData = PlayerData.Instance();
         Chemidex.chemNum = "1";
-        Chemidex.chemRecipes = new Dictionary<string, string>()
-        {
-            { "Recipe 1", "K + H2O" },
-            { "Recipe 2", "HCl + NH3" },
-            { "Recipe 3", "H2O2 + NaI" },
-            { "Recipe 4", "C2H3NaO2 + H2O" },
-            { "Recipe 5", "KI + H2O2 + C18H35NaO2" }
-        };
         GameObject.Find("Chem" + Chemidex.chemNum).GetComponent<Image>().color = Color.cyan;
         for (int i = 1; i <= 5; i++)
         {
@@ -40,55 +37,31 @@ public class ChemidexHandler : MonoBehaviour
     }
     public void Chem1()
     {
-        var playerData = PlayerData.Instance();
-        if (Chemidex.chemNum != "1")
-        {
-            GameObject.Find("Chem" + Chemidex.chemNum).GetComponent<Image>().color = Color.white;
-            Chemidex.chemNum = "1";
-            GameObject.Find("Chem" + Chemidex.chemNum).GetComponent<Image>().color = Color.cyan;
-            chemCheck();
-        }
+        chemButton("1");
     }
     public void Chem2()
     {
-        var playerData = PlayerData.Instance();
-        if (Chemidex.chemNum != "2")
-        {
-            GameObject.Find("Chem" + Chemidex.chemNum).GetComponent<Image>().color = Color.white;
-            Chemidex.chemNum = "2";
-            GameObject.Find("Chem" + Chemidex.chemNum).GetComponent<Image>().color = Color.cyan;
-            chemCheck();
-        }
+        chemButton("2");
     }
     public void Chem3()
     {
-        var playerData = PlayerData.Instance();
-        if (Chemidex.chemNum != "3")
-        {
-            GameObject.Find("Chem" + Chemidex.chemNum).GetComponent<Image>().color = Color.white;
-            Chemidex.chemNum = "3";
-            GameObject.Find("Chem" + Chemidex.chemNum).GetComponent<Image>().color = Color.cyan;
-            chemCheck();
-        }
+        chemButton("3");
     }
     public void Chem4()
     {
-        var playerData = PlayerData.Instance();
-        if (Chemidex.chemNum != "4")
-        {
-            GameObject.Find("Chem" + Chemidex.chemNum).GetComponent<Image>().color = Color.white;
-            Chemidex.chemNum = "4";
-            GameObject.Find("Chem" + Chemidex.chemNum).GetComponent<Image>().color = Color.cyan;
-            chemCheck();
-        }
+        chemButton("4");
     }
     public void Chem5()
     {
+        chemButton("5");
+    }
+    void chemButton(string Num)
+    {
         var playerData = PlayerData.Instance();
-        if (Chemidex.chemNum != "5")
+        if (Chemidex.chemNum != Num)
         {
             GameObject.Find("Chem" + Chemidex.chemNum).GetComponent<Image>().color = Color.white;
-            Chemidex.chemNum = "5";
+            Chemidex.chemNum = Num;
             GameObject.Find("Chem" + Chemidex.chemNum).GetComponent<Image>().color = Color.cyan;
             chemCheck();
         }
@@ -104,13 +77,5 @@ public class ChemidexHandler : MonoBehaviour
         {
             GameObject.Find("Statistic").GetComponent<Text>().text = "?";
         }
-    }
-    public void Load()
-    {
-        string directory = $"{Application.persistentDataPath}/Data";
-        var filePath = Path.Combine(directory, "Saves.json");
-        var fileContent = File.ReadAllText(filePath);
-        var saveObject = JsonConvert.DeserializeObject<SaveObject>(fileContent);
-        SaveObject.Instance().UpdateSaveObject(saveObject);
     }
 }

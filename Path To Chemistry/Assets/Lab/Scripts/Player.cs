@@ -1,6 +1,8 @@
 ﻿using Newtonsoft.Json;
 using System.IO;
+using System.Linq;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
@@ -8,7 +10,6 @@ using System;
 public static class player
 {
     public static string raycastObject { get; set; }
-    public static Dictionary<string, int> moleculeCount { get; set; }
 }
 
 public class Player : MonoBehaviour
@@ -35,7 +36,8 @@ public class Player : MonoBehaviour
             GameObject.Find("Player").GetComponent<Transform>().position = new Vector3(9.79f, 0.6f, 6.2f);
         }
         player.raycastObject = "";
-        player.moleculeCount = new Dictionary<string, int>();
+        GameObject.Find("Level").GetComponent<Text>().text = playerData.Level.ToString();
+        Guide();
         //Cursor.lockState = CursorLockMode.Locked;
     }
     void Update()
@@ -49,9 +51,9 @@ public class Player : MonoBehaviour
         playerBody.Rotate(Vector3.up * mouseX);
         var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
-        if (Physics.Raycast(ray, out hit))
+        if (Physics.Raycast(ray, out hit, 2))
         {
-            //Debug.DrawLine(ray.origin, hit.point, Color.red);
+            Debug.DrawLine(ray.origin, hit.point, Color.red);
             var selection = hit.transform;
             player.raycastObject = selection.name;
             GameObject.Find("Label1").GetComponent<Text>().text = player.raycastObject;
@@ -59,7 +61,14 @@ public class Player : MonoBehaviour
             {
                 if ((playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"] != null) && (playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"] != null) && (playerData.flaskElements.Count <= 10))
                 {
-                    playerData.flaskElements.Add(playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"].ToString());
+                    if (playerData.flaskElements.ContainsKey(playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"].ToString()))
+                    {
+                        playerData.flaskElements[playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"].ToString()] = Convert.ToInt32(playerData.flaskElements[playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"].ToString()]) + 1;
+                    }
+                    else
+                    {
+                        playerData.flaskElements.Add(playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"].ToString(), 1);
+                    }
                     if (Convert.ToInt32(playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"]) > 1)
                     {
                         playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"] = Convert.ToInt32(playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"]) - 1;
@@ -77,7 +86,14 @@ public class Player : MonoBehaviour
             {
                 if ((playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"] != null) && (playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"] != null))
                 {
-                    playerData.Molecule.Add(playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"].ToString());
+                    if (playerData.Molecule.ContainsKey(playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"].ToString()))
+                    {
+                        playerData.Molecule[playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"].ToString()] = Convert.ToInt32(playerData.Molecule[playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"].ToString()]) + 1;
+                    }
+                    else
+                    {
+                        playerData.Molecule.Add(playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"].ToString(), 1);
+                    }
                     if (Convert.ToInt32(playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"]) > 1)
                     {
                         playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"] = Convert.ToInt32(playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"]) - 1;
@@ -88,6 +104,7 @@ public class Player : MonoBehaviour
                         playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"] = null;
                     }
                     slotCheck();
+                    craftingTable();
                 }
             }
             else if ((Input.GetMouseButtonDown(0)) && (player.raycastObject == "React") && (GameObject.Find("Flask") != null))
@@ -96,7 +113,7 @@ public class Player : MonoBehaviour
                 var flaskMouth = GameObject.Find("Flask Mouth").GetComponent<Transform>();
                 if (playerData.levelAvailable.Contains("Level 1"))
                 {
-                    if ((playerData.flaskElements.Contains("K") && (playerData.flaskElements.Contains("Water")) && (playerData.flaskElements.Count == 2)))
+                    if ((playerData.flaskElements.ContainsKey("K") && (playerData.flaskElements.ContainsKey("Water")) && (playerData.flaskElements.Count == 2)))
                     {
                         GameObject.Find("Label2").GetComponent<Text>().text = "Explosion!";
                         Instantiate(explosionEffect, potion.position, potion.rotation);
@@ -105,7 +122,7 @@ public class Player : MonoBehaviour
                 }
                 if (playerData.levelAvailable.Contains("Level 2"))
                 {
-                    if ((playerData.flaskElements.Contains("Hydrochloric Acid")) && (playerData.flaskElements.Contains("Ammonia")) && (playerData.flaskElements.Count == 2))
+                    if ((playerData.flaskElements.ContainsKey("Hydrochloric Acid")) && (playerData.flaskElements.ContainsKey("Ammonia")) && (playerData.flaskElements.Count == 2))
                     {
                         GameObject.Find("Label2").GetComponent<Text>().text = "Smoke!";
                         Instantiate(smokeEffect, flaskMouth.position, flaskMouth.rotation);
@@ -114,7 +131,7 @@ public class Player : MonoBehaviour
                 }
                 if (playerData.levelAvailable.Contains("Level 3"))
                 {
-                    if ((playerData.flaskElements.Contains("Hydrogen Peroxide")) && (playerData.flaskElements.Contains("Sodium Iodide")) && (playerData.flaskElements.Count == 2))
+                    if ((playerData.flaskElements.ContainsKey("Hydrogen Peroxide")) && (playerData.flaskElements.ContainsKey("Sodium Iodide")) && (playerData.flaskElements.Count == 2))
                     {
                         GameObject.Find("Label2").GetComponent<Text>().text = "Splash!";
                         updateLevel();
@@ -122,7 +139,7 @@ public class Player : MonoBehaviour
                 }
                 if (playerData.levelAvailable.Contains("Level 4"))
                 {
-                    if ((playerData.flaskElements.Contains("Sodium Acetate")) && (playerData.flaskElements.Contains("Water")) && (playerData.flaskElements.Count == 2))
+                    if ((playerData.flaskElements.ContainsKey("Sodium Acetate")) && (playerData.flaskElements.ContainsKey("Water")) && (playerData.flaskElements.Count == 2))
                     {
                         GameObject.Find("Label2").GetComponent<Text>().text = "Hot Ice";
                         updateLevel();
@@ -130,7 +147,7 @@ public class Player : MonoBehaviour
                 }
                 if (playerData.levelAvailable.Contains("Level 5"))
                 {
-                    if ((playerData.flaskElements.Contains("Potassium Iodide")) && (playerData.flaskElements.Contains("Hydrogen Peroxide")) && (playerData.flaskElements.Contains("Soup")) && (playerData.flaskElements.Count == 3))
+                    if ((playerData.flaskElements.ContainsKey("Potassium Iodide")) && (playerData.flaskElements.ContainsKey("Hydrogen Peroxide")) && (playerData.flaskElements.ContainsKey("Soup")) && (playerData.flaskElements.Count == 3))
                     {
                         GameObject.Find("Label2").GetComponent<Text>().text = "Elephant Toothpaste";
                         updateLevel();
@@ -143,150 +160,133 @@ public class Player : MonoBehaviour
             }
             else if ((Input.GetMouseButtonDown(0)) && (player.raycastObject == "Craft"))
             {
-                foreach (string Item in playerData.Molecule)
+                if ((playerData.Molecule.ContainsKey("H")) && (playerData.Molecule.ContainsKey("O")))
                 {
-                    if (!player.moleculeCount.ContainsKey(Item))
-                    {
-                        player.moleculeCount.Add(Item, 1);
-                    }
-                    else
-                    {
-                        int Count = 0;
-                        player.moleculeCount.TryGetValue(Item, out Count);
-                        player.moleculeCount.Remove(Item);
-                        player.moleculeCount.Add(Item, Count + 1);
-                    }
-                }
-                foreach (KeyValuePair<string, int> entry in player.moleculeCount)
-                {
-                    print(entry.Key + entry.Value);
-                }
-                if ((playerData.Molecule.Contains("H")) && (playerData.Molecule.Contains("O")))
-                {
-                    if ((player.moleculeCount["H"] == 2) && (player.moleculeCount["O"] == 1))
+                    if ((playerData.Molecule["H"] == 2) && (playerData.Molecule["O"] == 1))
                     {
                         Product("Water");
                     }
                 }
-                else if ((playerData.Molecule.Contains("Na")) && (playerData.Molecule.Contains("Cl")))
+                else if ((playerData.Molecule.ContainsKey("Na")) && (playerData.Molecule.ContainsKey("Cl")))
                 {
-                    if ((player.moleculeCount["Na"] == 1) && (player.moleculeCount["Cl"] == 1))
+                    if ((playerData.Molecule["Na"] == 1) && (playerData.Molecule["Cl"] == 1))
                     {
                         Product("Salt");
                     }
                 }
-                else if ((playerData.Molecule.Contains("N")) && (playerData.Molecule.Contains("H")))
+                else if ((playerData.Molecule.ContainsKey("N")) && (playerData.Molecule.ContainsKey("H")))
                 {
-                    if ((player.moleculeCount["N"] == 1) && (player.moleculeCount["H"] == 3))
+                    if ((playerData.Molecule["N"] == 1) && (playerData.Molecule["H"] == 3))
                     {
                         Product("Ammonia");
                     }
                 }
-                else if ((playerData.Molecule.Contains("C")) && (playerData.Molecule.Contains("H")) && (playerData.Molecule.Contains("O")))
+                else if ((playerData.Molecule.ContainsKey("C")) && (playerData.Molecule.ContainsKey("H")) && (playerData.Molecule.ContainsKey("O")))
                 {
-                    if ((player.moleculeCount["C"] == 7) && (player.moleculeCount["H"] == 4) && (player.moleculeCount["O"] == 1))
+                    if ((playerData.Molecule["C"] == 7) && (playerData.Molecule["H"] == 4) && (playerData.Molecule["O"] == 1))
                     {
                         Product("Charcoal");
                     }
                 }
-                else if ((playerData.Molecule.Contains("C")) && (playerData.Molecule.Contains("H")) && (playerData.Molecule.Contains("N")) && (playerData.Molecule.Contains("O")))
+                else if ((playerData.Molecule.ContainsKey("C")) && (playerData.Molecule.ContainsKey("H")) && (playerData.Molecule.ContainsKey("N")) && (playerData.Molecule.ContainsKey("O")))
                 {
-                    if ((player.moleculeCount["C"] == 5) && (player.moleculeCount["H"] == 5) && (player.moleculeCount["N"] == 1) && (player.moleculeCount["O"] == 2))
+                    if ((playerData.Molecule["C"] == 5) && (playerData.Molecule["H"] == 5) && (playerData.Molecule["N"] == 1) && (playerData.Molecule["O"] == 2))
                     {
                         Product("Glue");
                     }
                 }
-                else if ((playerData.Molecule.Contains("C")) && (playerData.Molecule.Contains("H")) && (playerData.Molecule.Contains("N")) && (playerData.Molecule.Contains("O")))
+                else if ((playerData.Molecule.ContainsKey("C")) && (playerData.Molecule.ContainsKey("H")) && (playerData.Molecule.ContainsKey("N")) && (playerData.Molecule.ContainsKey("O")))
                 {
-                    if ((player.moleculeCount["C"] == 8) && (player.moleculeCount["H"] == 7) && (player.moleculeCount["N"] == 3) && (player.moleculeCount["O"] == 2))
+                    if ((playerData.Molecule["C"] == 8) && (playerData.Molecule["H"] == 7) && (playerData.Molecule["N"] == 3) && (playerData.Molecule["O"] == 2))
                     {
                         Product("Luminol");
                     }
                 }
-                else if ((playerData.Molecule.Contains("Fe")) && (playerData.Molecule.Contains("S")) && (playerData.Molecule.Contains("O")))
+                else if ((playerData.Molecule.ContainsKey("Fe")) && (playerData.Molecule.ContainsKey("S")) && (playerData.Molecule.ContainsKey("O")))
                 {
-                    if ((player.moleculeCount["Fe"] == 1) && (player.moleculeCount["S"] == 1) && (player.moleculeCount["O"] == 4))
+                    if ((playerData.Molecule["Fe"] == 1) && (playerData.Molecule["S"] == 1) && (playerData.Molecule["O"] == 4))
                     {
                         Product("Ink");
                     }
                 }
-                else if ((playerData.Molecule.Contains("C")) && (playerData.Molecule.Contains("H")))
+                else if ((playerData.Molecule.ContainsKey("C")) && (playerData.Molecule.ContainsKey("H")))
                 {
-                    if ((player.moleculeCount["C"] == 5) && (player.moleculeCount["H"] == 8))
+                    if ((playerData.Molecule["C"] == 5) && (playerData.Molecule["H"] == 8))
                     {
                         Product("Latex");
                     }
                 }
-                else if ((playerData.Molecule.Contains("C")) && (playerData.Molecule.Contains("H")))
+                else if ((playerData.Molecule.ContainsKey("C")) && (playerData.Molecule.ContainsKey("H")))
                 {
-                    if ((player.moleculeCount["C"] == 9) && (player.moleculeCount["H"] == 20))
+                    if ((playerData.Molecule["C"] == 9) && (playerData.Molecule["H"] == 20))
                     {
                         Product("Crude Oil");
                     }
                 }
-                else if ((playerData.Molecule.Contains("Na")) && (playerData.Molecule.Contains("O")) && (playerData.Molecule.Contains("H")))
+                else if ((playerData.Molecule.ContainsKey("Na")) && (playerData.Molecule.ContainsKey("O")) && (playerData.Molecule.ContainsKey("H")))
                 {
-                    if ((player.moleculeCount["Na"] == 1) && (player.moleculeCount["O"] == 1) && (player.moleculeCount["H"] == 1))
+                    if ((playerData.Molecule["Na"] == 1) && (playerData.Molecule["O"] == 1) && (playerData.Molecule["H"] == 1))
                     {
                         Product("Lye");
                     }
                 }
-                else if ((playerData.Molecule.Contains("C")) && (playerData.Molecule.Contains("H")) && (playerData.Molecule.Contains("Na")) && (playerData.Molecule.Contains("O")))
+                else if ((playerData.Molecule.ContainsKey("C")) && (playerData.Molecule.ContainsKey("H")) && (playerData.Molecule.ContainsKey("Na")) && (playerData.Molecule.ContainsKey("O")))
                 {
-                    if ((player.moleculeCount["C"] == 18) && (player.moleculeCount["H"] == 35) && (player.moleculeCount["Na"] == 1) && (player.moleculeCount["O"] == 2))
+                    if ((playerData.Molecule["C"] == 18) && (playerData.Molecule["H"] == 35) && (playerData.Molecule["Na"] == 1) && (playerData.Molecule["O"] == 2))
                     {
                         Product("Soap");
                     }
                 }
-                else if ((playerData.Molecule.Contains("C")) && (playerData.Molecule.Contains("H")) && (playerData.Molecule.Contains("O")))
+                else if ((playerData.Molecule.ContainsKey("C")) && (playerData.Molecule.ContainsKey("H")) && (playerData.Molecule.ContainsKey("O")))
                 {
-                    if ((player.moleculeCount["C"] == 6) && (player.moleculeCount["H"] == 12) && (player.moleculeCount["O"] == 6))
+                    if ((playerData.Molecule["C"] == 6) && (playerData.Molecule["H"] == 12) && (playerData.Molecule["O"] == 6))
                     {
                         Product("Sugar");
                     }
                 }
-                else if ((playerData.Molecule.Contains("S")) && (playerData.Molecule.Contains("O")))
+                else if ((playerData.Molecule.ContainsKey("S")) && (playerData.Molecule.ContainsKey("O")))
                 {
-                    if ((player.moleculeCount["S"] == 1) && (player.moleculeCount["O"] == 4))
+                    if ((playerData.Molecule["S"] == 1) && (playerData.Molecule["O"] == 4))
                     {
                         Product("Sulfate");
                     }
                 }
-                else if ((playerData.Molecule.Contains("K")) && (playerData.Molecule.Contains("I")))
+                else if ((playerData.Molecule.ContainsKey("K")) && (playerData.Molecule.ContainsKey("I")))
                 {
-                    if ((player.moleculeCount["K"] == 1) && (player.moleculeCount["I"] == 1))
+                    if ((playerData.Molecule["K"] == 1) && (playerData.Molecule["I"] == 1))
                     {
                         Product("Potassium Iodide");
                     }
                 }
-                else if ((playerData.Molecule.Contains("H")) && (playerData.Molecule.Contains("O")))
+                else if ((playerData.Molecule.ContainsKey("H")) && (playerData.Molecule.ContainsKey("O")))
                 {
-                    if ((player.moleculeCount["H"] == 2) && (player.moleculeCount["O"] == 2))
+                    if ((playerData.Molecule["H"] == 2) && (playerData.Molecule["O"] == 2))
                     {
                         Product("Hydrogen Peroxide");
                     }
                 }
-                else if ((playerData.Molecule.Contains("C")) && (playerData.Molecule.Contains("H")) && (playerData.Molecule.Contains("Na")) && (playerData.Molecule.Contains("O")))
+                else if ((playerData.Molecule.ContainsKey("C")) && (playerData.Molecule.ContainsKey("H")) && (playerData.Molecule.ContainsKey("Na")) && (playerData.Molecule.ContainsKey("O")))
                 {
-                    if ((player.moleculeCount["C"] == 2) && (player.moleculeCount["H"] == 3) && (player.moleculeCount["Na"] == 1) && (player.moleculeCount["O"] == 2))
+                    if ((playerData.Molecule["C"] == 2) && (playerData.Molecule["H"] == 3) && (playerData.Molecule["Na"] == 1) && (playerData.Molecule["O"] == 2))
                     {
                         Product("Sodium Acetate");
                     }
                 }
-                else if ((playerData.Molecule.Contains("H")) && (playerData.Molecule.Contains("Cl")))
+                else if ((playerData.Molecule.ContainsKey("H")) && (playerData.Molecule.ContainsKey("Cl")))
                 {
-                    if ((player.moleculeCount["H"] == 1) && (player.moleculeCount["Cl"] == 1))
+                    if ((playerData.Molecule["H"] == 1) && (playerData.Molecule["Cl"] == 1))
                     {
                         Product("Hydrochloric Acid");
                     }
                 }
-                else if ((playerData.Molecule.Contains("Na")) && (playerData.Molecule.Contains("I")))
+                else if ((playerData.Molecule.ContainsKey("Na")) && (playerData.Molecule.ContainsKey("I")))
                 {
-                    if ((player.moleculeCount["Na"] == 1) && (player.moleculeCount["I"] == 1))
+                    if ((playerData.Molecule["Na"] == 1) && (playerData.Molecule["I"] == 1))
                     {
                         Product("Sodium Iodide");
                     }
                 }
+                craftingTable();
             }
             else if ((Input.GetMouseButtonDown(0)) && (player.raycastObject == "Left Chair") && playerData.Seat != "Left")
             {
@@ -313,7 +313,7 @@ public class Player : MonoBehaviour
             }
         }
     }
-    public void slotCheck()
+    void slotCheck()
     {
         var playerData = PlayerData.Instance();
         for (int i = 1; i <= 9; i = i + 1)
@@ -335,7 +335,7 @@ public class Player : MonoBehaviour
             }
         }
     }
-    public void Product(string molecule)
+    void Product(string molecule)
     {
         var playerData = PlayerData.Instance();
         for (int i = 1; i <= 9; i = i + 1)
@@ -354,30 +354,74 @@ public class Player : MonoBehaviour
         }
         slotCheck();
         playerData.Molecule.Clear();
-        player.moleculeCount.Clear();
     }
-    public void flaskCheck()
+    void flaskCheck()
     {
         var playerData = PlayerData.Instance();
         for (int i = 1; i <= 10; i = i + 1)
         {
             GameObject.Find($"Item{i}").GetComponent<Text>().text = "";
+            GameObject.Find($"Invenum{i}").GetComponent<Text>().text = "";
         }
         for (int i = 1; i <= playerData.flaskElements.Count; i = i + 1)
         {
-            GameObject.Find($"Item{i}").GetComponent<Text>().text = playerData.flaskElements[i - 1];
+            if (playerData.flaskElements.Values.ElementAt(i - 1) > 1)
+            {
+                GameObject.Find($"Item{i}").GetComponent<Text>().text = playerData.flaskElements.Keys.ElementAt(i - 1);
+                GameObject.Find($"Invenum{i}").GetComponent<Text>().text = playerData.flaskElements.Values.ElementAt(i - 1).ToString();
+            }
+            else
+            {
+                GameObject.Find($"Item{i}").GetComponent<Text>().text = playerData.flaskElements.Keys.ElementAt(i - 1);
+                GameObject.Find($"Invenum{i}").GetComponent<Text>().text = "";
+            }
         }
     }
-public void updateLevel()
+    void craftingTable()
+    {
+        var playerData = PlayerData.Instance();
+        for (int i = 1; i <= 10; i = i + 1)
+        {
+            GameObject.Find($"Element{i}").GetComponent<Text>().text = "";
+            GameObject.Find($"Elementnum{i}").GetComponent<Text>().text = "";
+        }
+        for (int i = 1; i <= playerData.Molecule.Count; i = i + 1)
+        {
+            if (playerData.Molecule.Values.ElementAt(i - 1) > 1)
+            {
+                GameObject.Find($"Element{i}").GetComponent<Text>().text = playerData.Molecule.Keys.ElementAt(i - 1);
+                GameObject.Find($"Elementnum{i}").GetComponent<Text>().text = playerData.Molecule.Values.ElementAt(i - 1).ToString();
+            }
+            else
+            {
+                GameObject.Find($"Element{i}").GetComponent<Text>().text = playerData.Molecule.Keys.ElementAt(i - 1);
+                GameObject.Find($"Elementnum{i}").GetComponent<Text>().text = "";
+            }
+        }
+    }
+    void updateLevel()
     {
         var playerData = PlayerData.Instance();
         playerData.flaskElements.Clear();
         playerData.Level += 1;
         playerData.levelAvailable.Add($"Level {playerData.Level}");
         GameObject.Find("Level").GetComponent<Text>().text = playerData.Level.ToString();
+        Guide();
         flaskCheck();
     }
-    public void Save()
+    void Guide()
+    {
+        var playerData = PlayerData.Instance();
+        if (playerData.Level <= 5)
+        {
+            GameObject.Find("Guide").GetComponent<TextMeshPro>().text = Chemidex.chemRecipes[$"Recipe {playerData.Level}"];
+        }
+        else if (playerData.Level > 5)
+        {
+            GameObject.Find("Guide").GetComponent<TextMeshPro>().text = "Under Constaruction!";
+        }
+    }
+    void Save()
     {
         var playerData = PlayerData.Instance();
         string directory = $"{Application.persistentDataPath}/Data";
@@ -392,7 +436,7 @@ public void updateLevel()
         var filePath = Path.Combine(directory, "Saves.json");
         File.WriteAllText(filePath, Json);
     }
-    public void Load()
+    void Load()
     {
         string directory = $"{Application.persistentDataPath}/Data";
         var filePath = Path.Combine(directory, "Saves.json");

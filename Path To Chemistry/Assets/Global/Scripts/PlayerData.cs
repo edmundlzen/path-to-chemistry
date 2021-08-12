@@ -22,14 +22,13 @@ public class PlayerData
     private PlayerData()
     {
         Level = 1;
-        Counter = 0;
         Seat = "Main";
-        Molecule = new List<string>();
-        flaskElements = new List<string>();
         levelAvailable = new List<string>()
         {
             { $"Level {Level}" }
         };
+        Molecule = new Dictionary<string, int>();
+        flaskElements = new Dictionary<string, int>();
         slotItem = new Dictionary<string, Dictionary<string, object>>()
         {
             { "Slot1", new Dictionary<string, object>()
@@ -91,8 +90,8 @@ public class PlayerData
     public int Level { get; set; }
     public int Counter { get; set; }
     public string Seat { get; set; }
-    public List<string> Molecule { get; set; }
-    public List<string> flaskElements { get; set; }
     public List<string> levelAvailable { get; set; }
+    public Dictionary<string, int> Molecule { get; set; }
+    public Dictionary<string, int> flaskElements { get; set; }
     public Dictionary<string, Dictionary<string, object>> slotItem { get; set; }
 }
