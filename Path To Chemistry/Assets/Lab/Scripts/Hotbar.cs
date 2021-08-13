@@ -19,18 +19,6 @@ public class Hotbar : MonoBehaviour
         flaskCheck();
         craftingTable();
     }
-    public void OK()
-    {
-        GameObject.Find("Elementtxt").GetComponent<Text>().text = "Test";
-        if ((Convert.ToString(player.Protons) == player.Element["protons"]) && (Convert.ToString(player.Electrons) == player.Element["electrons"]) && (Convert.ToString(player.Neutrons) == player.Element["neutrons"]))
-        {
-            GameObject.Find("Elementtxt").GetComponent<Text>().text = "H";
-        }
-        else
-        {
-            GameObject.Find("Elementtxt").GetComponent<Text>().text = "Nothing!";
-        }
-    }
     public void Button1()
     {
         slotButton("1");

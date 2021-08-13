@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 
+
 public class PlayerData
 {
     private static readonly object threadlock = new object();
@@ -94,4 +95,12 @@ public class PlayerData
     public Dictionary<string, int> Molecule { get; set; }
     public Dictionary<string, int> flaskElements { get; set; }
     public Dictionary<string, Dictionary<string, object>> slotItem { get; set; }
+}
+public class ElementData
+{
+    public ElementData()
+    {
+        elements = new Dictionary<string, Dictionary<string, string>>();
+    }
+    public Dictionary<string, Dictionary<string, string>> elements { get; set; }
 }

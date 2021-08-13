@@ -17,8 +17,10 @@ public static class Chemidex
 
 public class ChemidexHandler : MonoBehaviour
 {
+    public static ElementData elementData; 
     void Start()
     {
+        elementData = new ElementData();
         var playerData = PlayerData.Instance();
         Chemidex.chemNum = "1";
         GameObject.Find("Chem" + Chemidex.chemNum).GetComponent<Image>().color = Color.cyan;

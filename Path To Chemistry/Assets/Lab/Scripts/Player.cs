@@ -5,25 +5,10 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
-using System.Collections.Generic;
 
 public static class player
 {
-    public static int Protons { get; set; }
-    public static int Electrons { get; set; }
-    public static int Neutrons { get; set; }
     public static string raycastObject { get; set; }
-    public static Dictionary<string, string> Element = new Dictionary<string, string>()
-    {
-
-        { "symbol", "H" },
-        { "name", "Hydrogen" },
-        { "group", "Other Non-Metal" },
-        { "protons", "1" },
-        { "electrons", "1" },
-        { "neutrons", "0" },
-        { "weight", "1" }
-    };
 }
 
 public class Player : MonoBehaviour
@@ -50,12 +35,6 @@ public class Player : MonoBehaviour
             GameObject.Find("Player").GetComponent<Transform>().position = new Vector3(9.79f, 0.6f, 6.2f);
         }
         player.raycastObject = "";
-        player.Protons = 0;
-        player.Electrons = 0;
-        player.Neutrons = 0;
-        GameObject.Find("protonNum").GetComponent<Text>().text = player.Protons.ToString();
-        GameObject.Find("electronNum").GetComponent<Text>().text = player.Electrons.ToString();
-        GameObject.Find("neutronNum").GetComponent<Text>().text = player.Neutrons.ToString();
         GameObject.Find("Level").GetComponent<Text>().text = playerData.Level.ToString();
         Guide();
         //Cursor.lockState = CursorLockMode.Locked;
@@ -126,21 +105,6 @@ public class Player : MonoBehaviour
                     slotCheck();
                     craftingTable();
                 }
-            }
-            else if ((Input.GetMouseButtonDown(0)) && (player.raycastObject == "Proton"))
-            {
-                player.Protons += 1;
-                GameObject.Find("protonNum").GetComponent<Text>().text = player.Protons.ToString();
-            }
-            else if ((Input.GetMouseButtonDown(0)) && (player.raycastObject == "Electron"))
-            {
-                player.Electrons += 1;
-                GameObject.Find("electronNum").GetComponent<Text>().text = player.Electrons.ToString();
-            }
-            else if ((Input.GetMouseButtonDown(0)) && (player.raycastObject == "Neutron"))
-            {
-                player.Neutrons += 1;
-                GameObject.Find("neutronNum").GetComponent<Text>().text = player.Neutrons.ToString();
             }
             else if ((Input.GetMouseButtonDown(0)) && (player.raycastObject == "React") && (GameObject.Find("Flask") != null))
             {
