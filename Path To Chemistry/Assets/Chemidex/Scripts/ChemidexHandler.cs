@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public static class Chemidex
 {
@@ -36,6 +37,22 @@ public class ChemidexHandler : MonoBehaviour
             }
         }
         chemCheck();
+    }
+    public void Recipes()
+    {
+        SceneManager.LoadScene("Recipes");
+    }
+    public void periodicTable()
+    {
+        SceneManager.LoadScene("Periodic Table");
+    }
+    public void mainMenu()
+    {
+        SceneManager.LoadScene("Main");
+    }
+    public void Back()
+    {
+        SceneManager.LoadScene("Chemidex");
     }
     public void Chem1()
     {
