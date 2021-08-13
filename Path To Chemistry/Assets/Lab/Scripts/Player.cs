@@ -106,6 +106,10 @@ public class Player : MonoBehaviour
                     craftingTable();
                 }
             }
+            else if ((Input.GetMouseButtonDown(0)) && (player.raycastObject == "On"))
+            {
+
+            }
             else if ((Input.GetMouseButtonDown(0)) && (player.raycastObject == "React") && (GameObject.Find("Flask") != null))
             {
                 var potion = GameObject.Find("Flask").GetComponent<Transform>();
