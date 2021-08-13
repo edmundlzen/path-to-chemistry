@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class TerrainChunk {
 	
@@ -13,6 +14,7 @@ public class TerrainChunk {
 	MeshRenderer meshRenderer;
 	MeshFilter meshFilter;
 	MeshCollider meshCollider;
+	GenerateObjects meshObjectGenerator;
 
 	LODInfo[] detailLevels;
 	LODMesh[] lodMeshes;
@@ -28,7 +30,7 @@ public class TerrainChunk {
 	MeshSettings meshSettings;
 	Transform viewer;
 
-	public TerrainChunk(Vector2 coord, HeightMapSettings heightMapSettings, MeshSettings meshSettings, LODInfo[] detailLevels, int colliderLODIndex, Transform parent, Transform viewer, Material material) {
+	public TerrainChunk(Vector2 coord, HeightMapSettings heightMapSettings, MeshSettings meshSettings, LODInfo[] detailLevels, int colliderLODIndex, Transform parent, Transform viewer, Material material, ObjectGenerationSettings objectGenerationSettings) {
 		this.coord = coord;
 		this.detailLevels = detailLevels;
 		this.colliderLODIndex = colliderLODIndex;
@@ -45,6 +47,8 @@ public class TerrainChunk {
 		meshRenderer = meshObject.AddComponent<MeshRenderer>();
 		meshFilter = meshObject.AddComponent<MeshFilter>();
 		meshCollider = meshObject.AddComponent<MeshCollider>();
+		meshObjectGenerator = meshObject.AddComponent<GenerateObjects>();
+		meshObject.GetComponent<GenerateObjects>().objectGenerationSettings = objectGenerationSettings;
 		meshRenderer.material = material;
 
 		meshObject.transform.position = new Vector3(position.x,0,position.y);
