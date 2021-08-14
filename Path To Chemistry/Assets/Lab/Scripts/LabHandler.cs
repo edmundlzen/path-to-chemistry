@@ -10,10 +10,12 @@ public class LabHandler : MonoBehaviour
     public void Pause(GameObject pauseMenu)
     {
         pauseMenu.SetActive(true);
+        Time.timeScale = 0;
     }
     public void Resume(GameObject pauseMenu)
     {
         pauseMenu.SetActive(false);
+        Time.timeScale = 1;
     }
     public void mainMenu()
     {

@@ -18,25 +18,19 @@ public static class Chemidex
 
 public class ChemidexHandler : MonoBehaviour
 {
-    public static ElementData elementData; 
+    public static ElementData elementData;
     void Start()
     {
         elementData = new ElementData();
         var playerData = PlayerData.Instance();
         Chemidex.chemNum = "1";
         GameObject.Find("Chem" + Chemidex.chemNum).GetComponent<Image>().color = Color.cyan;
-        for (int i = 1; i <= 5; i++)
-        {
-            if (playerData.levelAvailable.Contains($"Level {i}"))
-            {
-                GameObject.Find($"Text{i}").GetComponent<Text>().text = i.ToString();
-            }
-            else
-            {
-                GameObject.Find($"Text{i}").GetComponent<Text>().text = "?";
-            }
-        }
+        levellCheck();
         chemCheck();
+    }
+    public void addElements()
+    {
+        print("Hello");
     }
     public void Recipes()
     {
@@ -95,6 +89,21 @@ public class ChemidexHandler : MonoBehaviour
         else
         {
             GameObject.Find("Statistic").GetComponent<Text>().text = "?";
+        }
+    }
+    void levellCheck()
+    {
+        var playerData = PlayerData.Instance();
+        for (int i = 1; i <= 5; i++)
+        {
+            if (playerData.levelAvailable.Contains($"Level {i}"))
+            {
+                GameObject.Find($"Text{i}").GetComponent<Text>().text = i.ToString();
+            }
+            else
+            {
+                GameObject.Find($"Text{i}").GetComponent<Text>().text = "?";
+            }
         }
     }
 }
