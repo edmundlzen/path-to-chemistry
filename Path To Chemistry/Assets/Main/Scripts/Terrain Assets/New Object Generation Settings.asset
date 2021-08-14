@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63f87ff7c07f54ad5bcaf4048d2ea41c, type: 3}
+  m_Name: New Object Generation Settings
+  m_EditorClassIdentifier: 
+  autoUpdate: 0
+  objects:
+  - gameObject: {fileID: 5370130732417957973, guid: 879c6218c14ea4b0e86818a9cb3710d3,
+      type: 3}
+    minimumAmount: 50
+    maximumAmount: 100
+  - gameObject: {fileID: 4306264160316423171, guid: c47e7501a550b4998ba9a595d04ab3da,
+      type: 3}
+    minimumAmount: 100
+    maximumAmount: 200
