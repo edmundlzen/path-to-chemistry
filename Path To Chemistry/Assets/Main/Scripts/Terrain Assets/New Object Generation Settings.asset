@@ -14,11 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   autoUpdate: 0
   objects:
-  - gameObject: {fileID: 5370130732417957973, guid: 879c6218c14ea4b0e86818a9cb3710d3,
+  - gameObject: {fileID: 3511758101057001947, guid: bc10b72a11c89439dace6494ec9f4e26,
       type: 3}
     minimumAmount: 50
     maximumAmount: 100
-  - gameObject: {fileID: 4306264160316423171, guid: c47e7501a550b4998ba9a595d04ab3da,
-      type: 3}
-    minimumAmount: 100
-    maximumAmount: 200

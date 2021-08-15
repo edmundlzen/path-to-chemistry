@@ -35,7 +35,8 @@ public class GenerateObjects : MonoBehaviour
                     randomZ = Random.Range(r.bounds.min.z, r.bounds.max.z);
                     if (Physics.Raycast(new Vector3(randomX, r.bounds.max.y + 5f, randomZ), -Vector3.up, out hit))
                     {
-                        Instantiate(objects[i].gameObject, hit.point, Quaternion.identity);
+                        GameObject newObject = Instantiate(objects[i].gameObject, hit.point, Quaternion.FromToRotation(Vector3.up, hit.normal));
+                        newObject.transform.SetParent(transform);
                         currentObjects[objects[i].gameObject] += 1;
                     }
                 }
