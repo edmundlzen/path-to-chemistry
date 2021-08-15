@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class Main : MonoBehaviour
+public class Scenes : MonoBehaviour
 {
     public void Lab()
     {
