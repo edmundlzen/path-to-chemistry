@@ -12,9 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63f87ff7c07f54ad5bcaf4048d2ea41c, type: 3}
   m_Name: New Object Generation Settings
   m_EditorClassIdentifier: 
-  autoUpdate: 0
+  autoUpdate: 1
   objects:
   - gameObject: {fileID: 3511758101057001947, guid: bc10b72a11c89439dace6494ec9f4e26,
       type: 3}
     minimumAmount: 50
     maximumAmount: 100
+    minimumHeight: 5
+    maximumHeight: 13

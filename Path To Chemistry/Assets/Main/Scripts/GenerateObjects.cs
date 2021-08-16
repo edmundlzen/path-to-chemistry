@@ -13,12 +13,13 @@ public class GenerateObjects : MonoBehaviour
 
     void Start()
     {
-        r = GetComponent<Renderer>();
+        r = GetComponent<Renderer>(); 
+        
     }
 
     void Update()
     {
-        if (objectGenerationSettings.objects != null)
+        if (objectGenerationSettings.objects.Length != 0)
         {
             var objects = objectGenerationSettings.objects;
             for (int i = 0; i < objects.Length; i++)
@@ -35,9 +36,12 @@ public class GenerateObjects : MonoBehaviour
                     randomZ = Random.Range(r.bounds.min.z, r.bounds.max.z);
                     if (Physics.Raycast(new Vector3(randomX, r.bounds.max.y + 5f, randomZ), -Vector3.up, out hit))
                     {
-                        GameObject newObject = Instantiate(objects[i].gameObject, hit.point, Quaternion.FromToRotation(Vector3.up, hit.normal));
-                        newObject.transform.SetParent(transform);
-                        currentObjects[objects[i].gameObject] += 1;
+                        if (hit.point.y >= objects[i].minimumHeight && hit.point.y <= objects[i].maximumHeight)
+                        {
+                            GameObject newObject = Instantiate(objects[i].gameObject, hit.point, Quaternion.FromToRotation(Vector3.up, hit.normal));
+                            newObject.transform.SetParent(transform);
+                            currentObjects[objects[i].gameObject]++;
+                        }
                     }
                 }
             }

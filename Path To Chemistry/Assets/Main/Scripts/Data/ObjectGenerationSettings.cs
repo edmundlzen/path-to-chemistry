@@ -12,5 +12,7 @@ public class ObjectGenerationSettings : UpdatableData {
         public GameObject gameObject;
         public int minimumAmount;
         public int maximumAmount;
+        public float minimumHeight;
+        public float maximumHeight;
     }
 }
