@@ -13,10 +13,9 @@ public static class elementConstructor
 
 public class ElementConstructor : MonoBehaviour
 {
-    public ElementData elementData;
     public void Start()
     {
-        elementData = new ElementData();
+        Load();
         elementConstructor.Protons = 0;
         elementConstructor.Electrons = 0;
         elementConstructor.Neutrons = 0;
@@ -80,9 +79,7 @@ public class ElementConstructor : MonoBehaviour
     }
     public void Craft()
     {
-        var filePath = Path.Combine(Application.dataPath, "Elements.json");
-        var fileContent = File.ReadAllText(filePath);
-        var elementData = JsonConvert.DeserializeObject<ElementData>(fileContent);
+        var elementData = ElementData.Instance();
         foreach (var Keys in elementData.elements.Keys)
         {
             if ((Convert.ToString(elementConstructor.Protons) == elementData.elements[Keys]["protons"]) && (Convert.ToString(elementConstructor.Electrons) == elementData.elements[Keys]["electrons"]) && (Convert.ToString(elementConstructor.Neutrons) == elementData.elements[Keys]["neutrons"]))
@@ -95,5 +92,12 @@ public class ElementConstructor : MonoBehaviour
                 GameObject.Find("Product").GetComponent<Text>().text = "Nothing!";
             }
         }
+    }
+    void Load()
+    {
+        var filePath = Path.Combine(Application.dataPath, "Elements.json");
+        var fileContent = File.ReadAllText(filePath);
+        var elementData = JsonConvert.DeserializeObject<ElementData>(fileContent);
+        ElementData.Instance().UpdateElementData(elementData);
     }
 }
