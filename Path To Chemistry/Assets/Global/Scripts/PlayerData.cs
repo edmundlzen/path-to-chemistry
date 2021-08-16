@@ -30,6 +30,7 @@ public class PlayerData
             { $"Level {Level}" }
         };
         Molecule = new Dictionary<string, int>();
+        Inventory = new Dictionary<string, int>();
         flaskElements = new Dictionary<string, int>();
         slotItem = new Dictionary<string, Dictionary<string, object>>()
         {
@@ -94,11 +95,29 @@ public class PlayerData
     public string Seat { get; set; }
     public List<string> levelAvailable { get; set; }
     public Dictionary<string, int> Molecule { get; set; }
+    public Dictionary<string, int> Inventory { get; set; }
     public Dictionary<string, int> flaskElements { get; set; }
     public Dictionary<string, Dictionary<string, object>> slotItem { get; set; }
 }
 public class ElementData
 {
+    private static readonly object threadlock = new object();
+    private static ElementData instance = null;
+    public static ElementData Instance()
+    {
+        lock (threadlock)
+        {
+            if (instance == null)
+            {
+                instance = new ElementData();
+            }
+            return instance;
+        }
+    }
+    public void UpdateElementData(ElementData elementData)
+    {
+        instance = elementData;
+    }
     public ElementData()
     {
         elements = new Dictionary<string, Dictionary<string, string>>();
