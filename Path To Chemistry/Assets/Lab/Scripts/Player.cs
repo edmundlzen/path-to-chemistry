@@ -58,28 +58,7 @@ public class Player : MonoBehaviour
             GameObject.Find("Label1").GetComponent<Text>().text = player.raycastObject;
             if ((Input.GetMouseButtonDown(0)) && (player.raycastObject == "Add"))
             {
-                if ((playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"] != null) && (playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"] != null) && (playerData.flaskElements.Count <= 10))
-                {
-                    if (playerData.flaskElements.ContainsKey(playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"].ToString()))
-                    {
-                        playerData.flaskElements[playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"].ToString()] = Convert.ToInt32(playerData.flaskElements[playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"].ToString()]) + 1;
-                    }
-                    else
-                    {
-                        playerData.flaskElements.Add(playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"].ToString(), 1);
-                    }
-                    if (Convert.ToInt32(playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"]) > 1)
-                    {
-                        playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"] = Convert.ToInt32(playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"]) - 1;
-                    }
-                    else
-                    {
-                        playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"] = null;
-                        playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"] = null;
-                    }
-                    slotCheck();
-                    flaskCheck();
-                }
+                GameObject.Find("Slider").GetComponent<Slider>().maxValue = Convert.ToInt32(playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"]);
             }
             else if ((Input.GetMouseButtonDown(0)) && (player.raycastObject == "Add2"))
             {

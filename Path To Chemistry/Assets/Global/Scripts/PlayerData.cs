@@ -37,7 +37,7 @@ public class PlayerData
             { "Slot1", new Dictionary<string, object>()
                 {
                     { "Element", "K"},
-                    { "Quantity", 1 }
+                    { "Quantity", 7 }
                 }
             },
             { "Slot2", new Dictionary<string, object>()
