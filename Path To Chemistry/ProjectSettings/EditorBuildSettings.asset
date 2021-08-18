@@ -21,5 +21,7 @@ EditorBuildSettings:
     path: Assets/Chemidex/Scenes/Periodic Table.unity
     guid: da153caf05ae7f24ba377cb91a1bda2a
   m_configObjects:
+    UnityEditor.XR.ARCore.ARCoreSettings: {fileID: 11400000, guid: 6568def299a24bf4993a8bc2455e1114,
+      type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: e0699fdb6c1a14d2d8ce2cd4f38db3ba,
       type: 2}
