@@ -103,6 +103,21 @@ public class GrassPainter : MonoBehaviour
         length = new List<Vector2>();
     }
 
+    public void AddPoint(Vector3 grassPosition, Vector3 normal)
+    {
+        Event e = Event.current;
+        positions.Add((grassPosition));
+        indicies.Add(i);
+        length.Add(new Vector2(sizeWidth, sizeLength));
+        // add random color variations                          
+        colors.Add(new Color(AdjustedColor.r + (Random.Range(0, 1.0f) * rangeR), AdjustedColor.g + (Random.Range(0, 1.0f) * rangeG), AdjustedColor.b + (Random.Range(0, 1.0f) * rangeB), 1));
+
+        //colors.Add(temp);
+        normals.Add(normal);
+        i++;
+        e.Use();
+    }
+
     void OnScene(SceneView scene)
     {
         // only allow painting while this object is selected
@@ -164,15 +179,15 @@ public class GrassPainter : MonoBehaviour
                                 var grassPosition = hitPos;// + Vector3.Cross(origin, hitNormal);
                                 grassPosition -= this.transform.position;
 
-                                positions.Add((grassPosition));
-                                indicies.Add(i);
-                                length.Add(new Vector2(sizeWidth, sizeLength));
+                                positions.Add((grassPosition)); //
+                                indicies.Add(i); //
+                                length.Add(new Vector2(sizeWidth, sizeLength)); //
                                 // add random color variations                          
-                                colors.Add(new Color(AdjustedColor.r + (Random.Range(0, 1.0f) * rangeR), AdjustedColor.g + (Random.Range(0, 1.0f) * rangeG), AdjustedColor.b + (Random.Range(0, 1.0f) * rangeB), 1));
+                                colors.Add(new Color(AdjustedColor.r + (Random.Range(0, 1.0f) * rangeR), AdjustedColor.g + (Random.Range(0, 1.0f) * rangeG), AdjustedColor.b + (Random.Range(0, 1.0f) * rangeB), 1)); //
 
                                 //colors.Add(temp);
-                                normals.Add(terrainHit.normal);
-                                i++;
+                                normals.Add(terrainHit.normal); //
+                                i++; //
                             }
                             else
                             {// to not place everything at once, check if the first placed point far enough away from the last placed first one

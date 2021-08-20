@@ -15,6 +15,7 @@ public class TerrainChunk {
 	MeshFilter meshFilter;
 	MeshCollider meshCollider;
 	GenerateObjects meshObjectGenerator;
+	GenerateGrass meshGrassGenerator;
 
 	LODInfo[] detailLevels;
 	LODMesh[] lodMeshes;
@@ -30,7 +31,7 @@ public class TerrainChunk {
 	MeshSettings meshSettings;
 	Transform viewer;
 
-	public TerrainChunk(Vector2 coord, HeightMapSettings heightMapSettings, MeshSettings meshSettings, LODInfo[] detailLevels, int colliderLODIndex, Transform parent, Transform viewer, Material material, ObjectGenerationSettings objectGenerationSettings) {
+	public TerrainChunk(Vector2 coord, HeightMapSettings heightMapSettings, MeshSettings meshSettings, LODInfo[] detailLevels, int colliderLODIndex, Transform parent, Transform viewer, Material material, ObjectGenerationSettings objectGenerationSettings, GrassGenerationSettings grassGenerationSettings, GrassPainter grassPainter) {
 		this.coord = coord;
 		this.detailLevels = detailLevels;
 		this.colliderLODIndex = colliderLODIndex;
@@ -49,6 +50,9 @@ public class TerrainChunk {
 		meshCollider = meshObject.AddComponent<MeshCollider>();
 		meshObjectGenerator = meshObject.AddComponent<GenerateObjects>();
 		meshObject.GetComponent<GenerateObjects>().objectGenerationSettings = objectGenerationSettings;
+		meshGrassGenerator = meshObject.AddComponent<GenerateGrass>();
+		meshObject.GetComponent<GenerateGrass>().grassGenerationSettings = grassGenerationSettings;
+		meshObject.GetComponent<GenerateGrass>().grassPainter = grassPainter;
 		meshRenderer.material = material;
 		meshObject.transform.position = new Vector3(position.x,0,position.y);
 		meshObject.transform.parent = parent;
