@@ -105,17 +105,21 @@ public class GrassPainter : MonoBehaviour
 
     public void AddPoint(Vector3 grassPosition, Vector3 normal)
     {
-        Event e = Event.current;
         positions.Add((grassPosition));
         indicies.Add(i);
         length.Add(new Vector2(sizeWidth, sizeLength));
-        // add random color variations                          
         colors.Add(new Color(AdjustedColor.r + (Random.Range(0, 1.0f) * rangeR), AdjustedColor.g + (Random.Range(0, 1.0f) * rangeG), AdjustedColor.b + (Random.Range(0, 1.0f) * rangeB), 1));
-
-        //colors.Add(temp);
         normals.Add(normal);
         i++;
-        e.Use();
+
+        mesh = new Mesh();
+        mesh.SetVertices(positions);
+        indi = indicies.ToArray();
+        mesh.SetIndices(indi, MeshTopology.Points, 0);
+        mesh.SetUVs(0, length);
+        mesh.SetColors(colors);
+        mesh.SetNormals(normals);
+        filter.mesh = mesh;
     }
 
     void OnScene(SceneView scene)
@@ -310,8 +314,7 @@ public class GrassPainter : MonoBehaviour
             mesh.SetColors(colors);
             mesh.SetNormals(normals);
             filter.mesh = mesh;
-
-
+            
         }
     }
 #endif

@@ -7,17 +7,31 @@ public class GrassPlaceT : MonoBehaviour
     public GrassPainter grassPainter;
 
     private Renderer r;
+
+    private bool oneShot = true;
     // Start is called before the first frame update
     void Start()
     {
         r = GetComponent<Renderer>();
-        
-        grassPainter.AddPoint(new Vector3(-0.5307579f, -4.059805f, -0.8507843f ), new Vector3(0.1731887f, 0.9565451f, 0.2345785f));
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (oneShot)
+        {
+            for (int x = 0; x < 100; x++)
+            {
+                for (int z = 0; z < 100; z++)
+                {
+                    Debug.DrawLine(new Vector3(0,0,0), new Vector3(x, -4.93f, z), Color.red, 30);
+                    grassPainter.AddPoint(new Vector3(x, -4.93f, z),
+                        new Vector3(0f, 1f, 2.220446e-17f));
+                }
+            }
+
+            oneShot = false;
+        }
         if (grassPainter == null)
         {
             RaycastHit hit;

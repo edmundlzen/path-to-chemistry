@@ -53,6 +53,22 @@
                 return;
             }
 
+            if (Input.GetKey(KeyCode.Mouse0))
+            {
+                RaycastHit hit;
+                if (Physics.Raycast(cameraTransform.position, cameraTransform.forward, out hit))
+                {
+                    if (hit.distance < 10)
+                    {
+                        transform.GetComponent<PlayerWeapon>().UseLaser(hit, transform);
+                    }
+                }
+            }
+            else if (Input.GetKeyUp(KeyCode.Mouse0))
+            {
+                transform.GetComponent<PlayerWeapon>().DisableLaser();
+            }
+
             // We are grounded, so recalculate move direction based on axes
             Vector3 forward = transform.TransformDirection(Vector3.forward);
             Vector3 right = transform.TransformDirection(Vector3.right);

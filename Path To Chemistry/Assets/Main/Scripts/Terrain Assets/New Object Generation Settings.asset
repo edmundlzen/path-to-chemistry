@@ -20,3 +20,15 @@ MonoBehaviour:
     maximumAmount: 100
     minimumHeight: 5
     maximumHeight: 13
+  - gameObject: {fileID: 3511758101057001947, guid: bc10b72a11c89439dace6494ec9f4e26,
+      type: 3}
+    minimumAmount: 50
+    maximumAmount: 100
+    minimumHeight: 5
+    maximumHeight: 13
+  - gameObject: {fileID: 3511758101057001947, guid: bc10b72a11c89439dace6494ec9f4e26,
+      type: 3}
+    minimumAmount: 50
+    maximumAmount: 100
+    minimumHeight: 5
+    maximumHeight: 13
