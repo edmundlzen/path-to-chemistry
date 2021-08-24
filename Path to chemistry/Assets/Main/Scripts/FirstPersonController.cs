@@ -58,13 +58,13 @@
                 RaycastHit hit;
                 if (Physics.Raycast(cameraTransform.position, cameraTransform.forward, out hit))
                 {
-                    if (hit.distance < 10)
+                    if (hit.distance > 0)
                     {
                         transform.GetComponent<PlayerWeapon>().UseLaser(hit, transform);
                     }
                 }
             }
-            else if (Input.GetKeyUp(KeyCode.Mouse0))
+            if (Input.GetKeyUp(KeyCode.Mouse0))
             {
                 transform.GetComponent<PlayerWeapon>().DisableLaser();
             }

@@ -6,14 +6,15 @@ public class PlayerWeapon : MonoBehaviour
 {
     public Transform firePoint;
     public Transform cameraTransform;
-    public GameObject laserPrefab;
+    public GameObject laserHead;
+    public GameObject laserFizz;
 
-    private GameObject spawnedLaser;
+    public AudioSource laserSound;
+
     // Start is called before the first frame update
     void Start()
     {
-        spawnedLaser = Instantiate(laserPrefab, firePoint.transform);
-        spawnedLaser.transform.rotation.SetLookRotation(cameraTransform.forward);
+        // spawnedLaser.transform.rotation.SetLookRotation(cameraTransform.forward);
         DisableLaser();
     }
 
@@ -25,7 +26,9 @@ public class PlayerWeapon : MonoBehaviour
 
     public void UseLaser(RaycastHit hit, Transform playerTransform)
     {
+        laserHead.transform.LookAt(hit.point);
         ActivateLaser(hit.transform);
+        laserSound.Play();
         if (hit.transform.TryGetComponent(out Suckable suckable))
         {
             suckable.Suck(hit, playerTransform);
@@ -34,21 +37,24 @@ public class PlayerWeapon : MonoBehaviour
 
     void ActivateLaser(Transform hitTransform)
     {
-        spawnedLaser.SetActive(true);
-        UpdateLaser(hitTransform);
+        laserHead.SetActive(true);
+        laserFizz.GetComponent<ParticleSystem>().Play();
+        // UpdateLaser(hitTransform);
     }
 
     void UpdateLaser(Transform hitTransform)
     {
         if (firePoint != null)
         {
-            spawnedLaser.transform.position = firePoint.transform.position;
+            laserHead.transform.position = firePoint.transform.position;
             // spawnedLaser.transform.LookAt(hitTransform);
         }
     }
 
     public void DisableLaser()
     {
-        spawnedLaser.SetActive(false);
+        laserHead.SetActive(false);
+        laserFizz.GetComponent<ParticleSystem>().Stop();
+        laserSound.Stop();
     }
 }

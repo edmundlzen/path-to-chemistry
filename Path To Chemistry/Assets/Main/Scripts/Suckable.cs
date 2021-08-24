@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,30 +6,38 @@ using UnityEngine;
 public class Suckable : MonoBehaviour
 {
     private Transform particleSystem;
+    
+    public float HP = 1f;
+    private float startHP;
 
-    private bool oneShotSetMeshMat = true;
     // Start is called before the first frame update
     void Start()
     {
         particleSystem = transform.Find("Particle System");
+        SetParticles();
+        transform.GetComponent<Renderer>().material = new Material(transform.GetComponent<Renderer>().material);
+        startHP = HP;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-    
     public void Suck(RaycastHit hit, Transform playerTransform)
     {
-        if (oneShotSetMeshMat)
+        print(HP);
+        if (HP <= 0f)
         {
-            SetParticles();
-            oneShotSetMeshMat = false;
+            print("YES");
+            Destroy(gameObject);
         }
 
+        if (particleSystem.GetComponent<ParticleSystem>().time > .1f)
+        {
+            particleSystem.GetComponent<ParticleSystem>().time = 0;
+        }
         particleSystem.GetComponent<ParticleSystem>().Play();
         particleSystem.LookAt(playerTransform);
+
+        HP -= 0.3f * Time.deltaTime;
+        float newThreshold = startHP - HP;
+        GetComponent<Renderer>().material.SetFloat("Alpha_Clip_Threshold", newThreshold);
     }
 
     void SetParticles()

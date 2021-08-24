@@ -14,21 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   autoUpdate: 1
   objects:
-  - gameObject: {fileID: 3511758101057001947, guid: bc10b72a11c89439dace6494ec9f4e26,
+  - gameObject: {fileID: 1743353957770956, guid: 4663d5cca4ed98548946e758cd5979e2,
       type: 3}
     minimumAmount: 50
     maximumAmount: 100
     minimumHeight: 5
     maximumHeight: 13
-  - gameObject: {fileID: 3511758101057001947, guid: bc10b72a11c89439dace6494ec9f4e26,
+  - gameObject: {fileID: 8855115379164347087, guid: 6e3aac8ea1dca4b14a17387ca2bd6b36,
       type: 3}
     minimumAmount: 50
     maximumAmount: 100
-    minimumHeight: 5
-    maximumHeight: 13
-  - gameObject: {fileID: 3511758101057001947, guid: bc10b72a11c89439dace6494ec9f4e26,
-      type: 3}
-    minimumAmount: 50
-    maximumAmount: 100
-    minimumHeight: 5
-    maximumHeight: 13
+    minimumHeight: 0
+    maximumHeight: 20
