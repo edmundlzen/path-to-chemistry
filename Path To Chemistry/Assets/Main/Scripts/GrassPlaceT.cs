@@ -25,8 +25,8 @@ public class GrassPlaceT : MonoBehaviour
                 for (int z = 0; z < 100; z++)
                 {
                     Debug.DrawLine(new Vector3(0,0,0), new Vector3(x, -4.93f, z), Color.red, 30);
-                    grassPainter.AddPoint(new Vector3(x, -4.93f, z),
-                        new Vector3(0f, 1f, 2.220446e-17f));
+                    // grassPainter.AddPoint(new Vector3(x, -4.93f, z),
+                        // new Vector3(0f, 1f, 2.220446e-17f));
                 }
             }
 
@@ -41,7 +41,7 @@ public class GrassPlaceT : MonoBehaviour
             if (Physics.Raycast(rayOrigin, Vector3.down, out hit))
             {
                 print("WORKING");
-                grassPainter.AddPoint(hit.point, hit.normal);
+                // grassPainter.AddPoint(hit.point, hit.normal);
             }
         }
     }

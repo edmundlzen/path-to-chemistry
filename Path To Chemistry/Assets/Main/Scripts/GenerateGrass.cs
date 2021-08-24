@@ -32,7 +32,7 @@ public class GenerateGrass : MonoBehaviour
                         if (Physics.Raycast(new Vector3(x, r.bounds.max.y + 5f, z), Vector3.down, out hit))
                         {
                             print("ME");
-                            grassPainter.AddPoint(hit.point, hit.normal);
+                            // grassPainter.AddPoint(hit.point, hit.normal);
                         }
                     }
                 }

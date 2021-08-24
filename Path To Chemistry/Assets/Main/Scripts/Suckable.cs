@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Suckable : MonoBehaviour
 {
-    private Transform particleSystem;
+    new Transform particleSystem;
     
     public float HP = 1f;
     private float startHP;

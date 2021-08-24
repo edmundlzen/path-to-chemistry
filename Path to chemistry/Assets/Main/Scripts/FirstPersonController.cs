@@ -5,7 +5,9 @@
         public float speed = 10f;
         public float gravity = 5f;
         public VariableJoystick variableJoystick;
+        private bool touchWeaponOn;
         public GameObject joystick;
+        public GameObject fireButton;
         public CharacterController characterController;
         public Transform cameraTransform;
         public float cameraSensitivity;
@@ -20,6 +22,16 @@
         [SerializeField]
         private bool desktopInput = false;
         // Start is called before the first frame update
+
+        public void TouchWeaponOn()
+        {
+            touchWeaponOn = true;
+        }
+
+        public void TouchWeaponOff()
+        {
+            touchWeaponOn = false;
+        }
         void Start()
         {
             if (!desktopInput)
@@ -32,10 +44,28 @@
             }
             
             joystick.SetActive(false);
+            fireButton.SetActive(false);
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
         }
 
+        void WeaponDown()
+        {
+            RaycastHit hit;
+            if (Physics.Raycast(cameraTransform.position, cameraTransform.forward, out hit))
+            {
+                if (hit.distance > 0)
+                {
+                    transform.GetComponent<PlayerWeapon>().UseLaser(hit, transform);
+                }
+            }
+        }
+
+        void WeaponUp()
+        {
+            transform.GetComponent<PlayerWeapon>().DisableLaser();
+        }
+        
         // Update is called once per frame
         void Update()
         {
@@ -50,23 +80,24 @@
                     LookAround();
                 }
 
+                if (touchWeaponOn)
+                {
+                    WeaponDown();
+                } else
+                {
+                    WeaponUp();
+                }
+
                 return;
             }
 
             if (Input.GetKey(KeyCode.Mouse0))
             {
-                RaycastHit hit;
-                if (Physics.Raycast(cameraTransform.position, cameraTransform.forward, out hit))
-                {
-                    if (hit.distance > 0)
-                    {
-                        transform.GetComponent<PlayerWeapon>().UseLaser(hit, transform);
-                    }
-                }
+                WeaponDown();
             }
             if (Input.GetKeyUp(KeyCode.Mouse0))
             {
-                transform.GetComponent<PlayerWeapon>().DisableLaser();
+                WeaponUp();
             }
 
             // We are grounded, so recalculate move direction based on axes
