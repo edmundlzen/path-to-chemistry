@@ -4,30 +4,46 @@ using UnityEngine;
 
 public class PlayerWeapon : MonoBehaviour
 {
+    private float t = 0;
+    public float duration = 1;
+    private bool shrinkBeam = false;
+    
     public Transform firePoint;
-    public Transform cameraTransform;
     public GameObject laserHead;
     public GameObject laserFizz;
+    public GameObject laserBeam;
 
     public AudioSource laserSound;
 
     // Start is called before the first frame update
     void Start()
     {
-        // spawnedLaser.transform.rotation.SetLookRotation(cameraTransform.forward);
         DisableLaser();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (shrinkBeam && laserBeam.GetComponent<LineRenderer>().GetPosition(1).z <= 0.1f)
+        {
+            shrinkBeam = false;
+            laserBeam.SetActive(false);
+            laserHead.SetActive(false);
+            t = 0f;
+        } else if (shrinkBeam)
+        {
+            t += Time.deltaTime / duration;
+            float zDistance = laserBeam.GetComponent<LineRenderer>().GetPosition(1).z;
+            float newZDistance = 0;
+            float lerpedZDistance = Mathf.Lerp(zDistance, newZDistance, t);
+            laserBeam.GetComponent<LineRenderer>().SetPosition(1, new Vector3(0,0, lerpedZDistance));
+        }
     }
 
     public void UseLaser(RaycastHit hit, Transform playerTransform)
     {
         laserHead.transform.LookAt(hit.point);
-        ActivateLaser(hit.transform);
+        ActivateLaser(hit);
         laserSound.Play();
         if (hit.transform.TryGetComponent(out Suckable suckable))
         {
@@ -35,9 +51,16 @@ public class PlayerWeapon : MonoBehaviour
         }
     }
 
-    void ActivateLaser(Transform hitTransform)
+    void ActivateLaser(RaycastHit raycastHit)
     {
+        shrinkBeam = false;
+        t += Time.deltaTime / duration;
+        float zDistance = laserBeam.GetComponent<LineRenderer>().GetPosition(1).z;
+        float newZDistance = Vector3.Distance(laserBeam.transform.position, raycastHit.point);
+        float lerpedZDistance = Mathf.Lerp(zDistance, newZDistance, t);
+        laserBeam.SetActive(true);
         laserHead.SetActive(true);
+        laserBeam.GetComponent<LineRenderer>().SetPosition(1, new Vector3(0,0, lerpedZDistance));
         laserFizz.GetComponent<ParticleSystem>().Play();
         // UpdateLaser(hitTransform);
     }
@@ -53,7 +76,8 @@ public class PlayerWeapon : MonoBehaviour
 
     public void DisableLaser()
     {
-        laserHead.SetActive(false);
+        t = 0f;
+        shrinkBeam = true;
         laserFizz.GetComponent<ParticleSystem>().Stop();
         laserSound.Stop();
     }
