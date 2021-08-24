@@ -14,5 +14,6 @@ public class ObjectGenerationSettings : UpdatableData {
         public int maximumAmount;
         public float minimumHeight;
         public float maximumHeight;
+        public bool followRotation;
     }
 }

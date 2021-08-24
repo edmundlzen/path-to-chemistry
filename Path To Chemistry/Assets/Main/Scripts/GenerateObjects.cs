@@ -38,7 +38,15 @@ public class GenerateObjects : MonoBehaviour
                     {
                         if (hit.point.y >= objects[i].minimumHeight && hit.point.y <= objects[i].maximumHeight)
                         {
-                            GameObject newObject = Instantiate(objects[i].gameObject, hit.point, Quaternion.FromToRotation(Vector3.up, hit.normal));
+                            GameObject newObject;
+                            if (objectGenerationSettings.objects[i].followRotation)
+                            {
+                                newObject = Instantiate(objects[i].gameObject, hit.point, Quaternion.FromToRotation(Vector3.up, hit.normal));
+                            }
+                            else
+                            {
+                                newObject = Instantiate(objects[i].gameObject, hit.point, Quaternion.identity);
+                            }
                             newObject.transform.SetParent(transform);
                             currentObjects[objects[i].gameObject]++;
                         }
