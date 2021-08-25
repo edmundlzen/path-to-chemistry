@@ -22,6 +22,7 @@ public class Player : MonoBehaviour
     {
         //Load();
         var playerData = PlayerData.Instance();
+/*
         if (playerData.Seat == "Left")
         {
             GameObject.Find("Player").GetComponent<Transform>().position = new Vector3(5f, 0.6f, 6.2f);
@@ -34,6 +35,7 @@ public class Player : MonoBehaviour
         {
             GameObject.Find("Player").GetComponent<Transform>().position = new Vector3(9.79f, 0.6f, 6.2f);
         }
+*/
         player.raycastObject = "";
         GameObject.Find("Level").GetComponent<Text>().text = playerData.Level.ToString();
         Guide();
