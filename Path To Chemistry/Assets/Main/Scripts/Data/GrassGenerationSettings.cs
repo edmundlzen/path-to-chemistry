@@ -2,17 +2,10 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine.SocialPlatforms;
 
 [CreateAssetMenu()]
-public class GrassGenerationSettings : UpdatableData {
-    public Object[] objects;
-
-    [System.Serializable]
-    public class Object {
-        public GameObject gameObject;
-        public int minimumAmount;
-        public int maximumAmount;
-        public float minimumHeight;
-        public float maximumHeight;
-    }
+public class GrassGenerationSettings : UpdatableData
+{
+    [Range(0,10)] public int grassDensity;
 }

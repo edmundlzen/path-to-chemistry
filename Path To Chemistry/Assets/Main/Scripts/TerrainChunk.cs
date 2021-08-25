@@ -53,6 +53,7 @@ public class TerrainChunk {
 		meshGrassGenerator = meshObject.AddComponent<GenerateGrass>();
 		meshObject.GetComponent<GenerateGrass>().grassGenerationSettings = grassGenerationSettings;
 		meshObject.GetComponent<GenerateGrass>().grassPainter = grassPainter;
+		meshObject.GetComponent<GenerateGrass>().grassComputeScript = grassPainter.GetComponent<GrassComputeScript>();
 		meshRenderer.material = material;
 		meshObject.transform.position = new Vector3(position.x,0,position.y);
 		meshObject.transform.parent = parent;
