@@ -7,5 +7,5 @@ using UnityEngine.SocialPlatforms;
 [CreateAssetMenu()]
 public class GrassGenerationSettings : UpdatableData
 {
-    [Range(0,10)] public int grassDensity;
+    [Range(1,10)] public int grassDensity;
 }

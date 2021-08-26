@@ -112,7 +112,7 @@ public class GrassPainter : MonoBehaviour
         float step = 1f / grassDensity;
         for (int j = 0; j < grassDensity; j++)
         {
-            positions.Add(new Vector3(grassPosition.x + (step * j), grassPosition.y, grassPosition.z + (step * j)));
+            positions.Add(transform.InverseTransformPoint(new Vector3(grassPosition.x + (step * j), grassPosition.y, grassPosition.z + (step * j))));
             indicies.Add(i);
             length.Add(new Vector2(sizeWidth, sizeLength));
             colors.Add(new Color(AdjustedColor.r + (Random.Range(0, 1.0f) * rangeR), AdjustedColor.g + (Random.Range(0, 1.0f) * rangeG), AdjustedColor.b + (Random.Range(0, 1.0f) * rangeB), 1));

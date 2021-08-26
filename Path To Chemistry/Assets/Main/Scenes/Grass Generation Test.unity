@@ -123,7 +123,7 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!43 &769056681
+--- !u!43 &358614591
 Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -287,54 +287,6 @@ Mesh:
     offset: 0
     size: 0
     path: 
---- !u!1 &1130836811
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1130836813}
-  - component: {fileID: 1130836812}
-  m_Layer: 0
-  m_Name: Generate Grass
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1130836812
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1130836811}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7b4565f8b464d454eb56164e3cbcde40, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  grassGenerationSettings: {fileID: 11400000, guid: 9e15ec693d18d44d6b7844432eb248d7,
-    type: 2}
-  grassComputeScript: {fileID: 1132918135}
-  grassPainter: {fileID: 1132918136}
-  oneShot: 1
---- !u!4 &1130836813
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1130836811}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -14.339427, y: 1.3136106, z: 5.6767855}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1132918134
 GameObject:
   m_ObjectHideFlags: 0
@@ -367,7 +319,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   grassPainter: {fileID: 1132918136}
-  sourceMesh: {fileID: 769056681}
+  sourceMesh: {fileID: 358614591}
   material: {fileID: 2100000, guid: 8acf0820d35e744b4b140f8f68196024, type: 2}
   computeShader: {fileID: 7200000, guid: 9765ddfab17f4983a018ad90bfbdeb6b, type: 3}
   grassHeight: 1
@@ -399,10 +351,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b812201bb9c42499b0bd108e34edd71, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mesh: {fileID: 769056681}
+  mesh: {fileID: 358614591}
   AdjustedColor: {r: 0.495283, g: 1, b: 0.619783, a: 0}
   grassLimit: 50000
-  toolbarInt: 1
+  toolbarInt: 0
   toolbarIntEdit: 0
   positions: []
   colors: []
@@ -426,7 +378,7 @@ MonoBehaviour:
   brushSize: 0.8
   brushFalloffSize: 0.1
   Flow: 1
-  hitPosGizmo: {x: -33.107178, y: 1.012733e-16, z: -45.609436}
+  hitPosGizmo: {x: -7.697967, y: -7.414303e-17, z: 10.017315}
   hitNormal: {x: 0, y: 1, z: 2.2204462e-18}
 --- !u!33 &1132918137
 MeshFilter:
@@ -435,7 +387,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1132918134}
-  m_Mesh: {fileID: 769056681}
+  m_Mesh: {fileID: 358614591}
 --- !u!4 &1132918138
 Transform:
   m_ObjectHideFlags: 0
@@ -444,7 +396,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1132918134}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -13.641002, y: -0.8996632, z: -0.75186753}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -462,6 +414,7 @@ GameObject:
   - component: {fileID: 1487081589}
   - component: {fileID: 1487081588}
   - component: {fileID: 1487081587}
+  - component: {fileID: 1487081591}
   m_Layer: 0
   m_Name: Plane
   m_TagString: Untagged
@@ -542,11 +495,27 @@ Transform:
   m_GameObject: {fileID: 1487081586}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 10, y: 1, z: 10}
+  m_LocalScale: {x: 3, y: 1, z: 3}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1487081591
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1487081586}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b4565f8b464d454eb56164e3cbcde40, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  grassGenerationSettings: {fileID: 11400000, guid: 9e15ec693d18d44d6b7844432eb248d7,
+    type: 2}
+  grassComputeScript: {fileID: 1132918135}
+  grassPainter: {fileID: 1132918136}
 --- !u!1 &1510565602
 GameObject:
   m_ObjectHideFlags: 0

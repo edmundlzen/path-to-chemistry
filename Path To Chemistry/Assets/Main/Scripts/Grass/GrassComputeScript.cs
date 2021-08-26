@@ -103,9 +103,9 @@ public class GrassComputeScript : MonoBehaviour
         m_MainCamera = Camera.main;
         grassPainter = GetComponent<GrassPainter>();
         sourceMesh = GetComponent<MeshFilter>().sharedMesh;
-        m_Initialized = true;
-        m_DrawBuffer.SetCounterValue(0);
-        m_ArgsBuffer.SetData(argsBufferReset);
+        // m_Initialized = true;
+        // m_DrawBuffer.SetCounterValue(0);
+        // m_ArgsBuffer.SetData(argsBufferReset);
     }
     
     public void UpdateGrass()
@@ -122,8 +122,7 @@ public class GrassComputeScript : MonoBehaviour
         
         m_InstantiatedComputeShader.Dispatch(m_IdGrassKernel, m_DispatchSize, 1, 1);
         
-        Graphics.DrawProceduralIndirect(m_InstantiatedMaterial, bounds, MeshTopology.Triangles,
-            m_ArgsBuffer, 0, null, null, castShadow, true, gameObject.layer);
+        Graphics.DrawProceduralIndirect(m_InstantiatedMaterial, bounds, MeshTopology.Triangles, m_ArgsBuffer, 0, null, null, castShadow, true, gameObject.layer);
     }
 
 #if UNITY_EDITOR

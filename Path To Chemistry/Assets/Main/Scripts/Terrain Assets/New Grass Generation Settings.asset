@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: New Grass Generation Settings
   m_EditorClassIdentifier: 
   autoUpdate: 0
-  grassDensity: 0
+  grassDensity: 1

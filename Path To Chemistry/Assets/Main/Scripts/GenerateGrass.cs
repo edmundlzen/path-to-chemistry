@@ -22,14 +22,15 @@ public class GenerateGrass : MonoBehaviour
             r = GetComponent<Renderer>();
         } else
         {
+            // Generate grass
             RaycastHit hit;
             for (float x = r.bounds.min.x; x < r.bounds.max.x; x++)
             {
-                for (float z = r.bounds.min.z; z < r.bounds.max.y; z++)
+                for (float z = r.bounds.min.z; z < r.bounds.max.z; z++)
                 {
-                    if (Physics.Raycast(new Vector3(x, r.bounds.max.y + 5f, z), Vector3.down, out hit))
+                    if (Physics.Raycast(new Vector3(x, r.bounds.max.y + 5f, z), -Vector3.up, out hit))
                     {
-                        grassPainter.AddPoint(new Vector3(x, 0.9f, z), new Vector3(0, 1, 0), grassGenerationSettings.grassDensity);
+                        grassPainter.AddPoint(hit.point, hit.normal, grassGenerationSettings.grassDensity);
                     }
                 }
             }
