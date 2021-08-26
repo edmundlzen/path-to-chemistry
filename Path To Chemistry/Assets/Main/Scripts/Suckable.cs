@@ -21,7 +21,6 @@ public class Suckable : MonoBehaviour
 
     public void Suck(RaycastHit hit, Transform playerTransform)
     {
-        print(HP);
         if (HP <= 0f)
         {
             Destroy(gameObject);

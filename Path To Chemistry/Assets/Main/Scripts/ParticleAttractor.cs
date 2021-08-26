@@ -3,8 +3,7 @@ using System.Collections;
  
 public class ParticleAttractor : MonoBehaviour {
      
-    [SerializeField]
-    private Transform _attractorTransform;
+    public Transform _attractorTransform;
  
     private ParticleSystem _particleSystem;
     private ParticleSystem.Particle[] _particles = new ParticleSystem.Particle[1000];
@@ -16,7 +15,7 @@ public class ParticleAttractor : MonoBehaviour {
  
     public void LateUpdate()
     {
-        if (_particleSystem.isPlaying) {
+        if (_particleSystem.isPlaying && _particleSystem != null) {
             int length = _particleSystem.GetParticles(_particles);
             Vector3 attractorPosition = _attractorTransform.position;
  
