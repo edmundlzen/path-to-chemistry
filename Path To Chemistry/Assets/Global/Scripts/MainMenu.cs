@@ -1,8 +1,12 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class Scenes : MonoBehaviour
+public class MainMenu : MonoBehaviour
 {
+    public void Play()
+    {
+        SceneManager.LoadScene("Main");
+    }
     public void Lab()
     {
         SceneManager.LoadScene("3D Lab");

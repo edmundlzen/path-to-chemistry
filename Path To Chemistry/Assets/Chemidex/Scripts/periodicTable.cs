@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 public static class PeriodicTable
 {
@@ -29,15 +30,23 @@ public class periodicTable : MonoBehaviour
             }
         }
     }
-    public void elementCheck()
+    public void Back()
+    {
+        SceneManager.LoadScene("Chemidex");
+    }
+    public void mainMenu()
+    {
+        SceneManager.LoadScene("Main Menu");
+    }
+    void elementCheck()
     {
         var elementData = ElementData.Instance();
         for (int i = 1; i <= 118; i++)
         {
-            GameObject.Find($"Element ({i})").transform.GetComponentInChildren<Text>().text = elementData.elements.Keys.ElementAt(i - 1);
+            GameObject.Find($"Element ({i})/Symbol").GetComponent<Text>().text = elementData.elements.Keys.ElementAt(i - 1);
         }
     }
-    public void addElement()
+    void addElement()
     {
         var elementData = ElementData.Instance();
         if (PeriodicTable.periodicNum != EventSystem.current.currentSelectedGameObject.name)
