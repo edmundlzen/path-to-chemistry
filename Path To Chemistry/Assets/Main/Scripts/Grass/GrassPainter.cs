@@ -69,6 +69,10 @@ public class GrassPainter : MonoBehaviour
 
     int[] indi;
 
+    void Start()
+    {
+        filter = GetComponent<MeshFilter>();
+    }
 
 #if UNITY_EDITOR
     void OnFocus()
@@ -102,24 +106,26 @@ public class GrassPainter : MonoBehaviour
         normals = new List<Vector3>();
         length = new List<Vector2>();
     }
-
-    public void AddPoint(Vector3 grassPosition, Vector3 normal)
+    
+    public void AddPoint(Vector3 grassPosition, Vector3 grassNormal, int grassDensity)
     {
-        positions.Add((grassPosition));
-        indicies.Add(i);
-        length.Add(new Vector2(sizeWidth, sizeLength));
-        colors.Add(new Color(AdjustedColor.r + (Random.Range(0, 1.0f) * rangeR), AdjustedColor.g + (Random.Range(0, 1.0f) * rangeG), AdjustedColor.b + (Random.Range(0, 1.0f) * rangeB), 1));
-        normals.Add(normal);
-        i++;
-
-        mesh = new Mesh();
-        mesh.SetVertices(positions);
-        indi = indicies.ToArray();
-        mesh.SetIndices(indi, MeshTopology.Points, 0);
-        mesh.SetUVs(0, length);
-        mesh.SetColors(colors);
-        mesh.SetNormals(normals);
-        filter.mesh = mesh;
+        float step = 1f / grassDensity;
+        for (int j = 0; j < grassDensity; j++)
+        {
+            positions.Add(transform.InverseTransformPoint(new Vector3(grassPosition.x + (step * j), grassPosition.y, grassPosition.z + (step * j))));
+            indicies.Add(i);
+            length.Add(new Vector2(sizeWidth, sizeLength));
+            colors.Add(new Color(AdjustedColor.r + (Random.Range(0, 1.0f) * rangeR), AdjustedColor.g + (Random.Range(0, 1.0f) * rangeG), AdjustedColor.b + (Random.Range(0, 1.0f) * rangeB), 1));
+            normals.Add(grassNormal);
+            i++;
+        }
+            mesh.SetVertices(positions);
+            indi = indicies.ToArray();
+            mesh.SetIndices(indi, MeshTopology.Points, 0);
+            mesh.SetUVs(0, length);
+            mesh.SetColors(colors);
+            mesh.SetNormals(normals);
+            filter.mesh = mesh;
     }
 
     void OnScene(SceneView scene)
@@ -183,15 +189,15 @@ public class GrassPainter : MonoBehaviour
                                 var grassPosition = hitPos;// + Vector3.Cross(origin, hitNormal);
                                 grassPosition -= this.transform.position;
 
-                                positions.Add((grassPosition)); //
-                                indicies.Add(i); //
-                                length.Add(new Vector2(sizeWidth, sizeLength)); //
+                                positions.Add((grassPosition));
+                                indicies.Add(i);
+                                length.Add(new Vector2(sizeWidth, sizeLength));
                                 // add random color variations                          
-                                colors.Add(new Color(AdjustedColor.r + (Random.Range(0, 1.0f) * rangeR), AdjustedColor.g + (Random.Range(0, 1.0f) * rangeG), AdjustedColor.b + (Random.Range(0, 1.0f) * rangeB), 1)); //
+                                colors.Add(new Color(AdjustedColor.r + (Random.Range(0, 1.0f) * rangeR), AdjustedColor.g + (Random.Range(0, 1.0f) * rangeG), AdjustedColor.b + (Random.Range(0, 1.0f) * rangeB), 1));
 
                                 //colors.Add(temp);
-                                normals.Add(terrainHit.normal); //
-                                i++; //
+                                normals.Add(terrainHit.normal);
+                                i++;
                             }
                             else
                             {// to not place everything at once, check if the first placed point far enough away from the last placed first one
@@ -314,7 +320,8 @@ public class GrassPainter : MonoBehaviour
             mesh.SetColors(colors);
             mesh.SetNormals(normals);
             filter.mesh = mesh;
-            
+
+
         }
     }
 #endif

@@ -42,8 +42,7 @@ public class TerrainChunk {
 		sampleCentre = coord * meshSettings.meshWorldSize / meshSettings.meshScale;
 		Vector2 position = coord * meshSettings.meshWorldSize ;
 		bounds = new Bounds(position,Vector2.one * meshSettings.meshWorldSize );
-
-
+		
 		meshObject = new GameObject("Terrain Chunk");
 		meshRenderer = meshObject.AddComponent<MeshRenderer>();
 		meshFilter = meshObject.AddComponent<MeshFilter>();
@@ -53,6 +52,7 @@ public class TerrainChunk {
 		meshGrassGenerator = meshObject.AddComponent<GenerateGrass>();
 		meshObject.GetComponent<GenerateGrass>().grassGenerationSettings = grassGenerationSettings;
 		meshObject.GetComponent<GenerateGrass>().grassPainter = grassPainter;
+		meshObject.GetComponent<GenerateGrass>().grassComputeScript = grassPainter.GetComponent<GrassComputeScript>();
 		meshRenderer.material = material;
 		meshObject.transform.position = new Vector3(position.x,0,position.y);
 		meshObject.transform.parent = parent;

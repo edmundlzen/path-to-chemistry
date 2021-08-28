@@ -24,7 +24,6 @@ public class Suckable : MonoBehaviour
         print(HP);
         if (HP <= 0f)
         {
-            print("YES");
             Destroy(gameObject);
         }
 
