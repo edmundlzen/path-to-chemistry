@@ -6,6 +6,7 @@ public class GenerateObjects : MonoBehaviour
     public Dictionary<GameObject, int> numberOfObjects = new Dictionary<GameObject, int>();
     public Dictionary<GameObject, int> currentObjects = new Dictionary<GameObject, int>();
     public ObjectGenerationSettings objectGenerationSettings;
+    public Transform particleAttractor;
 
     private float randomX;
     private float randomZ;
@@ -42,6 +43,16 @@ public class GenerateObjects : MonoBehaviour
                             if (objectGenerationSettings.objects[i].followRotation)
                             {
                                 newObject = Instantiate(objects[i].gameObject, hit.point, Quaternion.FromToRotation(Vector3.up, hit.normal));
+                                Transform newParticleSystem = newObject.transform.Find("Particle System");
+                                if (newParticleSystem != null)
+                                {
+                                    ParticleAttractor particleAttractorScript =
+                                        newParticleSystem.GetComponent<ParticleAttractor>();
+                                    if (particleAttractorScript != null)
+                                    {
+                                        particleAttractorScript._attractorTransform = particleAttractor;
+                                    }
+                                }
                             }
                             else
                             {

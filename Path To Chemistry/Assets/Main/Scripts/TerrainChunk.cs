@@ -31,7 +31,7 @@ public class TerrainChunk {
 	MeshSettings meshSettings;
 	Transform viewer;
 
-	public TerrainChunk(Vector2 coord, HeightMapSettings heightMapSettings, MeshSettings meshSettings, LODInfo[] detailLevels, int colliderLODIndex, Transform parent, Transform viewer, Material material, ObjectGenerationSettings objectGenerationSettings, GrassGenerationSettings grassGenerationSettings, GrassPainter grassPainter) {
+	public TerrainChunk(Vector2 coord, HeightMapSettings heightMapSettings, MeshSettings meshSettings, LODInfo[] detailLevels, int colliderLODIndex, Transform parent, Transform viewer, Material material, ObjectGenerationSettings objectGenerationSettings, GrassGenerationSettings grassGenerationSettings, GrassPainter grassPainter, Transform particleAttractor, Transform playerTransform) {
 		this.coord = coord;
 		this.detailLevels = detailLevels;
 		this.colliderLODIndex = colliderLODIndex;
@@ -49,8 +49,10 @@ public class TerrainChunk {
 		meshCollider = meshObject.AddComponent<MeshCollider>();
 		meshObjectGenerator = meshObject.AddComponent<GenerateObjects>();
 		meshObject.GetComponent<GenerateObjects>().objectGenerationSettings = objectGenerationSettings;
+		meshObject.GetComponent<GenerateObjects>().particleAttractor = particleAttractor;
 		meshGrassGenerator = meshObject.AddComponent<GenerateGrass>();
 		meshObject.GetComponent<GenerateGrass>().grassGenerationSettings = grassGenerationSettings;
+		meshObject.GetComponent<GenerateGrass>().playerTransform = playerTransform;
 		meshObject.GetComponent<GenerateGrass>().grassPainter = grassPainter;
 		meshObject.GetComponent<GenerateGrass>().grassComputeScript = grassPainter.GetComponent<GrassComputeScript>();
 		meshRenderer.material = material;
