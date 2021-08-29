@@ -8,7 +8,7 @@ public class GenerateGrass : MonoBehaviour
     public GrassComputeScript grassComputeScript;
     public GrassPainter grassPainter;
     public Transform playerTransform;
-    public bool generateGrass = true;
+    public bool generateGrass = false;
     private Renderer r;
 
     // Update is called once per frame
@@ -19,14 +19,12 @@ public class GenerateGrass : MonoBehaviour
             r = GetComponent<Renderer>();
         } else if (generateGrass && Vector3.Distance(transform.position, playerTransform.position) < 61f)
         {
-            AddGrass();
-            
-            grassComputeScript.UpdateGrass();
+            StartCoroutine("AddGrass");
             generateGrass = false;
         }
     }
 
-    void AddGrass()
+    IEnumerator AddGrass()
     {
         // Generate grass
         RaycastHit hit;
@@ -37,6 +35,8 @@ public class GenerateGrass : MonoBehaviour
                 if (Physics.Raycast(new Vector3(x, r.bounds.max.y + 5f, z), -Vector3.up, out hit))
                 {
                     grassPainter.AddPoint(hit.point, hit.normal, grassGenerationSettings.grassDensity);
+                    grassComputeScript.UpdateGrass();
+                    yield return null; // new WaitForSeconds(.1f);
                 }
             }
         }

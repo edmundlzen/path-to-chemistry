@@ -16,15 +16,15 @@ MonoBehaviour:
   objects:
   - gameObject: {fileID: 1743353957770956, guid: 4663d5cca4ed98548946e758cd5979e2,
       type: 3}
-    minimumAmount: 50
-    maximumAmount: 100
+    minimumAmount: 30
+    maximumAmount: 50
     minimumHeight: 5
     maximumHeight: 13
     followRotation: 0
   - gameObject: {fileID: 8855115379164347087, guid: 6e3aac8ea1dca4b14a17387ca2bd6b36,
       type: 3}
-    minimumAmount: 50
-    maximumAmount: 100
+    minimumAmount: 10
+    maximumAmount: 20
     minimumHeight: 0
     maximumHeight: 20
     followRotation: 1
