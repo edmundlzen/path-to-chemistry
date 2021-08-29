@@ -5,24 +5,27 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: Assets/Global/Scenes/Main.unity
-    guid: b28991cb0c767f941b0398bcd0765201
-  - enabled: 0
-    path: Assets/Chemidex/Scenes/Chemidex.unity
-    guid: 3b2b654fbab482748aee9c0b0a8305c2
-  - enabled: 0
-    path: Assets/Chemidex/Scenes/Recipes.unity
-    guid: 124d95d0a7e20bd4092dbffbb51fdacc
-  - enabled: 0
-    path: Assets/Lab/Scenes/3D Lab.unity
-    guid: e74db27fb4475834796ecc76e695b0e6
-  - enabled: 0
-    path: Assets/Chemidex/Scenes/Periodic Table.unity
-    guid: da153caf05ae7f24ba377cb91a1bda2a
+  - enabled: 1
+    path: Assets/Global/Scenes/Transition.unity
+    guid: 79b364c2208f651428aa733ca7546d91
+  - enabled: 1
+    path: Assets/Global/Scenes/Main Menu.unity
+    guid: 83f8e51ebe4e2a145878250d6c4711b6
   - enabled: 1
     path: Assets/Main/Scenes/Main.unity
     guid: c23724e82e33aa64791f5b3e69699aa2
+  - enabled: 1
+    path: Assets/Lab/Scenes/3D Lab.unity
+    guid: e74db27fb4475834796ecc76e695b0e6
+  - enabled: 1
+    path: Assets/Chemidex/Scenes/Chemidex.unity
+    guid: 3b2b654fbab482748aee9c0b0a8305c2
+  - enabled: 1
+    path: Assets/Chemidex/Scenes/Periodic Table.unity
+    guid: da153caf05ae7f24ba377cb91a1bda2a
+  - enabled: 1
+    path: Assets/Chemidex/Scenes/Recipes.unity
+    guid: 124d95d0a7e20bd4092dbffbb51fdacc
   m_configObjects:
     UnityEditor.XR.ARCore.ARCoreSettings: {fileID: 11400000, guid: 6568def299a24bf4993a8bc2455e1114,
       type: 2}

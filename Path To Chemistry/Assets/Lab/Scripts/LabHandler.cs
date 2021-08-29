@@ -6,30 +6,57 @@ using UnityEngine.UI;
 
 public class LabHandler : MonoBehaviour
 {
-    void Start()
+    public GameObject pauseMenu;
+    public GameObject identifyQuantity;
+    public GameObject flaskHotbar;
+    public GameObject craftingTableHotbar;
+    public GameObject elementConstructorPanel;
+    void Update()
     {
-        GameObject.Find("pauseMenu").SetActive(false);
+        if ((Input.GetMouseButtonDown(0)) && (player.raycastObject == "Add"))
+        {
+            identifyQuantity.SetActive(true);
+            Time.timeScale = 0;
+        }
+        else if ((Input.GetMouseButtonDown(0)) && (player.raycastObject == "Add2"))
+        {
+            craftingTableHotbar.SetActive(true);
+            Time.timeScale = 0;
+        }
+        else if ((Input.GetMouseButtonDown(0)) && (player.raycastObject == "Add3"))
+        {
+            elementConstructorPanel.SetActive(true);
+            Time.timeScale = 0;
+        }
     }
-    public void Pause(GameObject pauseMenu)
+    public void Pause()
     {
         pauseMenu.SetActive(true);
         Time.timeScale = 0;
     }
-    public void Resume(GameObject pauseMenu)
+    public void Resume()
     {
         pauseMenu.SetActive(false);
         Time.timeScale = 1;
     }
     public void mainMenu()
     {
-        SceneManager.LoadScene("Main");
+        SceneManager.LoadScene("Main Menu");
+        Time.timeScale = 1;
     }
     public void Slider(float Value)
     {
         GameObject.Find("sliderValue").GetComponent<Text>().text = Convert.ToString(Convert.ToInt32(Value));
     }
+    public void Back1()
+    {
+        elementConstructorPanel.SetActive(false);
+        Time.timeScale = 1;
+    }
     public void Done()
     {
+        flaskHotbar.SetActive(true);
+        identifyQuantity.SetActive(false);
         var playerData = PlayerData.Instance();
         var silderValue = Convert.ToInt32(GameObject.Find("Slider").GetComponent<Slider>().value);
         if ((playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"] != null) && (playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"] != null) && (playerData.flaskElements.Count <= 10))

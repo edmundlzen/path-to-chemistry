@@ -16,8 +16,6 @@ public class Hotbar : MonoBehaviour
         GameObject.Find("Button" + hotbar.slotNum).GetComponent<Image>().color = Color.cyan;
         var playerData = PlayerData.Instance();
         slotCheck();
-        flaskCheck();
-        craftingTable();
     }
     public void Button1()
     {
