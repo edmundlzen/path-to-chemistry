@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ProceduralToolkit.Skeleton
 {
     /// <summary>
-    /// A straight skeleton representation
+    ///     A straight skeleton representation
     /// </summary>
     public class StraightSkeleton
     {
@@ -41,10 +41,7 @@ namespace ProceduralToolkit.Skeleton
 
         public void ValidatePolygons()
         {
-            foreach (var polygon in polygons)
-            {
-                ValidatePolygon(polygon);
-            }
+            foreach (var polygon in polygons) ValidatePolygon(polygon);
         }
 
         private void AddVertex(int polygonIndex, Vector2 vertex)
@@ -52,13 +49,9 @@ namespace ProceduralToolkit.Skeleton
             var polygon = polygons.GetLooped(polygonIndex);
             if (polygon.Count > 2)
             {
-                for (int i = 2; i < polygon.Count; i++)
-                {
+                for (var i = 2; i < polygon.Count; i++)
                     if (polygon[i] == vertex)
-                    {
                         return;
-                    }
-                }
 
                 polygon.Add(vertex);
             }
@@ -70,8 +63,8 @@ namespace ProceduralToolkit.Skeleton
 
         private void ValidatePolygon(List<Vector2> polygon)
         {
-            Vector2 controurDirection = polygon[1] - polygon[0];
-            int count = 0;
+            var controurDirection = polygon[1] - polygon[0];
+            var count = 0;
             bool swapped;
             do
             {
@@ -81,12 +74,13 @@ namespace ProceduralToolkit.Skeleton
                     Debug.LogError("Too many iterations");
                     break;
                 }
-                for (int i = 3; i < polygon.Count; i++)
+
+                for (var i = 3; i < polygon.Count; i++)
                 {
-                    Vector2 current = polygon[i];
-                    Vector2 previous = polygon[i - 1];
-                    Vector2 edgeDirection = current - previous;
-                    float dot = Vector2.Dot(controurDirection, edgeDirection);
+                    var current = polygon[i];
+                    var previous = polygon[i - 1];
+                    var edgeDirection = current - previous;
+                    var dot = Vector2.Dot(controurDirection, edgeDirection);
                     if (dot < -Geometry.Epsilon)
                     {
                         // Contradirected
@@ -101,8 +95,8 @@ namespace ProceduralToolkit.Skeleton
                     else
                     {
                         // Perpendicular
-                        Vector2 next = polygon.GetLooped(i + 1);
-                        Vector2 previousPrevious = polygon[i - 2];
+                        var next = polygon.GetLooped(i + 1);
+                        var previousPrevious = polygon[i - 2];
                         if (Intersect.SegmentSegment(current, next, previous, previousPrevious))
                         {
                             polygon[i] = previous;
@@ -111,6 +105,7 @@ namespace ProceduralToolkit.Skeleton
                         }
                     }
                 }
+
                 count++;
             } while (swapped);
         }

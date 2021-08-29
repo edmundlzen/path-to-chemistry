@@ -5,38 +5,13 @@ using UnityEngine;
 namespace ProceduralToolkit
 {
     /// <summary>
-    /// Representation of a 2D line segment
+    ///     Representation of a 2D line segment
     /// </summary>
     [Serializable]
     public struct Segment2 : IEquatable<Segment2>, IFormattable
     {
         public Vector2 a;
         public Vector2 b;
-
-        /// <summary>
-        /// Returns the normalized direction of the segment
-        /// </summary>
-        public Vector2 direction => (b - a).normalized;
-        /// <summary>
-        /// Returns the length of the segment
-        /// </summary>
-        public float length => (b - a).magnitude;
-        /// <summary>
-        /// Returns the center of the segment
-        /// </summary>
-        public Vector2 center => GetPoint(0.5f);
-        /// <summary>
-        /// Returns the axis-aligned bounding box of the segment
-        /// </summary>
-        public Rect aabb
-        {
-            get
-            {
-                Vector2 min = Vector2.Min(a, b);
-                Vector2 max = Vector2.Max(a, b);
-                return Rect.MinMaxRect(min.x, min.y, max.x, max.y);
-            }
-        }
 
         public Segment2(Vector2 a, Vector2 b)
         {
@@ -45,7 +20,35 @@ namespace ProceduralToolkit
         }
 
         /// <summary>
-        /// Access the a or b component using [0] or [1] respectively
+        ///     Returns the normalized direction of the segment
+        /// </summary>
+        public Vector2 direction => (b - a).normalized;
+
+        /// <summary>
+        ///     Returns the length of the segment
+        /// </summary>
+        public float length => (b - a).magnitude;
+
+        /// <summary>
+        ///     Returns the center of the segment
+        /// </summary>
+        public Vector2 center => GetPoint(0.5f);
+
+        /// <summary>
+        ///     Returns the axis-aligned bounding box of the segment
+        /// </summary>
+        public Rect aabb
+        {
+            get
+            {
+                var min = Vector2.Min(a, b);
+                var max = Vector2.Max(a, b);
+                return Rect.MinMaxRect(min.x, min.y, max.x, max.y);
+            }
+        }
+
+        /// <summary>
+        ///     Access the a or b component using [0] or [1] respectively
         /// </summary>
         public Vector2 this[int index]
         {
@@ -75,8 +78,19 @@ namespace ProceduralToolkit
             }
         }
 
+        public bool Equals(Segment2 other)
+        {
+            return a.Equals(other.a) && b.Equals(other.b);
+        }
+
+        public string ToString(string format, IFormatProvider formatProvider)
+        {
+            return string.Format("Segment2(a: {0}, b: {1})", a.ToString(format, formatProvider),
+                b.ToString(format, formatProvider));
+        }
+
         /// <summary>
-        /// Returns a point on the segment at the given normalized position
+        ///     Returns a point on the segment at the given normalized position
         /// </summary>
         /// <param name="position">Normalized position</param>
         public Vector2 GetPoint(float position)
@@ -85,7 +99,7 @@ namespace ProceduralToolkit
         }
 
         /// <summary>
-        /// Returns a list of evenly distributed points on the segment
+        ///     Returns a list of evenly distributed points on the segment
         /// </summary>
         /// <param name="count">Number of points</param>
         public List<Vector2> GetPoints(int count)
@@ -94,40 +108,21 @@ namespace ProceduralToolkit
         }
 
         /// <summary>
-        /// Linearly interpolates between two segments
+        ///     Linearly interpolates between two segments
         /// </summary>
         public static Segment2 Lerp(Segment2 a, Segment2 b, float t)
         {
             t = Mathf.Clamp01(t);
-            return new Segment2(a.a + (b.a - a.a)*t, a.b + (b.b - a.b)*t);
+            return new Segment2(a.a + (b.a - a.a) * t, a.b + (b.b - a.b) * t);
         }
 
         /// <summary>
-        /// Linearly interpolates between two segments without clamping the interpolant
+        ///     Linearly interpolates between two segments without clamping the interpolant
         /// </summary>
         public static Segment2 LerpUnclamped(Segment2 a, Segment2 b, float t)
         {
-            return new Segment2(a.a + (b.a - a.a)*t, a.b + (b.b - a.b)*t);
+            return new Segment2(a.a + (b.a - a.a) * t, a.b + (b.b - a.b) * t);
         }
-
-        #region Casting operators
-
-        public static explicit operator Line2(Segment2 segment)
-        {
-            return new Line2(segment.a, (segment.b - segment.a).normalized);
-        }
-
-        public static explicit operator Ray2D(Segment2 segment)
-        {
-            return new Ray2D(segment.a, (segment.b - segment.a).normalized);
-        }
-
-        public static explicit operator Segment3(Segment2 segment)
-        {
-            return new Segment3((Vector3) segment.a, (Vector3) segment.b);
-        }
-
-        #endregion Casting operators
 
         public static Segment2 operator +(Segment2 segment, Vector2 vector)
         {
@@ -159,11 +154,6 @@ namespace ProceduralToolkit
             return other is Segment2 && Equals((Segment2) other);
         }
 
-        public bool Equals(Segment2 other)
-        {
-            return a.Equals(other.a) && b.Equals(other.b);
-        }
-
         public override string ToString()
         {
             return string.Format("Segment2(a: {0}, b: {1})", a, b);
@@ -174,9 +164,23 @@ namespace ProceduralToolkit
             return string.Format("Segment2(a: {0}, b: {1})", a.ToString(format), b.ToString(format));
         }
 
-        public string ToString(string format, IFormatProvider formatProvider)
+        #region Casting operators
+
+        public static explicit operator Line2(Segment2 segment)
         {
-            return string.Format("Segment2(a: {0}, b: {1})", a.ToString(format, formatProvider), b.ToString(format, formatProvider));
+            return new Line2(segment.a, (segment.b - segment.a).normalized);
         }
+
+        public static explicit operator Ray2D(Segment2 segment)
+        {
+            return new Ray2D(segment.a, (segment.b - segment.a).normalized);
+        }
+
+        public static explicit operator Segment3(Segment2 segment)
+        {
+            return new Segment3(segment.a, segment.b);
+        }
+
+        #endregion Casting operators
     }
 }

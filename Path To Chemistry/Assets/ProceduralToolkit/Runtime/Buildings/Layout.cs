@@ -6,11 +6,10 @@ namespace ProceduralToolkit.Buildings
 {
     public abstract class Layout : ILayout
     {
+        private readonly List<ILayoutElement> elements = new List<ILayoutElement>();
         public Vector2 origin { get; set; }
         public float width { get; set; }
         public float height { get; set; }
-
-        private readonly List<ILayoutElement> elements = new List<ILayoutElement>();
 
         public IEnumerator<ILayoutElement> GetEnumerator()
         {

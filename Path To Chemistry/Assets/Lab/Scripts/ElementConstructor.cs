@@ -1,6 +1,6 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.IO;
+using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -23,6 +23,7 @@ public class ElementConstructor : MonoBehaviour
         GameObject.Find("electronNum").GetComponent<Text>().text = Convert.ToString(elementConstructor.Electrons);
         GameObject.Find("NeutronNum").GetComponent<Text>().text = Convert.ToString(elementConstructor.Neutrons);
     }
+
     public void addProton()
     {
         if (elementConstructor.Protons + 1 <= 120)
@@ -32,6 +33,7 @@ public class ElementConstructor : MonoBehaviour
             GameObject.Find("Product").GetComponent<Text>().text = "Craft";
         }
     }
+
     public void addElectron()
     {
         if (elementConstructor.Electrons + 1 <= 120)
@@ -41,6 +43,7 @@ public class ElementConstructor : MonoBehaviour
             GameObject.Find("Product").GetComponent<Text>().text = "Craft";
         }
     }
+
     public void addNeutron()
     {
         if (elementConstructor.Neutrons + 1 <= 180)
@@ -50,6 +53,7 @@ public class ElementConstructor : MonoBehaviour
             GameObject.Find("Product").GetComponent<Text>().text = "Craft";
         }
     }
+
     public void removeProton()
     {
         if (elementConstructor.Protons - 1 >= 0)
@@ -59,6 +63,7 @@ public class ElementConstructor : MonoBehaviour
             GameObject.Find("Product").GetComponent<Text>().text = "Craft";
         }
     }
+
     public void removeElectron()
     {
         if (elementConstructor.Electrons - 1 >= 0)
@@ -68,6 +73,7 @@ public class ElementConstructor : MonoBehaviour
             GameObject.Find("Product").GetComponent<Text>().text = "Craft";
         }
     }
+
     public void removeNeuton()
     {
         if (elementConstructor.Neutrons - 1 >= 0)
@@ -77,12 +83,14 @@ public class ElementConstructor : MonoBehaviour
             GameObject.Find("Product").GetComponent<Text>().text = "Craft";
         }
     }
+
     public void Craft()
     {
         var elementData = ElementData.Instance();
         foreach (var Keys in elementData.elements.Keys)
-        {
-            if ((Convert.ToString(elementConstructor.Protons) == elementData.elements[Keys]["protons"]) && (Convert.ToString(elementConstructor.Electrons) == elementData.elements[Keys]["electrons"]) && (Convert.ToString(elementConstructor.Neutrons) == elementData.elements[Keys]["neutrons"]))
+            if (Convert.ToString(elementConstructor.Protons) == elementData.elements[Keys]["protons"] &&
+                Convert.ToString(elementConstructor.Electrons) == elementData.elements[Keys]["electrons"] &&
+                Convert.ToString(elementConstructor.Neutrons) == elementData.elements[Keys]["neutrons"])
             {
                 GameObject.Find("Product").GetComponent<Text>().text = Keys;
                 break;
@@ -91,9 +99,9 @@ public class ElementConstructor : MonoBehaviour
             {
                 GameObject.Find("Product").GetComponent<Text>().text = "Nothing!";
             }
-        }
     }
-    void Load()
+
+    private void Load()
     {
         var filePath = Path.Combine(Application.dataPath, "Elements.json");
         var fileContent = File.ReadAllText(filePath);

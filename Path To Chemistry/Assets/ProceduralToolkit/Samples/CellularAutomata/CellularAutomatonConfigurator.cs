@@ -6,49 +6,40 @@ using UnityEngine.UI;
 namespace ProceduralToolkit.Samples
 {
     /// <summary>
-    /// A demonstration of CellularAutomaton from the main library, draws the automaton simulation on a texture.
-    /// Note that some of the rulesets need noise value different from the default setting.
+    ///     A demonstration of CellularAutomaton from the main library, draws the automaton simulation on a texture.
+    ///     Note that some of the rulesets need noise value different from the default setting.
     /// </summary>
     public class CellularAutomatonConfigurator : ConfiguratorBase
     {
         public RectTransform leftPanel;
         public ToggleGroup toggleGroup;
         public RawImage image;
-        [Space]
-        public CellularAutomaton.Config config = new CellularAutomaton.Config();
 
-        private enum RulesetName
-        {
-            Life,
-            Mazectric,
-            Coral,
-            WalledCities,
-            Coagulations,
-            Anneal,
-            Majority,
-        }
+        [Space] public CellularAutomaton.Config config = new CellularAutomaton.Config();
+
+        private Color aliveColor;
+        private CellularAutomaton automaton;
+        private Color deadColor;
+        private TextControl header;
+
+        private readonly Dictionary<RulesetName, CellularAutomaton.Ruleset> nameToRuleset =
+            new Dictionary<RulesetName, CellularAutomaton.Ruleset>
+            {
+                {RulesetName.Life, CellularAutomaton.Ruleset.life},
+                {RulesetName.Mazectric, CellularAutomaton.Ruleset.mazectric},
+                {RulesetName.Coral, CellularAutomaton.Ruleset.coral},
+                {RulesetName.WalledCities, CellularAutomaton.Ruleset.walledCities},
+                {RulesetName.Coagulations, CellularAutomaton.Ruleset.coagulations},
+                {RulesetName.Anneal, CellularAutomaton.Ruleset.anneal},
+                {RulesetName.Majority, CellularAutomaton.Ruleset.majority}
+            };
 
         private Color[] pixels;
         private Texture2D texture;
-        private CellularAutomaton automaton;
-        private Color deadColor;
-        private Color aliveColor;
-        private TextControl header;
-
-        private Dictionary<RulesetName, CellularAutomaton.Ruleset> nameToRuleset = new Dictionary<RulesetName, CellularAutomaton.Ruleset>
-        {
-            {RulesetName.Life, CellularAutomaton.Ruleset.life},
-            {RulesetName.Mazectric, CellularAutomaton.Ruleset.mazectric},
-            {RulesetName.Coral, CellularAutomaton.Ruleset.coral},
-            {RulesetName.WalledCities, CellularAutomaton.Ruleset.walledCities},
-            {RulesetName.Coagulations, CellularAutomaton.Ruleset.coagulations},
-            {RulesetName.Anneal, CellularAutomaton.Ruleset.anneal},
-            {RulesetName.Majority, CellularAutomaton.Ruleset.majority},
-        };
 
         private void Awake()
         {
-            pixels = new Color[config.width*config.height];
+            pixels = new Color[config.width * config.height];
             texture = PTUtils.CreateTexture(config.width, config.height, Color.clear);
             image.texture = texture;
 
@@ -110,20 +101,12 @@ namespace ProceduralToolkit.Samples
 
         private void DrawCells()
         {
-            for (int x = 0; x < config.width; x++)
-            {
-                for (int y = 0; y < config.height; y++)
-                {
-                    if (automaton.cells[x, y])
-                    {
-                        pixels[y*config.width + x] = aliveColor;
-                    }
-                    else
-                    {
-                        pixels[y*config.width + x] = deadColor;
-                    }
-                }
-            }
+            for (var x = 0; x < config.width; x++)
+            for (var y = 0; y < config.height; y++)
+                if (automaton.cells[x, y])
+                    pixels[y * config.width + x] = aliveColor;
+                else
+                    pixels[y * config.width + x] = deadColor;
 
             texture.SetPixels(pixels);
             texture.Apply();
@@ -133,9 +116,9 @@ namespace ProceduralToolkit.Samples
         {
             var toggle = InstantiateControl<ToggleControl>(toggleGroup.transform);
             toggle.Initialize(
-                header: rulesetName.ToString(),
-                value: rulesetName == selectedRulesetName,
-                onValueChanged: isOn =>
+                rulesetName.ToString(),
+                rulesetName == selectedRulesetName,
+                isOn =>
                 {
                     if (isOn)
                     {
@@ -143,7 +126,18 @@ namespace ProceduralToolkit.Samples
                         Generate();
                     }
                 },
-                toggleGroup: toggleGroup);
+                toggleGroup);
+        }
+
+        private enum RulesetName
+        {
+            Life,
+            Mazectric,
+            Coral,
+            WalledCities,
+            Coagulations,
+            Anneal,
+            Majority
         }
     }
 }

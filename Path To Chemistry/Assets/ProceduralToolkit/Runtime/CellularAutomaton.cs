@@ -6,32 +6,18 @@ using Random = UnityEngine.Random;
 namespace ProceduralToolkit
 {
     /// <summary>
-    /// Generic cellular automaton for two-state rulesets
+    ///     Generic cellular automaton for two-state rulesets
     /// </summary>
     public class CellularAutomaton
     {
-        [Serializable]
-        public class Config
-        {
-            public int width = 128;
-            public int height = 128;
-            public Ruleset ruleset = Ruleset.life;
-            public float startNoise = 0.25f;
-            public bool aliveBorders = false;
-        }
-
-        private bool[,] _cells;
-        public bool[,] cells
-        {
-            get => _cells;
-            private set => _cells = value;
-        }
-
-        private Config config;
         private readonly Action<int, int> visitAliveBorders;
         private readonly Action<int, int> visitDeadBorders;
-        private bool[,] copy;
+
+        private bool[,] _cells;
         private int aliveNeighbours;
+
+        private Config config;
+        private bool[,] copy;
 
         public CellularAutomaton(Config config)
         {
@@ -61,6 +47,12 @@ namespace ProceduralToolkit
             };
 
             FillWithNoise();
+        }
+
+        public bool[,] cells
+        {
+            get => _cells;
+            private set => _cells = value;
         }
 
         public void SetConfig(Config config)
@@ -148,15 +140,116 @@ namespace ProceduralToolkit
             {
                 copy.Visit8(x, y, visitDeadBorders);
             }
+
             return aliveNeighbours;
         }
 
+        [Serializable]
+        public class Config
+        {
+            public int width = 128;
+            public int height = 128;
+            public Ruleset ruleset = Ruleset.life;
+            public float startNoise = 0.25f;
+            public bool aliveBorders = false;
+        }
+
         /// <summary>
-        /// Cellular automaton ruleset representation
+        ///     Cellular automaton ruleset representation
         /// </summary>
         [Serializable]
         public struct Ruleset
         {
+            public byte[] birthRule;
+            public byte[] survivalRule;
+
+            public Ruleset(byte[] birthRule, byte[] survivalRule)
+            {
+                this.birthRule = new byte[birthRule.Length];
+                for (int i = 0; i < birthRule.Length; i++)
+                {
+                    this.birthRule[i] = birthRule[i];
+                }
+
+                this.survivalRule = new byte[survivalRule.Length];
+                for (int i = 0; i < survivalRule.Length; i++)
+                {
+                    this.survivalRule[i] = survivalRule[i];
+                }
+            }
+
+            public Ruleset(List<byte> birthRule, List<byte> survivalRule)
+            {
+                this.birthRule = birthRule.ToArray();
+                this.survivalRule = survivalRule.ToArray();
+            }
+
+            public Ruleset(string birthRule = null, string survivalRule = null)
+            {
+                this.birthRule = ConvertRuleStringToList(birthRule).ToArray();
+                this.survivalRule = ConvertRuleStringToList(survivalRule).ToArray();
+            }
+
+            public bool CanSpawn(int aliveCells)
+            {
+                foreach (byte number in birthRule)
+                {
+                    if (number == aliveCells) return true;
+                }
+
+                return false;
+            }
+
+            public bool CanSurvive(int aliveCells)
+            {
+                foreach (byte number in survivalRule)
+                {
+                    if (number == aliveCells) return true;
+                }
+
+                return false;
+            }
+
+            public static List<byte> ConvertRuleStringToList(string rule)
+            {
+                var list = new List<byte>();
+                if (!string.IsNullOrEmpty(rule))
+                {
+                    foreach (char c in rule)
+                    {
+                        if (char.IsDigit(c))
+                        {
+                            byte digit = (byte) char.GetNumericValue(c);
+                            if (!list.Contains(digit))
+                            {
+                                list.Add(digit);
+                            }
+                        }
+                    }
+
+                    list.Sort();
+                }
+
+                return list;
+            }
+
+            public override string ToString()
+            {
+                string b = "";
+                foreach (var digit in birthRule)
+                {
+                    b += digit;
+                }
+
+                string s = "";
+                foreach (var digit in survivalRule)
+                {
+                    s += digit;
+                }
+
+                return string.Format("B{0}/S{1}", b, s);
+            }
+
             #region Common rulesets
 
             public static Ruleset life => new Ruleset("3", "23");
@@ -189,89 +282,6 @@ namespace ProceduralToolkit
             public static Ruleset assimilation => new Ruleset("345", "4567");
 
             #endregion Common rulesets
-
-            public byte[] birthRule;
-            public byte[] survivalRule;
-
-            public Ruleset(byte[] birthRule, byte[] survivalRule)
-            {
-                this.birthRule = new byte[birthRule.Length];
-                for (int i = 0; i < birthRule.Length; i++)
-                {
-                    this.birthRule[i] = birthRule[i];
-                }
-                this.survivalRule = new byte[survivalRule.Length];
-                for (int i = 0; i < survivalRule.Length; i++)
-                {
-                    this.survivalRule[i] = survivalRule[i];
-                }
-            }
-
-            public Ruleset(List<byte> birthRule, List<byte> survivalRule)
-            {
-                this.birthRule = birthRule.ToArray();
-                this.survivalRule = survivalRule.ToArray();
-            }
-
-            public Ruleset(string birthRule = null, string survivalRule = null)
-            {
-                this.birthRule = ConvertRuleStringToList(birthRule).ToArray();
-                this.survivalRule = ConvertRuleStringToList(survivalRule).ToArray();
-            }
-
-            public bool CanSpawn(int aliveCells)
-            {
-                foreach (byte number in birthRule)
-                {
-                    if (number == aliveCells) return true;
-                }
-                return false;
-            }
-
-            public bool CanSurvive(int aliveCells)
-            {
-                foreach (byte number in survivalRule)
-                {
-                    if (number == aliveCells) return true;
-                }
-                return false;
-            }
-
-            public static List<byte> ConvertRuleStringToList(string rule)
-            {
-                var list = new List<byte>();
-                if (!string.IsNullOrEmpty(rule))
-                {
-                    foreach (char c in rule)
-                    {
-                        if (char.IsDigit(c))
-                        {
-                            byte digit = (byte) char.GetNumericValue(c);
-                            if (!list.Contains(digit))
-                            {
-                                list.Add(digit);
-                            }
-                        }
-                    }
-                    list.Sort();
-                }
-                return list;
-            }
-
-            public override string ToString()
-            {
-                string b = "";
-                foreach (var digit in birthRule)
-                {
-                    b += digit;
-                }
-                string s = "";
-                foreach (var digit in survivalRule)
-                {
-                    s += digit;
-                }
-                return string.Format("B{0}/S{1}", b, s);
-            }
         }
     }
 }

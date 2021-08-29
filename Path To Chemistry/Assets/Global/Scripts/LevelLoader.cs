@@ -5,18 +5,18 @@ using UnityEngine.SceneManagement;
 public class LevelLoader : MonoBehaviour
 {
     public Animator Transition;
-    void Update()
+
+    private void Update()
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-            LoadNextLevel();
-        }
+        if (Input.GetMouseButtonDown(0)) LoadNextLevel();
     }
+
     public void LoadNextLevel()
     {
         StartCoroutine(LoadLevel());
     }
-    IEnumerator LoadLevel()
+
+    private IEnumerator LoadLevel()
     {
         Transition.SetTrigger("Start");
         yield return new WaitForSeconds(1);

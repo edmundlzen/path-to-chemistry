@@ -12,7 +12,8 @@ namespace ProceduralToolkit.Samples.Primitives
 
         private void Start()
         {
-            GetComponent<MeshFilter>().mesh = MeshDraft.FlatSpheroid(radius, height, horizontalSegments, verticalSegments).ToMesh();
+            GetComponent<MeshFilter>().mesh =
+                MeshDraft.FlatSpheroid(radius, height, horizontalSegments, verticalSegments).ToMesh();
         }
     }
 }

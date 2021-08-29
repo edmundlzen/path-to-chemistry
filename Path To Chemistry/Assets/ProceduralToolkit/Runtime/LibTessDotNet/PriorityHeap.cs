@@ -50,20 +50,13 @@ namespace ProceduralToolkit.LibTessDotNet
     {
         public delegate bool LessOrEqual(TValue lhs, TValue rhs);
 
-        protected class HandleElem
-        {
-            internal TValue _key;
-            internal int _node;
-        }
-
-        private LessOrEqual _leq;
-        private int[] _nodes;
-        private HandleElem[] _handles;
-        private int _size, _max;
         private int _freeList;
+        private HandleElem[] _handles;
         private bool _initialized;
 
-        public bool Empty { get { return _size == 0; } }
+        private readonly LessOrEqual _leq;
+        private int[] _nodes;
+        private int _size, _max;
 
         public PriorityHeap(int initialSize, LessOrEqual leq)
         {
@@ -78,8 +71,10 @@ namespace ProceduralToolkit.LibTessDotNet
             _initialized = false;
 
             _nodes[1] = 1;
-            _handles[1] = new HandleElem { _key = null };
+            _handles[1] = new HandleElem {_key = null};
         }
+
+        public bool Empty => _size == 0;
 
         private void FloatDown(int curr)
         {
@@ -90,10 +85,7 @@ namespace ProceduralToolkit.LibTessDotNet
             while (true)
             {
                 child = curr << 1;
-                if (child < _size && _leq(_handles[_nodes[child + 1]]._key, _handles[_nodes[child]]._key))
-                {
-                    ++child;
-                }
+                if (child < _size && _leq(_handles[_nodes[child + 1]]._key, _handles[_nodes[child]]._key)) ++child;
 
                 Debug.Assert(child <= _max);
 
@@ -127,6 +119,7 @@ namespace ProceduralToolkit.LibTessDotNet
                     _handles[hCurr]._node = curr;
                     break;
                 }
+
                 _nodes[curr] = hParent;
                 _handles[hParent]._node = curr;
                 curr = parent;
@@ -135,17 +128,14 @@ namespace ProceduralToolkit.LibTessDotNet
 
         public void Init()
         {
-            for (int i = _size; i >= 1; --i)
-            {
-                FloatDown(i);
-            }
+            for (var i = _size; i >= 1; --i) FloatDown(i);
             _initialized = true;
         }
 
         public PQHandle Insert(TValue value)
         {
-            int curr = ++_size;
-            if ((curr * 2) > _max)
+            var curr = ++_size;
+            if (curr * 2 > _max)
             {
                 _max <<= 1;
                 Array.Resize(ref _nodes, _max + 1);
@@ -166,7 +156,7 @@ namespace ProceduralToolkit.LibTessDotNet
             _nodes[curr] = free;
             if (_handles[free] == null)
             {
-                _handles[free] = new HandleElem { _key = value, _node = curr };
+                _handles[free] = new HandleElem {_key = value, _node = curr};
             }
             else
             {
@@ -174,21 +164,18 @@ namespace ProceduralToolkit.LibTessDotNet
                 _handles[free]._key = value;
             }
 
-            if (_initialized)
-            {
-                FloatUp(curr);
-            }
+            if (_initialized) FloatUp(curr);
 
             Debug.Assert(free != PQHandle.Invalid);
-            return new PQHandle { _handle = free };
+            return new PQHandle {_handle = free};
         }
 
         public TValue ExtractMin()
         {
             Debug.Assert(_initialized);
 
-            int hMin = _nodes[1];
-            TValue min = _handles[hMin]._key;
+            var hMin = _nodes[1];
+            var min = _handles[hMin]._key;
 
             if (_size > 0)
             {
@@ -199,10 +186,7 @@ namespace ProceduralToolkit.LibTessDotNet
                 _handles[hMin]._node = _freeList;
                 _freeList = hMin;
 
-                if (--_size > 0)
-                {
-                    FloatDown(1);
-                }
+                if (--_size > 0) FloatDown(1);
             }
 
             return min;
@@ -218,28 +202,30 @@ namespace ProceduralToolkit.LibTessDotNet
         {
             Debug.Assert(_initialized);
 
-            int hCurr = handle._handle;
+            var hCurr = handle._handle;
             Debug.Assert(hCurr >= 1 && hCurr <= _max && _handles[hCurr]._key != null);
 
-            int curr = _handles[hCurr]._node;
+            var curr = _handles[hCurr]._node;
             _nodes[curr] = _nodes[_size];
             _handles[_nodes[curr]]._node = curr;
 
             if (curr <= --_size)
             {
                 if (curr <= 1 || _leq(_handles[_nodes[curr >> 1]]._key, _handles[_nodes[curr]]._key))
-                {
                     FloatDown(curr);
-                }
                 else
-                {
                     FloatUp(curr);
-                }
             }
 
             _handles[hCurr]._key = null;
             _handles[hCurr]._node = _freeList;
             _freeList = hCurr;
+        }
+
+        protected class HandleElem
+        {
+            internal TValue _key;
+            internal int _node;
         }
     }
 }

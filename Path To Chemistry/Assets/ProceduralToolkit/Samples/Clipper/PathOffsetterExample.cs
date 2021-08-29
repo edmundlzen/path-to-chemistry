@@ -28,10 +28,7 @@ namespace ProceduralToolkit.Samples
         private void SetVertices(LineRenderer lineRenderer, List<Vector2> vertices)
         {
             lineRenderer.positionCount = vertices.Count;
-            for (int i = 0; i < vertices.Count; i++)
-            {
-                lineRenderer.SetPosition(i, vertices[i]);
-            }
+            for (var i = 0; i < vertices.Count; i++) lineRenderer.SetPosition(i, vertices[i]);
         }
     }
 }

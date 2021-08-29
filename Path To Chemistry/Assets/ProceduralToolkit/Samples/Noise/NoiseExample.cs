@@ -7,22 +7,21 @@ namespace ProceduralToolkit.Samples
 {
     public class NoiseExample : ConfiguratorBase
     {
+        private const int width = 512;
+        private const int height = 512;
         public RectTransform leftPanel;
         public ToggleGroup toggleGroup;
         public RawImage image;
-
-        private const int width = 512;
-        private const int height = 512;
+        private FastNoise.NoiseType currentNoiseType = FastNoise.NoiseType.Perlin;
+        private TextControl header;
+        private FastNoise noise;
 
         private Color[] pixels;
         private Texture2D texture;
-        private FastNoise noise;
-        private TextControl header;
-        private FastNoise.NoiseType currentNoiseType = FastNoise.NoiseType.Perlin;
 
         private void Awake()
         {
-            pixels = new Color[width*height];
+            pixels = new Color[width * height];
             texture = PTUtils.CreateTexture(width, height, Color.clear);
             image.texture = texture;
 
@@ -57,13 +56,11 @@ namespace ProceduralToolkit.Samples
 
             GeneratePalette();
 
-            for (int x = 0; x < width; x++)
+            for (var x = 0; x < width; x++)
+            for (var y = 0; y < height; y++)
             {
-                for (int y = 0; y < height; y++)
-                {
-                    float value = noise.GetNoise01(x, y);
-                    pixels[y*width + x] = GetMainColorHSV().WithSV(value, value).ToColor();
-                }
+                var value = noise.GetNoise01(x, y);
+                pixels[y * width + x] = GetMainColorHSV().WithSV(value, value).ToColor();
             }
 
             texture.SetPixels(pixels);
@@ -74,9 +71,9 @@ namespace ProceduralToolkit.Samples
         {
             var toggle = InstantiateControl<ToggleControl>(toggleGroup.transform);
             toggle.Initialize(
-                header: noiseType.ToString(),
-                value: noiseType == currentNoiseType,
-                onValueChanged: isOn =>
+                noiseType.ToString(),
+                noiseType == currentNoiseType,
+                isOn =>
                 {
                     if (isOn)
                     {
@@ -84,7 +81,7 @@ namespace ProceduralToolkit.Samples
                         Generate();
                     }
                 },
-                toggleGroup: toggleGroup);
+                toggleGroup);
         }
     }
 }

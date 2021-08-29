@@ -3,7 +3,7 @@
 namespace ProceduralToolkit
 {
     /// <summary>
-    /// Specifies directions along thee axes
+    ///     Specifies directions along thee axes
     /// </summary>
     [Flags]
     public enum Directions

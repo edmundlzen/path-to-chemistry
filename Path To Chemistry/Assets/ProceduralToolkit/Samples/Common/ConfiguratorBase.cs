@@ -5,13 +5,13 @@ namespace ProceduralToolkit.Samples
 {
     public class ConfiguratorBase : MonoBehaviour
     {
-        private Palette currentPalette = new Palette();
-        private Palette targetPalette = new Palette();
+        private readonly Palette currentPalette = new Palette();
+        private readonly Palette targetPalette = new Palette();
 
         protected static T InstantiateControl<T>(Transform parent) where T : Component
         {
-            T prefab = Resources.Load<T>(typeof(T).Name);
-            T control = Instantiate(prefab);
+            var prefab = Resources.Load<T>(typeof(T).Name);
+            var control = Instantiate(prefab);
             control.transform.SetParent(parent, false);
             control.transform.localPosition = Vector3.zero;
             control.transform.localRotation = Quaternion.identity;
@@ -21,14 +21,14 @@ namespace ProceduralToolkit.Samples
 
         public static MeshDraft Platform(float radius, float height, int segments = 128)
         {
-            float segmentAngle = 360f/segments;
+            var segmentAngle = 360f / segments;
             float currentAngle = 0;
 
             var lowerRing = new List<Vector3>(segments);
             var upperRing = new List<Vector3>(segments);
             for (var i = 0; i < segments; i++)
             {
-                lowerRing.Add(Geometry.PointOnCircle3XZ(radius + height, currentAngle) + Vector3.down*height);
+                lowerRing.Add(Geometry.PointOnCircle3XZ(radius + height, currentAngle) + Vector3.down * height);
                 upperRing.Add(Geometry.PointOnCircle3XZ(radius, currentAngle));
                 currentAngle += segmentAngle;
             }
@@ -50,32 +50,25 @@ namespace ProceduralToolkit.Samples
         public static void AssignDraftToMeshFilter(MeshDraft draft, MeshFilter meshFilter, ref Mesh mesh)
         {
             if (mesh == null)
-            {
                 mesh = draft.ToMesh();
-            }
             else
-            {
                 draft.ToMesh(ref mesh);
-            }
             meshFilter.sharedMesh = mesh;
         }
 
-        public static void AssignDraftToMeshFilter(CompoundMeshDraft compoundDraft, MeshFilter meshFilter, ref Mesh mesh)
+        public static void AssignDraftToMeshFilter(CompoundMeshDraft compoundDraft, MeshFilter meshFilter,
+            ref Mesh mesh)
         {
             if (mesh == null)
-            {
                 mesh = compoundDraft.ToMeshWithSubMeshes();
-            }
             else
-            {
                 compoundDraft.ToMeshWithSubMeshes(ref mesh);
-            }
             meshFilter.sharedMesh = mesh;
         }
 
         protected void GeneratePalette()
         {
-            List<ColorHSV> palette = RandomE.TetradicPalette(0.25f, 0.7f);
+            var palette = RandomE.TetradicPalette(0.25f, 0.7f);
             targetPalette.mainColor = palette[0].WithSV(0.8f, 0.6f);
             targetPalette.secondaryColor = palette[1].WithSV(0.8f, 0.6f);
             targetPalette.skyColor = palette[2];
@@ -121,11 +114,11 @@ namespace ProceduralToolkit.Samples
 
         private class Palette
         {
+            public ColorHSV groundColor;
+            public ColorHSV horizonColor;
             public ColorHSV mainColor;
             public ColorHSV secondaryColor;
             public ColorHSV skyColor;
-            public ColorHSV horizonColor;
-            public ColorHSV groundColor;
         }
     }
 }

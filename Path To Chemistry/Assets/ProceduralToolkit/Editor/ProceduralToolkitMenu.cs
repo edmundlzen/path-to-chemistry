@@ -1,11 +1,12 @@
 using System;
 using UnityEditor;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace ProceduralToolkit.Editor
 {
     /// <summary>
-    /// Submenu with constructors for primitives at `GameObject > Procedural Toolkit`
+    ///     Submenu with constructors for primitives at `GameObject > Procedural Toolkit`
     /// </summary>
     public class ProceduralToolkitMenu
     {
@@ -24,7 +25,7 @@ namespace ProceduralToolkit.Editor
         {
             var go = GameObject.CreatePrimitive(PrimitiveType.Quad);
             Undo.RegisterCreatedObjectUndo(go, create + name);
-            UnityEngine.Object.DestroyImmediate(go.GetComponent<Collider>());
+            Object.DestroyImmediate(go.GetComponent<Collider>());
             go.name = name;
             go.GetComponent<MeshFilter>().mesh = mesh();
         }

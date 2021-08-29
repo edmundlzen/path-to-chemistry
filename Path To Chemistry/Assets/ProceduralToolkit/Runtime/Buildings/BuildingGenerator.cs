@@ -7,10 +7,10 @@ namespace ProceduralToolkit.Buildings
 {
     public class BuildingGenerator
     {
-        private IFacadePlanner facadePlanner;
         private IFacadeConstructor facadeConstructor;
-        private IRoofPlanner roofPlanner;
+        private IFacadePlanner facadePlanner;
         private IRoofConstructor roofConstructor;
+        private IRoofPlanner roofPlanner;
 
         public void SetFacadePlanner(IFacadePlanner facadePlanner)
         {
@@ -37,13 +37,10 @@ namespace ProceduralToolkit.Buildings
             Assert.IsTrue(config.floors > 0);
             Assert.IsTrue(config.entranceInterval > 0);
 
-            List<ILayout> facadeLayouts = facadePlanner.Plan(foundationPolygon, config);
-            float height = facadeLayouts[0].height;
+            var facadeLayouts = facadePlanner.Plan(foundationPolygon, config);
+            var height = facadeLayouts[0].height;
 
-            if (parent == null)
-            {
-                parent = new GameObject("Building").transform;
-            }
+            if (parent == null) parent = new GameObject("Building").transform;
             facadeConstructor.Construct(foundationPolygon, facadeLayouts, parent);
 
             if (roofPlanner != null && roofConstructor != null)
@@ -56,6 +53,7 @@ namespace ProceduralToolkit.Buildings
                 roof.localRotation = Quaternion.identity;
                 roofConstructor.Construct(roofConstructible, roof);
             }
+
             return parent;
         }
 
@@ -65,12 +63,14 @@ namespace ProceduralToolkit.Buildings
             public int floors = 5;
             public float entranceInterval = 12;
             public bool hasAttic = true;
+
             public RoofConfig roofConfig = new RoofConfig
             {
                 type = RoofType.Flat,
                 thickness = 0.2f,
-                overhang = 0.2f,
+                overhang = 0.2f
             };
+
             public Palette palette = new Palette();
         }
     }
@@ -87,18 +87,18 @@ namespace ProceduralToolkit.Buildings
     public class Palette
     {
         public Color socleColor = ColorE.silver;
-        public Color socleWindowColor = (ColorE.silver/2).WithA(1);
-        public Color doorColor = (ColorE.silver/2).WithA(1);
+        public Color socleWindowColor = (ColorE.silver / 2).WithA(1);
+        public Color doorColor = (ColorE.silver / 2).WithA(1);
         public Color wallColor = ColorE.white;
         public Color frameColor = ColorE.silver;
         public Color glassColor = ColorE.white;
-        public Color roofColor = (ColorE.gray/4).WithA(1);
+        public Color roofColor = (ColorE.gray / 4).WithA(1);
     }
 
     public enum RoofType
     {
         Flat,
         Hipped,
-        Gabled,
+        Gabled
     }
 }

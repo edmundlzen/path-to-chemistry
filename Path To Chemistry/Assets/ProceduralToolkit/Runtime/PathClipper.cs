@@ -6,40 +6,22 @@ using UnityEngine;
 namespace ProceduralToolkit
 {
     /// <summary>
-    /// Clipper wrapper
+    ///     Clipper wrapper
     /// </summary>
     public class PathClipper
     {
-        /// <summary>
-        /// If set to true, polygons returned by clipping operations will have orientations opposite to their normal orientations.
-        /// </summary>
-        public bool reverseSolution
+        [Flags]
+        public enum InitOptions
         {
-            get => clipper.ReverseSolution;
-            set => clipper.ReverseSolution = value;
-        }
-        /// <summary>
-        /// If set to true, polygons returned by clipping operations will be strictly simple, otherwise they may be weakly simple.
-        /// Computationally expensive.
-        /// </summary>
-        public bool strictlySimple
-        {
-            get => clipper.StrictlySimple;
-            set => clipper.StrictlySimple = value;
-        }
-        /// <summary>
-        /// If set to true, collinear vertices in input paths will not be removed before clipping.
-        /// </summary>
-        public bool preserveCollinear
-        {
-            get => clipper.PreserveCollinear;
-            set => clipper.PreserveCollinear = value;
+            ReverseSolution = 1,
+            StrictlySimple = 2,
+            PreserveCollinear = 4
         }
 
         private readonly Clipper clipper;
 
         /// <summary>
-        /// Constructs a new PathClipper
+        ///     Constructs a new PathClipper
         /// </summary>
         /// <param name="initOptions"> A set of flags controlling the corresponding properties. </param>
         public PathClipper(InitOptions initOptions = 0)
@@ -48,7 +30,37 @@ namespace ProceduralToolkit
         }
 
         /// <summary>
-        /// Adds a path to a Clipper object in preparation for clipping.
+        ///     If set to true, polygons returned by clipping operations will have orientations opposite to their normal
+        ///     orientations.
+        /// </summary>
+        public bool reverseSolution
+        {
+            get => clipper.ReverseSolution;
+            set => clipper.ReverseSolution = value;
+        }
+
+        /// <summary>
+        ///     If set to true, polygons returned by clipping operations will be strictly simple, otherwise they may be weakly
+        ///     simple.
+        ///     Computationally expensive.
+        /// </summary>
+        public bool strictlySimple
+        {
+            get => clipper.StrictlySimple;
+            set => clipper.StrictlySimple = value;
+        }
+
+        /// <summary>
+        ///     If set to true, collinear vertices in input paths will not be removed before clipping.
+        /// </summary>
+        public bool preserveCollinear
+        {
+            get => clipper.PreserveCollinear;
+            set => clipper.PreserveCollinear = value;
+        }
+
+        /// <summary>
+        ///     Adds a path to a Clipper object in preparation for clipping.
         /// </summary>
         /// <param name="path"> Vertices of the path. </param>
         /// <param name="polyType"> Type of the path (Subject or Clip). </param>
@@ -60,7 +72,7 @@ namespace ProceduralToolkit
         }
 
         /// <summary>
-        /// Adds a path to a Clipper object in preparation for clipping.
+        ///     Adds a path to a Clipper object in preparation for clipping.
         /// </summary>
         /// <param name="path"> Vertices of the path. </param>
         /// <param name="polyType"> Type of the path (Subject or Clip). </param>
@@ -72,7 +84,7 @@ namespace ProceduralToolkit
         }
 
         /// <summary>
-        /// Adds a path to a Clipper object in preparation for clipping.
+        ///     Adds a path to a Clipper object in preparation for clipping.
         /// </summary>
         /// <param name="path"> Vertices of the path. </param>
         /// <param name="polyType"> Type of the path (Subject or Clip). </param>
@@ -84,7 +96,7 @@ namespace ProceduralToolkit
         }
 
         /// <summary>
-        /// Adds paths to a Clipper object in preparation for clipping.
+        ///     Adds paths to a Clipper object in preparation for clipping.
         /// </summary>
         /// <param name="paths"> List of paths. </param>
         /// <param name="polyType"> Type of the path (Subject or Clip). </param>
@@ -96,7 +108,7 @@ namespace ProceduralToolkit
         }
 
         /// <summary>
-        /// Adds paths to a Clipper object in preparation for clipping.
+        ///     Adds paths to a Clipper object in preparation for clipping.
         /// </summary>
         /// <param name="paths"> List of paths. </param>
         /// <param name="polyType"> Type of the path (Subject or Clip). </param>
@@ -108,70 +120,74 @@ namespace ProceduralToolkit
         }
 
         /// <summary>
-        /// Performs the clipping operation.
-        /// Can be called multiple times without reassigning subject and clip polygons
-        /// (ie when different clipping operations are required on the same polygon sets).
+        ///     Performs the clipping operation.
+        ///     Can be called multiple times without reassigning subject and clip polygons
+        ///     (ie when different clipping operations are required on the same polygon sets).
         /// </summary>
         /// <param name="clipType"> Type of the clipping operation. </param>
         /// <param name="output"> The List that will receive the result of the clipping operation. </param>
         /// <param name="fillType"> Fill rule that will be applied to the paths. </param>
         /// <returns> True if the operation was successful, false otherwise. </returns>
-        public bool Clip(ClipType clipType, ref List<List<Vector2>> output, PolyFillType fillType = PolyFillType.pftEvenOdd)
+        public bool Clip(ClipType clipType, ref List<List<Vector2>> output,
+            PolyFillType fillType = PolyFillType.pftEvenOdd)
         {
             return Clip(clipType, ref output, fillType, fillType);
         }
 
         /// <summary>
-        /// Performs the clipping operation.
-        /// Can be called multiple times without reassigning subject and clip polygons
-        /// (ie when different clipping operations are required on the same polygon sets).
+        ///     Performs the clipping operation.
+        ///     Can be called multiple times without reassigning subject and clip polygons
+        ///     (ie when different clipping operations are required on the same polygon sets).
         /// </summary>
         /// <param name="clipType"> Type of the clipping operation. </param>
         /// <param name="output"> The List that will receive the result of the clipping operation. </param>
         /// <param name="subjectFillType"> Fill rule that will be applied to the subject paths. </param>
         /// <param name="clipFillType"> Fill rule that will be applied to the clip paths. </param>
         /// <returns> True if the operation was successful, false otherwise. </returns>
-        public bool Clip(ClipType clipType, ref List<List<Vector2>> output, PolyFillType subjectFillType, PolyFillType clipFillType)
+        public bool Clip(ClipType clipType, ref List<List<Vector2>> output, PolyFillType subjectFillType,
+            PolyFillType clipFillType)
         {
             var intOutput = new List<List<IntPoint>>();
-            bool succeeded = clipper.Execute(clipType, intOutput, subjectFillType, clipFillType);
+            var succeeded = clipper.Execute(clipType, intOutput, subjectFillType, clipFillType);
             ClipperUtility.ToVector2Paths(intOutput, ref output);
             return succeeded;
         }
 
         /// <summary>
-        /// Performs the clipping operation.
-        /// Can be called multiple times without reassigning subject and clip polygons
-        /// (ie when different clipping operations are required on the same polygon sets).
+        ///     Performs the clipping operation.
+        ///     Can be called multiple times without reassigning subject and clip polygons
+        ///     (ie when different clipping operations are required on the same polygon sets).
         /// </summary>
         /// <param name="clipType"> Type of the clipping operation. </param>
         /// <param name="output"> The List that will receive the result of the clipping operation. </param>
         /// <param name="fillType"> Fill rule that will be applied to the paths. </param>
         /// <returns> True if the operation was successful, false otherwise. </returns>
-        public bool Clip(ClipType clipType, ref List<List<IntPoint>> output, PolyFillType fillType = PolyFillType.pftEvenOdd)
+        public bool Clip(ClipType clipType, ref List<List<IntPoint>> output,
+            PolyFillType fillType = PolyFillType.pftEvenOdd)
         {
             return Clip(clipType, ref output, fillType, fillType);
         }
 
         /// <summary>
-        /// Performs the clipping operation.
-        /// Can be called multiple times without reassigning subject and clip polygons
-        /// (ie when different clipping operations are required on the same polygon sets).
+        ///     Performs the clipping operation.
+        ///     Can be called multiple times without reassigning subject and clip polygons
+        ///     (ie when different clipping operations are required on the same polygon sets).
         /// </summary>
         /// <param name="clipType"> Type of the clipping operation. </param>
         /// <param name="output"> The List that will receive the result of the clipping operation. </param>
         /// <param name="subjectFillType"> Fill rule that will be applied to the subject paths. </param>
         /// <param name="clipFillType"> Fill rule that will be applied to the clip paths. </param>
         /// <returns> True if the operation was successful, false otherwise. </returns>
-        public bool Clip(ClipType clipType, ref List<List<IntPoint>> output, PolyFillType subjectFillType, PolyFillType clipFillType)
+        public bool Clip(ClipType clipType, ref List<List<IntPoint>> output, PolyFillType subjectFillType,
+            PolyFillType clipFillType)
         {
             return clipper.Execute(clipType, output, subjectFillType, clipFillType);
         }
 
         /// <summary>
-        /// Performs the clipping operation.
-        /// Can be called multiple times without reassigning subject and clip polygons
-        /// (ie when different clipping operations are required on the same polygon sets).
+        ///     Performs the clipping operation.
+        ///     Can be called multiple times without reassigning subject and clip polygons
+        ///     (ie when different clipping operations are required on the same polygon sets).
         /// </summary>
         /// <param name="clipType"> Type of the clipping operation. </param>
         /// <param name="output"> The PolyTree that will receive the result of the clipping operation. </param>
@@ -183,34 +199,27 @@ namespace ProceduralToolkit
         }
 
         /// <summary>
-        /// Performs the clipping operation.
-        /// Can be called multiple times without reassigning subject and clip polygons
-        /// (ie when different clipping operations are required on the same polygon sets).
+        ///     Performs the clipping operation.
+        ///     Can be called multiple times without reassigning subject and clip polygons
+        ///     (ie when different clipping operations are required on the same polygon sets).
         /// </summary>
         /// <param name="clipType"> Type of the clipping operation. </param>
         /// <param name="output"> The PolyTree that will receive the result of the clipping operation. </param>
         /// <param name="subjectFillType"> Fill rule that will be applied to the subject paths. </param>
         /// <param name="clipFillType"> Fill rule that will be applied to the clip paths. </param>
         /// <returns> True if the operation was successful, false otherwise. </returns>
-        public bool Clip(ClipType clipType, ref PolyTree output, PolyFillType subjectFillType, PolyFillType clipFillType)
+        public bool Clip(ClipType clipType, ref PolyTree output, PolyFillType subjectFillType,
+            PolyFillType clipFillType)
         {
             return clipper.Execute(clipType, output, subjectFillType, clipFillType);
         }
 
         /// <summary>
-        /// Clears all paths from the Clipper object, allowing new paths to be assigned.
+        ///     Clears all paths from the Clipper object, allowing new paths to be assigned.
         /// </summary>
         public void Clear()
         {
             clipper.Clear();
-        }
-
-        [Flags]
-        public enum InitOptions : int
-        {
-            ReverseSolution = 1,
-            StrictlySimple = 2,
-            PreserveCollinear = 4,
         }
     }
 }

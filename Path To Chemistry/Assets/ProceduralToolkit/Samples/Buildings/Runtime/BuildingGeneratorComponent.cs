@@ -6,18 +6,21 @@ namespace ProceduralToolkit.Samples.Buildings
 {
     public class BuildingGeneratorComponent : MonoBehaviour
     {
-        [SerializeField, FormerlySerializedAs("facadePlanningStrategy")]
-        private FacadePlanner facadePlanner = null;
-        [SerializeField, FormerlySerializedAs("facadeConstructionStrategy")]
-        private FacadeConstructor facadeConstructor = null;
-        [SerializeField, FormerlySerializedAs("roofPlanningStrategy")]
-        private RoofPlanner roofPlanner = null;
-        [SerializeField, FormerlySerializedAs("roofConstructionStrategy")]
-        private RoofConstructor roofConstructor = null;
-        [SerializeField]
-        private PolygonAsset foundationPolygon = null;
-        [SerializeField]
-        private BuildingGenerator.Config config = new BuildingGenerator.Config();
+        [SerializeField] [FormerlySerializedAs("facadePlanningStrategy")]
+        private FacadePlanner facadePlanner;
+
+        [SerializeField] [FormerlySerializedAs("facadeConstructionStrategy")]
+        private FacadeConstructor facadeConstructor;
+
+        [SerializeField] [FormerlySerializedAs("roofPlanningStrategy")]
+        private RoofPlanner roofPlanner;
+
+        [SerializeField] [FormerlySerializedAs("roofConstructionStrategy")]
+        private RoofConstructor roofConstructor;
+
+        [SerializeField] private PolygonAsset foundationPolygon;
+
+        [SerializeField] private BuildingGenerator.Config config = new BuildingGenerator.Config();
 
         private void Awake()
         {

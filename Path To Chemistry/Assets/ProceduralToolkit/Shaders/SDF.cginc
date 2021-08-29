@@ -18,7 +18,7 @@
 
 float Tile(float p, float tiling)
 {
-    return frac(p*tiling);
+    return frac(p * tiling);
 }
 
 float TileIO(inout float p, float tiling)
@@ -53,7 +53,7 @@ float MirrorTileIO(inout float p, float tiling)
 
 float2 Tile(float2 p, float2 tiling)
 {
-    return frac(p*tiling);
+    return frac(p * tiling);
 }
 
 float2 Tile(float2 p, float tilingX, float tilingY)
@@ -105,7 +105,7 @@ float2 MirrorTileIO(inout float2 p, float tilingX, float tilingY)
 float2 BrickTile(float2 p, float2 tiling, float xOffset)
 {
     p *= tiling;
-    p.x -= abs(fmod(floor(p.y), 2.0))*xOffset;
+    p.x -= abs(fmod(floor(p.y), 2.0)) * xOffset;
     p = frac(p);
     return p;
 }
@@ -118,7 +118,7 @@ float2 BrickTile(float2 p, float tilingX, float tilingY, float xOffset)
 float2 BrickTileIO(inout float2 p, float2 tiling, float xOffset)
 {
     p *= tiling;
-    p.x -= abs(fmod(floor(p.y), 2.0))*xOffset;
+    p.x -= abs(fmod(floor(p.y), 2.0)) * xOffset;
     float2 cell = floor(p);
     p = frac(p);
     return cell;
@@ -132,21 +132,21 @@ float2 BrickTileIO(inout float2 p, float tilingX, float tilingY, float xOffset)
 float2 RadialTile(float2 p, float segments)
 {
     float segmentAngle = UNITY_TWO_PI / segments;
-    float halfSegmentAngle = segmentAngle*0.5;
+    float halfSegmentAngle = segmentAngle * 0.5;
     float angleRadians = atan2(-p.x, -p.y) + UNITY_PI + halfSegmentAngle;
     float repeat = fmod(angleRadians, segmentAngle) - halfSegmentAngle;
-    p = float2(sin(repeat), cos(repeat))*length(p);
+    p = float2(sin(repeat), cos(repeat)) * length(p);
     return p;
 }
 
 float RadialTileIO(inout float2 p, float segments)
 {
-    float segmentAngle = UNITY_TWO_PI/segments;
-    float halfSegmentAngle = segmentAngle*0.5;
+    float segmentAngle = UNITY_TWO_PI / segments;
+    float halfSegmentAngle = segmentAngle * 0.5;
     float angleRadians = atan2(-p.x, -p.y) + UNITY_PI + halfSegmentAngle;
-    float cell = fmod(floor(angleRadians/segmentAngle), segments);
+    float cell = fmod(floor(angleRadians / segmentAngle), segments);
     float repeat = fmod(angleRadians, segmentAngle) - halfSegmentAngle;
-    p = float2(sin(repeat), cos(repeat))*length(p);
+    p = float2(sin(repeat), cos(repeat)) * length(p);
     return cell;
 }
 
@@ -156,22 +156,22 @@ float RadialTileIO(inout float2 p, float segments)
 
 float2 RotateCW(float2 p, float angleRadians)
 {
-    return cos(angleRadians)*p + sin(angleRadians)*float2(-p.y, p.x);
+    return cos(angleRadians) * p + sin(angleRadians) * float2(-p.y, p.x);
 }
 
 float2 RotateCCW(float2 p, float angleRadians)
 {
-    return cos(angleRadians)*p + sin(angleRadians)*float2(p.y, -p.x);
+    return cos(angleRadians) * p + sin(angleRadians) * float2(p.y, -p.x);
 }
 
 float2 RotateCW45(float2 p)
 {
-    return (p + float2(-p.y, p.x))*sqrt(0.5);
+    return (p + float2(-p.y, p.x)) * sqrt(0.5);
 }
 
 float2 RotateCCW45(float2 p)
 {
-    return (p + float2(p.y, -p.x))*sqrt(0.5);
+    return (p + float2(p.y, -p.x)) * sqrt(0.5);
 }
 
 float2 RotateCW90(float2 p)
@@ -239,13 +239,13 @@ float HalfSpaceSmoothStep(float2 p, float2 normal, float aa)
 float SpaceSegment(float2 p, float angleRadians)
 {
     float2 rotatedP = RotateCW(p, angleRadians);
-    float cornerStep = step(p.y, 0.0)*step(rotatedP.y, 0.0);
+    float cornerStep = step(p.y, 0.0) * step(rotatedP.y, 0.0);
     float segmentStep = 1.0 - cornerStep;
 
-    float h1 = HalfSpace(p, float2(-1.0, 0.0))*segmentStep;
-    float h2 = HalfSpace(rotatedP, float2(1.0, 0.0))*segmentStep;
+    float h1 = HalfSpace(p, float2(-1.0, 0.0)) * segmentStep;
+    float h2 = HalfSpace(rotatedP, float2(1.0, 0.0)) * segmentStep;
     float segment = angleRadians > UNITY_PI ? Union(h1, h2) : Intersection(h1, h2);
-    float corner = -length(p)*cornerStep*sign(angleRadians - UNITY_PI);
+    float corner = -length(p) * cornerStep * sign(angleRadians - UNITY_PI);
     return segment + corner;
 }
 
@@ -318,7 +318,7 @@ float RingSmoothStep(float2 p, float radius, float width, float aa)
 
 float EllipseCheap(float2 p, float2 size)
 {
-    return (length(p/size) - 1.0)*min(size.x, size.y);
+    return (length(p / size) - 1.0) * min(size.x, size.y);
 }
 
 float EllipseCheapStep(float2 p, float2 size)
@@ -344,8 +344,8 @@ float Capsule(float2 p, float2 a, float2 b, float radius)
 {
     float2 toP = p - a;
     float2 direction = b - a;
-    float h = saturate(dot(toP, direction)/dot(direction, direction));
-    return length(toP - direction*h) - radius;
+    float h = saturate(dot(toP, direction) / dot(direction, direction));
+    return length(toP - direction * h) - radius;
 }
 
 float CapsuleStep(float2 p, float2 a, float2 b, float radius)
@@ -502,14 +502,14 @@ float RoundRectangleFrameSmoothStep(float2 p, float2 size, float width, float ra
 
 float PolygonCheap(float2 p, float vertices, float radius)
 {
-    float segmentAngle = UNITY_TWO_PI/vertices;
-    float halfSegmentAngle = segmentAngle*0.5;
+    float segmentAngle = UNITY_TWO_PI / vertices;
+    float halfSegmentAngle = segmentAngle * 0.5;
 
     float angleRadians = atan2(p.x, p.y);
     float repeat = fmod(abs(angleRadians), segmentAngle) - halfSegmentAngle;
-    float inradius = radius*cos(halfSegmentAngle);
+    float inradius = radius * cos(halfSegmentAngle);
     float circle = length(p);
-    float y = cos(repeat)*circle - inradius;
+    float y = cos(repeat) * circle - inradius;
     return y;
 }
 
@@ -534,19 +534,19 @@ float PolygonCheapSmoothStep(float2 p, float2 vertices, float radius, float aa)
 
 float Polygon(float2 p, float vertices, float radius)
 {
-    float segmentAngle = UNITY_TWO_PI/vertices;
-    float halfSegmentAngle = segmentAngle*0.5;
+    float segmentAngle = UNITY_TWO_PI / vertices;
+    float halfSegmentAngle = segmentAngle * 0.5;
 
     float angleRadians = atan2(p.x, p.y);
     float repeat = fmod(abs(angleRadians), segmentAngle) - halfSegmentAngle;
-    float inradius = radius*cos(halfSegmentAngle);
+    float inradius = radius * cos(halfSegmentAngle);
     float circle = length(p);
-    float x = sin(repeat)*circle;
-    float y = cos(repeat)*circle - inradius;
+    float x = sin(repeat) * circle;
+    float y = cos(repeat) * circle - inradius;
 
     float inside = min(y, 0.0);
-    float corner = radius*sin(halfSegmentAngle);
-    float outside = length(float2(max(abs(x) - corner, 0.0), y))*step(0.0, y);
+    float corner = radius * sin(halfSegmentAngle);
+    float outside = length(float2(max(abs(x) - corner, 0.0), y)) * step(0.0, y);
     return inside + outside;
 }
 
@@ -571,16 +571,16 @@ float PolygonSmoothStep(float2 p, float2 vertices, float radius, float aa)
 
 float StarPolygonCheap(float2 p, float vertices, float radius, float starAngle)
 {
-    float segmentAngle = UNITY_TWO_PI/vertices;
-    float halfSegmentAngle = segmentAngle*0.5;
+    float segmentAngle = UNITY_TWO_PI / vertices;
+    float halfSegmentAngle = segmentAngle * 0.5;
 
     float angleRadians = atan2(p.x, p.y);
-    float repeat = abs(frac(angleRadians/segmentAngle - 0.5) - 0.5)*segmentAngle;
+    float repeat = abs(frac(angleRadians / segmentAngle - 0.5) - 0.5) * segmentAngle;
     float circle = length(p);
-    float x = sin(repeat)*circle;
-    float y = cos(repeat)*circle - radius;
+    float x = sin(repeat) * circle;
+    float y = cos(repeat) * circle - radius;
     float uvRotation = halfSegmentAngle + starAngle;
-    y = cos(uvRotation)*y + sin(uvRotation)*x;
+    y = cos(uvRotation) * y + sin(uvRotation) * x;
     return y;
 }
 
@@ -605,20 +605,20 @@ float StarPolygonCheapSmoothStep(float2 p, float2 vertices, float radius, float 
 
 float StarPolygon(float2 p, float vertices, float radius, float starAngle)
 {
-    float segmentAngle = UNITY_TWO_PI/vertices;
-    float halfSegmentAngle = segmentAngle*0.5;
+    float segmentAngle = UNITY_TWO_PI / vertices;
+    float halfSegmentAngle = segmentAngle * 0.5;
 
     float angleRadians = atan2(p.x, p.y);
-    float repeat = abs(frac(angleRadians/segmentAngle - 0.5) - 0.5)*segmentAngle;
+    float repeat = abs(frac(angleRadians / segmentAngle - 0.5) - 0.5) * segmentAngle;
     float circle = length(p);
-    float x = sin(repeat)*circle;
-    float y = cos(repeat)*circle - radius;
+    float x = sin(repeat) * circle;
+    float y = cos(repeat) * circle - radius;
     float uvRotation = halfSegmentAngle + starAngle;
-    float2 uv = cos(uvRotation)*float2(x, y) + sin(uvRotation)*float2(-y, x);
+    float2 uv = cos(uvRotation) * float2(x, y) + sin(uvRotation) * float2(-y, x);
 
-    float corner = radius*sin(halfSegmentAngle)/cos(starAngle);
-    float inside = -length(float2(max(uv.x - corner, 0.0), uv.y))*step(0.0, -uv.y);
-    float outside = length(float2(min(uv.x, 0.0), uv.y))*step(0.0, uv.y);
+    float corner = radius * sin(halfSegmentAngle) / cos(starAngle);
+    float inside = -length(float2(max(uv.x - corner, 0.0), uv.y)) * step(0.0, -uv.y);
+    float outside = length(float2(min(uv.x, 0.0), uv.y)) * step(0.0, uv.y);
     return inside + outside;
 }
 

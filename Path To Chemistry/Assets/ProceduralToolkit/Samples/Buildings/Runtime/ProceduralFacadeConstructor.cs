@@ -7,16 +7,16 @@ namespace ProceduralToolkit.Samples.Buildings
     [CreateAssetMenu(menuName = "ProceduralToolkit/Buildings/Procedural Facade Constructor", order = 3)]
     public class ProceduralFacadeConstructor : FacadeConstructor
     {
-        [SerializeField]
-        private RendererProperties rendererProperties = null;
-        [SerializeField]
-        private Material glassMaterial = null;
-        [SerializeField]
-        private Material roofMaterial = null;
-        [SerializeField]
-        private Material wallMaterial = null;
+        [SerializeField] private RendererProperties rendererProperties;
 
-        public override void Construct(List<Vector2> foundationPolygon, List<ILayout> layouts, Transform parentTransform)
+        [SerializeField] private Material glassMaterial;
+
+        [SerializeField] private Material roofMaterial;
+
+        [SerializeField] private Material wallMaterial;
+
+        public override void Construct(List<Vector2> foundationPolygon, List<ILayout> layouts,
+            Transform parentTransform)
         {
             var facadesDraft = new CompoundMeshDraft();
 
@@ -27,9 +27,9 @@ namespace ProceduralToolkit.Samples.Buildings
             {
                 var layout = layouts[i];
 
-                Vector2 a = foundationPolygon.GetLooped(i + 1);
-                Vector2 b = foundationPolygon[i];
-                Vector3 normal = (b - a).Perp().ToVector3XZ();
+                var a = foundationPolygon.GetLooped(i + 1);
+                var b = foundationPolygon[i];
+                var normal = (b - a).Perp().ToVector3XZ();
 
                 var facade = new CompoundMeshDraft();
                 ConstructLayout(facade, Vector2.zero, layout);
@@ -49,29 +49,17 @@ namespace ProceduralToolkit.Samples.Buildings
 
             var materials = new List<Material>();
             foreach (var draft in facadesDraft)
-            {
                 if (draft.name == "Glass")
-                {
                     materials.Add(glassMaterial);
-                }
                 else if (draft.name == "Roof")
-                {
                     materials.Add(roofMaterial);
-                }
-                else if (draft.name == "Wall")
-                {
-                    materials.Add(wallMaterial);
-                }
-            }
+                else if (draft.name == "Wall") materials.Add(wallMaterial);
             meshRenderer.materials = materials.ToArray();
         }
 
         public static void ConstructLayout(CompoundMeshDraft draft, Vector2 parentLayoutOrigin, ILayout layout)
         {
-            foreach (var element in layout)
-            {
-                ConstructElement(draft, parentLayoutOrigin + layout.origin, element);
-            }
+            foreach (var element in layout) ConstructElement(draft, parentLayoutOrigin + layout.origin, element);
         }
 
         public static void ConstructElement(CompoundMeshDraft draft, Vector2 parentLayoutOrigin, ILayoutElement element)
@@ -82,11 +70,9 @@ namespace ProceduralToolkit.Samples.Buildings
                 ConstructLayout(draft, parentLayoutOrigin, layout);
                 return;
             }
+
             var constructible = element as IConstructible<CompoundMeshDraft>;
-            if (constructible != null)
-            {
-                draft.Add(constructible.Construct(parentLayoutOrigin));
-            }
+            if (constructible != null) draft.Add(constructible.Construct(parentLayoutOrigin));
         }
     }
 }

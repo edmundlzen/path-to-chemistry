@@ -5,13 +5,10 @@ using UnityEngine;
 namespace ProceduralToolkit.Skeleton
 {
     /// <summary>
-    /// Representation of the active plan during generation process
+    ///     Representation of the active plan during generation process
     /// </summary>
     public class Plan : IEnumerable<Plan.Vertex>
     {
-        public int Count => vertices.Count;
-        public Vertex First => vertices[0];
-
         private readonly List<Vertex> vertices = new List<Vertex>();
 
         private Plan()
@@ -20,16 +17,42 @@ namespace ProceduralToolkit.Skeleton
 
         public Plan(IEnumerable<Vector2> polygon)
         {
-            foreach (var vertex in polygon)
-            {
-                vertices.Add(new Vertex(vertex));
-            }
-            for (int i = 0; i < Count; i++)
+            foreach (var vertex in polygon) vertices.Add(new Vertex(vertex));
+            for (var i = 0; i < Count; i++)
             {
                 var vertex = vertices[i];
                 vertex.previous = vertices.GetLooped(i - 1);
                 vertex.next = vertices.GetLooped(i + 1);
             }
+        }
+
+        public int Count => vertices.Count;
+        public Vertex First => vertices[0];
+
+        public IEnumerator<Vertex> GetEnumerator()
+        {
+            if (Count == 0) yield break;
+            var startVertex = vertices[0];
+            var currentVertex = startVertex;
+            var i = 0;
+            var max = Count;
+            do
+            {
+                if (i >= max)
+                {
+                    Debug.LogError("Invalid connectivity");
+                    yield break;
+                }
+
+                yield return currentVertex;
+                currentVertex = currentVertex.next;
+                i++;
+            } while (!currentVertex.Equals(startVertex));
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
 
         private void Add(Vertex vertex)
@@ -51,9 +74,7 @@ namespace ProceduralToolkit.Skeleton
         public void Offset(float offset)
         {
             foreach (var vertex in vertices)
-            {
-                vertex.position -= vertex.bisector*Geometry.GetAngleOffset(offset, vertex.angle);
-            }
+                vertex.position -= vertex.bisector * Geometry.GetAngleOffset(offset, vertex.angle);
         }
 
         public List<Plan> Split()
@@ -61,8 +82,8 @@ namespace ProceduralToolkit.Skeleton
             var plans = new List<Plan>();
             while (Count > 0)
             {
-                int i = 0;
-                int max = Count;
+                var i = 0;
+                var max = Count;
                 var plan = new Plan();
                 var startVertex = First;
                 var currentVertex = startVertex;
@@ -73,42 +94,17 @@ namespace ProceduralToolkit.Skeleton
                         Debug.LogError("Invalid connectivity");
                         break;
                     }
+
                     Remove(currentVertex);
                     plan.Add(currentVertex);
                     currentVertex = currentVertex.next;
                     i++;
                 } while (!currentVertex.Equals(startVertex));
+
                 plans.Add(plan);
             }
+
             return plans;
-        }
-
-        public IEnumerator<Vertex> GetEnumerator()
-        {
-            if (Count == 0)
-            {
-                yield break;
-            }
-            var startVertex = vertices[0];
-            var currentVertex = startVertex;
-            int i = 0;
-            int max = Count;
-            do
-            {
-                if (i >= max)
-                {
-                    Debug.LogError("Invalid connectivity");
-                    yield break;
-                }
-                yield return currentVertex;
-                currentVertex = currentVertex.next;
-                i++;
-            } while (!currentVertex.Equals(startVertex));
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
         }
 
         private static void LinkVertices(Vertex a, Vertex b)
@@ -125,21 +121,21 @@ namespace ProceduralToolkit.Skeleton
 
         public class Vertex
         {
-            public Vector2 position;
             public float angle;
             public Vector2 bisector;
-            public Vertex previous;
-            public Vertex next;
             public bool inEvent;
-            public int previousPolygonIndex;
+            public Vertex next;
             public int nextPolygonIndex;
-
-            public bool reflect => angle >= 180;
+            public Vector2 position;
+            public Vertex previous;
+            public int previousPolygonIndex;
 
             public Vertex(Vector2 position)
             {
                 this.position = position;
             }
+
+            public bool reflect => angle >= 180;
 
             public override string ToString()
             {

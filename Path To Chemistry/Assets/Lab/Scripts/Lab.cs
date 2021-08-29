@@ -8,44 +8,42 @@ public class Lab : MonoBehaviour
 {
     public GameObject objectToSpawn;
     public GameObject Target;
+    private ARRaycastManager arRaycastManager;
+    private bool isPoseValid;
     private GameObject objectSpawn;
     private Pose Pose;
-    private ARRaycastManager arRaycastManager;
-    private bool isPoseValid = false;
- 
-    void Start()
+
+    private void Start()
     {
         arRaycastManager = FindObjectOfType<ARRaycastManager>();
     }
-    void Update()
+
+    private void Update()
     {
-        if ((Input.GetTouch(0).phase == TouchPhase.Stationary) || (Input.GetTouch(0).phase == TouchPhase.Moved && Input.GetTouch(0).deltaPosition.magnitude < 1.2f))
-        { 
-            GameObject.Find("Label").GetComponent<Text>().text = Input.GetTouch(0).position.ToString(); 
-        }
-        if (objectSpawn == null && isPoseValid && Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
-        {
-            placeObject();
-        }
+        if (Input.GetTouch(0).phase == TouchPhase.Stationary || Input.GetTouch(0).phase == TouchPhase.Moved &&
+            Input.GetTouch(0).deltaPosition.magnitude < 1.2f)
+            GameObject.Find("Label").GetComponent<Text>().text = Input.GetTouch(0).position.ToString();
+        if (objectSpawn == null && isPoseValid && Input.touchCount > 0 &&
+            Input.GetTouch(0).phase == TouchPhase.Began) placeObject();
         updatePose();
         updateCrosshair();
     }
-    void placeObject()
+
+    private void placeObject()
     {
         objectSpawn = Instantiate(objectToSpawn, Pose.position, Pose.rotation);
     }
-    void updatePose()
+
+    private void updatePose()
     {
         var screenCenter = Camera.current.ViewportToScreenPoint(new Vector3(0.5f, 0.5f));
         var Hit = new List<ARRaycastHit>();
         arRaycastManager.Raycast(screenCenter, Hit, TrackableType.Planes);
         isPoseValid = Hit.Count > 0;
-        if (isPoseValid)
-        {
-            Pose = Hit[0].pose;
-        }
+        if (isPoseValid) Pose = Hit[0].pose;
     }
-    void updateCrosshair()
+
+    private void updateCrosshair()
     {
         if (objectSpawn == null && isPoseValid)
         {

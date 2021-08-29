@@ -6,17 +6,10 @@ using UnityEngine.UI;
 namespace ProceduralToolkit.Samples
 {
     /// <summary>
-    /// Configurator for MazeGenerator with UI controls
+    ///     Configurator for MazeGenerator with UI controls
     /// </summary>
     public class MazeGeneratorConfigurator : ConfiguratorBase
     {
-        public RectTransform leftPanel;
-        public ToggleGroup algorithmsGroup;
-        public RawImage mazeImage;
-        [Space]
-        public MazeGenerator.Config config = new MazeGenerator.Config();
-        public bool useGradient = true;
-
         private const int roomSize = 2;
         private const int wallSize = 1;
         private const float gradientSaturation = 0.7f;
@@ -24,17 +17,24 @@ namespace ProceduralToolkit.Samples
         private const float gradientValue = 0.7f;
         private const float gradientValueOffset = 0.1f;
         private const float gradientLength = 30;
+        public RectTransform leftPanel;
+        public ToggleGroup algorithmsGroup;
+        public RawImage mazeImage;
+
+        [Space] public MazeGenerator.Config config = new MazeGenerator.Config();
+
+        public bool useGradient = true;
+        private ColorHSV mainColor;
+        private MazeGenerator mazeGenerator;
 
         private Texture2D texture;
-        private MazeGenerator mazeGenerator;
-        private ColorHSV mainColor;
 
         private void Awake()
         {
             config.drawEdge = DrawEdge;
 
-            int textureWidth = MazeGenerator.GetMapWidth(config.width, wallSize, roomSize);
-            int textureHeight = MazeGenerator.GetMapHeight(config.height, wallSize, roomSize);
+            var textureWidth = MazeGenerator.GetMapWidth(config.width, wallSize, roomSize);
+            var textureHeight = MazeGenerator.GetMapHeight(config.height, wallSize, roomSize);
             texture = PTUtils.CreateTexture(textureWidth, textureHeight, Color.black);
             mazeImage.texture = texture;
 
@@ -79,7 +79,7 @@ namespace ProceduralToolkit.Samples
 
         private IEnumerator GenerateCoroutine()
         {
-            while (mazeGenerator.Generate(steps: 200))
+            while (mazeGenerator.Generate(200))
             {
                 texture.Apply();
                 yield return null;
@@ -88,13 +88,13 @@ namespace ProceduralToolkit.Samples
 
         private void DrawEdge(Maze.Edge edge)
         {
-            MazeGenerator.EdgeToRect(edge, wallSize, roomSize, out Vector2Int position, out int width, out int height);
+            MazeGenerator.EdgeToRect(edge, wallSize, roomSize, out var position, out var width, out var height);
 
             Color color;
             if (useGradient)
             {
-                float gradient01 = Mathf.Repeat(edge.origin.depth/gradientLength, 1);
-                float gradient010 = Mathf.Abs((gradient01 - 0.5f)*2);
+                var gradient01 = Mathf.Repeat(edge.origin.depth / gradientLength, 1);
+                var gradient010 = Mathf.Abs((gradient01 - 0.5f) * 2);
 
                 color = GetColor(gradient010);
             }
@@ -102,13 +102,14 @@ namespace ProceduralToolkit.Samples
             {
                 color = GetColor(0.75f);
             }
+
             texture.DrawRect(position.x, position.y, width, height, color);
         }
 
         private Color GetColor(float gradientPosition)
         {
-            float saturation = gradientPosition*gradientSaturation + gradientSaturationOffset;
-            float value = gradientPosition*gradientValue + gradientValueOffset;
+            var saturation = gradientPosition * gradientSaturation + gradientSaturationOffset;
+            var value = gradientPosition * gradientValue + gradientValueOffset;
             return mainColor.WithSV(saturation, value).ToColor();
         }
 
@@ -116,9 +117,9 @@ namespace ProceduralToolkit.Samples
         {
             var toggle = InstantiateControl<ToggleControl>(algorithmsGroup.transform);
             toggle.Initialize(
-                header: header,
-                value: algorithm == config.algorithm,
-                onValueChanged: isOn =>
+                header,
+                algorithm == config.algorithm,
+                isOn =>
                 {
                     if (isOn)
                     {
@@ -126,7 +127,7 @@ namespace ProceduralToolkit.Samples
                         Generate();
                     }
                 },
-                toggleGroup: algorithmsGroup);
+                algorithmsGroup);
         }
     }
 }

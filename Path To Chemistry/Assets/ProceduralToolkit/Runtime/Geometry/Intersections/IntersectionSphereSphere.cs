@@ -19,7 +19,7 @@ namespace ProceduralToolkit
             return new IntersectionSphereSphere
             {
                 type = IntersectionType.Point,
-                point = point,
+                point = point
             };
         }
 
@@ -30,7 +30,7 @@ namespace ProceduralToolkit
                 type = IntersectionType.Circle,
                 point = center,
                 normal = normal,
-                radius = radius,
+                radius = radius
             };
         }
 
@@ -40,7 +40,7 @@ namespace ProceduralToolkit
             {
                 type = IntersectionType.Sphere,
                 point = center,
-                radius = radius,
+                radius = radius
             };
         }
     }

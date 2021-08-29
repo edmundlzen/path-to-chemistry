@@ -5,7 +5,7 @@ namespace ProceduralToolkit.Samples
     public class CharacterGeneratorConfigurator : MonoBehaviour
     {
         public CharacterGenerator generator;
-        public bool constantSeed = false;
+        public bool constantSeed;
 
         private void Start()
         {
@@ -14,18 +14,12 @@ namespace ProceduralToolkit.Samples
 
         private void Update()
         {
-            if (Input.GetMouseButtonDown(0))
-            {
-                Generate();
-            }
+            if (Input.GetMouseButtonDown(0)) Generate();
         }
 
         private void Generate()
         {
-            if (constantSeed)
-            {
-                Random.InitState(0);
-            }
+            if (constantSeed) Random.InitState(0);
             generator.Generate();
         }
     }

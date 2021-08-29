@@ -8,22 +8,19 @@ namespace ProceduralToolkit.Samples
         public LineRenderer lineRenderer;
         public MeshFilter meshFilter;
 
-        private List<Vector3> vertices = new List<Vector3>
+        private readonly List<Vector3> vertices = new List<Vector3>
         {
             new Vector3(0, 3),
             new Vector3(1, 0),
             new Vector3(-1.6f, 1.9f),
             new Vector3(1.6f, 1.9f),
-            new Vector3(-1, 0),
+            new Vector3(-1, 0)
         };
 
         private void Awake()
         {
             lineRenderer.positionCount = vertices.Count;
-            for (int i = 0; i < vertices.Count; i++)
-            {
-                lineRenderer.SetPosition(i, vertices[i]);
-            }
+            for (var i = 0; i < vertices.Count; i++) lineRenderer.SetPosition(i, vertices[i]);
 
             var tessellator = new Tessellator();
             tessellator.AddContour(vertices);

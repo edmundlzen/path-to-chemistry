@@ -4,16 +4,10 @@ using UnityEngine;
 namespace ProceduralToolkit.Samples
 {
     /// <summary>
-    /// Configurator for ChairGenerator with UI and editor controls
+    ///     Configurator for ChairGenerator with UI and editor controls
     /// </summary>
     public class ChairGeneratorConfigurator : ConfiguratorBase
     {
-        public MeshFilter chairMeshFilter;
-        public MeshFilter platformMeshFilter;
-        public RectTransform leftPanel;
-        public bool constantSeed = false;
-        public ChairGenerator.Config config = new ChairGenerator.Config();
-
         private const float minLegWidth = 0.05f;
         private const float maxLegWidth = 0.12f;
         private const float minLegHeight = 0.5f;
@@ -31,6 +25,11 @@ namespace ProceduralToolkit.Samples
 
         private const float platformHeight = 0.05f;
         private const float platformRadiusOffset = 0.5f;
+        public MeshFilter chairMeshFilter;
+        public MeshFilter platformMeshFilter;
+        public RectTransform leftPanel;
+        public bool constantSeed;
+        public ChairGenerator.Config config = new ChairGenerator.Config();
 
         private Mesh chairMesh;
         private Mesh platformMesh;
@@ -100,10 +99,7 @@ namespace ProceduralToolkit.Samples
 
         public void Generate(bool randomizeConfig = true)
         {
-            if (constantSeed)
-            {
-                Random.InitState(0);
-            }
+            if (constantSeed) Random.InitState(0);
 
             if (randomizeConfig)
             {
@@ -115,7 +111,7 @@ namespace ProceduralToolkit.Samples
             var chairDraft = ChairGenerator.Chair(config);
             AssignDraftToMeshFilter(chairDraft, chairMeshFilter, ref chairMesh);
 
-            float platformRadius = Geometry.GetCircumradius(config.seatWidth, config.seatDepth) + platformRadiusOffset;
+            var platformRadius = Geometry.GetCircumradius(config.seatWidth, config.seatDepth) + platformRadiusOffset;
             var platformDraft = Platform(platformRadius, platformHeight);
             AssignDraftToMeshFilter(platformDraft, platformMeshFilter, ref platformMesh);
         }

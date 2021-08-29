@@ -8,12 +8,11 @@ using UnityEngine;
 namespace WoLfulus.LineEnding
 {
     /// <summary>
-    /// Initialize on load
+    ///     Initialize on load
     /// </summary>
     [InitializeOnLoad]
     public class FileMonitor
     {
-
         private const string WindowsStyle = "\r\n";
         private const string UnixStyle = "\n";
         private const string MacStyle = "\r";
@@ -27,16 +26,13 @@ namespace WoLfulus.LineEnding
         private const string ConfigurationId = "WoLfulus_LEF_Type";
 
         /// <summary>
-        /// Initializer
+        ///     Initializer
         /// </summary>
         static FileMonitor()
         {
             EditorApplication.delayCall += () =>
             {
-                if (!EditorPrefs.HasKey(ConfigurationId))
-                {
-                    EditorPrefs.SetString(ConfigurationId, "win");
-                }
+                if (!EditorPrefs.HasKey(ConfigurationId)) EditorPrefs.SetString(ConfigurationId, "win");
 
                 Menu.SetChecked(MenuWindows, false);
                 Menu.SetChecked(MenuUnix, false);
@@ -44,22 +40,15 @@ namespace WoLfulus.LineEnding
 
                 var type = EditorPrefs.GetString(ConfigurationId);
                 if (type == "win")
-                {
                     Menu.SetChecked(MenuWindows, true);
-                }
                 else if (type == "unix")
-                {
                     Menu.SetChecked(MenuUnix, true);
-                }
-                else if (type == "mac")
-                {
-                    Menu.SetChecked(MenuMac, true);
-                }
+                else if (type == "mac") Menu.SetChecked(MenuMac, true);
             };
         }
 
         /// <summary>
-        /// Windows style
+        ///     Windows style
         /// </summary>
         [MenuItem(MenuWindows)]
         private static void SetWindows()
@@ -72,7 +61,7 @@ namespace WoLfulus.LineEnding
         }
 
         /// <summary>
-        /// Windows style
+        ///     Windows style
         /// </summary>
         [MenuItem(MenuUnix)]
         private static void SetUnix()
@@ -85,7 +74,7 @@ namespace WoLfulus.LineEnding
         }
 
         /// <summary>
-        /// Windows style
+        ///     Windows style
         /// </summary>
         [MenuItem(MenuMac)]
         private static void SetMac()
@@ -98,30 +87,28 @@ namespace WoLfulus.LineEnding
         }
 
         /// <summary>
-        /// Collect files from log entries
+        ///     Collect files from log entries
         /// </summary>
         private static IEnumerable<string> Collect()
         {
             var files = new List<string>();
             var flags = LogEntries.consoleFlags;
 
-            LogEntries.SetConsoleFlag((int)ConsoleFlags.LogLevelLog, false);
-            LogEntries.SetConsoleFlag((int)ConsoleFlags.LogLevelWarning, true);
-            LogEntries.SetConsoleFlag((int)ConsoleFlags.LogLevelError, false);
+            LogEntries.SetConsoleFlag((int) ConsoleFlags.LogLevelLog, false);
+            LogEntries.SetConsoleFlag((int) ConsoleFlags.LogLevelWarning, true);
+            LogEntries.SetConsoleFlag((int) ConsoleFlags.LogLevelError, false);
 
             LogEntries.StartGettingEntries();
 
             var count = LogEntries.GetCount();
-            for (int i = 0; i < count; i++)
+            for (var i = 0; i < count; i++)
             {
                 LogEntries.GetEntryInternal(i, LogEntry.instance);
                 if ((LogEntry.mode & Mode.AssetImportWarning) != 0)
                 {
                     var condition = LogEntry.condition;
                     if (!string.IsNullOrEmpty(condition) && condition.Contains("inconsistent line endings"))
-                    {
                         files.Add(LogEntry.file);
-                    }
                 }
             }
 
@@ -132,9 +119,9 @@ namespace WoLfulus.LineEnding
         }
 
         /// <summary>
-        /// Fix stuff
+        ///     Fix stuff
         /// </summary>
-        static void FixFiles()
+        private static void FixFiles()
         {
             var files = Collect();
 
@@ -159,17 +146,19 @@ namespace WoLfulus.LineEnding
                 return;
             }
 
-            int filesFixed = 0;
+            var filesFixed = 0;
 
             foreach (var file in files)
             {
                 if (!File.Exists(file))
                 {
-                    Debug.LogError("File '" + file + "' is reported to have wrong line endings but the file itself couldn't be found.");
+                    Debug.LogError("File '" + file +
+                                   "' is reported to have wrong line endings but the file itself couldn't be found.");
                     continue;
                 }
 
-                var fileContents = File.ReadAllText(file).Replace("\r\n", "\n").Replace("\r", "\n").Replace("\n", ending);
+                var fileContents = File.ReadAllText(file).Replace("\r\n", "\n").Replace("\r", "\n")
+                    .Replace("\n", ending);
                 File.WriteAllText(file, fileContents);
 
                 EditorApplication.delayCall += () =>
@@ -180,22 +169,16 @@ namespace WoLfulus.LineEnding
                 filesFixed++;
             }
 
-            if (filesFixed > 0)
-            {
-                Debug.Log("Fixed " + filesFixed + " files with mixed line endings.");
-            }
+            if (filesFixed > 0) Debug.Log("Fixed " + filesFixed + " files with mixed line endings.");
         }
 
         /// <summary>
-        /// Scripts reloaded
+        ///     Scripts reloaded
         /// </summary>
         [DidReloadScripts]
-        static void ScriptsReloaded()
+        private static void ScriptsReloaded()
         {
-            if (!EditorApplication.isPlaying)
-            {
-                FixFiles();
-            }
+            if (!EditorApplication.isPlaying) FixFiles();
         }
     }
 }

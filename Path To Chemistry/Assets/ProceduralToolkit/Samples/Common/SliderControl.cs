@@ -36,7 +36,7 @@ namespace ProceduralToolkit.Samples.UI
             slider.value = value;
             slider.onValueChanged.AddListener(newValue =>
             {
-                int intValue = Mathf.FloorToInt(newValue);
+                var intValue = Mathf.FloorToInt(newValue);
                 onValueChanged(intValue);
                 valueText.text = intValue.ToString();
             });

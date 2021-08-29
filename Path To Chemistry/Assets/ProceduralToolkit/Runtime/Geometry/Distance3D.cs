@@ -3,14 +3,14 @@ using UnityEngine;
 namespace ProceduralToolkit
 {
     /// <summary>
-    /// Collection of distance calculation algorithms
+    ///     Collection of distance calculation algorithms
     /// </summary>
     public static partial class Distance
     {
         #region Point-Line
 
         /// <summary>
-        /// Returns a distance to the closest point on the line
+        ///     Returns a distance to the closest point on the line
         /// </summary>
         public static float PointLine(Vector3 point, Line3 line)
         {
@@ -18,7 +18,7 @@ namespace ProceduralToolkit
         }
 
         /// <summary>
-        /// Returns a distance to the closest point on the line
+        ///     Returns a distance to the closest point on the line
         /// </summary>
         public static float PointLine(Vector3 point, Vector3 lineOrigin, Vector3 lineDirection)
         {
@@ -30,7 +30,7 @@ namespace ProceduralToolkit
         #region Point-Ray
 
         /// <summary>
-        /// Returns a distance to the closest point on the ray
+        ///     Returns a distance to the closest point on the ray
         /// </summary>
         public static float PointRay(Vector3 point, Ray ray)
         {
@@ -38,7 +38,7 @@ namespace ProceduralToolkit
         }
 
         /// <summary>
-        /// Returns a distance to the closest point on the ray
+        ///     Returns a distance to the closest point on the ray
         /// </summary>
         public static float PointRay(Vector3 point, Vector3 rayOrigin, Vector3 rayDirection)
         {
@@ -50,7 +50,7 @@ namespace ProceduralToolkit
         #region Point-Segment
 
         /// <summary>
-        /// Returns a distance to the closest point on the segment
+        ///     Returns a distance to the closest point on the segment
         /// </summary>
         public static float PointSegment(Vector3 point, Segment3 segment)
         {
@@ -58,7 +58,7 @@ namespace ProceduralToolkit
         }
 
         /// <summary>
-        /// Returns a distance to the closest point on the segment
+        ///     Returns a distance to the closest point on the segment
         /// </summary>
         public static float PointSegment(Vector3 point, Vector3 segmentA, Vector3 segmentB)
         {
@@ -70,7 +70,7 @@ namespace ProceduralToolkit
         #region Point-Sphere
 
         /// <summary>
-        /// Returns a distance to the closest point on the sphere
+        ///     Returns a distance to the closest point on the sphere
         /// </summary>
         /// <returns>Positive value if the point is outside, negative otherwise</returns>
         public static float PointSphere(Vector3 point, Sphere sphere)
@@ -79,7 +79,7 @@ namespace ProceduralToolkit
         }
 
         /// <summary>
-        /// Returns a distance to the closest point on the sphere
+        ///     Returns a distance to the closest point on the sphere
         /// </summary>
         /// <returns>Positive value if the point is outside, negative otherwise</returns>
         public static float PointSphere(Vector3 point, Vector3 sphereCenter, float sphereRadius)
@@ -92,7 +92,7 @@ namespace ProceduralToolkit
         #region Line-Sphere
 
         /// <summary>
-        /// Returns the distance between the closest points on the line and the sphere
+        ///     Returns the distance between the closest points on the line and the sphere
         /// </summary>
         public static float LineSphere(Line3 line, Sphere sphere)
         {
@@ -100,19 +100,18 @@ namespace ProceduralToolkit
         }
 
         /// <summary>
-        /// Returns the distance between the closest points on the line and the sphere
+        ///     Returns the distance between the closest points on the line and the sphere
         /// </summary>
-        public static float LineSphere(Vector3 lineOrigin, Vector3 lineDirection, Vector3 sphereCenter, float sphereRadius)
+        public static float LineSphere(Vector3 lineOrigin, Vector3 lineDirection, Vector3 sphereCenter,
+            float sphereRadius)
         {
-            Vector3 originToCenter = sphereCenter - lineOrigin;
-            float centerProjection = Vector3.Dot(lineDirection, originToCenter);
-            float sqrDistanceToLine = originToCenter.sqrMagnitude - centerProjection*centerProjection;
-            float sqrDistanceToIntersection = sphereRadius*sphereRadius - sqrDistanceToLine;
+            var originToCenter = sphereCenter - lineOrigin;
+            var centerProjection = Vector3.Dot(lineDirection, originToCenter);
+            var sqrDistanceToLine = originToCenter.sqrMagnitude - centerProjection * centerProjection;
+            var sqrDistanceToIntersection = sphereRadius * sphereRadius - sqrDistanceToLine;
             if (sqrDistanceToIntersection < -Geometry.Epsilon)
-            {
                 // No intersection
                 return Mathf.Sqrt(sqrDistanceToLine) - sphereRadius;
-            }
             return 0;
         }
 
@@ -121,7 +120,7 @@ namespace ProceduralToolkit
         #region Ray-Sphere
 
         /// <summary>
-        /// Returns the distance between the closest points on the ray and the sphere
+        ///     Returns the distance between the closest points on the ray and the sphere
         /// </summary>
         public static float RaySphere(Ray ray, Sphere sphere)
         {
@@ -129,53 +128,45 @@ namespace ProceduralToolkit
         }
 
         /// <summary>
-        /// Returns the distance between the closest points on the ray and the sphere
+        ///     Returns the distance between the closest points on the ray and the sphere
         /// </summary>
         public static float RaySphere(Vector3 rayOrigin, Vector3 rayDirection, Vector3 sphereCenter, float sphereRadius)
         {
-            Vector3 originToCenter = sphereCenter - rayOrigin;
-            float centerProjection = Vector3.Dot(rayDirection, originToCenter);
+            var originToCenter = sphereCenter - rayOrigin;
+            var centerProjection = Vector3.Dot(rayDirection, originToCenter);
             if (centerProjection + sphereRadius < -Geometry.Epsilon)
-            {
                 // No intersection
                 return Mathf.Sqrt(originToCenter.sqrMagnitude) - sphereRadius;
-            }
 
-            float sqrDistanceToOrigin = originToCenter.sqrMagnitude;
-            float sqrDistanceToLine = sqrDistanceToOrigin - centerProjection*centerProjection;
-            float sqrDistanceToIntersection = sphereRadius*sphereRadius - sqrDistanceToLine;
+            var sqrDistanceToOrigin = originToCenter.sqrMagnitude;
+            var sqrDistanceToLine = sqrDistanceToOrigin - centerProjection * centerProjection;
+            var sqrDistanceToIntersection = sphereRadius * sphereRadius - sqrDistanceToLine;
             if (sqrDistanceToIntersection < -Geometry.Epsilon)
             {
                 // No intersection
-                if (centerProjection < -Geometry.Epsilon)
-                {
-                    return Mathf.Sqrt(sqrDistanceToOrigin) - sphereRadius;
-                }
+                if (centerProjection < -Geometry.Epsilon) return Mathf.Sqrt(sqrDistanceToOrigin) - sphereRadius;
                 return Mathf.Sqrt(sqrDistanceToLine) - sphereRadius;
             }
+
             if (sqrDistanceToIntersection < Geometry.Epsilon)
             {
                 if (centerProjection < -Geometry.Epsilon)
-                {
                     // No intersection
                     return Mathf.Sqrt(sqrDistanceToOrigin) - sphereRadius;
-                }
                 // Point intersection
                 return 0;
             }
 
             // Line intersection
-            float distanceToIntersection = Mathf.Sqrt(sqrDistanceToIntersection);
-            float distanceA = centerProjection - distanceToIntersection;
-            float distanceB = centerProjection + distanceToIntersection;
+            var distanceToIntersection = Mathf.Sqrt(sqrDistanceToIntersection);
+            var distanceA = centerProjection - distanceToIntersection;
+            var distanceB = centerProjection + distanceToIntersection;
 
             if (distanceA < -Geometry.Epsilon)
             {
                 if (distanceB < -Geometry.Epsilon)
-                {
                     // No intersection
                     return Mathf.Sqrt(sqrDistanceToOrigin) - sphereRadius;
-                }
 
                 // Point intersection;
                 return 0;
@@ -190,7 +181,7 @@ namespace ProceduralToolkit
         #region Segment-Sphere
 
         /// <summary>
-        /// Returns the distance between the closest points on the segment and the sphere
+        ///     Returns the distance between the closest points on the segment and the sphere
         /// </summary>
         public static float SegmentSphere(Segment3 segment, Sphere sphere)
         {
@@ -198,77 +189,60 @@ namespace ProceduralToolkit
         }
 
         /// <summary>
-        /// Returns the distance between the closest points on the segment and the sphere
+        ///     Returns the distance between the closest points on the segment and the sphere
         /// </summary>
         public static float SegmentSphere(Vector3 segmentA, Vector3 segmentB, Vector3 sphereCenter, float sphereRadius)
         {
-            Vector3 segmentAToCenter = sphereCenter - segmentA;
-            Vector3 fromAtoB = segmentB - segmentA;
-            float segmentLength = fromAtoB.magnitude;
-            if (segmentLength < Geometry.Epsilon)
-            {
-                return segmentAToCenter.magnitude - sphereRadius;
-            }
+            var segmentAToCenter = sphereCenter - segmentA;
+            var fromAtoB = segmentB - segmentA;
+            var segmentLength = fromAtoB.magnitude;
+            if (segmentLength < Geometry.Epsilon) return segmentAToCenter.magnitude - sphereRadius;
 
-            Vector3 segmentDirection = fromAtoB.normalized;
-            float centerProjection = Vector3.Dot(segmentDirection, segmentAToCenter);
+            var segmentDirection = fromAtoB.normalized;
+            var centerProjection = Vector3.Dot(segmentDirection, segmentAToCenter);
             if (centerProjection + sphereRadius < -Geometry.Epsilon ||
                 centerProjection - sphereRadius > segmentLength + Geometry.Epsilon)
             {
                 // No intersection
-                if (centerProjection < 0)
-                {
-                    return segmentAToCenter.magnitude - sphereRadius;
-                }
+                if (centerProjection < 0) return segmentAToCenter.magnitude - sphereRadius;
                 return (sphereCenter - segmentB).magnitude - sphereRadius;
             }
 
-            float sqrDistanceToA = segmentAToCenter.sqrMagnitude;
-            float sqrDistanceToLine = sqrDistanceToA - centerProjection*centerProjection;
-            float sqrDistanceToIntersection = sphereRadius*sphereRadius - sqrDistanceToLine;
+            var sqrDistanceToA = segmentAToCenter.sqrMagnitude;
+            var sqrDistanceToLine = sqrDistanceToA - centerProjection * centerProjection;
+            var sqrDistanceToIntersection = sphereRadius * sphereRadius - sqrDistanceToLine;
             if (sqrDistanceToIntersection < -Geometry.Epsilon)
             {
                 // No intersection
-                if (centerProjection < -Geometry.Epsilon)
-                {
-                    return Mathf.Sqrt(sqrDistanceToA) - sphereRadius;
-                }
+                if (centerProjection < -Geometry.Epsilon) return Mathf.Sqrt(sqrDistanceToA) - sphereRadius;
                 if (centerProjection > segmentLength + Geometry.Epsilon)
-                {
                     return (sphereCenter - segmentB).magnitude - sphereRadius;
-                }
                 return Mathf.Sqrt(sqrDistanceToLine) - sphereRadius;
             }
 
             if (sqrDistanceToIntersection < Geometry.Epsilon)
             {
                 if (centerProjection < -Geometry.Epsilon)
-                {
                     // No intersection
                     return Mathf.Sqrt(sqrDistanceToA) - sphereRadius;
-                }
                 if (centerProjection > segmentLength + Geometry.Epsilon)
-                {
                     // No intersection
                     return (sphereCenter - segmentB).magnitude - sphereRadius;
-                }
                 // Point intersection
                 return 0;
             }
 
             // Line intersection
-            float distanceToIntersection = Mathf.Sqrt(sqrDistanceToIntersection);
-            float distanceA = centerProjection - distanceToIntersection;
-            float distanceB = centerProjection + distanceToIntersection;
+            var distanceToIntersection = Mathf.Sqrt(sqrDistanceToIntersection);
+            var distanceA = centerProjection - distanceToIntersection;
+            var distanceB = centerProjection + distanceToIntersection;
 
-            bool pointAIsAfterSegmentA = distanceA > -Geometry.Epsilon;
-            bool pointBIsBeforeSegmentB = distanceB < segmentLength + Geometry.Epsilon;
+            var pointAIsAfterSegmentA = distanceA > -Geometry.Epsilon;
+            var pointBIsBeforeSegmentB = distanceB < segmentLength + Geometry.Epsilon;
 
             if (pointAIsAfterSegmentA && pointBIsBeforeSegmentB)
-            {
                 // Two points intersection
                 return 0;
-            }
             if (!pointAIsAfterSegmentA && !pointBIsBeforeSegmentB)
             {
                 // The segment is inside, but no intersection
@@ -276,24 +250,17 @@ namespace ProceduralToolkit
                 return distanceA > distanceB ? distanceA : distanceB;
             }
 
-            bool pointAIsBeforeSegmentB = distanceA < segmentLength + Geometry.Epsilon;
+            var pointAIsBeforeSegmentB = distanceA < segmentLength + Geometry.Epsilon;
             if (pointAIsAfterSegmentA && pointAIsBeforeSegmentB)
-            {
                 // Point A intersection
                 return 0;
-            }
-            bool pointBIsAfterSegmentA = distanceB > -Geometry.Epsilon;
+            var pointBIsAfterSegmentA = distanceB > -Geometry.Epsilon;
             if (pointBIsAfterSegmentA && pointBIsBeforeSegmentB)
-            {
                 // Point B intersection
                 return 0;
-            }
 
             // No intersection
-            if (centerProjection < 0)
-            {
-                return Mathf.Sqrt(sqrDistanceToA) - sphereRadius;
-            }
+            if (centerProjection < 0) return Mathf.Sqrt(sqrDistanceToA) - sphereRadius;
             return (sphereCenter - segmentB).magnitude - sphereRadius;
         }
 
@@ -302,11 +269,11 @@ namespace ProceduralToolkit
         #region Sphere-Sphere
 
         /// <summary>
-        /// Returns the distance between the closest points on the spheres
+        ///     Returns the distance between the closest points on the spheres
         /// </summary>
         /// <returns>
-        /// Positive value if the spheres do not intersect, negative otherwise.
-        /// Negative value can be interpreted as depth of penetration.
+        ///     Positive value if the spheres do not intersect, negative otherwise.
+        ///     Negative value can be interpreted as depth of penetration.
         /// </returns>
         public static float SphereSphere(Sphere sphereA, Sphere sphereB)
         {
@@ -314,11 +281,11 @@ namespace ProceduralToolkit
         }
 
         /// <summary>
-        /// Returns the distance between the closest points on the spheres
+        ///     Returns the distance between the closest points on the spheres
         /// </summary>
         /// <returns>
-        /// Positive value if the spheres do not intersect, negative otherwise.
-        /// Negative value can be interpreted as depth of penetration.
+        ///     Positive value if the spheres do not intersect, negative otherwise.
+        ///     Negative value can be interpreted as depth of penetration.
         /// </returns>
         public static float SphereSphere(Vector3 centerA, float radiusA, Vector3 centerB, float radiusB)
         {

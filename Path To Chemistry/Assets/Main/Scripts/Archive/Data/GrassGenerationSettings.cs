@@ -1,11 +1,7 @@
 using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using UnityEngine.SocialPlatforms;
 
-[CreateAssetMenu()]
+[CreateAssetMenu]
 public class GrassGenerationSettings : UpdatableData
 {
-    [Range(1,10)] public int grassDensity;
+    [Range(1, 10)] public int grassDensity;
 }

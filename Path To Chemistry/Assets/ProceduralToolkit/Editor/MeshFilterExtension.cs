@@ -1,10 +1,10 @@
-using UnityEngine;
 using UnityEditor;
+using UnityEngine;
 
 namespace ProceduralToolkit.Editor
 {
     /// <summary>
-    /// Mesh saving utility available at `MeshFilter context menu > Save Mesh`
+    ///     Mesh saving utility available at `MeshFilter context menu > Save Mesh`
     /// </summary>
     public class MeshFilterExtension
     {
@@ -17,10 +17,7 @@ namespace ProceduralToolkit.Editor
             var mesh = meshFilter.sharedMesh;
 
             var path = EditorUtility.SaveFilePanelInProject("Save Mesh", mesh.name, "asset", "Save Mesh");
-            if (string.IsNullOrEmpty(path))
-            {
-                return;
-            }
+            if (string.IsNullOrEmpty(path)) return;
             AssetDatabase.CreateAsset(mesh, path);
         }
 

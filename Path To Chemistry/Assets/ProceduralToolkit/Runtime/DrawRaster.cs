@@ -4,15 +4,15 @@ using UnityEngine;
 namespace ProceduralToolkit
 {
     /// <summary>
-    /// Collection of generic vector and raster drawing algorithms
+    ///     Collection of generic vector and raster drawing algorithms
     /// </summary>
     public static partial class Draw
     {
         /// <summary>
-        /// Draws a line and calls <paramref name="draw"/> on every pixel
+        ///     Draws a line and calls <paramref name="draw" /> on every pixel
         /// </summary>
         /// <remarks>
-        /// https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
+        ///     https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
         /// </remarks>
         public static void RasterLine(Vector2Int v0, Vector2Int v1, Action<int, int> draw)
         {
@@ -20,31 +20,32 @@ namespace ProceduralToolkit
         }
 
         /// <summary>
-        /// Draws a line and calls <paramref name="draw"/> on every pixel
+        ///     Draws a line and calls <paramref name="draw" /> on every pixel
         /// </summary>
         /// <remarks>
-        /// https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
+        ///     https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
         /// </remarks>
         public static void RasterLine(int x0, int y0, int x1, int y1, Action<int, int> draw)
         {
-            bool steep = Math.Abs(y1 - y0) > Math.Abs(x1 - x0);
+            var steep = Math.Abs(y1 - y0) > Math.Abs(x1 - x0);
             if (steep)
             {
                 PTUtils.Swap(ref x0, ref y0);
                 PTUtils.Swap(ref x1, ref y1);
             }
+
             if (x0 > x1)
             {
                 PTUtils.Swap(ref x0, ref x1);
                 PTUtils.Swap(ref y0, ref y1);
             }
 
-            int dx = x1 - x0;
-            int dy = Math.Abs(y1 - y0);
-            int error = dx/2;
-            int ystep = (y0 < y1) ? 1 : -1;
-            int y = y0;
-            for (int x = x0; x <= x1; x++)
+            var dx = x1 - x0;
+            var dy = Math.Abs(y1 - y0);
+            var error = dx / 2;
+            var ystep = y0 < y1 ? 1 : -1;
+            var y = y0;
+            for (var x = x0; x <= x1; x++)
             {
                 draw(steep ? y : x, steep ? x : y);
                 error -= dy;
@@ -57,10 +58,10 @@ namespace ProceduralToolkit
         }
 
         /// <summary>
-        /// Draws an anti-aliased line and calls <paramref name="draw"/> on every pixel
+        ///     Draws an anti-aliased line and calls <paramref name="draw" /> on every pixel
         /// </summary>
         /// <remarks>
-        /// https://en.wikipedia.org/wiki/Xiaolin_Wu%27s_line_algorithm
+        ///     https://en.wikipedia.org/wiki/Xiaolin_Wu%27s_line_algorithm
         /// </remarks>
         public static void RasterAALine(Vector2Int v0, Vector2Int v1, Action<int, int, float> draw)
         {
@@ -68,19 +69,20 @@ namespace ProceduralToolkit
         }
 
         /// <summary>
-        /// Draws an anti-aliased line and calls <paramref name="draw"/> on every pixel
+        ///     Draws an anti-aliased line and calls <paramref name="draw" /> on every pixel
         /// </summary>
         /// <remarks>
-        /// https://en.wikipedia.org/wiki/Xiaolin_Wu%27s_line_algorithm
+        ///     https://en.wikipedia.org/wiki/Xiaolin_Wu%27s_line_algorithm
         /// </remarks>
         public static void RasterAALine(int x0, int y0, int x1, int y1, Action<int, int, float> draw)
         {
-            bool steep = Math.Abs(y1 - y0) > Math.Abs(x1 - x0);
+            var steep = Math.Abs(y1 - y0) > Math.Abs(x1 - x0);
             if (steep)
             {
                 PTUtils.Swap(ref x0, ref y0);
                 PTUtils.Swap(ref x1, ref y1);
             }
+
             if (x0 > x1)
             {
                 PTUtils.Swap(ref x0, ref x1);
@@ -97,10 +99,11 @@ namespace ProceduralToolkit
                 draw(x0, y0, 1);
                 draw(x1, y1, 1);
             }
+
             float dx = x1 - x0;
             float dy = y1 - y0;
-            float gradient = dy/dx;
-            float y = y0 + gradient;
+            var gradient = dy / dx;
+            var y = y0 + gradient;
             for (var x = x0 + 1; x <= x1 - 1; x++)
             {
                 if (steep)
@@ -113,16 +116,17 @@ namespace ProceduralToolkit
                     draw(x, (int) y, 1 - (y - (int) y));
                     draw(x, (int) y + 1, y - (int) y);
                 }
+
                 y += gradient;
             }
         }
 
         /// <summary>
-        /// Draws a circle and calls <paramref name="draw"/> on every pixel
+        ///     Draws a circle and calls <paramref name="draw" /> on every pixel
         /// </summary>
         /// <remarks>
-        /// A Rasterizing Algorithm for Drawing Curves
-        /// http://members.chello.at/easyfilter/bresenham.pdf
+        ///     A Rasterizing Algorithm for Drawing Curves
+        ///     http://members.chello.at/easyfilter/bresenham.pdf
         /// </remarks>
         public static void RasterCircle(Vector2Int v0, int radius, Action<int, int> draw)
         {
@@ -130,11 +134,11 @@ namespace ProceduralToolkit
         }
 
         /// <summary>
-        /// Draws a circle and calls <paramref name="draw"/> on every pixel
+        ///     Draws a circle and calls <paramref name="draw" /> on every pixel
         /// </summary>
         /// <remarks>
-        /// A Rasterizing Algorithm for Drawing Curves
-        /// http://members.chello.at/easyfilter/bresenham.pdf
+        ///     A Rasterizing Algorithm for Drawing Curves
+        ///     http://members.chello.at/easyfilter/bresenham.pdf
         /// </remarks>
         public static void RasterCircle(int x0, int y0, int radius, Action<int, int> draw)
         {
@@ -144,9 +148,9 @@ namespace ProceduralToolkit
                 return;
             }
 
-            int x = -radius;
-            int y = 0;
-            int error = 2 - 2*radius; // 2 quadrant ◴
+            var x = -radius;
+            var y = 0;
+            var error = 2 - 2 * radius; // 2 quadrant ◴
             while (x < 0)
             {
                 draw(x0 - x, y0 + y); // 1 quadrant ◷
@@ -154,11 +158,11 @@ namespace ProceduralToolkit
                 draw(x0 + x, y0 - y); // 3 quadrant ◵
                 draw(x0 + y, y0 + x); // 4 quadrant ◶
 
-                int lastError = error;
+                var lastError = error;
                 if (y >= error)
                 {
                     y++;
-                    error += 2*y + 1;
+                    error += 2 * y + 1;
                 }
 
                 // Second check is needed to avoid weird pixels at diagonals at some radiuses
@@ -166,13 +170,13 @@ namespace ProceduralToolkit
                 if (x < lastError || y < error)
                 {
                     x++;
-                    error += 2*x + 1;
+                    error += 2 * x + 1;
                 }
             }
         }
 
         /// <summary>
-        /// Draws a filled circle and calls <paramref name="draw"/> on every pixel
+        ///     Draws a filled circle and calls <paramref name="draw" /> on every pixel
         /// </summary>
         public static void RasterFilledCircle(Vector2Int v0, int radius, Action<int, int> draw)
         {
@@ -180,7 +184,7 @@ namespace ProceduralToolkit
         }
 
         /// <summary>
-        /// Draws a filled circle and calls <paramref name="draw"/> on every pixel
+        ///     Draws a filled circle and calls <paramref name="draw" /> on every pixel
         /// </summary>
         public static void RasterFilledCircle(int x0, int y0, int radius, Action<int, int> draw)
         {
@@ -189,6 +193,7 @@ namespace ProceduralToolkit
                 draw(x0, y0);
                 return;
             }
+
             if (radius == 1)
             {
                 draw(x0, y0 + 1);
@@ -199,11 +204,11 @@ namespace ProceduralToolkit
                 return;
             }
 
-            int x = -radius;
-            int y = 0;
-            int error = 2 - 2*radius; // 2 quadrant ◴
+            var x = -radius;
+            var y = 0;
+            var error = 2 - 2 * radius; // 2 quadrant ◴
             // lastY must have a different value than y
-            int lastY = int.MaxValue;
+            var lastY = int.MaxValue;
             while (x < 0)
             {
                 // This check prevents overdraw at poles
@@ -211,18 +216,16 @@ namespace ProceduralToolkit
                 {
                     DrawHorizontalLine(x0 + x, x0 - x, y0 + y, draw); // ◠
                     // This check prevents overdraw at central horizontal
-                    if (y != 0)
-                    {
-                        DrawHorizontalLine(x0 + x, x0 - x, y0 - y, draw); // ◡
-                    }
+                    if (y != 0) DrawHorizontalLine(x0 + x, x0 - x, y0 - y, draw); // ◡
                 }
+
                 lastY = y;
 
-                int lastError = error;
+                var lastError = error;
                 if (y >= error)
                 {
                     y++;
-                    error += 2*y + 1;
+                    error += 2 * y + 1;
                 }
 
                 // Second check is needed to avoid weird pixels at diagonals at some radiuses
@@ -230,17 +233,14 @@ namespace ProceduralToolkit
                 if (x < lastError || y < error)
                 {
                     x++;
-                    error += 2*x + 1;
+                    error += 2 * x + 1;
                 }
             }
         }
 
         private static void DrawHorizontalLine(int fromX, int toX, int y, Action<int, int> draw)
         {
-            for (int x = fromX; x <= toX; x++)
-            {
-                draw(x, y);
-            }
+            for (var x = fromX; x <= toX; x++) draw(x, y);
         }
     }
 }

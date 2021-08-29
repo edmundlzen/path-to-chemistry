@@ -5,7 +5,7 @@ using UnityEngine;
 namespace ProceduralToolkit.Editor
 {
     /// <summary>
-    /// PropertyDrawer for CellularAutomaton.Ruleset
+    ///     PropertyDrawer for CellularAutomaton.Ruleset
     /// </summary>
     [CustomPropertyDrawer(typeof(CellularAutomaton.Ruleset))]
     public class RulesetDrawer : PropertyDrawer
@@ -17,8 +17,9 @@ namespace ProceduralToolkit.Editor
         private const string birthRuleName = "birthRule";
         private const string survivalRuleName = "survivalRule";
 
-        private readonly GUIStyle dropdownStyle = (GUIStyle) "StaticDropdown";
-        private readonly GUIContent[] options = new GUIContent[]
+        private readonly GUIStyle dropdownStyle = "StaticDropdown";
+
+        private readonly GUIContent[] options =
         {
             new GUIContent("Life"),
             new GUIContent("Highlife"),
@@ -47,9 +48,10 @@ namespace ProceduralToolkit.Editor
             new GUIContent("WalledCities"),
             new GUIContent("Stains"),
             new GUIContent("Coagulations"),
-            new GUIContent("Assimilation"),
+            new GUIContent("Assimilation")
         };
-        private readonly CellularAutomaton.Ruleset[] rulesets = new CellularAutomaton.Ruleset[]
+
+        private readonly CellularAutomaton.Ruleset[] rulesets =
         {
             CellularAutomaton.Ruleset.life,
             CellularAutomaton.Ruleset.highlife,
@@ -78,7 +80,7 @@ namespace ProceduralToolkit.Editor
             CellularAutomaton.Ruleset.walledCities,
             CellularAutomaton.Ruleset.stains,
             CellularAutomaton.Ruleset.coagulations,
-            CellularAutomaton.Ruleset.assimilation,
+            CellularAutomaton.Ruleset.assimilation
         };
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
@@ -90,22 +92,20 @@ namespace ProceduralToolkit.Editor
 
             position = EditorGUI.PrefixLabel(position, label);
 
-            float ruleWidth = (position.width - dropdownWidth)/2;
-            Rect ruleRect = new Rect(position.x - labelSpacing, position.y, ruleWidth, position.height);
+            var ruleWidth = (position.width - dropdownWidth) / 2;
+            var ruleRect = new Rect(position.x - labelSpacing, position.y, ruleWidth, position.height);
             DrawRule(birthRule, ruleRect, "B");
 
             ruleRect.x += ruleWidth + labelSpacing;
             DrawRule(survivalRule, ruleRect, "S");
 
-            int oldIndentLevel = EditorGUI.indentLevel;
+            var oldIndentLevel = EditorGUI.indentLevel;
             EditorGUI.indentLevel = 0;
             {
-                Rect dropdownRect = new Rect(ruleRect.xMax + dropdownSpacing, position.y, dropdownWidth, position.height);
-                int selected = EditorGUI.Popup(dropdownRect, -1, options, dropdownStyle);
-                if (selected >= 0)
-                {
-                    SelectRuleset(birthRule, survivalRule, selected);
-                }
+                var dropdownRect = new Rect(ruleRect.xMax + dropdownSpacing, position.y, dropdownWidth,
+                    position.height);
+                var selected = EditorGUI.Popup(dropdownRect, -1, options, dropdownStyle);
+                if (selected >= 0) SelectRuleset(birthRule, survivalRule, selected);
             }
             EditorGUI.indentLevel = oldIndentLevel;
 
@@ -117,7 +117,7 @@ namespace ProceduralToolkit.Editor
             var ruleset = rulesets[selected];
 
             birthRule.ClearArray();
-            for (int i = 0; i < ruleset.birthRule.Length; i++)
+            for (var i = 0; i < ruleset.birthRule.Length; i++)
             {
                 birthRule.InsertArrayElementAtIndex(i);
                 var element = birthRule.GetArrayElementAtIndex(i);
@@ -125,7 +125,7 @@ namespace ProceduralToolkit.Editor
             }
 
             survivalRule.ClearArray();
-            for (int i = 0; i < ruleset.survivalRule.Length; i++)
+            for (var i = 0; i < ruleset.survivalRule.Length; i++)
             {
                 survivalRule.InsertArrayElementAtIndex(i);
                 var element = survivalRule.GetArrayElementAtIndex(i);
@@ -136,22 +136,19 @@ namespace ProceduralToolkit.Editor
         private void DrawRule(SerializedProperty rule, Rect position, string label)
         {
             var stringBuilder = new StringBuilder();
-            for (int i = 0; i < rule.arraySize; i++)
-            {
-                stringBuilder.Append(rule.GetArrayElementAtIndex(i).intValue);
-            }
+            for (var i = 0; i < rule.arraySize; i++) stringBuilder.Append(rule.GetArrayElementAtIndex(i).intValue);
 
-            float oldLabelWidth = EditorGUIUtility.labelWidth;
-            int oldIndentLevel = EditorGUI.indentLevel;
+            var oldLabelWidth = EditorGUIUtility.labelWidth;
+            var oldIndentLevel = EditorGUI.indentLevel;
             EditorGUIUtility.labelWidth = labelWidth;
             EditorGUI.indentLevel = 0;
-            string ruleString = EditorGUI.TextField(position, label, stringBuilder.ToString());
+            var ruleString = EditorGUI.TextField(position, label, stringBuilder.ToString());
             EditorGUIUtility.labelWidth = oldLabelWidth;
             EditorGUI.indentLevel = oldIndentLevel;
 
             var ruleList = CellularAutomaton.Ruleset.ConvertRuleStringToList(ruleString);
             rule.ClearArray();
-            for (int i = 0; i < ruleList.Count; i++)
+            for (var i = 0; i < ruleList.Count; i++)
             {
                 rule.InsertArrayElementAtIndex(i);
                 var element = rule.GetArrayElementAtIndex(i);

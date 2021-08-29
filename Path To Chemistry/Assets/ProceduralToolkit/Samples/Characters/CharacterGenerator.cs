@@ -4,10 +4,10 @@ using UnityEngine;
 namespace ProceduralToolkit.Samples
 {
     /// <summary>
-    /// 2D character generator
+    ///     2D character generator
     /// </summary>
     /// <remarks>
-    /// Sprites made by Kenney http://kenney.nl/
+    ///     Sprites made by Kenney http://kenney.nl/
     /// </remarks>
     public class CharacterGenerator : MonoBehaviour
     {

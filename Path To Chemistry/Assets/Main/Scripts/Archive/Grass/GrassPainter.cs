@@ -1,42 +1,32 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-
 using UnityEditor;
-
-
+using UnityEngine;
 
 [RequireComponent(typeof(MeshFilter))]
 [ExecuteInEditMode]
 public class GrassPainter : MonoBehaviour
 {
-
     public Mesh mesh;
-    MeshFilter filter;
 
     public Color AdjustedColor;
 
-    [Range(1, 600000)]
-    public int grassLimit = 50000;
+    [Range(1, 600000)] public int grassLimit = 50000;
 
-    private Vector3 lastPosition = Vector3.zero;
+    public int toolbarInt;
 
-    public int toolbarInt = 0;
+    public int toolbarIntEdit;
 
-    public int toolbarIntEdit = 0;
+    [SerializeField] private List<Vector3> positions = new List<Vector3>();
 
-    [SerializeField]
-    List<Vector3> positions = new List<Vector3>();
-    [SerializeField]
-    List<Color> colors = new List<Color>();
-    [SerializeField]
-    List<int> indicies = new List<int>();
-    [SerializeField]
-    List<Vector3> normals = new List<Vector3>();
-    [SerializeField]
-    List<Vector2> length = new List<Vector2>();
+    [SerializeField] private List<Color> colors = new List<Color>();
 
-    public int i = 0;
+    [SerializeField] private List<int> indicies = new List<int>();
+
+    [SerializeField] private List<Vector3> normals = new List<Vector3>();
+
+    [SerializeField] private List<Vector2> length = new List<Vector2>();
+
+    public int i;
 
     public float sizeWidth = 1f;
     public float sizeLength = 1f;
@@ -54,47 +44,49 @@ public class GrassPainter : MonoBehaviour
 
     public float Flow;
 
+    [HideInInspector] public Vector3 hitPosGizmo;
+
+    [HideInInspector] public Vector3 hitNormal;
+
+    private MeshFilter filter;
+
     private int flowTimer;
 
-    Vector3 mousePos;
-
-    [HideInInspector]
-    public Vector3 hitPosGizmo;
-
-    Vector3 hitPos;
-
-    [HideInInspector]
-    public Vector3 hitNormal;
+    private Vector3 hitPos;
 
 
-    int[] indi;
+    private int[] indi;
 
-    void Start()
+    private Vector3 lastPosition = Vector3.zero;
+
+    private Vector3 mousePos;
+
+    private void Start()
     {
         filter = GetComponent<MeshFilter>();
     }
 
 #if UNITY_EDITOR
-    void OnFocus()
+    private void OnFocus()
     {
         // Remove delegate listener if it has previously
         // been assigned.
-        SceneView.duringSceneGui -= this.OnScene;
+        SceneView.duringSceneGui -= OnScene;
         // Add (or re-add) the delegate.
-        SceneView.duringSceneGui += this.OnScene;
+        SceneView.duringSceneGui += OnScene;
     }
 
-    void OnDestroy()
+    private void OnDestroy()
     {
         // When the window is destroyed, remove the delegate
         // so that it will no longer do any drawing.
-        SceneView.duringSceneGui -= this.OnScene;
+        SceneView.duringSceneGui -= OnScene;
     }
 
     private void OnEnable()
     {
         filter = GetComponent<MeshFilter>();
-        SceneView.duringSceneGui += this.OnScene;
+        SceneView.duringSceneGui += OnScene;
     }
 
     public void ClearMesh()
@@ -106,82 +98,83 @@ public class GrassPainter : MonoBehaviour
         normals = new List<Vector3>();
         length = new List<Vector2>();
     }
-    
+
     public void RemovePoint(Vector3 grassPosition, Vector3 grassNormal, int grassDensity)
     {
-        float step = 1f / grassDensity;
-        for (int j = 0; j < grassDensity; j++)
+        var step = 1f / grassDensity;
+        for (var j = 0; j < grassDensity; j++)
         {
-            positions.Remove(transform.InverseTransformPoint(new Vector3(grassPosition.x + (step * j), grassPosition.y, grassPosition.z + (step * j))));
+            positions.Remove(transform.InverseTransformPoint(new Vector3(grassPosition.x + step * j, grassPosition.y,
+                grassPosition.z + step * j)));
             indicies.Remove(i);
             length.Remove(new Vector2(sizeWidth, sizeLength));
-            colors.Remove(new Color(AdjustedColor.r + (Random.Range(0, 1.0f) * rangeR), AdjustedColor.g + (Random.Range(0, 1.0f) * rangeG), AdjustedColor.b + (Random.Range(0, 1.0f) * rangeB), 1));
+            colors.Remove(new Color(AdjustedColor.r + Random.Range(0, 1.0f) * rangeR,
+                AdjustedColor.g + Random.Range(0, 1.0f) * rangeG, AdjustedColor.b + Random.Range(0, 1.0f) * rangeB, 1));
             normals.Remove(grassNormal);
             i--;
         }
+
         mesh.SetVertices(positions);
         indi = indicies.ToArray();
         mesh.SetIndices(indi, MeshTopology.Points, 0);
         mesh.SetUVs(0, length);
         mesh.SetColors(colors);
-        mesh.SetNormals(normals); 
+        mesh.SetNormals(normals);
         filter.mesh = mesh;
     }
-    
+
     public void AddPoint(Vector3 grassPosition, Vector3 grassNormal, int grassDensity)
     {
-        float step = 1f / grassDensity;
-        for (int j = 0; j < grassDensity; j++)
+        var step = 1f / grassDensity;
+        for (var j = 0; j < grassDensity; j++)
         {
-            positions.Add(transform.InverseTransformPoint(new Vector3(grassPosition.x + (step * j), grassPosition.y, grassPosition.z + (step * j))));
+            positions.Add(transform.InverseTransformPoint(new Vector3(grassPosition.x + step * j, grassPosition.y,
+                grassPosition.z + step * j)));
             indicies.Add(i);
             length.Add(new Vector2(sizeWidth, sizeLength));
-            colors.Add(new Color(AdjustedColor.r + (Random.Range(0, 1.0f) * rangeR), AdjustedColor.g + (Random.Range(0, 1.0f) * rangeG), AdjustedColor.b + (Random.Range(0, 1.0f) * rangeB), 1));
+            colors.Add(new Color(AdjustedColor.r + Random.Range(0, 1.0f) * rangeR,
+                AdjustedColor.g + Random.Range(0, 1.0f) * rangeG, AdjustedColor.b + Random.Range(0, 1.0f) * rangeB, 1));
             normals.Add(grassNormal);
             i++;
         }
-            mesh.SetVertices(positions);
-            indi = indicies.ToArray();
-            mesh.SetIndices(indi, MeshTopology.Points, 0);
-            mesh.SetUVs(0, length);
-            mesh.SetColors(colors);
-            mesh.SetNormals(normals);
-            filter.mesh = mesh;
+
+        mesh.SetVertices(positions);
+        indi = indicies.ToArray();
+        mesh.SetIndices(indi, MeshTopology.Points, 0);
+        mesh.SetUVs(0, length);
+        mesh.SetColors(colors);
+        mesh.SetNormals(normals);
+        filter.mesh = mesh;
     }
 
-    void OnScene(SceneView scene)
+    private void OnScene(SceneView scene)
     {
         // only allow painting while this object is selected
-        if ((Selection.Contains(gameObject)))
+        if (Selection.Contains(gameObject))
         {
-
-            Event e = Event.current;
+            var e = Event.current;
             RaycastHit terrainHit;
             mousePos = e.mousePosition;
-            float ppp = EditorGUIUtility.pixelsPerPoint;
+            var ppp = EditorGUIUtility.pixelsPerPoint;
             mousePos.y = scene.camera.pixelHeight - mousePos.y * ppp;
             mousePos.x *= ppp;
 
             // ray for gizmo(disc)
-            Ray rayGizmo = scene.camera.ScreenPointToRay(mousePos);
+            var rayGizmo = scene.camera.ScreenPointToRay(mousePos);
             RaycastHit hitGizmo;
 
-            if (Physics.Raycast(rayGizmo, out hitGizmo, 200f, hitMask.value))
-            {
-                hitPosGizmo = hitGizmo.point;
-            }
+            if (Physics.Raycast(rayGizmo, out hitGizmo, 200f, hitMask.value)) hitPosGizmo = hitGizmo.point;
 
             if (e.type == EventType.MouseDrag && e.button == 1 && toolbarInt == 0)
             {
                 // place based on density
-                for (int k = 0; k < density; k++)
+                for (var k = 0; k < density; k++)
                 {
-
                     // brushrange
-                    float t = 2f * Mathf.PI * Random.Range(0f, brushSize);
-                    float u = Random.Range(0f, brushSize) + Random.Range(0f, brushSize);
-                    float r = (u > 1 ? 2 - u : u);
-                    Vector3 origin = Vector3.zero;
+                    var t = 2f * Mathf.PI * Random.Range(0f, brushSize);
+                    var u = Random.Range(0f, brushSize) + Random.Range(0f, brushSize);
+                    var r = u > 1 ? 2 - u : u;
+                    var origin = Vector3.zero;
 
                     // place random in radius, except for first one
                     if (k != 0)
@@ -195,73 +188,74 @@ public class GrassPainter : MonoBehaviour
                     }
 
                     // add random range to ray
-                    Ray ray = scene.camera.ScreenPointToRay(mousePos);
+                    var ray = scene.camera.ScreenPointToRay(mousePos);
                     ray.origin += origin;
 
                     // if the ray hits something thats on the layer mask,  within the grass limit and within the y normal limit
-                    if (Physics.Raycast(ray, out terrainHit, 200f, hitMask.value) && i < grassLimit && terrainHit.normal.y <= (1 + normalLimit) && terrainHit.normal.y >= (1 - normalLimit))
-                    {
+                    if (Physics.Raycast(ray, out terrainHit, 200f, hitMask.value) && i < grassLimit &&
+                        terrainHit.normal.y <= 1 + normalLimit && terrainHit.normal.y >= 1 - normalLimit)
                         if ((paintMask.value & (1 << terrainHit.transform.gameObject.layer)) > 0)
                         {
                             hitPos = terrainHit.point;
                             hitNormal = terrainHit.normal;
                             if (k != 0)
                             {
-                                var grassPosition = hitPos;// + Vector3.Cross(origin, hitNormal);
-                                grassPosition -= this.transform.position;
+                                var grassPosition = hitPos; // + Vector3.Cross(origin, hitNormal);
+                                grassPosition -= transform.position;
 
-                                positions.Add((grassPosition));
+                                positions.Add(grassPosition);
                                 indicies.Add(i);
                                 length.Add(new Vector2(sizeWidth, sizeLength));
                                 // add random color variations                          
-                                colors.Add(new Color(AdjustedColor.r + (Random.Range(0, 1.0f) * rangeR), AdjustedColor.g + (Random.Range(0, 1.0f) * rangeG), AdjustedColor.b + (Random.Range(0, 1.0f) * rangeB), 1));
+                                colors.Add(new Color(AdjustedColor.r + Random.Range(0, 1.0f) * rangeR,
+                                    AdjustedColor.g + Random.Range(0, 1.0f) * rangeG,
+                                    AdjustedColor.b + Random.Range(0, 1.0f) * rangeB, 1));
 
                                 //colors.Add(temp);
                                 normals.Add(terrainHit.normal);
                                 i++;
                             }
                             else
-                            {// to not place everything at once, check if the first placed point far enough away from the last placed first one
+                            {
+                                // to not place everything at once, check if the first placed point far enough away from the last placed first one
                                 if (Vector3.Distance(terrainHit.point, lastPosition) > brushSize)
                                 {
                                     var grassPosition = hitPos;
-                                    grassPosition -= this.transform.position;
-                                    positions.Add((grassPosition));
+                                    grassPosition -= transform.position;
+                                    positions.Add(grassPosition);
                                     indicies.Add(i);
                                     length.Add(new Vector2(sizeWidth, sizeLength));
-                                    colors.Add(new Color(AdjustedColor.r + (Random.Range(0, 1.0f) * rangeR), AdjustedColor.g + (Random.Range(0, 1.0f) * rangeG), AdjustedColor.b + (Random.Range(0, 1.0f) * rangeB), 1));
+                                    colors.Add(new Color(AdjustedColor.r + Random.Range(0, 1.0f) * rangeR,
+                                        AdjustedColor.g + Random.Range(0, 1.0f) * rangeG,
+                                        AdjustedColor.b + Random.Range(0, 1.0f) * rangeB, 1));
                                     normals.Add(terrainHit.normal);
                                     i++;
 
-                                    if (origin == Vector3.zero)
-                                    {
-                                        lastPosition = hitPos;
-                                    }
+                                    if (origin == Vector3.zero) lastPosition = hitPos;
                                 }
                             }
                         }
-
-                    }
-
                 }
+
                 e.Use();
             }
+
             // removing mesh points
             if (e.type == EventType.MouseDrag && e.button == 1 && toolbarInt == 1)
             {
-                Ray ray = scene.camera.ScreenPointToRay(mousePos);
+                var ray = scene.camera.ScreenPointToRay(mousePos);
 
                 if (Physics.Raycast(ray, out terrainHit, 200f, hitMask.value))
                 {
                     hitPos = terrainHit.point;
                     hitPosGizmo = hitPos;
                     hitNormal = terrainHit.normal;
-                    for (int j = 0; j < positions.Count; j++)
+                    for (var j = 0; j < positions.Count; j++)
                     {
-                        Vector3 pos = positions[j];
+                        var pos = positions[j];
 
-                        pos += this.transform.position;
-                        float dist = Vector3.Distance(terrainHit.point, pos);
+                        pos += transform.position;
+                        var dist = Vector3.Distance(terrainHit.point, pos);
 
                         // if its within the radius of the brush, remove all info
                         if (dist <= brushSize)
@@ -272,66 +266,64 @@ public class GrassPainter : MonoBehaviour
                             length.RemoveAt(j);
                             indicies.RemoveAt(j);
                             i--;
-                            for (int i = 0; i < indicies.Count; i++)
-                            {
-                                indicies[i] = i;
-                            }
+                            for (var i = 0; i < indicies.Count; i++) indicies[i] = i;
                         }
                     }
                 }
+
                 e.Use();
             }
+
             //edit
             if (e.type == EventType.MouseDrag && e.button == 1 && toolbarInt == 2)
             {
-                Ray ray = scene.camera.ScreenPointToRay(mousePos);
+                var ray = scene.camera.ScreenPointToRay(mousePos);
 
                 if (Physics.Raycast(ray, out terrainHit, 200f, hitMask.value))
                 {
                     hitPos = terrainHit.point;
                     hitPosGizmo = hitPos;
                     hitNormal = terrainHit.normal;
-                    for (int j = 0; j < positions.Count; j++)
+                    for (var j = 0; j < positions.Count; j++)
                     {
-                        Vector3 pos = positions[j];
+                        var pos = positions[j];
 
-                        pos += this.transform.position;
-                        float dist = Vector3.Distance(terrainHit.point, pos);
+                        pos += transform.position;
+                        var dist = Vector3.Distance(terrainHit.point, pos);
 
                         // if its within the radius of the brush, remove all info
                         if (dist <= brushSize)
                         {
                             brushFalloffSize = Mathf.Clamp(brushFalloffSize, 0, brushSize);
-                            float falloff = Mathf.Clamp01((dist - brushFalloffSize) / (brushSize - brushFalloffSize));
+                            var falloff = Mathf.Clamp01((dist - brushFalloffSize) / (brushSize - brushFalloffSize));
 
-                            Color OrigColor = colors[j];
+                            var OrigColor = colors[j];
 
-                            Color newCol = (new Color(AdjustedColor.r + (Random.Range(0, 1.0f) * rangeR), AdjustedColor.g + (Random.Range(0, 1.0f) * rangeG), AdjustedColor.b + (Random.Range(0, 1.0f) * rangeB), 1));
+                            var newCol = new Color(AdjustedColor.r + Random.Range(0, 1.0f) * rangeR,
+                                AdjustedColor.g + Random.Range(0, 1.0f) * rangeG,
+                                AdjustedColor.b + Random.Range(0, 1.0f) * rangeB, 1);
 
-                            Vector2 origLength = length[j];
-                            Vector2 newLength = new Vector2(sizeWidth, sizeLength); ;
+                            var origLength = length[j];
+                            var newLength = new Vector2(sizeWidth, sizeLength);
+                            ;
 
                             flowTimer++;
                             if (flowTimer > Flow)
                             {
                                 if (toolbarIntEdit == 0 || toolbarIntEdit == 2)
-                                {
                                     colors[j] = Color.Lerp(newCol, OrigColor, falloff);
-                                }
                                 if (toolbarIntEdit == 1 || toolbarIntEdit == 2)
-                                {
                                     length[j] = Vector2.Lerp(newLength, origLength, falloff);
-                                }
 
                                 flowTimer = 0;
                             }
-
                         }
                     }
                 }
-                e.Use();
 
+                e.Use();
             }
+
             // set all info to mesh
             mesh = new Mesh();
             mesh.SetVertices(positions);
@@ -341,8 +333,6 @@ public class GrassPainter : MonoBehaviour
             mesh.SetColors(colors);
             mesh.SetNormals(normals);
             filter.mesh = mesh;
-
-
         }
     }
 #endif

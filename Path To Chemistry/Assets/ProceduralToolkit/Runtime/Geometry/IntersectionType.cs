@@ -9,6 +9,6 @@ namespace ProceduralToolkit
         Ray,
         Segment,
         Circle,
-        Sphere,
+        Sphere
     }
 }

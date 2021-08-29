@@ -1,5 +1,5 @@
-using UnityEngine;
 using UnityEditor;
+using UnityEngine;
 
 namespace ProceduralToolkit.Samples.Buildings
 {
@@ -24,9 +24,9 @@ namespace ProceduralToolkit.Samples.Buildings
                 {
                     generator,
                     generator.building,
-                    generator.platformMeshFilter,
+                    generator.platformMeshFilter
                 }, "Generate building");
-                generator.Generate(randomizeConfig: false);
+                generator.Generate(false);
             }
         }
     }

@@ -1,14 +1,14 @@
-﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using UnityEngine;
 
-[CreateAssetMenu()]
-public class ObjectGenerationSettings : UpdatableData {
+[CreateAssetMenu]
+public class ObjectGenerationSettings : UpdatableData
+{
     public Object[] objects;
 
-    [System.Serializable]
-    public class Object {
+    [Serializable]
+    public class Object
+    {
         public GameObject gameObject;
         public int minimumAmount;
         public int maximumAmount;

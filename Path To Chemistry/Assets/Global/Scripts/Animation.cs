@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Animation : MonoBehaviour
@@ -10,19 +9,19 @@ public class Animation : MonoBehaviour
     public GameObject roundFlask;
     public GameObject Effect;
     public bool flaskDissapear = true;
-    bool hasAnimated = false;
-    void Update()
+    private bool hasAnimated;
+
+    private void Update()
     {
         if (Input.GetMouseButtonDown(0))
-        {
             if (!hasAnimated)
             {
                 StartCoroutine(pourExplode());
                 hasAnimated = true;
             }
-        }
     }
-    IEnumerator pourExplode()
+
+    private IEnumerator pourExplode()
     {
         var Potion = GameObject.Find("Effect").GetComponent<Transform>();
         roundFlask.SetActive(true);
@@ -31,10 +30,7 @@ public class Animation : MonoBehaviour
         animator2.SetTrigger("Fill");
         yield return new WaitForSeconds(4);
         Instantiate(Effect, Potion.position, Potion.rotation);
-        if (flaskDissapear)
-        {
-            normalFlask.SetActive(false);
-        }
+        if (flaskDissapear) normalFlask.SetActive(false);
         roundFlask.SetActive(false);
     }
 }

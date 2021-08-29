@@ -18,7 +18,7 @@ namespace ProceduralToolkit
             return new IntersectionRayRay2
             {
                 type = IntersectionType.Point,
-                pointA = point,
+                pointA = point
             };
         }
 
@@ -28,7 +28,7 @@ namespace ProceduralToolkit
             {
                 type = IntersectionType.Ray,
                 pointA = origin,
-                pointB = direction,
+                pointB = direction
             };
         }
 
@@ -38,7 +38,7 @@ namespace ProceduralToolkit
             {
                 type = IntersectionType.Segment,
                 pointA = pointA,
-                pointB = pointB,
+                pointB = pointB
             };
         }
     }

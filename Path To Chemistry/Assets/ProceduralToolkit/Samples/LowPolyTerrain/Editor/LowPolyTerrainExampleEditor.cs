@@ -23,18 +23,19 @@ namespace ProceduralToolkit.Samples
                 Undo.RecordObjects(new Object[]
                 {
                     generator,
-                    generator.terrainMeshFilter,
+                    generator.terrainMeshFilter
                 }, "Generate terrain");
-                generator.Generate(randomizeConfig: false);
+                generator.Generate(false);
             }
+
             if (GUILayout.Button("Randomize config and generate mesh"))
             {
                 Undo.RecordObjects(new Object[]
                 {
                     generator,
-                    generator.terrainMeshFilter,
+                    generator.terrainMeshFilter
                 }, "Generate terrain");
-                generator.Generate(randomizeConfig: true);
+                generator.Generate(true);
             }
         }
     }

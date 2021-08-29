@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ProceduralToolkit
 {
     /// <summary>
-    /// Representation of a 3D circle
+    ///     Representation of a 3D circle
     /// </summary>
     [Serializable]
     public struct Circle3 : IEquatable<Circle3>, IFormattable
@@ -12,19 +12,6 @@ namespace ProceduralToolkit
         public Vector3 center;
         public Vector3 normal;
         public float radius;
-
-        /// <summary>
-        /// Returns the perimeter of the circle
-        /// </summary>
-        public float perimeter => 2*Mathf.PI*radius;
-        /// <summary>
-        /// Returns the area of the circle
-        /// </summary>
-        public float area => Mathf.PI*radius*radius;
-
-        public static Circle3 unitXY => new Circle3(Vector3.zero, Vector3.back, 1);
-        public static Circle3 unitXZ => new Circle3(Vector3.zero, Vector3.up, 1);
-        public static Circle3 unitYZ => new Circle3(Vector3.zero, Vector3.left, 1);
 
         public Circle3(float radius) : this(Vector3.zero, Vector3.back, radius)
         {
@@ -42,26 +29,52 @@ namespace ProceduralToolkit
         }
 
         /// <summary>
-        /// Linearly interpolates between two circles
+        ///     Returns the perimeter of the circle
+        /// </summary>
+        public float perimeter => 2 * Mathf.PI * radius;
+
+        /// <summary>
+        ///     Returns the area of the circle
+        /// </summary>
+        public float area => Mathf.PI * radius * radius;
+
+        public static Circle3 unitXY => new Circle3(Vector3.zero, Vector3.back, 1);
+        public static Circle3 unitXZ => new Circle3(Vector3.zero, Vector3.up, 1);
+        public static Circle3 unitYZ => new Circle3(Vector3.zero, Vector3.left, 1);
+
+        public bool Equals(Circle3 other)
+        {
+            return center.Equals(other.center) && normal.Equals(other.normal) && radius.Equals(other.radius);
+        }
+
+        public string ToString(string format, IFormatProvider formatProvider)
+        {
+            return string.Format("Circle3(center: {0}, normal: {1}, radius: {2})",
+                center.ToString(format, formatProvider), normal.ToString(format, formatProvider),
+                radius.ToString(format, formatProvider));
+        }
+
+        /// <summary>
+        ///     Linearly interpolates between two circles
         /// </summary>
         public static Circle3 Lerp(Circle3 a, Circle3 b, float t)
         {
             t = Mathf.Clamp01(t);
             return new Circle3(
-                center: a.center + (b.center - a.center)*t,
-                normal: Vector3.LerpUnclamped(a.normal, b.normal, t),
-                radius: a.radius + (b.radius - a.radius)*t);
+                a.center + (b.center - a.center) * t,
+                Vector3.LerpUnclamped(a.normal, b.normal, t),
+                a.radius + (b.radius - a.radius) * t);
         }
 
         /// <summary>
-        /// Linearly interpolates between two circles without clamping the interpolant
+        ///     Linearly interpolates between two circles without clamping the interpolant
         /// </summary>
         public static Circle3 LerpUnclamped(Circle3 a, Circle3 b, float t)
         {
             return new Circle3(
-                center: a.center + (b.center - a.center)*t,
-                normal: Vector3.LerpUnclamped(a.normal, b.normal, t),
-                radius: a.radius + (b.radius - a.radius)*t);
+                a.center + (b.center - a.center) * t,
+                Vector3.LerpUnclamped(a.normal, b.normal, t),
+                a.radius + (b.radius - a.radius) * t);
         }
 
         public static explicit operator Sphere(Circle3 circle)
@@ -71,7 +84,7 @@ namespace ProceduralToolkit
 
         public static explicit operator Circle2(Circle3 circle)
         {
-            return new Circle2((Vector2) circle.center, circle.radius);
+            return new Circle2(circle.center, circle.radius);
         }
 
         public static Circle3 operator +(Circle3 circle, Vector3 vector)
@@ -104,11 +117,6 @@ namespace ProceduralToolkit
             return other is Circle3 && Equals((Circle3) other);
         }
 
-        public bool Equals(Circle3 other)
-        {
-            return center.Equals(other.center) && normal.Equals(other.normal) && radius.Equals(other.radius);
-        }
-
         public override string ToString()
         {
             return string.Format("Circle3(center: {0}, normal: {1}, radius: {2})", center, normal, radius);
@@ -118,12 +126,6 @@ namespace ProceduralToolkit
         {
             return string.Format("Circle3(center: {0}, normal: {1}, radius: {2})",
                 center.ToString(format), normal.ToString(format), radius.ToString(format));
-        }
-
-        public string ToString(string format, IFormatProvider formatProvider)
-        {
-            return string.Format("Circle3(center: {0}, normal: {1}, radius: {2})",
-                center.ToString(format, formatProvider), normal.ToString(format, formatProvider), radius.ToString(format, formatProvider));
         }
     }
 }

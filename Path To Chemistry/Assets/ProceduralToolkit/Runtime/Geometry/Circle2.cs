@@ -5,24 +5,13 @@ using UnityEngine;
 namespace ProceduralToolkit
 {
     /// <summary>
-    /// Representation of a 2D circle
+    ///     Representation of a 2D circle
     /// </summary>
     [Serializable]
     public struct Circle2 : IEquatable<Circle2>, IFormattable
     {
         public Vector2 center;
         public float radius;
-
-        /// <summary>
-        /// Returns the perimeter of the circle
-        /// </summary>
-        public float perimeter => 2*Mathf.PI*radius;
-        /// <summary>
-        /// Returns the area of the circle
-        /// </summary>
-        public float area => Mathf.PI*radius*radius;
-
-        public static Circle2 unit => new Circle2(Vector2.zero, 1);
 
         public Circle2(float radius) : this(Vector2.zero, radius)
         {
@@ -35,7 +24,30 @@ namespace ProceduralToolkit
         }
 
         /// <summary>
-        /// Returns a point on the circle at the given <paramref name="angle"/>
+        ///     Returns the perimeter of the circle
+        /// </summary>
+        public float perimeter => 2 * Mathf.PI * radius;
+
+        /// <summary>
+        ///     Returns the area of the circle
+        /// </summary>
+        public float area => Mathf.PI * radius * radius;
+
+        public static Circle2 unit => new Circle2(Vector2.zero, 1);
+
+        public bool Equals(Circle2 other)
+        {
+            return center.Equals(other.center) && radius.Equals(other.radius);
+        }
+
+        public string ToString(string format, IFormatProvider formatProvider)
+        {
+            return string.Format("Circle2(center: {0}, radius: {1})", center.ToString(format, formatProvider),
+                radius.ToString(format, formatProvider));
+        }
+
+        /// <summary>
+        ///     Returns a point on the circle at the given <paramref name="angle" />
         /// </summary>
         /// <param name="angle">Angle in degrees</param>
         public Vector2 GetPoint(float angle)
@@ -44,7 +56,7 @@ namespace ProceduralToolkit
         }
 
         /// <summary>
-        /// Returns a list of evenly distributed points on the circle
+        ///     Returns a list of evenly distributed points on the circle
         /// </summary>
         /// <param name="count">Number of points</param>
         public List<Vector2> GetPoints(int count)
@@ -53,7 +65,7 @@ namespace ProceduralToolkit
         }
 
         /// <summary>
-        /// Returns true if the point intersects the circle
+        ///     Returns true if the point intersects the circle
         /// </summary>
         public bool Contains(Vector2 point)
         {
@@ -61,30 +73,30 @@ namespace ProceduralToolkit
         }
 
         /// <summary>
-        /// Linearly interpolates between two circles
+        ///     Linearly interpolates between two circles
         /// </summary>
         public static Circle2 Lerp(Circle2 a, Circle2 b, float t)
         {
             t = Mathf.Clamp01(t);
-            return new Circle2(a.center + (b.center - a.center)*t, a.radius + (b.radius - a.radius)*t);
+            return new Circle2(a.center + (b.center - a.center) * t, a.radius + (b.radius - a.radius) * t);
         }
 
         /// <summary>
-        /// Linearly interpolates between two circles without clamping the interpolant
+        ///     Linearly interpolates between two circles without clamping the interpolant
         /// </summary>
         public static Circle2 LerpUnclamped(Circle2 a, Circle2 b, float t)
         {
-            return new Circle2(a.center + (b.center - a.center)*t, a.radius + (b.radius - a.radius)*t);
+            return new Circle2(a.center + (b.center - a.center) * t, a.radius + (b.radius - a.radius) * t);
         }
 
         public static explicit operator Sphere(Circle2 circle)
         {
-            return new Sphere((Vector3) circle.center, circle.radius);
+            return new Sphere(circle.center, circle.radius);
         }
 
         public static explicit operator Circle3(Circle2 circle)
         {
-            return new Circle3((Vector3) circle.center, Vector3.back, circle.radius);
+            return new Circle3(circle.center, Vector3.back, circle.radius);
         }
 
         public static Circle2 operator +(Circle2 circle, Vector2 vector)
@@ -117,11 +129,6 @@ namespace ProceduralToolkit
             return other is Circle2 && Equals((Circle2) other);
         }
 
-        public bool Equals(Circle2 other)
-        {
-            return center.Equals(other.center) && radius.Equals(other.radius);
-        }
-
         public override string ToString()
         {
             return string.Format("Circle2(center: {0}, radius: {1})", center, radius);
@@ -130,12 +137,6 @@ namespace ProceduralToolkit
         public string ToString(string format)
         {
             return string.Format("Circle2(center: {0}, radius: {1})", center.ToString(format), radius.ToString(format));
-        }
-
-        public string ToString(string format, IFormatProvider formatProvider)
-        {
-            return string.Format("Circle2(center: {0}, radius: {1})", center.ToString(format, formatProvider),
-                radius.ToString(format, formatProvider));
         }
     }
 }

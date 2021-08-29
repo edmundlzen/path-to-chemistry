@@ -31,22 +31,22 @@
 ** LibTessDotNet: Remi Gillig, https://github.com/speps/LibTessDotNet
 */
 
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-
 #if DOUBLE
 using Real = System.Double;
 namespace ProceduralToolkit.LibTessDotNet.Double
 #else
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using Real = System.Single;
+
 namespace ProceduralToolkit.LibTessDotNet
 #endif
 {
     /// <summary>
-    /// The winding rule determines how the different contours are combined together.
-    /// See OpenGL Programming Guide (section "Winding Numbers and Winding Rules") for description of the winding rules.
-    /// http://www.glprogramming.com/red/chapter11.html
+    ///     The winding rule determines how the different contours are combined together.
+    ///     See OpenGL Programming Guide (section "Winding Numbers and Winding Rules") for description of the winding rules.
+    ///     http://www.glprogramming.com/red/chapter11.html
     /// </summary>
     public enum WindingRule
     {
@@ -58,25 +58,29 @@ namespace ProceduralToolkit.LibTessDotNet
     }
 
     /// <summary>
-    /// The element type determines the contents of <see cref="Tess.Elements"/>.
+    ///     The element type determines the contents of <see cref="Tess.Elements" />.
     /// </summary>
     public enum ElementType
     {
         /// <summary>
-        /// Each element in <see cref="Tess.Elements"/> is a polygon defined as 'polySize' number of vertex indices.
-        /// If a polygon has less than 'polySize' vertices, the remaining indices are stored as <see cref="Tess.Undef"/>.
+        ///     Each element in <see cref="Tess.Elements" /> is a polygon defined as 'polySize' number of vertex indices.
+        ///     If a polygon has less than 'polySize' vertices, the remaining indices are stored as <see cref="Tess.Undef" />.
         /// </summary>
         Polygons,
+
         /// <summary>
-        /// Each element in <see cref="Tess.Elements"/> is polygon defined as 'polySize' number of vertex indices,
-        /// followed by 'polySize' indices to neighbour polygons, that is each element is 'polySize' * 2 indices.
-        /// If a polygon has less than 'polySize' vertices, the remaining indices are stored as <see cref="Tess.Undef"/>.
-        /// If a polygon edge is a boundary, that is, not connected to another polygon, the neighbour index is <see cref="Tess.Undef"/>.
+        ///     Each element in <see cref="Tess.Elements" /> is polygon defined as 'polySize' number of vertex indices,
+        ///     followed by 'polySize' indices to neighbour polygons, that is each element is 'polySize' * 2 indices.
+        ///     If a polygon has less than 'polySize' vertices, the remaining indices are stored as <see cref="Tess.Undef" />.
+        ///     If a polygon edge is a boundary, that is, not connected to another polygon, the neighbour index is
+        ///     <see cref="Tess.Undef" />.
         /// </summary>
         ConnectedPolygons,
+
         /// <summary>
-        /// Each element in <see cref="Tess.Elements"/> is [base index, count] pair defining a range of vertices for a contour.
-        /// The first value is index to first vertex in contour and the second value is number of vertices in the contour.
+        ///     Each element in <see cref="Tess.Elements" /> is [base index, count] pair defining a range of vertices for a
+        ///     contour.
+        ///     The first value is index to first vertex in contour and the second value is number of vertices in the contour.
         /// </summary>
         BoundaryContours
     }
@@ -105,36 +109,32 @@ namespace ProceduralToolkit.LibTessDotNet
         }
     }
 
-    public delegate object CombineCallback(Vec3 position, object[] data, Real[] weights);
+    public delegate object CombineCallback(Vec3 position, object[] data, float[] weights);
 
     /// <summary>
-    /// The main tessellation class
+    ///     The main tessellation class
     /// </summary>
     /// <example>
-    /// Create a new Tess instance:
-    /// var tess = new Tess();
-    /// 
-    /// Add a contour:
-    /// tess.AddContour(contour);
-    /// 
-    /// Tessellate!
-    /// tess.Tessellate();
-    /// 
-    /// Use the tessellated mesh:
-    /// Vec3 v0 = tess.Vertices[tess.Elements[0]].Position;
-    /// Vec3 v1 = tess.Vertices[tess.Elements[1]].Position;
-    /// Vec3 v2 = tess.Vertices[tess.Elements[2]].Position;
-    /// Console.WriteLine("Triangle: ({0}) ({1}) ({2})", v0, v1, v2);
+    ///     Create a new Tess instance:
+    ///     var tess = new Tess();
+    ///     Add a contour:
+    ///     tess.AddContour(contour);
+    ///     Tessellate!
+    ///     tess.Tessellate();
+    ///     Use the tessellated mesh:
+    ///     Vec3 v0 = tess.Vertices[tess.Elements[0]].Position;
+    ///     Vec3 v1 = tess.Vertices[tess.Elements[1]].Position;
+    ///     Vec3 v2 = tess.Vertices[tess.Elements[2]].Position;
+    ///     Console.WriteLine("Triangle: ({0}) ({1}) ({2})", v0, v1, v2);
     /// </example>
     public partial class Tess
     {
-        private IPool _pool;
+        private readonly IPool _pool;
         private Mesh _mesh;
-        private Vec3 _normal;
         private Vec3 _sUnit;
         private Vec3 _tUnit;
 
-        private Real _bminX, _bminY, _bmaxX, _bmaxY;
+        private float _bminX, _bminY, _bmaxX, _bmaxY;
 
         private WindingRule _windingRule;
 
@@ -144,59 +144,55 @@ namespace ProceduralToolkit.LibTessDotNet
 
         private CombineCallback _combineCallback;
 
-        private ContourVertex[] _vertices;
-        private int _vertexCount;
-        private int[] _elements;
-        private int _elementCount;
-
         /// <summary>
-        /// The value used to fill indices of incomplete polygons 
-        /// and to mark boundary edges in <see cref="ElementType.ConnectedPolygons"/> mode.
+        ///     The value used to fill indices of incomplete polygons
+        ///     and to mark boundary edges in <see cref="ElementType.ConnectedPolygons" /> mode.
         /// </summary>
         public const int Undef = ~0;
 
         /// <summary>
-        /// Normal of the tessellated mesh.
+        ///     Normal of the tessellated mesh.
         /// </summary>
-        public Vec3 Normal { get { return _normal; } set { _normal = value; } }
+        public Vec3 Normal { get; set; }
 
-        public Real SUnitX = 1;
-        public Real SUnitY = 0;
+        public float SUnitX = 1;
+        public float SUnitY = 0;
 #if DOUBLE
         public Real SentinelCoord = 4e150;
 #else
-        public Real SentinelCoord = 4e30f;
+        public float SentinelCoord = 4e30f;
 #endif
 
         /// <summary>
-        /// If true, will remove empty (zero area) polygons.
+        ///     If true, will remove empty (zero area) polygons.
         /// </summary>
         public bool NoEmptyPolygons = false;
 
         /// <summary>
-        /// OBSOLETE: use the IPool constructor to disable pooling by passing null.
-        /// If true, will use pooling to reduce GC (compare performance with/without, can vary wildly).
+        ///     OBSOLETE: use the IPool constructor to disable pooling by passing null.
+        ///     If true, will use pooling to reduce GC (compare performance with/without, can vary wildly).
         /// </summary>
-        [Obsolete]
-        public bool UsePooling = true;
+        [Obsolete] public bool UsePooling = true;
 
         /// <summary>
-        /// Vertices of the tessellated mesh.
+        ///     Vertices of the tessellated mesh.
         /// </summary>
-        public ContourVertex[] Vertices { get { return _vertices; } }
-        /// <summary>
-        /// Number of vertices in the tessellated mesh.
-        /// </summary>
-        public int VertexCount { get { return _vertexCount; } }
+        public ContourVertex[] Vertices { get; private set; }
 
         /// <summary>
-        /// Indices of the tessellated mesh. See <see cref="ElementType"/> for details on data layout.
+        ///     Number of vertices in the tessellated mesh.
         /// </summary>
-        public int[] Elements { get { return _elements; } }
+        public int VertexCount { get; private set; }
+
         /// <summary>
-        /// Number of elements in the tessellated mesh.
+        ///     Indices of the tessellated mesh. See <see cref="ElementType" /> for details on data layout.
         /// </summary>
-        public int ElementCount { get { return _elementCount; } }
+        public int[] Elements { get; private set; }
+
+        /// <summary>
+        ///     Number of elements in the tessellated mesh.
+        /// </summary>
+        public int ElementCount { get; private set; }
 
         public Tess()
             : this(new DefaultPool())
@@ -205,47 +201,73 @@ namespace ProceduralToolkit.LibTessDotNet
 
         public Tess(IPool pool)
         {
-            _normal = Vec3.Zero;
+            Normal = Vec3.Zero;
             _bminX = _bminY = _bmaxX = _bmaxY = 0;
 
             _windingRule = WindingRule.EvenOdd;
             _pool = pool;
-            if (_pool == null)
-            {
-                _pool = new NullPool();
-            }
+            if (_pool == null) _pool = new NullPool();
             _mesh = null;
 
-            _vertices = null;
-            _vertexCount = 0;
-            _elements = null;
-            _elementCount = 0;
+            Vertices = null;
+            VertexCount = 0;
+            Elements = null;
+            ElementCount = 0;
         }
 
         private void ComputeNormal(ref Vec3 norm)
         {
             var v = _mesh._vHead._next;
 
-            var minVal = new Real[3] { v._coords.X, v._coords.Y, v._coords.Z };
-            var minVert = new MeshUtils.Vertex[3] { v, v, v };
-            var maxVal = new Real[3] { v._coords.X, v._coords.Y, v._coords.Z };
-            var maxVert = new MeshUtils.Vertex[3] { v, v, v };
+            var minVal = new float[3] {v._coords.X, v._coords.Y, v._coords.Z};
+            var minVert = new MeshUtils.Vertex[3] {v, v, v};
+            var maxVal = new float[3] {v._coords.X, v._coords.Y, v._coords.Z};
+            var maxVert = new MeshUtils.Vertex[3] {v, v, v};
 
             for (; v != _mesh._vHead; v = v._next)
             {
-                if (v._coords.X < minVal[0]) { minVal[0] = v._coords.X; minVert[0] = v; }
-                if (v._coords.Y < minVal[1]) { minVal[1] = v._coords.Y; minVert[1] = v; }
-                if (v._coords.Z < minVal[2]) { minVal[2] = v._coords.Z; minVert[2] = v; }
-                if (v._coords.X > maxVal[0]) { maxVal[0] = v._coords.X; maxVert[0] = v; }
-                if (v._coords.Y > maxVal[1]) { maxVal[1] = v._coords.Y; maxVert[1] = v; }
-                if (v._coords.Z > maxVal[2]) { maxVal[2] = v._coords.Z; maxVert[2] = v; }
+                if (v._coords.X < minVal[0])
+                {
+                    minVal[0] = v._coords.X;
+                    minVert[0] = v;
+                }
+
+                if (v._coords.Y < minVal[1])
+                {
+                    minVal[1] = v._coords.Y;
+                    minVert[1] = v;
+                }
+
+                if (v._coords.Z < minVal[2])
+                {
+                    minVal[2] = v._coords.Z;
+                    minVert[2] = v;
+                }
+
+                if (v._coords.X > maxVal[0])
+                {
+                    maxVal[0] = v._coords.X;
+                    maxVert[0] = v;
+                }
+
+                if (v._coords.Y > maxVal[1])
+                {
+                    maxVal[1] = v._coords.Y;
+                    maxVert[1] = v;
+                }
+
+                if (v._coords.Z > maxVal[2])
+                {
+                    maxVal[2] = v._coords.Z;
+                    maxVert[2] = v;
+                }
             }
 
             // Find two vertices separated by at least 1/sqrt(3) of the maximum
             // distance between any two vertices
-            int i = 0;
-            if (maxVal[1] - minVal[1] > maxVal[0] - minVal[0]) { i = 1; }
-            if (maxVal[2] - minVal[2] > maxVal[i] - minVal[i]) { i = 2; }
+            var i = 0;
+            if (maxVal[1] - minVal[1] > maxVal[0] - minVal[0]) i = 1;
+            if (maxVal[2] - minVal[2] > maxVal[i] - minVal[i]) i = 2;
             if (minVal[i] >= maxVal[i])
             {
                 // All vertices are the same -- normal doesn't matter
@@ -255,7 +277,7 @@ namespace ProceduralToolkit.LibTessDotNet
 
             // Look for a third vertex which forms the triangle with maximum area
             // (Length of normal == twice the triangle area)
-            Real maxLen2 = 0, tLen2;
+            float maxLen2 = 0, tLen2;
             var v1 = minVert[i];
             var v2 = maxVert[i];
             Vec3 d1, d2, tNorm;
@@ -266,7 +288,7 @@ namespace ProceduralToolkit.LibTessDotNet
                 tNorm.X = d1.Y * d2.Z - d1.Z * d2.Y;
                 tNorm.Y = d1.Z * d2.X - d1.X * d2.Z;
                 tNorm.Z = d1.X * d2.Y - d1.Y * d2.X;
-                tLen2 = tNorm.X*tNorm.X + tNorm.Y*tNorm.Y + tNorm.Z*tNorm.Z;
+                tLen2 = tNorm.X * tNorm.X + tNorm.Y * tNorm.Y + tNorm.Z * tNorm.Z;
                 if (tLen2 > maxLen2)
                 {
                     maxLen2 = tLen2;
@@ -287,39 +309,34 @@ namespace ProceduralToolkit.LibTessDotNet
         {
             // When we compute the normal automatically, we choose the orientation
             // so that the sum of the signed areas of all contours is non-negative.
-            Real area = 0.0f;
+            var area = 0.0f;
             for (var f = _mesh._fHead._next; f != _mesh._fHead; f = f._next)
             {
-                if (f._anEdge._winding <= 0)
-                {
-                    continue;
-                }
+                if (f._anEdge._winding <= 0) continue;
                 area += MeshUtils.FaceArea(f);
             }
+
             if (area < 0.0f)
             {
                 // Reverse the orientation by flipping all the t-coordinates
-                for (var v = _mesh._vHead._next; v != _mesh._vHead; v = v._next)
-                {
-                    v._t = -v._t;
-                }
+                for (var v = _mesh._vHead._next; v != _mesh._vHead; v = v._next) v._t = -v._t;
                 Vec3.Neg(ref _tUnit);
             }
         }
 
         private void ProjectPolygon()
         {
-            var norm = _normal;
+            var norm = Normal;
 
-            bool computedNormal = false;
+            var computedNormal = false;
             if (norm.X == 0.0f && norm.Y == 0.0f && norm.Z == 0.0f)
             {
                 ComputeNormal(ref norm);
-                _normal = norm;
+                Normal = norm;
                 computedNormal = true;
             }
 
-            int i = Vec3.LongAxis(ref norm);
+            var i = Vec3.LongAxis(ref norm);
 
             _sUnit[i] = 0;
             _sUnit[(i + 1) % 3] = SUnitX;
@@ -335,15 +352,12 @@ namespace ProceduralToolkit.LibTessDotNet
                 Vec3.Dot(ref v._coords, ref _sUnit, out v._s);
                 Vec3.Dot(ref v._coords, ref _tUnit, out v._t);
             }
-            if (computedNormal)
-            {
-                CheckOrientation();
-            }
+
+            if (computedNormal) CheckOrientation();
 
             // Compute ST bounds.
-            bool first = true;
+            var first = true;
             for (var v = _mesh._vHead._next; v != _mesh._vHead; v = v._next)
-            {
                 if (first)
                 {
                     _bminX = _bmaxX = v._s;
@@ -357,36 +371,31 @@ namespace ProceduralToolkit.LibTessDotNet
                     if (v._t < _bminY) _bminY = v._t;
                     if (v._t > _bmaxY) _bmaxY = v._t;
                 }
-            }
         }
 
         /// <summary>
-        /// TessellateMonoRegion( face ) tessellates a monotone region
-        /// (what else would it do??)  The region must consist of a single
-        /// loop of half-edges (see mesh.h) oriented CCW.  "Monotone" in this
-        /// case means that any vertical line intersects the interior of the
-        /// region in a single interval.  
-        /// 
-        /// Tessellation consists of adding interior edges (actually pairs of
-        /// half-edges), to split the region into non-overlapping triangles.
-        /// 
-        /// The basic idea is explained in Preparata and Shamos (which I don't
-        /// have handy right now), although their implementation is more
-        /// complicated than this one.  The are two edge chains, an upper chain
-        /// and a lower chain.  We process all vertices from both chains in order,
-        /// from right to left.
-        /// 
-        /// The algorithm ensures that the following invariant holds after each
-        /// vertex is processed: the untessellated region consists of two
-        /// chains, where one chain (say the upper) is a single edge, and
-        /// the other chain is concave.  The left vertex of the single edge
-        /// is always to the left of all vertices in the concave chain.
-        /// 
-        /// Each step consists of adding the rightmost unprocessed vertex to one
-        /// of the two chains, and forming a fan of triangles from the rightmost
-        /// of two chain endpoints.  Determining whether we can add each triangle
-        /// to the fan is a simple orientation test.  By making the fan as large
-        /// as possible, we restore the invariant (check it yourself).
+        ///     TessellateMonoRegion( face ) tessellates a monotone region
+        ///     (what else would it do??)  The region must consist of a single
+        ///     loop of half-edges (see mesh.h) oriented CCW.  "Monotone" in this
+        ///     case means that any vertical line intersects the interior of the
+        ///     region in a single interval.
+        ///     Tessellation consists of adding interior edges (actually pairs of
+        ///     half-edges), to split the region into non-overlapping triangles.
+        ///     The basic idea is explained in Preparata and Shamos (which I don't
+        ///     have handy right now), although their implementation is more
+        ///     complicated than this one.  The are two edge chains, an upper chain
+        ///     and a lower chain.  We process all vertices from both chains in order,
+        ///     from right to left.
+        ///     The algorithm ensures that the following invariant holds after each
+        ///     vertex is processed: the untessellated region consists of two
+        ///     chains, where one chain (say the upper) is a single edge, and
+        ///     the other chain is concave.  The left vertex of the single edge
+        ///     is always to the left of all vertices in the concave chain.
+        ///     Each step consists of adding the rightmost unprocessed vertex to one
+        ///     of the two chains, and forming a fan of triangles from the rightmost
+        ///     of two chain endpoints.  Determining whether we can add each triangle
+        ///     to the fan is a simple orientation test.  By making the fan as large
+        ///     as possible, we restore the invariant (check it yourself).
         /// </summary>
         private void TessellateMonoRegion(MeshUtils.Face face)
         {
@@ -403,44 +412,35 @@ namespace ProceduralToolkit.LibTessDotNet
             var lo = up._Lprev;
 
             while (up._Lnext != lo)
-            {
                 if (Geom.VertLeq(up._Dst, lo._Org))
                 {
                     // up.Dst is on the left. It is safe to form triangles from lo.Org.
                     // The EdgeGoesLeft test guarantees progress even when some triangles
                     // are CW, given that the upper and lower chains are truly monotone.
                     while (lo._Lnext != up && (Geom.EdgeGoesLeft(lo._Lnext)
-                        || Geom.EdgeSign(lo._Org, lo._Dst, lo._Lnext._Dst) <= 0.0f))
-                    {
+                                               || Geom.EdgeSign(lo._Org, lo._Dst, lo._Lnext._Dst) <= 0.0f))
                         lo = _mesh.Connect(_pool, lo._Lnext, lo)._Sym;
-                    }
                     lo = lo._Lprev;
                 }
                 else
                 {
                     // lo.Org is on the left.  We can make CCW triangles from up.Dst.
                     while (lo._Lnext != up && (Geom.EdgeGoesRight(up._Lprev)
-                        || Geom.EdgeSign(up._Dst, up._Org, up._Lprev._Org) >= 0.0f))
-                    {
+                                               || Geom.EdgeSign(up._Dst, up._Org, up._Lprev._Org) >= 0.0f))
                         up = _mesh.Connect(_pool, up, up._Lprev)._Sym;
-                    }
                     up = up._Lnext;
                 }
-            }
 
             // Now lo.Org == up.Dst == the leftmost vertex.  The remaining region
             // can be tessellated in a fan from this leftmost vertex.
             Debug.Assert(lo._Lnext != up);
-            while (lo._Lnext._Lnext != up)
-            {
-                lo = _mesh.Connect(_pool, lo._Lnext, lo)._Sym;
-            }
+            while (lo._Lnext._Lnext != up) lo = _mesh.Connect(_pool, lo._Lnext, lo)._Sym;
         }
 
         /// <summary>
-        /// TessellateInterior( mesh ) tessellates each region of
-        /// the mesh which is marked "inside" the polygon. Each such region
-        /// must be monotone.
+        ///     TessellateInterior( mesh ) tessellates each region of
+        ///     the mesh which is marked "inside" the polygon. Each such region
+        ///     must be monotone.
         /// </summary>
         private void TessellateInterior()
         {
@@ -449,18 +449,15 @@ namespace ProceduralToolkit.LibTessDotNet
             {
                 // Make sure we don't try to tessellate the new triangles.
                 next = f._next;
-                if (f._inside)
-                {
-                    TessellateMonoRegion(f);
-                }
+                if (f._inside) TessellateMonoRegion(f);
             }
         }
 
         /// <summary>
-        /// DiscardExterior zaps (ie. sets to null) all faces
-        /// which are not marked "inside" the polygon.  Since further mesh operations
-        /// on NULL faces are not allowed, the main purpose is to clean up the
-        /// mesh so that exterior loops are not represented in the data structure.
+        ///     DiscardExterior zaps (ie. sets to null) all faces
+        ///     which are not marked "inside" the polygon.  Since further mesh operations
+        ///     on NULL faces are not allowed, the main purpose is to clean up the
+        ///     mesh so that exterior loops are not represented in the data structure.
         /// </summary>
         private void DiscardExterior()
         {
@@ -470,20 +467,17 @@ namespace ProceduralToolkit.LibTessDotNet
             {
                 // Since f will be destroyed, save its next pointer.
                 next = f._next;
-                if( ! f._inside ) {
-                    _mesh.ZapFace(_pool, f);
-                }
+                if (!f._inside) _mesh.ZapFace(_pool, f);
             }
         }
 
         /// <summary>
-        /// SetWindingNumber( value, keepOnlyBoundary ) resets the
-        /// winding numbers on all edges so that regions marked "inside" the
-        /// polygon have a winding number of "value", and regions outside
-        /// have a winding number of 0.
-        /// 
-        /// If keepOnlyBoundary is TRUE, it also deletes all edges which do not
-        /// separate an interior region from an exterior one.
+        ///     SetWindingNumber( value, keepOnlyBoundary ) resets the
+        ///     winding numbers on all edges so that regions marked "inside" the
+        ///     polygon have a winding number of "value", and regions outside
+        ///     have a winding number of 0.
+        ///     If keepOnlyBoundary is TRUE, it also deletes all edges which do not
+        ///     separate an interior region from an exterior one.
         /// </summary>
         private void SetWindingNumber(int value, bool keepOnlyBoundary)
         {
@@ -494,25 +488,18 @@ namespace ProceduralToolkit.LibTessDotNet
                 eNext = e._next;
                 if (e._Rface._inside != e._Lface._inside)
                 {
-
                     /* This is a boundary edge (one side is interior, one is exterior). */
-                    e._winding = (e._Lface._inside) ? value : -value;
+                    e._winding = e._Lface._inside ? value : -value;
                 }
                 else
                 {
-
                     /* Both regions are interior, or both are exterior. */
                     if (!keepOnlyBoundary)
-                    {
                         e._winding = 0;
-                    }
                     else
-                    {
                         _mesh.Delete(_pool, e);
-                    }
                 }
             }
-
         }
 
         private int GetNeighbourFace(MeshUtils.Edge edge)
@@ -529,20 +516,14 @@ namespace ProceduralToolkit.LibTessDotNet
             MeshUtils.Vertex v;
             MeshUtils.Face f;
             MeshUtils.Edge edge;
-            int maxFaceCount = 0;
-            int maxVertexCount = 0;
+            var maxFaceCount = 0;
+            var maxVertexCount = 0;
             int faceVerts, i;
 
-            if (polySize < 3)
-            {
-                polySize = 3;
-            }
+            if (polySize < 3) polySize = 3;
             // Assume that the input data is triangles now.
             // Try to merge as many polygons as possible
-            if (polySize > 3)
-            {
-                _mesh.MergeConvexFaces(_pool, polySize);
-            }
+            if (polySize > 3) _mesh.MergeConvexFaces(_pool, polySize);
 
             // Mark unused
             for (v = _mesh._vHead._next; v != _mesh._vHead; v = v._next)
@@ -557,25 +538,23 @@ namespace ProceduralToolkit.LibTessDotNet
                 if (NoEmptyPolygons)
                 {
                     var area = MeshUtils.FaceArea(f);
-                    if (Math.Abs(area) < Real.Epsilon)
-                    {
-                        continue;
-                    }
+                    if (Math.Abs(area) < float.Epsilon) continue;
                 }
 
                 edge = f._anEdge;
                 faceVerts = 0;
-                do {
+                do
+                {
                     v = edge._Org;
                     if (v._n == Undef)
                     {
                         v._n = maxVertexCount;
                         maxVertexCount++;
                     }
+
                     faceVerts++;
                     edge = edge._Lnext;
-                }
-                while (edge != f._anEdge);
+                } while (edge != f._anEdge);
 
                 Debug.Assert(faceVerts <= polySize);
 
@@ -583,27 +562,25 @@ namespace ProceduralToolkit.LibTessDotNet
                 ++maxFaceCount;
             }
 
-            _elementCount = maxFaceCount;
+            ElementCount = maxFaceCount;
             if (elementType == ElementType.ConnectedPolygons)
                 maxFaceCount *= 2;
-            _elements = new int[maxFaceCount * polySize];
+            Elements = new int[maxFaceCount * polySize];
 
-            _vertexCount = maxVertexCount;
-            _vertices = new ContourVertex[_vertexCount];
+            VertexCount = maxVertexCount;
+            Vertices = new ContourVertex[VertexCount];
 
             // Output vertices.
             for (v = _mesh._vHead._next; v != _mesh._vHead; v = v._next)
-            {
                 if (v._n != Undef)
                 {
                     // Store coordinate
-                    _vertices[v._n].Position = v._coords;
-                    _vertices[v._n].Data = v._data;
+                    Vertices[v._n].Position = v._coords;
+                    Vertices[v._n].Data = v._data;
                 }
-            }
 
             // Output indices.
-            int elementIndex = 0;
+            var elementIndex = 0;
             for (f = _mesh._fHead._next; f != _mesh._fHead; f = f._next)
             {
                 if (!f._inside) continue;
@@ -611,26 +588,22 @@ namespace ProceduralToolkit.LibTessDotNet
                 if (NoEmptyPolygons)
                 {
                     var area = MeshUtils.FaceArea(f);
-                    if (Math.Abs(area) < Real.Epsilon)
-                    {
-                        continue;
-                    }
+                    if (Math.Abs(area) < float.Epsilon) continue;
                 }
 
                 // Store polygon
                 edge = f._anEdge;
                 faceVerts = 0;
-                do {
+                do
+                {
                     v = edge._Org;
-                    _elements[elementIndex++] = v._n;
+                    Elements[elementIndex++] = v._n;
                     faceVerts++;
                     edge = edge._Lnext;
                 } while (edge != f._anEdge);
+
                 // Fill unused.
-                for (i = faceVerts; i < polySize; ++i)
-                {
-                    _elements[elementIndex++] = Undef;
-                }
+                for (i = faceVerts; i < polySize; ++i) Elements[elementIndex++] = Undef;
 
                 // Store polygon connectivity
                 if (elementType == ElementType.ConnectedPolygons)
@@ -638,14 +611,12 @@ namespace ProceduralToolkit.LibTessDotNet
                     edge = f._anEdge;
                     do
                     {
-                        _elements[elementIndex++] = GetNeighbourFace(edge);
+                        Elements[elementIndex++] = GetNeighbourFace(edge);
                         edge = edge._Lnext;
                     } while (edge != f._anEdge);
+
                     // Fill unused.
-                    for (i = faceVerts; i < polySize; ++i)
-                    {
-                        _elements[elementIndex++] = Undef;
-                    }
+                    for (i = faceVerts; i < polySize; ++i) Elements[elementIndex++] = Undef;
                 }
             }
         }
@@ -654,11 +625,11 @@ namespace ProceduralToolkit.LibTessDotNet
         {
             MeshUtils.Face f;
             MeshUtils.Edge edge, start;
-            int startVert = 0;
-            int vertCount = 0;
+            var startVert = 0;
+            var vertCount = 0;
 
-            _vertexCount = 0;
-            _elementCount = 0;
+            VertexCount = 0;
+            ElementCount = 0;
 
             for (f = _mesh._fHead._next; f != _mesh._fHead; f = f._next)
             {
@@ -667,19 +638,18 @@ namespace ProceduralToolkit.LibTessDotNet
                 start = edge = f._anEdge;
                 do
                 {
-                    ++_vertexCount;
+                    ++VertexCount;
                     edge = edge._Lnext;
-                }
-                while (edge != start);
+                } while (edge != start);
 
-                ++_elementCount;
+                ++ElementCount;
             }
 
-            _elements = new int[_elementCount * 2];
-            _vertices = new ContourVertex[_vertexCount];
+            Elements = new int[ElementCount * 2];
+            Vertices = new ContourVertex[VertexCount];
 
-            int vertIndex = 0;
-            int elementIndex = 0;
+            var vertIndex = 0;
+            var elementIndex = 0;
 
             startVert = 0;
 
@@ -689,26 +659,27 @@ namespace ProceduralToolkit.LibTessDotNet
 
                 vertCount = 0;
                 start = edge = f._anEdge;
-                do {
-                    _vertices[vertIndex].Position = edge._Org._coords;
-                    _vertices[vertIndex].Data = edge._Org._data;
+                do
+                {
+                    Vertices[vertIndex].Position = edge._Org._coords;
+                    Vertices[vertIndex].Data = edge._Org._data;
                     ++vertIndex;
                     ++vertCount;
                     edge = edge._Lnext;
                 } while (edge != start);
 
-                _elements[elementIndex++] = startVert;
-                _elements[elementIndex++] = vertCount;
+                Elements[elementIndex++] = startVert;
+                Elements[elementIndex++] = vertCount;
 
                 startVert += vertCount;
             }
         }
 
-        private Real SignedArea(IList<ContourVertex> vertices)
+        private float SignedArea(IList<ContourVertex> vertices)
         {
-            Real area = 0.0f;
+            var area = 0.0f;
 
-            for (int i = 0; i < vertices.Count; i++)
+            for (var i = 0; i < vertices.Count; i++)
             {
                 var v0 = vertices[i];
                 var v1 = vertices[(i + 1) % vertices.Count];
@@ -721,51 +692,51 @@ namespace ProceduralToolkit.LibTessDotNet
         }
 
         /// <summary>
-        /// Adds a closed contour to be tessellated.
+        ///     Adds a closed contour to be tessellated.
         /// </summary>
         /// <param name="vertices"> Vertices of the contour. </param>
         /// <param name="forceOrientation">
-        /// Orientation of the contour.
-        /// <see cref="ContourOrientation.Original"/> keeps the orientation of the input vertices.
-        /// <see cref="ContourOrientation.Clockwise"/> and <see cref="ContourOrientation.CounterClockwise"/> 
-        /// force the vertices to have a specified orientation.
+        ///     Orientation of the contour.
+        ///     <see cref="ContourOrientation.Original" /> keeps the orientation of the input vertices.
+        ///     <see cref="ContourOrientation.Clockwise" /> and <see cref="ContourOrientation.CounterClockwise" />
+        ///     force the vertices to have a specified orientation.
         /// </param>
-        public void AddContour(ContourVertex[] vertices, ContourOrientation forceOrientation = ContourOrientation.Original)
+        public void AddContour(ContourVertex[] vertices,
+            ContourOrientation forceOrientation = ContourOrientation.Original)
         {
             AddContourInternal(vertices, forceOrientation);
         }
 
         /// <summary>
-        /// Adds a closed contour to be tessellated.
+        ///     Adds a closed contour to be tessellated.
         /// </summary>
         /// <param name="vertices"> Vertices of the contour. </param>
         /// <param name="forceOrientation">
-        /// Orientation of the contour.
-        /// <see cref="ContourOrientation.Original"/> keeps the orientation of the input vertices.
-        /// <see cref="ContourOrientation.Clockwise"/> and <see cref="ContourOrientation.CounterClockwise"/> 
-        /// force the vertices to have a specified orientation.
+        ///     Orientation of the contour.
+        ///     <see cref="ContourOrientation.Original" /> keeps the orientation of the input vertices.
+        ///     <see cref="ContourOrientation.Clockwise" /> and <see cref="ContourOrientation.CounterClockwise" />
+        ///     force the vertices to have a specified orientation.
         /// </param>
-        public void AddContour(IList<ContourVertex> vertices, ContourOrientation forceOrientation = ContourOrientation.Original)
+        public void AddContour(IList<ContourVertex> vertices,
+            ContourOrientation forceOrientation = ContourOrientation.Original)
         {
             AddContourInternal(vertices, forceOrientation);
         }
 
         private void AddContourInternal(IList<ContourVertex> vertices, ContourOrientation forceOrientation)
         {
-            if (_mesh == null)
-            {
-                _mesh = _pool.Get<Mesh>();
-            }
+            if (_mesh == null) _mesh = _pool.Get<Mesh>();
 
-            bool reverse = false;
+            var reverse = false;
             if (forceOrientation != ContourOrientation.Original)
             {
                 var area = SignedArea(vertices);
-                reverse = (forceOrientation == ContourOrientation.Clockwise && area < 0.0f) || (forceOrientation == ContourOrientation.CounterClockwise && area > 0.0f);
+                reverse = forceOrientation == ContourOrientation.Clockwise && area < 0.0f ||
+                          forceOrientation == ContourOrientation.CounterClockwise && area > 0.0f;
             }
 
             MeshUtils.Edge e = null;
-            for (int i = 0; i < vertices.Count; ++i)
+            for (var i = 0; i < vertices.Count; ++i)
             {
                 if (e == null)
                 {
@@ -780,7 +751,7 @@ namespace ProceduralToolkit.LibTessDotNet
                     e = e._Lnext;
                 }
 
-                int index = reverse ? vertices.Count - 1 - i : i;
+                var index = reverse ? vertices.Count - 1 - i : i;
                 // The new vertex is now e._Org.
                 e._Org._coords = vertices[index].Position;
                 e._Org._data = vertices[index].Data;
@@ -795,27 +766,25 @@ namespace ProceduralToolkit.LibTessDotNet
         }
 
         /// <summary>
-        /// Tessellates the input contours.
+        ///     Tessellates the input contours.
         /// </summary>
-        /// <param name="windingRule"> Winding rule used for tessellation. See <see cref="WindingRule"/> for details. </param>
-        /// <param name="elementType"> Tessellation output type. See <see cref="ElementType"/> for details. </param>
+        /// <param name="windingRule"> Winding rule used for tessellation. See <see cref="WindingRule" /> for details. </param>
+        /// <param name="elementType"> Tessellation output type. See <see cref="ElementType" /> for details. </param>
         /// <param name="polySize"> Number of vertices per polygon if output is polygons. </param>
         /// <param name="combineCallback"> Interpolator used to determine the data payload of generated vertices. </param>
         /// <param name="normal"> Normal of the input contours. If set to zero, the normal will be calculated during tessellation. </param>
-        public void Tessellate(WindingRule windingRule = WindingRule.EvenOdd, ElementType elementType = ElementType.Polygons, int polySize = 3,
+        public void Tessellate(WindingRule windingRule = WindingRule.EvenOdd,
+            ElementType elementType = ElementType.Polygons, int polySize = 3,
             CombineCallback combineCallback = null, Vec3 normal = new Vec3())
         {
-            _normal = normal;
-            _vertices = null;
-            _elements = null;
+            Normal = normal;
+            Vertices = null;
+            Elements = null;
 
             _windingRule = windingRule;
             _combineCallback = combineCallback;
 
-            if (_mesh == null)
-            {
-                return;
-            }
+            if (_mesh == null) return;
 
             // Determine the polygon normal and project vertices onto the plane
             // of the polygon.
@@ -832,24 +801,16 @@ namespace ProceduralToolkit.LibTessDotNet
             // except those which separate the interior from the exterior.
             // Otherwise we tessellate all the regions marked "inside".
             if (elementType == ElementType.BoundaryContours)
-            {
                 SetWindingNumber(1, true);
-            }
             else
-            {
                 TessellateInterior();
-            }
 
             _mesh.Check();
 
             if (elementType == ElementType.BoundaryContours)
-            {
                 OutputContours();
-            }
             else
-            {
                 OutputPolymesh(elementType, polySize);
-            }
 
             _pool.Return(_mesh);
             _mesh = null;

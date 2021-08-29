@@ -6,16 +6,17 @@ using UnityEngine;
 [InitializeOnLoad]
 public class EditorGrassPainter : Editor
 {
-    GrassPainter grassPainter;
-    readonly string[] toolbarStrings = { "Add", "Remove", "Edit" };
+    private readonly string[] toolbarStrings = {"Add", "Remove", "Edit"};
 
-    readonly string[] toolbarStringsEdit = { "Edit Colors", "Edit Length/Width", "Both" };
+    private readonly string[] toolbarStringsEdit = {"Edit Colors", "Edit Length/Width", "Both"};
+    private GrassPainter grassPainter;
 
     private void OnEnable()
     {
-        grassPainter = (GrassPainter)target;
+        grassPainter = (GrassPainter) target;
     }
-    void OnSceneGUI()
+
+    private void OnSceneGUI()
     {
         //base
         Handles.color = Color.cyan;
@@ -30,6 +31,7 @@ public class EditorGrassPainter : Editor
             Handles.color = new Color(0.5f, 0f, 0f, 0.4f);
             Handles.DrawSolidDisc(grassPainter.hitPosGizmo, grassPainter.hitNormal, grassPainter.brushSize);
         }
+
         if (grassPainter.toolbarInt == 2)
         {
             Handles.color = Color.yellow;
@@ -40,7 +42,8 @@ public class EditorGrassPainter : Editor
             Handles.color = Color.yellow;
             Handles.DrawWireDisc(grassPainter.hitPosGizmo, grassPainter.hitNormal, grassPainter.brushFalloffSize);
             Handles.color = new Color(0.5f, 0.5f, 0f, 0.4f);
-            Handles.DrawSolidDisc(grassPainter.hitPosGizmo, grassPainter.hitNormal, Mathf.Clamp(grassPainter.brushFalloffSize, 0, grassPainter.brushSize));
+            Handles.DrawSolidDisc(grassPainter.hitPosGizmo, grassPainter.hitNormal,
+                Mathf.Clamp(grassPainter.brushFalloffSize, 0, grassPainter.brushSize));
         }
     }
 
@@ -49,14 +52,18 @@ public class EditorGrassPainter : Editor
         EditorGUILayout.LabelField("Grass Limit", EditorStyles.boldLabel);
 
         EditorGUILayout.BeginHorizontal();
-        EditorGUILayout.LabelField(grassPainter.i.ToString() + "/", EditorStyles.label);
+        EditorGUILayout.LabelField(grassPainter.i + "/", EditorStyles.label);
         grassPainter.grassLimit = EditorGUILayout.IntField(grassPainter.grassLimit);
         EditorGUILayout.EndHorizontal();
         EditorGUILayout.Space();
         EditorGUILayout.LabelField("Hit Settings", EditorStyles.boldLabel);
-        LayerMask tempMask = EditorGUILayout.MaskField("Hit Mask", InternalEditorUtility.LayerMaskToConcatenatedLayersMask(grassPainter.hitMask), InternalEditorUtility.layers);
+        LayerMask tempMask = EditorGUILayout.MaskField("Hit Mask",
+            InternalEditorUtility.LayerMaskToConcatenatedLayersMask(grassPainter.hitMask),
+            InternalEditorUtility.layers);
         grassPainter.hitMask = InternalEditorUtility.ConcatenatedLayersMaskToLayerMask(tempMask);
-        LayerMask tempMask2 = EditorGUILayout.MaskField("Painting Mask", InternalEditorUtility.LayerMaskToConcatenatedLayersMask(grassPainter.paintMask), InternalEditorUtility.layers);
+        LayerMask tempMask2 = EditorGUILayout.MaskField("Painting Mask",
+            InternalEditorUtility.LayerMaskToConcatenatedLayersMask(grassPainter.paintMask),
+            InternalEditorUtility.layers);
         grassPainter.paintMask = InternalEditorUtility.ConcatenatedLayersMaskToLayerMask(tempMask2);
         EditorGUILayout.Space();
         EditorGUILayout.LabelField("Paint Status (Right-Mouse Button to paint)", EditorStyles.boldLabel);
@@ -70,23 +77,21 @@ public class EditorGrassPainter : Editor
         {
             grassPainter.normalLimit = EditorGUILayout.Slider("Normal Limit", grassPainter.normalLimit, 0f, 1f);
             grassPainter.density = EditorGUILayout.Slider("Density", grassPainter.density, 0.1f, 10f);
-
         }
+
         if (grassPainter.toolbarInt == 2)
         {
             grassPainter.toolbarIntEdit = GUILayout.Toolbar(grassPainter.toolbarIntEdit, toolbarStringsEdit);
             EditorGUILayout.Space();
             EditorGUILayout.LabelField("Soft Falloff Settings", EditorStyles.boldLabel);
-            grassPainter.brushFalloffSize = EditorGUILayout.Slider("Brush Falloff Size", grassPainter.brushFalloffSize, 0.1f, 10f);
+            grassPainter.brushFalloffSize =
+                EditorGUILayout.Slider("Brush Falloff Size", grassPainter.brushFalloffSize, 0.1f, 10f);
             grassPainter.Flow = EditorGUILayout.Slider("Brush Flow", grassPainter.Flow, 1, 20f);
-
         }
 
 
         if (grassPainter.toolbarInt == 0 || grassPainter.toolbarInt == 2)
         {
-
-
             EditorGUILayout.Space();
             EditorGUILayout.LabelField("Width and Length ", EditorStyles.boldLabel);
             grassPainter.sizeWidth = EditorGUILayout.Slider("Grass Width", grassPainter.sizeWidth, 0f, 2f);
@@ -101,13 +106,8 @@ public class EditorGrassPainter : Editor
         }
 
         if (GUILayout.Button("Clear Mesh"))
-        {
             if (EditorUtility.DisplayDialog("Clear Painted Mesh?",
-               "Are you sure you want to clear the mesh?", "Clear", "Don't Clear"))
-            {
+                "Are you sure you want to clear the mesh?", "Clear", "Don't Clear"))
                 grassPainter.ClearMesh();
-            }
-        }
     }
-
 }

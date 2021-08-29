@@ -1,28 +1,23 @@
-﻿using System;
-using System.Runtime.InteropServices;
-using UnityEngine;
-using UnityEngine.Rendering;
+﻿using System.Runtime.InteropServices;
 
 namespace UnityEngine.XR.iOS
 {
+    public class UnityRemoteVideo : MonoBehaviour
+    {
+        public ConnectToEditor connectToEditor;
 
-	public class UnityRemoteVideo : MonoBehaviour
-	{
-		public ConnectToEditor connectToEditor;
+        private UnityARSessionNativeInterface m_Session;
+        private bool bTexturesInitialized;
 
-		private UnityARSessionNativeInterface m_Session;
-		private bool bTexturesInitialized;
+        private int currentFrameIndex;
+        private byte[] m_textureYBytes;
+        private byte[] m_textureUVBytes;
+        private byte[] m_textureYBytes2;
+        private byte[] m_textureUVBytes2;
+        private GCHandle m_pinnedYArray;
+        private GCHandle m_pinnedUVArray;
 
-		private int currentFrameIndex;
-		private byte[] m_textureYBytes;
-		private byte[] m_textureUVBytes;
-		private byte[] m_textureYBytes2;
-		private byte[] m_textureUVBytes2;
-		private GCHandle m_pinnedYArray;
-		private GCHandle m_pinnedUVArray;
-
-		#if !UNITY_EDITOR
-
+#if !UNITY_EDITOR
 		public void Start()
 		{
 			m_Session = UnityARSessionNativeInterface.GetARSessionNativeInterface ();
@@ -43,7 +38,8 @@ namespace UnityEngine.XR.iOS
 		void InitializeTextures(UnityARCamera camera)
 		{
 			int numYBytes = camera.videoParams.yWidth * camera.videoParams.yHeight;
-			int numUVBytes = camera.videoParams.yWidth * camera.videoParams.yHeight / 2; //quarter resolution, but two bytes per pixel
+			int numUVBytes =
+ camera.videoParams.yWidth * camera.videoParams.yHeight / 2; //quarter resolution, but two bytes per pixel
 			
 			m_textureYBytes = new byte[numYBytes];
 			m_textureUVBytes = new byte[numUVBytes];
@@ -107,6 +103,6 @@ namespace UnityEngine.XR.iOS
 			connectToEditor.SendToEditor (ConnectionMessageIds.screenCaptureUVMsgId, UVByteArrayForFrame(1-currentFrameIndex));
 			
 		}
-		#endif
-	}
+#endif
+    }
 }

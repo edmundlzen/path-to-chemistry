@@ -7,26 +7,22 @@ using UnityEngine.Rendering;
 namespace ProceduralToolkit
 {
     /// <summary>
-    /// Helper class for mesh generation supporting large meshes and submeshes
+    ///     Helper class for mesh generation supporting large meshes and submeshes
     /// </summary>
     public class CompoundMeshDraft : IEnumerable<MeshDraft>
     {
+        private readonly List<MeshDraft> meshDrafts = new List<MeshDraft>();
         public string name = "";
 
         public int vertexCount
         {
             get
             {
-                int count = 0;
-                foreach (var meshDraft in meshDrafts)
-                {
-                    count += meshDraft.vertexCount;
-                }
+                var count = 0;
+                foreach (var meshDraft in meshDrafts) count += meshDraft.vertexCount;
                 return count;
             }
         }
-
-        private readonly List<MeshDraft> meshDrafts = new List<MeshDraft>();
 
         public IEnumerator<MeshDraft> GetEnumerator()
         {
@@ -55,7 +51,7 @@ namespace ProceduralToolkit
         }
 
         /// <summary>
-        /// Clears all vertex data and all triangle indices
+        ///     Clears all vertex data and all triangle indices
         /// </summary>
         public void Clear()
         {
@@ -63,140 +59,108 @@ namespace ProceduralToolkit
         }
 
         /// <summary>
-        /// Moves draft vertices by <paramref name="vector"/>
+        ///     Moves draft vertices by <paramref name="vector" />
         /// </summary>
         public CompoundMeshDraft Move(Vector3 vector)
         {
-            foreach (var meshDraft in meshDrafts)
-            {
-                meshDraft.Move(vector);
-            }
+            foreach (var meshDraft in meshDrafts) meshDraft.Move(vector);
             return this;
         }
 
         /// <summary>
-        /// Rotates draft vertices by <paramref name="rotation"/>
+        ///     Rotates draft vertices by <paramref name="rotation" />
         /// </summary>
         public CompoundMeshDraft Rotate(Quaternion rotation)
         {
-            foreach (var meshDraft in meshDrafts)
-            {
-                meshDraft.Rotate(rotation);
-            }
+            foreach (var meshDraft in meshDrafts) meshDraft.Rotate(rotation);
             return this;
         }
 
         /// <summary>
-        /// Scales draft vertices uniformly by <paramref name="scale"/>
+        ///     Scales draft vertices uniformly by <paramref name="scale" />
         /// </summary>
         public CompoundMeshDraft Scale(float scale)
         {
-            foreach (var meshDraft in meshDrafts)
-            {
-                meshDraft.Scale(scale);
-            }
+            foreach (var meshDraft in meshDrafts) meshDraft.Scale(scale);
             return this;
         }
 
         /// <summary>
-        /// Scales draft vertices non-uniformly by <paramref name="scale"/>
+        ///     Scales draft vertices non-uniformly by <paramref name="scale" />
         /// </summary>
         public CompoundMeshDraft Scale(Vector3 scale)
         {
-            foreach (var meshDraft in meshDrafts)
-            {
-                meshDraft.Scale(scale);
-            }
+            foreach (var meshDraft in meshDrafts) meshDraft.Scale(scale);
             return this;
         }
 
         /// <summary>
-        /// Paints draft vertices with <paramref name="color"/>
+        ///     Paints draft vertices with <paramref name="color" />
         /// </summary>
         public CompoundMeshDraft Paint(Color color)
         {
-            foreach (var meshDraft in meshDrafts)
-            {
-                meshDraft.Paint(color);
-            }
+            foreach (var meshDraft in meshDrafts) meshDraft.Paint(color);
             return this;
         }
 
         /// <summary>
-        /// Flips draft faces
+        ///     Flips draft faces
         /// </summary>
         public CompoundMeshDraft FlipFaces()
         {
-            foreach (var meshDraft in meshDrafts)
-            {
-                meshDraft.FlipFaces();
-            }
+            foreach (var meshDraft in meshDrafts) meshDraft.FlipFaces();
             return this;
         }
 
         /// <summary>
-        /// Reverses the winding order of draft triangles
+        ///     Reverses the winding order of draft triangles
         /// </summary>
         public CompoundMeshDraft FlipTriangles()
         {
-            foreach (var meshDraft in meshDrafts)
-            {
-                meshDraft.FlipTriangles();
-            }
+            foreach (var meshDraft in meshDrafts) meshDraft.FlipTriangles();
             return this;
         }
 
         /// <summary>
-        /// Reverses the direction of draft normals
+        ///     Reverses the direction of draft normals
         /// </summary>
         public CompoundMeshDraft FlipNormals()
         {
-            foreach (var meshDraft in meshDrafts)
-            {
-                meshDraft.FlipNormals();
-            }
+            foreach (var meshDraft in meshDrafts) meshDraft.FlipNormals();
             return this;
         }
 
         /// <summary>
-        /// Flips the UV map horizontally in the selected <paramref name="channel"/>
+        ///     Flips the UV map horizontally in the selected <paramref name="channel" />
         /// </summary>
         public CompoundMeshDraft FlipUVHorizontally(int channel = 0)
         {
-            foreach (var meshDraft in meshDrafts)
-            {
-                meshDraft.FlipUVHorizontally(channel);
-            }
+            foreach (var meshDraft in meshDrafts) meshDraft.FlipUVHorizontally(channel);
             return this;
         }
 
         /// <summary>
-        /// Flips the UV map vertically in the selected <paramref name="channel"/>
+        ///     Flips the UV map vertically in the selected <paramref name="channel" />
         /// </summary>
         public CompoundMeshDraft FlipUVVertically(int channel = 0)
         {
-            foreach (var meshDraft in meshDrafts)
-            {
-                meshDraft.FlipUVVertically(channel);
-            }
+            foreach (var meshDraft in meshDrafts) meshDraft.FlipUVVertically(channel);
             return this;
         }
 
         /// <summary>
-        /// Projects vertices on a sphere with the given <paramref name="radius"/> and <paramref name="center"/>, recalculates normals
+        ///     Projects vertices on a sphere with the given <paramref name="radius" /> and <paramref name="center" />,
+        ///     recalculates normals
         /// </summary>
         public CompoundMeshDraft Spherify(float radius, Vector3 center = default)
         {
-            foreach (var meshDraft in meshDrafts)
-            {
-                meshDraft.Spherify(radius, center);
-            }
+            foreach (var meshDraft in meshDrafts) meshDraft.Spherify(radius, center);
             return this;
         }
 
         public void MergeDraftsWithTheSameName()
         {
-            for (int i = 0; i < meshDrafts.Count; i++)
+            for (var i = 0; i < meshDrafts.Count; i++)
             {
                 var merged = MergeDraftsWithName(meshDrafts[i].name);
                 meshDrafts.Insert(i, merged);
@@ -206,7 +170,7 @@ namespace ProceduralToolkit
         private MeshDraft MergeDraftsWithName(string draftName)
         {
             var merged = new MeshDraft {name = draftName};
-            for (int i = 0; i < meshDrafts.Count; i++)
+            for (var i = 0; i < meshDrafts.Count; i++)
             {
                 var meshDraft = meshDrafts[i];
                 if (meshDraft.name == draftName)
@@ -216,6 +180,7 @@ namespace ProceduralToolkit
                     i--;
                 }
             }
+
             return merged;
         }
 
@@ -227,15 +192,12 @@ namespace ProceduralToolkit
         public MeshDraft ToMeshDraft()
         {
             var finalDraft = new MeshDraft();
-            foreach (var meshDraft in meshDrafts)
-            {
-                finalDraft.Add(meshDraft);
-            }
+            foreach (var meshDraft in meshDrafts) finalDraft.Add(meshDraft);
             return finalDraft;
         }
 
         /// <summary>
-        /// Creates a new mesh from the data in the draft
+        ///     Creates a new mesh from the data in the draft
         /// </summary>
         /// <param name="calculateBounds"> Calculate the bounding box of the Mesh after setting the triangles. </param>
         /// <param name="autoIndexFormat"> Use 16 bit or 32 bit index buffers based on vertex count. </param>
@@ -247,24 +209,21 @@ namespace ProceduralToolkit
         }
 
         /// <summary>
-        /// Fills the <paramref name="mesh"/> with the data in the draft
+        ///     Fills the <paramref name="mesh" /> with the data in the draft
         /// </summary>
         /// <param name="mesh"> Resulting mesh. Cleared before use. </param>
         /// <param name="calculateBounds"> Calculate the bounding box of the Mesh after setting the triangles. </param>
         /// <param name="autoIndexFormat"> Use 16 bit or 32 bit index buffers based on vertex count. </param>
         public void ToMeshWithSubMeshes(ref Mesh mesh, bool calculateBounds = true, bool autoIndexFormat = true)
         {
-            if (mesh == null)
-            {
-                throw new ArgumentNullException(nameof(mesh));
-            }
+            if (mesh == null) throw new ArgumentNullException(nameof(mesh));
             mesh.Clear(false);
             FillMesh(ref mesh, calculateBounds, autoIndexFormat);
         }
 
         private void FillMesh(ref Mesh mesh, bool calculateBounds, bool autoIndexFormat)
         {
-            int vCount = vertexCount;
+            var vCount = vertexCount;
             if (vCount > 65535)
             {
                 if (autoIndexFormat)
@@ -273,7 +232,8 @@ namespace ProceduralToolkit
                 }
                 else
                 {
-                    Debug.LogError("A mesh can't have more than 65535 vertices with 16 bit index buffer. Vertex count: " + vCount);
+                    Debug.LogError(
+                        "A mesh can't have more than 65535 vertices with 16 bit index buffer. Vertex count: " + vCount);
                     mesh.indexFormat = IndexFormat.UInt16;
                 }
             }
@@ -283,26 +243,21 @@ namespace ProceduralToolkit
             }
 
             var finalDraft = new MeshDraft();
-            foreach (var meshDraft in meshDrafts)
-            {
-                finalDraft.Add(meshDraft);
-            }
+            foreach (var meshDraft in meshDrafts) finalDraft.Add(meshDraft);
 
             mesh.name = name;
             mesh.SetVertices(finalDraft.vertices);
             mesh.subMeshCount = meshDrafts.Count;
 
-            int baseVertex = 0;
-            for (int i = 0; i < meshDrafts.Count; i++)
+            var baseVertex = 0;
+            for (var i = 0; i < meshDrafts.Count; i++)
             {
                 var draft = meshDrafts[i];
                 mesh.SetTriangles(draft.triangles, i, false, baseVertex);
                 baseVertex += draft.vertexCount;
             }
-            if (calculateBounds)
-            {
-                mesh.RecalculateBounds();
-            }
+
+            if (calculateBounds) mesh.RecalculateBounds();
 
             mesh.SetNormals(finalDraft.normals);
             mesh.SetTangents(finalDraft.tangents);

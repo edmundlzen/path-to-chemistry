@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 
 namespace WoLfulus.LineEnding
 {
@@ -26,7 +25,7 @@ namespace WoLfulus.LineEnding
         DontExtractStacktrace = 262144,
         ShouldClearOnPlay = 524288,
         GraphCompileError = 1048576,
-        ScriptingAssertion = 2097152,
+        ScriptingAssertion = 2097152
     }
 
     [Flags]
@@ -41,6 +40,6 @@ namespace WoLfulus.LineEnding
         Autoscroll = 64,
         LogLevelLog = 128,
         LogLevelWarning = 256,
-        LogLevelError = 512,
+        LogLevelError = 512
     }
 }

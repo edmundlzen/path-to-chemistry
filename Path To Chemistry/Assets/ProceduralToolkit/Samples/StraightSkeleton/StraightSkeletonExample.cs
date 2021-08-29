@@ -31,13 +31,13 @@ namespace ProceduralToolkit.Skeleton
             GL.Color(Color.white);
             for (var polygonIndex = 0; polygonIndex < skeleton.polygons.Count; polygonIndex++)
             {
-                Vector3 zOffset = Vector3.back*(skeletonPolygonOffset*polygonIndex);
+                var zOffset = Vector3.back * (skeletonPolygonOffset * polygonIndex);
 
                 var skeletonPolygon = skeleton.polygons[polygonIndex];
-                for (int vertexIndex = 0; vertexIndex < skeletonPolygon.Count; vertexIndex++)
+                for (var vertexIndex = 0; vertexIndex < skeletonPolygon.Count; vertexIndex++)
                 {
-                    Vector2 current = skeletonPolygon[vertexIndex];
-                    Vector2 next = skeletonPolygon.GetLooped(vertexIndex + 1);
+                    var current = skeletonPolygon[vertexIndex];
+                    var next = skeletonPolygon.GetLooped(vertexIndex + 1);
                     GLE.DrawLine((Vector3) current + zOffset, (Vector3) next + zOffset);
                 }
             }

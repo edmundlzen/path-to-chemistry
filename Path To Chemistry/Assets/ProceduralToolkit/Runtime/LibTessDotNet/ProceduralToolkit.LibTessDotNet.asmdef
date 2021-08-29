@@ -1,8 +1,8 @@
 {
-    "name": "ProceduralToolkit.LibTessDotNet",
-    "references": [],
-    "optionalUnityReferences": [],
-    "includePlatforms": [],
-    "excludePlatforms": [],
-    "allowUnsafeCode": false
+  "name": "ProceduralToolkit.LibTessDotNet",
+  "references": [],
+  "optionalUnityReferences": [],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false
 }

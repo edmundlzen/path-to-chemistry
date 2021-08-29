@@ -7,10 +7,12 @@ public class ChemidexHandler : MonoBehaviour
     {
         SceneManager.LoadScene("Recipes");
     }
+
     public void periodicTable()
     {
         SceneManager.LoadScene("Periodic Table");
     }
+
     public void mainMenu()
     {
         SceneManager.LoadScene("Main Menu");

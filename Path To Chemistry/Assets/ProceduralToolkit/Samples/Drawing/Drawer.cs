@@ -3,7 +3,7 @@ using UnityEngine;
 namespace ProceduralToolkit.Samples
 {
     /// <summary>
-    /// An example showing usage of DebugE, GLE and GizmosE
+    ///     An example showing usage of DebugE, GLE and GizmosE
     /// </summary>
     [ExecuteInEditMode]
     public class Drawer : MonoBehaviour
@@ -14,12 +14,22 @@ namespace ProceduralToolkit.Samples
 
         private void Update()
         {
-            Color color = ColorE.aqua;
-            Quaternion rotation = transform.rotation*Quaternion.Euler(0, 0, -120);
-            Vector3 position = transform.position + rotation*Vector3.up;
+            var color = ColorE.aqua;
+            var rotation = transform.rotation * Quaternion.Euler(0, 0, -120);
+            var position = transform.position + rotation * Vector3.up;
 
             DebugE.DrawWireHemisphere(position, rotation, radius, color);
             DebugE.DrawWireCone(position, rotation, radius, coneAngle, coneLength, color);
+        }
+
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = ColorE.lime;
+            var rotation = transform.rotation * Quaternion.Euler(0, 0, 120);
+            var position = transform.position + rotation * Vector3.up;
+
+            GizmosE.DrawWireHemisphere(position, rotation, radius);
+            GizmosE.DrawWireCone(position, rotation, radius, coneAngle, coneLength);
         }
 
         private void OnRenderObject()
@@ -27,23 +37,13 @@ namespace ProceduralToolkit.Samples
             GLE.BeginLines();
             {
                 GL.Color(ColorE.fuchsia);
-                Quaternion rotation = transform.rotation;
-                Vector3 position = transform.position + Vector3.up;
+                var rotation = transform.rotation;
+                var position = transform.position + Vector3.up;
 
                 GLE.DrawWireHemisphere(position, rotation, radius);
                 GLE.DrawWireCone(position, rotation, radius, coneAngle, coneLength);
             }
             GL.End();
-        }
-
-        private void OnDrawGizmos()
-        {
-            Gizmos.color = ColorE.lime;
-            Quaternion rotation = transform.rotation*Quaternion.Euler(0, 0, 120);
-            Vector3 position = transform.position + rotation*Vector3.up;
-
-            GizmosE.DrawWireHemisphere(position, rotation, radius);
-            GizmosE.DrawWireCone(position, rotation, radius, coneAngle, coneLength);
         }
     }
 }

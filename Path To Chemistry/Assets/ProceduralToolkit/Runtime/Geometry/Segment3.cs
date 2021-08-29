@@ -5,7 +5,7 @@ using UnityEngine;
 namespace ProceduralToolkit
 {
     /// <summary>
-    /// Representation of a 3D line segment
+    ///     Representation of a 3D line segment
     /// </summary>
     [Serializable]
     public struct Segment3 : IEquatable<Segment3>, IFormattable
@@ -13,20 +13,29 @@ namespace ProceduralToolkit
         public Vector3 a;
         public Vector3 b;
 
+        public Segment3(Vector3 a, Vector3 b)
+        {
+            this.a = a;
+            this.b = b;
+        }
+
         /// <summary>
-        /// Returns the normalized direction of the segment
+        ///     Returns the normalized direction of the segment
         /// </summary>
         public Vector3 direction => (b - a).normalized;
+
         /// <summary>
-        /// Returns the length of the segment
+        ///     Returns the length of the segment
         /// </summary>
         public float length => (b - a).magnitude;
+
         /// <summary>
-        /// Returns the center of the segment
+        ///     Returns the center of the segment
         /// </summary>
         public Vector2 center => GetPoint(0.5f);
+
         /// <summary>
-        /// Returns the axis-aligned bounding box of the segment
+        ///     Returns the axis-aligned bounding box of the segment
         /// </summary>
         public Bounds aabb
         {
@@ -38,14 +47,8 @@ namespace ProceduralToolkit
             }
         }
 
-        public Segment3(Vector3 a, Vector3 b)
-        {
-            this.a = a;
-            this.b = b;
-        }
-
         /// <summary>
-        /// Access the a or b component using [0] or [1] respectively
+        ///     Access the a or b component using [0] or [1] respectively
         /// </summary>
         public Vector3 this[int index]
         {
@@ -75,8 +78,19 @@ namespace ProceduralToolkit
             }
         }
 
+        public bool Equals(Segment3 other)
+        {
+            return a.Equals(other.a) && b.Equals(other.b);
+        }
+
+        public string ToString(string format, IFormatProvider formatProvider)
+        {
+            return string.Format("Segment3(a: {0}, b: {1})", a.ToString(format, formatProvider),
+                b.ToString(format, formatProvider));
+        }
+
         /// <summary>
-        /// Returns a point on the segment at the given normalized position
+        ///     Returns a point on the segment at the given normalized position
         /// </summary>
         /// <param name="position">Normalized position</param>
         public Vector3 GetPoint(float position)
@@ -85,7 +99,7 @@ namespace ProceduralToolkit
         }
 
         /// <summary>
-        /// Returns a list of evenly distributed points on the segment
+        ///     Returns a list of evenly distributed points on the segment
         /// </summary>
         /// <param name="count">Number of points</param>
         public List<Vector3> GetPoints(int count)
@@ -94,40 +108,21 @@ namespace ProceduralToolkit
         }
 
         /// <summary>
-        /// Linearly interpolates between two segments
+        ///     Linearly interpolates between two segments
         /// </summary>
         public static Segment3 Lerp(Segment3 a, Segment3 b, float t)
         {
             t = Mathf.Clamp01(t);
-            return new Segment3(a.a + (b.a - a.a)*t, a.b + (b.b - a.b)*t);
+            return new Segment3(a.a + (b.a - a.a) * t, a.b + (b.b - a.b) * t);
         }
 
         /// <summary>
-        /// Linearly interpolates between two segments without clamping the interpolant
+        ///     Linearly interpolates between two segments without clamping the interpolant
         /// </summary>
         public static Segment3 LerpUnclamped(Segment3 a, Segment3 b, float t)
         {
-            return new Segment3(a.a + (b.a - a.a)*t, a.b + (b.b - a.b)*t);
+            return new Segment3(a.a + (b.a - a.a) * t, a.b + (b.b - a.b) * t);
         }
-
-        #region Casting operators
-
-        public static explicit operator Line3(Segment3 segment)
-        {
-            return new Line3(segment.a, (segment.b - segment.a).normalized);
-        }
-
-        public static explicit operator Ray(Segment3 segment)
-        {
-            return new Ray(segment.a, (segment.b - segment.a).normalized);
-        }
-
-        public static explicit operator Segment2(Segment3 segment)
-        {
-            return new Segment2((Vector2) segment.a, (Vector2) segment.b);
-        }
-
-        #endregion Casting operators
 
         public static Segment3 operator +(Segment3 segment, Vector3 vector)
         {
@@ -159,11 +154,6 @@ namespace ProceduralToolkit
             return other is Segment3 && Equals((Segment3) other);
         }
 
-        public bool Equals(Segment3 other)
-        {
-            return a.Equals(other.a) && b.Equals(other.b);
-        }
-
         public override string ToString()
         {
             return string.Format("Segment3(a: {0}, b: {1})", a, b);
@@ -174,9 +164,23 @@ namespace ProceduralToolkit
             return string.Format("Segment3(a: {0}, b: {1})", a.ToString(format), b.ToString(format));
         }
 
-        public string ToString(string format, IFormatProvider formatProvider)
+        #region Casting operators
+
+        public static explicit operator Line3(Segment3 segment)
         {
-            return string.Format("Segment3(a: {0}, b: {1})", a.ToString(format, formatProvider), b.ToString(format, formatProvider));
+            return new Line3(segment.a, (segment.b - segment.a).normalized);
         }
+
+        public static explicit operator Ray(Segment3 segment)
+        {
+            return new Ray(segment.a, (segment.b - segment.a).normalized);
+        }
+
+        public static explicit operator Segment2(Segment3 segment)
+        {
+            return new Segment2(segment.a, segment.b);
+        }
+
+        #endregion Casting operators
     }
 }

@@ -17,7 +17,7 @@ namespace ProceduralToolkit
             return new IntersectionLineRay2
             {
                 type = IntersectionType.Point,
-                point = point,
+                point = point
             };
         }
 
@@ -26,7 +26,7 @@ namespace ProceduralToolkit
             return new IntersectionLineRay2
             {
                 type = IntersectionType.Ray,
-                point = point,
+                point = point
             };
         }
     }

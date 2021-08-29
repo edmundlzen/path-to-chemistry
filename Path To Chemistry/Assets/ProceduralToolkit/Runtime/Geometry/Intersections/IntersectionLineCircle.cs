@@ -18,7 +18,7 @@ namespace ProceduralToolkit
             return new IntersectionLineCircle
             {
                 type = IntersectionType.Point,
-                pointA = point,
+                pointA = point
             };
         }
 
@@ -28,7 +28,7 @@ namespace ProceduralToolkit
             {
                 type = IntersectionType.TwoPoints,
                 pointA = pointA,
-                pointB = pointB,
+                pointB = pointB
             };
         }
     }

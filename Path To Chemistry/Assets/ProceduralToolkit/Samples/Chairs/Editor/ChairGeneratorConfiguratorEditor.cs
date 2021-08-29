@@ -24,19 +24,20 @@ namespace ProceduralToolkit.Samples
                 {
                     generator,
                     generator.chairMeshFilter,
-                    generator.platformMeshFilter,
+                    generator.platformMeshFilter
                 }, "Generate chair");
-                generator.Generate(randomizeConfig: false);
+                generator.Generate(false);
             }
+
             if (GUILayout.Button("Randomize config and generate mesh"))
             {
                 Undo.RecordObjects(new Object[]
                 {
                     generator,
                     generator.chairMeshFilter,
-                    generator.platformMeshFilter,
+                    generator.platformMeshFilter
                 }, "Generate chair");
-                generator.Generate(randomizeConfig: true);
+                generator.Generate(true);
             }
         }
     }

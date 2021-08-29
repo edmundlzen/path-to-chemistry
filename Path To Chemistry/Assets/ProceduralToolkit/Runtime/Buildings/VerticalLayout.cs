@@ -7,7 +7,7 @@ namespace ProceduralToolkit.Buildings
         public override void Add(ILayoutElement element)
         {
             base.Add(element);
-            element.origin = Vector2.up*height;
+            element.origin = Vector2.up * height;
             height += element.height;
             width = Mathf.Max(width, element.width);
         }
