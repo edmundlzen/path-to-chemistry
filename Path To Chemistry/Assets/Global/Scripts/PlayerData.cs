@@ -16,6 +16,7 @@ public class PlayerData
         Molecule = new Dictionary<string, int>();
         Inventory = new Dictionary<string, int>();
         flaskElements = new Dictionary<string, int>();
+        // TODO: Replace these with real values.
         survivalInventory = new Dictionary<string, Dictionary<string, object>>
         {
             {
@@ -338,7 +339,198 @@ public class PlayerData
                 }
             }
         };
-        slotItem = new Dictionary<string, Dictionary<string, object>>
+        survivalSmeltingRecipes = new Dictionary<string, Dictionary<string, object>>
+        {
+            {
+                "Item 1", new Dictionary<string, object>
+                {
+                    {"enabled", true},
+                    {"name", "Item 1"},
+                    {
+                        "materials", new Dictionary<string, int>
+                        {
+                            {"Material 1", 7},
+                            {"Material 3", 28} 
+                        }
+                    },
+                    {"time", 3}
+                }
+            },
+            {
+                "Item 2", new Dictionary<string, object>
+                {
+                    {"enabled", true},
+                    {"name", "Item 2"},
+                    {
+                        "materials", new Dictionary<string, int>
+                        {
+                            {"Material 3", 927},
+                            {"Material 4", 26},
+                            {"Material 5", 76}
+                        }
+                    },
+                    {"time", 5}
+                }
+            },
+            {
+                "Item 3", new Dictionary<string, object>
+                {
+                    {"enabled", true},
+                    {"name", "Item 3"},
+                    {
+                        "materials", new Dictionary<string, int>
+                        {
+                            {"Material 1", 76},
+                            {"Material 2", 23},
+                            {"Material 5", 98}
+                        }
+                    },
+                    {"time", 2}
+                }
+            },
+            {
+                "Item 4", new Dictionary<string, object>
+                {
+                    {"enabled", true},
+                    {"name", "Item 4"},
+                    {
+                        "materials", new Dictionary<string, int>
+                        {
+                            {"Material 1", 7},
+                            {"Material 3", 28}
+                        }
+                    },
+                    {"time", 6}
+                }
+            },
+            {
+                "Item 5", new Dictionary<string, object>
+                {
+                    {"enabled", true},
+                    {"name", "Item 5"},
+                    {
+                        "materials", new Dictionary<string, int>
+                        {
+                            {"Material 3", 927},
+                            {"Material 4", 26},
+                            {"Material 5", 76}
+                        }
+                    },
+                    {"time", 3}
+                }
+            },
+            {
+                "Item 6", new Dictionary<string, object>
+                {
+                    {"enabled", true},
+                    {"name", "Item 6"},
+                    {
+                        "materials", new Dictionary<string, int>
+                        {
+                            {"Material 1", 76},
+                            {"Material 2", 23},
+                            {"Material 5", 98}
+                        }
+                    },
+                    {"time", 3}
+                }
+            },
+            {
+                "Item 7", new Dictionary<string, object>
+                {
+                    {"enabled", true},
+                    {"name", "Item 7"},
+                    {
+                        "materials", new Dictionary<string, int>
+                        {
+                            {"Material 1", 7},
+                            {"Material 3", 28}
+                        }
+                    },
+                    {"time", 3}
+                }
+            },
+            {
+                "Item 8", new Dictionary<string, object>
+                {
+                    {"enabled", true},
+                    {"name", "Item 8"},
+                    {
+                        "materials", new Dictionary<string, int>
+                        {
+                            {"Material 3", 927},
+                            {"Material 4", 26},
+                            {"Material 5", 76}
+                        }
+                    },
+                    {"time", 3}
+                }
+            },
+            {
+                "Item 9", new Dictionary<string, object>
+                {
+                    {"enabled", true},
+                    {"name", "Item 9"},
+                    {
+                        "materials", new Dictionary<string, int>
+                        {
+                            {"Material 1", 76},
+                            {"Material 2", 23},
+                            {"Material 5", 98}
+                        }
+                    },
+                    {"time", 3}
+                }
+            },
+            {
+                "Item 10", new Dictionary<string, object>
+                {
+                    {"enabled", true},
+                    {"name", "Item 10"},
+                    {
+                        "materials", new Dictionary<string, int>
+                        {
+                            {"Material 1", 7},
+                            {"Material 3", 28}
+                        }
+                    },
+                    {"time", 3}
+                }
+            },
+            {
+                "Item 11", new Dictionary<string, object>
+                {
+                    {"enabled", true},
+                    {"name", "Item 11"},
+                    {
+                        "materials", new Dictionary<string, int>
+                        {
+                            {"Material 3", 927},
+                            {"Material 4", 26},
+                            {"Material 5", 76}
+                        }
+                    },
+                    {"time", 3}
+                }
+            },
+            {
+                "Item 12", new Dictionary<string, object>
+                {
+                    {"enabled", true},
+                    {"name", "Item 12"},
+                    {
+                        "materials", new Dictionary<string, int>
+                        {
+                            {"Material 1", 76},
+                            {"Material 2", 23},
+                            {"Material 5", 98}
+                        }
+                    },
+                    {"time", 3}
+                }
+            }
+        };
+            slotItem = new Dictionary<string, Dictionary<string, object>>
         {
             {
                 "Slot1", new Dictionary<string, object>
@@ -418,6 +610,7 @@ public class PlayerData
     public List<string> survivalHotbar { get; set; }
     public Dictionary<string, Dictionary<string, object>> survivalMaterials { get; set; }
     public Dictionary<string, Dictionary<string, object>> survivalRecipes { get; set; }
+    public Dictionary<string, Dictionary<string, object>> survivalSmeltingRecipes { get; set; }
 
     public static PlayerData Instance()
     {

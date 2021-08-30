@@ -1,7 +1,8 @@
 using System.Collections.Generic;
 using System.IO;
-using System.Xml.Linq;
+using System.Linq;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -23,11 +24,6 @@ public class CraftingController : MonoBehaviour
         recipeMaterials = recipeInfo.transform.Find("Recipe Materials Container").GetChild(0).GetChild(0).GetChild(0)
             .gameObject;
         firstRecipeMaterialContainer = recipeMaterials.transform.GetChild(0).gameObject;
-    }
-
-    // Update is called once per frame
-    private void Update()
-    {
     }
 
     private void OnEnable()
@@ -115,7 +111,9 @@ public class CraftingController : MonoBehaviour
         recipeInfo.transform.Find("Recipe Output").GetChild(0).GetChild(0).gameObject.SetActive(true);
         recipeInfo.transform.Find("Recipe Name").GetComponent<Text>().text = activeRecipe;
 
-        foreach (var material in (Dictionary<string, int>) survivalRecipes[activeRecipe]["materials"])
+        JObject JrecipeMaterials = (JObject) survivalRecipes[activeRecipe]["materials"];
+        var dictRecipeMaterials = JrecipeMaterials.ToObject<Dictionary<string, int>>();
+        foreach (var material in dictRecipeMaterials)
         {
             if (!firstRecipeMaterialContainer.activeSelf)
             {
@@ -124,11 +122,16 @@ public class CraftingController : MonoBehaviour
                 firstRecipeMaterialContainer.transform.Find("Material Count").GetComponent<Text>().text =
                     "x " + material.Value;
                 if (material.Value > int.Parse(survivalMaterials[material.Key]["quantity"].ToString()))
+                {
+                    print("YES");
                     firstRecipeMaterialContainer.transform.Find("Material Count").GetComponent<Text>().color =
                         Color.red;
+                }
                 else
                     firstRecipeMaterialContainer.transform.Find("Material Count").GetComponent<Text>().color =
                         Color.black;
+
+                firstRecipeMaterialContainer.name = material.Key;
                 firstRecipeMaterialContainer.SetActive(true);
                 continue;
             }
@@ -145,6 +148,8 @@ public class CraftingController : MonoBehaviour
             else
                 firstRecipeMaterialContainer.transform.Find("Material Count").GetComponent<Text>().color =
                     Color.black;
+
+            newRecipeMaterialsContainer.name = material.Key;
             newRecipeMaterialsContainer.SetActive(true);
         }
     }
@@ -158,7 +163,9 @@ public class CraftingController : MonoBehaviour
         var survivalRecipes = playerData.survivalRecipes;
         var survivalMaterials = playerData.survivalMaterials;
 
-        foreach (var recipeMaterial in (Dictionary<string, int>) survivalRecipes[activeRecipe]["materials"])
+        JObject JrecipeMaterials = (JObject) survivalRecipes[activeRecipe]["materials"];
+        var dictRecipeMaterials = JrecipeMaterials.ToObject<Dictionary<string, int>>();
+        foreach (var recipeMaterial in dictRecipeMaterials)
         {
             if (recipeMaterial.Value > int.Parse(survivalMaterials[recipeMaterial.Key]["quantity"].ToString()))
             {
@@ -169,13 +176,11 @@ public class CraftingController : MonoBehaviour
         survivalInventory[activeRecipe]["quantity"] =
             int.Parse(survivalInventory[activeRecipe]["quantity"].ToString()) + 1;
 
-        foreach (var recipeMaterial in (Dictionary<string, int>) survivalRecipes[activeRecipe]["materials"])
+        foreach (var recipeMaterial in dictRecipeMaterials)
         {
             survivalMaterials[recipeMaterial.Key]["quantity"] =
                 int.Parse(survivalMaterials[recipeMaterial.Key]["quantity"].ToString()) - recipeMaterial.Value;
         }
-        
-        Save();
         UpdateRecipeInfoView();
     }
 
