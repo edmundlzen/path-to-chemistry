@@ -1,47 +1,49 @@
-using Newtonsoft.Json;
-using System;
 using System.IO;
+using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class InventoryController : MonoBehaviour
 {
-    private GameObject inventory;
-    private GameObject materials;
     private GameObject hotbar;
-    
-    void Awake()
+    private GameObject inventory;
+    private GameObject materialsSlots;
+
+    private void Awake()
     {
         inventory = GameObject.Find("Inventory Items");
-        materials = GameObject.Find("Materials Display").transform.Find("Materials").gameObject;
+        materialsSlots = GameObject.Find("Materials Display").transform.Find("Scroll View").GetChild(0).GetChild(0).gameObject;
         hotbar = GameObject.Find("Hotbar").transform.Find("Hotbar Items").gameObject;
     }
-    void OnEnable()
+
+    // Update is called once per frame
+    private void Update()
     {
-        // Load();
-        
+    }
+
+    private void OnEnable()
+    {
+        Load();
+
         UpdateInventoryView();
         UpdateHotbarView();
         UpdateMaterialsView();
     }
-    
-    void Load()
+
+    private void Load()
     {
-        string directory = $"{Application.persistentDataPath}/Data";
+        var directory = $"{Application.persistentDataPath}/Data";
         var filePath = Path.Combine(directory, "Saves.json");
         var fileContent = File.ReadAllText(filePath);
         var playerData = JsonConvert.DeserializeObject<PlayerData>(fileContent);
         PlayerData.Instance().UpdatePlayerData(playerData);
     }
 
-    void Save()
+    private void Save()
     {
         var playerData = PlayerData.Instance();
-        string directory = $"{Application.persistentDataPath}/Data";
-        if (!Directory.Exists(directory))
-        {
-            Directory.CreateDirectory(directory);
-        }
+        var directory = $"{Application.persistentDataPath}/Data";
+        if (!Directory.Exists(directory)) Directory.CreateDirectory(directory);
 
         var Settings = new JsonSerializerSettings();
         Settings.Formatting = Formatting.Indented;
@@ -50,7 +52,7 @@ public class InventoryController : MonoBehaviour
         var filePath = Path.Combine(directory, "Saves.json");
         File.WriteAllText(filePath, Json);
     }
-    
+
     public void InventoryClickHandler(GameObject slot)
     {
         var playerData = PlayerData.Instance();
@@ -64,14 +66,15 @@ public class InventoryController : MonoBehaviour
             playerData.survivalHotbar.Insert(0, item["name"].ToString());
             UpdateHotbarView();
             Save();
-        } else if (!survivalHotbar.Contains(item["name"].ToString()) && survivalHotbar.Count < 9)
+        }
+        else if (!survivalHotbar.Contains(item["name"].ToString()) && survivalHotbar.Count < 9)
         {
             playerData.survivalHotbar.Insert(0, item["name"].ToString());
             UpdateHotbarView();
             Save();
         }
     }
-    
+
     public void HotbarClickHandler(GameObject slot)
     {
         var playerData = PlayerData.Instance();
@@ -79,24 +82,22 @@ public class InventoryController : MonoBehaviour
         var item = survivalInventory[slot.name];
         print(slot.name);
     }
-    
-    void UpdateInventoryView()
+
+    private void UpdateInventoryView()
     {
         var playerData = PlayerData.Instance();
         var survivalInventory = playerData.survivalInventory;
 
         foreach (var item in survivalInventory)
         {
-            if (Int32.Parse(item.Value["quantity"].ToString()) <= 0)
-            {
-                continue;
-            }
+            if (int.Parse(item.Value["quantity"].ToString()) <= 0) continue;
             foreach (Transform slot in inventory.transform)
             {
-                Transform slotGraphics = slot.Find("Slot Components");
+                var slotGraphics = slot.Find("Slot Components");
                 if (!slotGraphics.gameObject.activeSelf)
                 {
-                    slotGraphics.Find("Image").GetComponent<Image>().sprite = Resources.Load<Sprite>(item.Value["image"].ToString());
+                    slotGraphics.Find("Image").GetComponent<Image>().sprite =
+                        Resources.Load<Sprite>(item.Value["image"].ToString());
                     slotGraphics.Find("Text").GetComponent<Text>().text = item.Value["quantity"].ToString();
                     slot.transform.name = item.Value["name"].ToString();
                     slotGraphics.gameObject.SetActive(true);
@@ -106,30 +107,25 @@ public class InventoryController : MonoBehaviour
         }
     }
 
-    void UpdateHotbarView()
+    private void UpdateHotbarView()
     {
         var playerData = PlayerData.Instance();
         var survivalInventory = playerData.survivalInventory;
         var survivalHotbar = playerData.survivalHotbar;
 
-        foreach (Transform slot in hotbar.transform)
-        {
-            slot.Find("Slot Components").gameObject.SetActive(false);
-        }
+        foreach (Transform slot in hotbar.transform) slot.Find("Slot Components").gameObject.SetActive(false);
 
         foreach (var reference in survivalHotbar)
         {
             var item = survivalInventory[reference];
-            if (Int32.Parse(item["quantity"].ToString()) <= 0)
-            {
-                continue;
-            }
+            if (int.Parse(item["quantity"].ToString()) <= 0) continue;
             foreach (Transform slot in hotbar.transform)
             {
-                Transform slotGraphics = slot.Find("Slot Components");
+                var slotGraphics = slot.Find("Slot Components");
                 if (!slotGraphics.gameObject.activeSelf)
                 {
-                    slotGraphics.Find("Image").GetComponent<Image>().sprite = Resources.Load<Sprite>(item["image"].ToString());
+                    slotGraphics.Find("Image").GetComponent<Image>().sprite =
+                        Resources.Load<Sprite>(item["image"].ToString());
                     slotGraphics.Find("Text").GetComponent<Text>().text = item["quantity"].ToString();
                     slot.transform.name = item["name"].ToString();
                     slotGraphics.gameObject.SetActive(true);
@@ -139,32 +135,41 @@ public class InventoryController : MonoBehaviour
         }
     }
 
-    void UpdateMaterialsView()
+    private void UpdateMaterialsView()
     {
+        var firstMaterialSlot = materialsSlots.transform.GetChild(0);
+        firstMaterialSlot.gameObject.SetActive(false);
+        foreach (Transform materialSlot in materialsSlots.transform)
+        {
+            if (materialSlot.gameObject.activeSelf)
+            {
+                GameObject.Destroy(materialSlot.gameObject);
+            }
+        }
+        
         var playerData = PlayerData.Instance();
         var survivalMaterials = playerData.survivalMaterials;
 
         foreach (var material in survivalMaterials)
         {
-            foreach (Transform slot in materials.transform)
+            if (firstMaterialSlot.gameObject.activeSelf)
             {
-                Transform slotGraphics = slot.Find("Material Graphics");
-                if (!slotGraphics.gameObject.activeSelf)
-                {
-                    slotGraphics.Find("Image").GetComponent<Image>().sprite =
-                        Resources.Load<Sprite>(material.Value["image"].ToString());
-                    slotGraphics.Find("Text").GetComponent<Text>().text = "x " + material.Value["quantity"].ToString();
-                    slot.transform.name = material.Value["name"].ToString();
-                    slotGraphics.gameObject.SetActive(true);
-                    break;
-                }
+                firstMaterialSlot.Find("Image").GetComponent<Image>().sprite = Resources.Load<Sprite>(material.Value["image"].ToString());
+                firstMaterialSlot.Find("Text").GetComponent<Text>().text = material.Value["quantity"].ToString();
+
+                firstMaterialSlot.name = material.Key;
+                firstMaterialSlot.gameObject.SetActive(true);
+                continue;
             }
+
+            Transform newMaterialSlot = Instantiate(firstMaterialSlot);
+            newMaterialSlot.SetParent(materialsSlots.transform);
+            
+            newMaterialSlot.Find("Image").GetComponent<Image>().sprite = Resources.Load<Sprite>(material.Value["image"].ToString());
+            newMaterialSlot.Find("Text").GetComponent<Text>().text = "x " + material.Value["quantity"];
+            
+            newMaterialSlot.name = material.Key;
+            newMaterialSlot.gameObject.SetActive(true);
         }
-    }
-    
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }
