@@ -87,6 +87,12 @@ public class InventoryController : MonoBehaviour
         var playerData = PlayerData.Instance();
         var survivalInventory = playerData.survivalInventory;
 
+        foreach (Transform slot in inventory.transform)
+        {
+            var slotGraphics = slot.Find("Slot Components");
+            slotGraphics.gameObject.SetActive(false);
+        }
+        
         foreach (var item in survivalInventory)
         {
             if (int.Parse(item.Value["quantity"].ToString()) <= 0) continue;
@@ -141,9 +147,9 @@ public class InventoryController : MonoBehaviour
         firstMaterialSlot.gameObject.SetActive(false);
         foreach (Transform materialSlot in materialsSlots.transform)
         {
-            if (materialSlot.gameObject.activeSelf)
+            if (materialSlot.GetSiblingIndex() != 0)
             {
-                GameObject.Destroy(materialSlot.gameObject);
+                Destroy(materialSlot.gameObject);
             }
         }
         

@@ -62,6 +62,15 @@ public class CraftingController : MonoBehaviour
         var playerData = PlayerData.Instance();
         var survivalInventory = playerData.survivalInventory;
         var survivalRecipes = playerData.survivalRecipes;
+        
+        firstRecipeContainer.gameObject.SetActive(false);
+        foreach (Transform recipeContainer in recipes)
+        {
+            if (recipeContainer.GetSiblingIndex() != 0)
+            {
+                Destroy(recipeContainer.gameObject);
+            }
+        }
 
         foreach (var recipe in survivalRecipes)
             if ((bool) recipe.Value["enabled"])

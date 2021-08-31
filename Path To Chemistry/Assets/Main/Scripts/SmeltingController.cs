@@ -21,8 +21,7 @@ public class SmeltingController : MonoBehaviour
         firstSmeltingRecipeContainer = smeltingRecipes.GetChild(0).gameObject;
         smeltingRecipeInfo = transform.Find("Smelting Recipe Info").gameObject;
         smeltingRecipeMaterials = smeltingRecipeInfo.transform.Find("Smelting Recipe Materials Container").GetChild(0)
-            .GetChild(0).GetChild(0)
-            .gameObject;
+            .GetChild(0).GetChild(0).gameObject;
         firstSmeltingRecipeMaterialContainer = smeltingRecipeMaterials.transform.GetChild(0).gameObject;
     }
 
@@ -62,6 +61,15 @@ public class SmeltingController : MonoBehaviour
         var playerData = PlayerData.Instance();
         var survivalInventory = playerData.survivalInventory;
         var survivalSmeltingRecipes = playerData.survivalSmeltingRecipes;
+        
+        firstSmeltingRecipeContainer.gameObject.SetActive(false);
+        foreach (Transform smeltingRecipeContainer in smeltingRecipes)
+        {
+            if (smeltingRecipeContainer.GetSiblingIndex() != 0)
+            {
+                Destroy(smeltingRecipeContainer.gameObject);
+            }
+        }
 
         foreach (var recipe in survivalSmeltingRecipes)
             if ((bool) recipe.Value["enabled"])
