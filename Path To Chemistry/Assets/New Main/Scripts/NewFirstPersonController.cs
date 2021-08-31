@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class FirstPersonController : MonoBehaviour
+public class NewFirstPersonController : MonoBehaviour
 {
     public float mouseSensitivity = 100f;
     public Transform playerBody;

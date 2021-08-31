@@ -822,7 +822,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!65 &258200372
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2165,11 +2165,11 @@ Terrain:
   m_Enabled: 1
   serializedVersion: 6
   m_TerrainData: {fileID: 15600000, guid: 2175e7c6da802854596ba98789bb7166, type: 2}
-  m_TreeDistance: 199
+  m_TreeDistance: 10
   m_TreeBillboardDistance: 150
   m_TreeCrossFadeLength: 5
   m_TreeMaximumFullLODCount: 50
-  m_DetailObjectDistance: 200
+  m_DetailObjectDistance: 50
   m_DetailObjectDensity: 1
   m_HeightmapPixelError: 5
   m_SplatMapDistance: 1000
@@ -7844,10 +7844,10 @@ MonoBehaviour:
     drawTreesAndFoliage: 1
     perservePrefabLayer: 1
     treeLightProbes: 0
-    treeDistance: 199
+    treeDistance: 10
     billboardStart: 150
     maxMeshTrees: 50
-    grassDistance: 200
+    grassDistance: 50
     grassDensity: 1
     windStrength: 0.15
     windSpeed: 1
