@@ -116,6 +116,7 @@ public class PlayerData
                 }
             }
         };
+        // TODO: Initialize this with 9 nulls to represent an empty hotbar.
         survivalHotbar = new List<string>();
         survivalMaterials = new Dictionary<string, Dictionary<string, object>>
         {

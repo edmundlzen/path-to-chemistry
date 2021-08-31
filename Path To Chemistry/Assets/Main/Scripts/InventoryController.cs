@@ -80,7 +80,6 @@ public class InventoryController : MonoBehaviour
         var playerData = PlayerData.Instance();
         var survivalInventory = playerData.survivalInventory;
         var item = survivalInventory[slot.name];
-        print(slot.name);
     }
 
     private void UpdateInventoryView()
@@ -117,6 +116,7 @@ public class InventoryController : MonoBehaviour
 
         foreach (var reference in survivalHotbar)
         {
+            if (reference == null) continue;
             var item = survivalInventory[reference];
             if (int.Parse(item["quantity"].ToString()) <= 0) continue;
             foreach (Transform slot in hotbar.transform)
