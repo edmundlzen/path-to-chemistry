@@ -28,8 +28,6 @@ public class CraftingController : MonoBehaviour
 
     private void OnEnable()
     {
-        Load();
-        
         activeRecipe = null;
         UpdateRecipesView();
     }
@@ -79,7 +77,7 @@ public class CraftingController : MonoBehaviour
                 if (!firstRecipeContainer.activeSelf)
                 {
                     firstRecipeContainer.transform.Find("Image Container").GetChild(0).GetComponent<Image>().sprite =
-                        Resources.Load<Sprite>(item["image"].ToString());
+                        Resources.Load<Sprite>("Sprites/" + item["image"].ToString());
                     firstRecipeContainer.transform.Find("Recipe Name").GetComponent<Text>().text =
                         item["name"].ToString();
                     firstRecipeContainer.SetActive(true);
@@ -91,7 +89,7 @@ public class CraftingController : MonoBehaviour
                 newRecipeContainer.transform.SetParent(recipes);
 
                 newRecipeContainer.transform.Find("Image Container").GetChild(0).GetComponent<Image>().sprite =
-                    Resources.Load<Sprite>(item["image"].ToString());
+                    Resources.Load<Sprite>("Sprites/" + item["image"].ToString());
                 newRecipeContainer.transform.Find("Recipe Name").GetComponent<Text>().text =
                     item["name"].ToString();
                 newRecipeContainer.name = item["name"].ToString();
@@ -116,7 +114,7 @@ public class CraftingController : MonoBehaviour
         var survivalMaterials = playerData.survivalMaterials;
 
         recipeInfo.transform.Find("Recipe Output").GetChild(0).GetChild(0).GetComponent<Image>().sprite =
-            Resources.Load<Sprite>(survivalInventory[activeRecipe]["image"].ToString());
+            Resources.Load<Sprite>("Sprites/" + survivalInventory[activeRecipe]["image"].ToString());
         recipeInfo.transform.Find("Recipe Output").GetChild(0).GetChild(0).gameObject.SetActive(true);
         recipeInfo.transform.Find("Recipe Name").GetComponent<Text>().text = activeRecipe;
 
@@ -127,7 +125,7 @@ public class CraftingController : MonoBehaviour
             if (!firstRecipeMaterialContainer.activeSelf)
             {
                 firstRecipeMaterialContainer.transform.Find("Image Container").GetChild(0).GetComponent<Image>()
-                    .sprite = Resources.Load<Sprite>(survivalMaterials[material.Key]["image"].ToString());
+                    .sprite = Resources.Load<Sprite>("Sprites/" + survivalMaterials[material.Key]["image"].ToString());
                 firstRecipeMaterialContainer.transform.Find("Material Count").GetComponent<Text>().text =
                     "x " + material.Value;
                 if (material.Value > int.Parse(survivalMaterials[material.Key]["quantity"].ToString()))
@@ -148,7 +146,7 @@ public class CraftingController : MonoBehaviour
             var newRecipeMaterialsContainer = Instantiate(firstRecipeMaterialContainer);
             newRecipeMaterialsContainer.transform.SetParent(recipeMaterials.transform);
             newRecipeMaterialsContainer.transform.Find("Image Container").GetChild(0).GetComponent<Image>()
-                .sprite = Resources.Load<Sprite>(survivalMaterials[material.Key]["image"].ToString());
+                .sprite = Resources.Load<Sprite>("Sprites/" + survivalMaterials[material.Key]["image"].ToString());
             newRecipeMaterialsContainer.transform.Find("Material Count").GetComponent<Text>().text =
                 "x " + material.Value;
             if (material.Value > int.Parse(survivalMaterials[material.Key]["quantity"].ToString()))

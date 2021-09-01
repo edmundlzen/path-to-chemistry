@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Serialization;
 
 public class FirstPersonController : MonoBehaviour
 {
@@ -6,11 +7,11 @@ public class FirstPersonController : MonoBehaviour
     public float gravity = 5f;
     public VariableJoystick variableJoystick;
     public GameObject joystick;
-    public GameObject fireButton;
+    public GameObject useButton;
     public CharacterController characterController;
     public Transform cameraTransform;
-    public float cameraSensitivity;
-    public bool canMove = true;
+    public float cameraSensitivity = 1f;
+    public bool freeze = false;
 
     [SerializeField] private float jumpSpeed = 5f;
 
@@ -35,41 +36,33 @@ public class FirstPersonController : MonoBehaviour
         }
 
         joystick.SetActive(false);
-        fireButton.SetActive(false);
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        // useButton.SetActive(false);
+        // Cursor.lockState = CursorLockMode.Locked;
+        // Cursor.visible = false;
     }
 
     // Update is called once per frame
-    private void Update()
+    void Update()
     {
+        if (freeze) return;
+
         if (!desktopInput)
         {
             GetTouchInput();
             JoystickMove();
 
-            if (_rightFingerId != -1) LookAround();
-
-            if (touchWeaponOn)
-                WeaponDown();
-            else
-                WeaponUp();
-
             return;
         }
-
-        if (Input.GetKey(KeyCode.Mouse0)) WeaponDown();
-        if (Input.GetKeyUp(KeyCode.Mouse0)) WeaponUp();
 
         // We are grounded, so recalculate move direction based on axes
         var forward = transform.TransformDirection(Vector3.forward);
         var right = transform.TransformDirection(Vector3.right);
-        var curSpeedX = canMove ? speed * Input.GetAxis("Vertical") : 0;
-        var curSpeedY = canMove ? speed * Input.GetAxis("Horizontal") : 0;
+        var curSpeedX = speed * Input.GetAxis("Vertical");
+        var curSpeedY = speed * Input.GetAxis("Horizontal");
         var movementDirectionY = _moveDirection.y;
         _moveDirection = forward * curSpeedX + right * curSpeedY;
 
-        if (Input.GetButton("Jump") && canMove && characterController.isGrounded)
+        if (Input.GetButton("Jump") && !freeze && characterController.isGrounded)
             _moveDirection.y = jumpSpeed;
         else
             _moveDirection.y = movementDirectionY;
@@ -82,16 +75,13 @@ public class FirstPersonController : MonoBehaviour
         // Move the controller
         characterController.Move(_moveDirection * Time.deltaTime);
 
-        // Player and Camera rotation
-        if (canMove)
-        {
-            cameraPitch += -Input.GetAxis("Mouse Y") * cameraSensitivity;
-            cameraPitch = Mathf.Clamp(cameraPitch, -90f, 90f);
-            cameraTransform.localRotation = Quaternion.Euler(cameraPitch, 0, 0);
-            transform.rotation *= Quaternion.Euler(0, Input.GetAxis("Mouse X") * cameraSensitivity, 0);
-        }
+        cameraPitch += -Input.GetAxis("Mouse Y") * cameraSensitivity;
+        cameraPitch = Mathf.Clamp(cameraPitch, -90f, 90f);
+        cameraTransform.localRotation = Quaternion.Euler(cameraPitch, 0, 0);
+        transform.rotation *= Quaternion.Euler(0, Input.GetAxis("Mouse X") * cameraSensitivity, 0);
+    }
 
-        void JoystickMove()
+    void JoystickMove()
         {
             _moveDirection = new Vector3(variableJoystick.Horizontal, 0, variableJoystick.Vertical);
             _moveDirection = transform.TransformDirection(_moveDirection);
@@ -156,36 +146,3 @@ public class FirstPersonController : MonoBehaviour
             }
         }
     }
-    // Start is called before the first frame update
-
-    public void TouchWeaponOn()
-    {
-        touchWeaponOn = true;
-    }
-
-    public void TouchWeaponOff()
-    {
-        touchWeaponOn = false;
-    }
-
-    private void WeaponDown()
-    {
-        RaycastHit hit;
-        if (Physics.Raycast(cameraTransform.position, cameraTransform.forward, out hit))
-            if (hit.distance > 0)
-                transform.GetComponent<PlayerWeapon>().UseLaser(hit, transform);
-    }
-
-    private void WeaponUp()
-    {
-        transform.GetComponent<PlayerWeapon>().DisableLaser();
-    }
-
-    private void LookAround()
-    {
-        cameraPitch = Mathf.Clamp(cameraPitch - lookInput.y, -90f, 90f);
-        cameraTransform.localRotation = Quaternion.Euler(cameraPitch, 0, 0);
-
-        transform.Rotate(transform.up, lookInput.x);
-    }
-}

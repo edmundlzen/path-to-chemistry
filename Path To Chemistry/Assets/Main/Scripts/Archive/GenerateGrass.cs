@@ -32,7 +32,7 @@ public class GenerateGrass : MonoBehaviour
         for (var z = r.bounds.min.z; z < r.bounds.max.z; z++)
             if (Physics.Raycast(new Vector3(x, r.bounds.max.y + 5f, z), -Vector3.up, out hit))
             {
-                grassPainter.AddPoint(hit.point, hit.normal, grassGenerationSettings.grassDensity);
+                // grassPainter.AddPoint(hit.point, hit.normal, grassGenerationSettings.grassDensity);
                 grassComputeScript.UpdateGrass();
                 yield return null; // new WaitForSeconds(.1f);
             }

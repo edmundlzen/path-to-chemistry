@@ -17,7 +17,10 @@ public class MainGUIController : MonoBehaviour
     
     private string activeView;
 
-    private string activeWeapon;
+    private string activeItem;
+    
+    public GameObject hand;
+    public FirstPersonController player;
 
     void Awake()
     {
@@ -41,16 +44,16 @@ public class MainGUIController : MonoBehaviour
 
         switch (keyPressed)
         {
-            case "q":
+            case "z":
                 ChangeView("gameview");
                 break;
-            case "w":
+            case "x":
                 ChangeView("inventory");
                 break;
-            case "e":
+            case "c":
                 ChangeView("crafting");
                 break;
-            case "r":
+            case "v":
                 ChangeView("smelting");
                 break;
         }
@@ -81,26 +84,40 @@ public class MainGUIController : MonoBehaviour
 
     public void ChangeView(string view)
     {
+        player.freeze = true;
         activeView = view;
+        
+        Save();
         
         gameviewButtons.SetActive(false);
         inventory.SetActive(false);
         crafting.SetActive(false);
         smelting.SetActive(false);
+        
+        Load();
 
         switch (view)
         {
             case "gameview":
+                player.freeze = false;
+                // Cursor.lockState = CursorLockMode.Locked;
+                // Cursor.visible = false;
                 gameviewButtons.SetActive(true);
                 UpdateGameviewHotbar();
                 break;
             case "inventory":
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
                 inventory.SetActive(true);
                 break;
             case "crafting":
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
                 crafting.SetActive(true);
                 break;
             case "smelting":
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
                 smelting.SetActive(true);
                 break;
             default:
@@ -109,7 +126,7 @@ public class MainGUIController : MonoBehaviour
         }
     }
 
-    public void ChangeActiveWeapon(int hotbarSlot)
+    public void ChangeActiveItem(int hotbarSlot)
     {
         var playerData = PlayerData.Instance();
         var survivalHotbar = playerData.survivalHotbar;
@@ -119,17 +136,30 @@ public class MainGUIController : MonoBehaviour
             case null:
                 break;
             default:
-                activeWeapon = hotbarItem;
+                activeItem = hotbarItem;
+                SetHandItem(Resources.Load<GameObject>("Prefabs/" + hotbarItem));
                 break;
         }
     }
 
-    public string GetActiveWeapon()
+    public void SetHandItem(GameObject item)
     {
-        return activeWeapon;
+        foreach (Transform existingItem in hand.transform)
+        {
+            Destroy(existingItem.gameObject);
+        }
+
+        var newHandItem = Instantiate(item, hand.transform, false);
+        newHandItem.name = item.name;
+        newHandItem.transform.rotation = hand.transform.rotation;
     }
 
-    void UpdateGameviewHotbar()
+    public string GetActiveItem()
+    {
+        return activeItem;
+    }
+
+    public void UpdateGameviewHotbar()
     {
         var playerData = PlayerData.Instance();
         var survivalInventory = playerData.survivalInventory;
@@ -141,14 +171,22 @@ public class MainGUIController : MonoBehaviour
         {
             if (reference == null) continue;
             var item = survivalInventory[reference];
-            if (int.Parse(item["quantity"].ToString()) <= 0) continue;
+            if (int.Parse(item["quantity"].ToString()) <= 0)
+            {
+                if (item["name"].ToString() == activeItem)
+                {
+                    Destroy(hand.transform.GetChild(0).gameObject);
+                }
+
+                continue;
+            }
             foreach (Transform slot in gameviewHotbar.transform)
             {
                 var slotGraphics = slot.Find("Slot Components");
                 if (!slotGraphics.gameObject.activeSelf)
                 {
                     slotGraphics.Find("Image").GetComponent<UnityEngine.UI.Image>().sprite =
-                        Resources.Load<Sprite>(item["image"].ToString());
+                        Resources.Load<Sprite>("Sprites/" + item["image"].ToString());
                     slotGraphics.Find("Text").GetComponent<Text>().text = item["quantity"].ToString();
                     slot.transform.name = item["name"].ToString();
                     slotGraphics.gameObject.SetActive(true);
@@ -160,6 +198,6 @@ public class MainGUIController : MonoBehaviour
 
     public void GameviewHotbarClickHandler(GameObject slot)
     {
-        ChangeActiveWeapon(slot.transform.GetSiblingIndex());
+        ChangeActiveItem(slot.transform.GetSiblingIndex());
     }
 }

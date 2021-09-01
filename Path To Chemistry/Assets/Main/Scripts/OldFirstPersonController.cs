@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-    public class FirstPersonController1 : MonoBehaviour
+    public class OldFirstPersonController : MonoBehaviour
     {
         public float speed = 10f;
         public float gravity = 5f;

@@ -16,15 +16,8 @@ public class InventoryController : MonoBehaviour
         hotbar = GameObject.Find("Hotbar").transform.Find("Hotbar Items").gameObject;
     }
 
-    // Update is called once per frame
-    private void Update()
-    {
-    }
-
     private void OnEnable()
     {
-        Load();
-
         UpdateInventoryView();
         UpdateHotbarView();
         UpdateMaterialsView();
@@ -102,7 +95,7 @@ public class InventoryController : MonoBehaviour
                 if (!slotGraphics.gameObject.activeSelf)
                 {
                     slotGraphics.Find("Image").GetComponent<Image>().sprite =
-                        Resources.Load<Sprite>(item.Value["image"].ToString());
+                        Resources.Load<Sprite>("Sprites/" + item.Value["image"].ToString());
                     slotGraphics.Find("Text").GetComponent<Text>().text = item.Value["quantity"].ToString();
                     slot.transform.name = item.Value["name"].ToString();
                     slotGraphics.gameObject.SetActive(true);
@@ -131,7 +124,7 @@ public class InventoryController : MonoBehaviour
                 if (!slotGraphics.gameObject.activeSelf)
                 {
                     slotGraphics.Find("Image").GetComponent<Image>().sprite =
-                        Resources.Load<Sprite>(item["image"].ToString());
+                        Resources.Load<Sprite>("Sprites/" + item["image"].ToString());
                     slotGraphics.Find("Text").GetComponent<Text>().text = item["quantity"].ToString();
                     slot.transform.name = item["name"].ToString();
                     slotGraphics.gameObject.SetActive(true);
@@ -160,7 +153,7 @@ public class InventoryController : MonoBehaviour
         {
             if (firstMaterialSlot.gameObject.activeSelf)
             {
-                firstMaterialSlot.Find("Image").GetComponent<Image>().sprite = Resources.Load<Sprite>(material.Value["image"].ToString());
+                firstMaterialSlot.Find("Image").GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/" + material.Value["image"].ToString());
                 firstMaterialSlot.Find("Text").GetComponent<Text>().text = material.Value["quantity"].ToString();
 
                 firstMaterialSlot.name = material.Key;
@@ -171,7 +164,7 @@ public class InventoryController : MonoBehaviour
             Transform newMaterialSlot = Instantiate(firstMaterialSlot);
             newMaterialSlot.SetParent(materialsSlots.transform);
             
-            newMaterialSlot.Find("Image").GetComponent<Image>().sprite = Resources.Load<Sprite>(material.Value["image"].ToString());
+            newMaterialSlot.Find("Image").GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/" + material.Value["image"].ToString());
             newMaterialSlot.Find("Text").GetComponent<Text>().text = "x " + material.Value["quantity"];
             
             newMaterialSlot.name = material.Key;
