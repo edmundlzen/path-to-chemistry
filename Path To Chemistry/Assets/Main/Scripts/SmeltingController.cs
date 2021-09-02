@@ -27,8 +27,6 @@ public class SmeltingController : MonoBehaviour
 
     private void OnEnable()
     {
-        Load();
-
         activeSmeltingRecipe = null;
         UpdateRecipesView();
     }
@@ -79,7 +77,7 @@ public class SmeltingController : MonoBehaviour
                 {
                     firstSmeltingRecipeContainer.transform.Find("Image Container").GetChild(0).GetComponent<Image>()
                             .sprite =
-                        Resources.Load<Sprite>(item["image"].ToString());
+                        Resources.Load<Sprite>("Sprites/" + item["image"].ToString());
                     firstSmeltingRecipeContainer.transform.Find("Smelting Recipe Name").GetComponent<Text>().text =
                         item["name"].ToString();
                     firstSmeltingRecipeContainer.SetActive(true);
@@ -91,7 +89,7 @@ public class SmeltingController : MonoBehaviour
                 newRecipeContainer.transform.SetParent(smeltingRecipes);
 
                 newRecipeContainer.transform.Find("Image Container").GetChild(0).GetComponent<Image>().sprite =
-                    Resources.Load<Sprite>(item["image"].ToString());
+                    Resources.Load<Sprite>("Sprites/" + item["image"].ToString());
                 newRecipeContainer.transform.Find("Smelting Recipe Name").GetComponent<Text>().text =
                     item["name"].ToString();
                 newRecipeContainer.name = item["name"].ToString();
@@ -117,7 +115,7 @@ public class SmeltingController : MonoBehaviour
 
         smeltingRecipeInfo.transform.Find("Smelting Recipe Output").GetChild(0).GetChild(0).GetComponent<Image>()
                 .sprite =
-            Resources.Load<Sprite>(survivalInventory[activeSmeltingRecipe]["image"].ToString());
+            Resources.Load<Sprite>("Sprites/" + survivalInventory[activeSmeltingRecipe]["image"].ToString());
         smeltingRecipeInfo.transform.Find("Smelting Recipe Output").GetChild(0).GetChild(0).gameObject.SetActive(true);
         smeltingRecipeInfo.transform.Find("Smelting Recipe Name").GetComponent<Text>().text = activeSmeltingRecipe;
 
@@ -128,7 +126,7 @@ public class SmeltingController : MonoBehaviour
             if (!firstSmeltingRecipeMaterialContainer.activeSelf)
             {
                 firstSmeltingRecipeMaterialContainer.transform.Find("Image Container").GetChild(0).GetComponent<Image>()
-                    .sprite = Resources.Load<Sprite>(survivalMaterials[material.Key]["image"].ToString());
+                    .sprite = Resources.Load<Sprite>("Sprites/" + survivalMaterials[material.Key]["image"].ToString());
                 firstSmeltingRecipeMaterialContainer.transform.Find("Material Count").GetComponent<Text>().text =
                     "x " + material.Value;
                 if (material.Value > int.Parse(survivalMaterials[material.Key]["quantity"].ToString()))
@@ -144,7 +142,7 @@ public class SmeltingController : MonoBehaviour
             var newRecipeMaterialsContainer = Instantiate(firstSmeltingRecipeMaterialContainer);
             newRecipeMaterialsContainer.transform.SetParent(smeltingRecipeMaterials.transform);
             newRecipeMaterialsContainer.transform.Find("Image Container").GetChild(0).GetComponent<Image>()
-                .sprite = Resources.Load<Sprite>(survivalMaterials[material.Key]["image"].ToString());
+                .sprite = Resources.Load<Sprite>("Sprites/" + survivalMaterials[material.Key]["image"].ToString());
             newRecipeMaterialsContainer.transform.Find("Material Count").GetComponent<Text>().text =
                 "x " + material.Value;
             if (material.Value > int.Parse(survivalMaterials[material.Key]["quantity"].ToString()))
