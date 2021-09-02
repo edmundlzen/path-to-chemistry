@@ -6,7 +6,7 @@ using Newtonsoft.Json.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CraftingController : MonoBehaviour
+public class PlayerCraftingController : MonoBehaviour
 {
     private string activeRecipe;
     private GameObject firstRecipeContainer;
@@ -59,7 +59,7 @@ public class CraftingController : MonoBehaviour
     {
         var playerData = PlayerData.Instance();
         var survivalInventory = playerData.survivalInventory;
-        var survivalRecipes = playerData.survivalRecipes;
+        var survivalRecipes = playerData.survivalPlayerRecipes;
         
         firstRecipeContainer.gameObject.SetActive(false);
         foreach (Transform recipeContainer in recipes)
@@ -110,7 +110,7 @@ public class CraftingController : MonoBehaviour
 
         var playerData = PlayerData.Instance();
         var survivalInventory = playerData.survivalInventory;
-        var survivalRecipes = playerData.survivalRecipes;
+        var survivalRecipes = playerData.survivalPlayerRecipes;
         var survivalMaterials = playerData.survivalMaterials;
 
         recipeInfo.transform.Find("Recipe Output").GetChild(0).GetChild(0).GetComponent<Image>().sprite =
@@ -166,10 +166,10 @@ public class CraftingController : MonoBehaviour
 
         var playerData = PlayerData.Instance();
         var survivalInventory = playerData.survivalInventory;
-        var survivalRecipes = playerData.survivalRecipes;
+        var survivalPlayerRecipes = playerData.survivalPlayerRecipes;
         var survivalMaterials = playerData.survivalMaterials;
 
-        JObject JrecipeMaterials = (JObject) survivalRecipes[activeRecipe]["materials"];
+        JObject JrecipeMaterials = (JObject) survivalPlayerRecipes[activeRecipe]["materials"];
         var dictRecipeMaterials = JrecipeMaterials.ToObject<Dictionary<string, int>>();
         foreach (var recipeMaterial in dictRecipeMaterials)
         {

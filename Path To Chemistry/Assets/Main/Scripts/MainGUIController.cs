@@ -14,6 +14,7 @@ public class MainGUIController : MonoBehaviour
     private GameObject inventory;
     private GameObject crafting;
     private GameObject smelting;
+    private GameObject playerCrafting;
     
     private string activeView;
 
@@ -29,6 +30,7 @@ public class MainGUIController : MonoBehaviour
         inventory = transform.Find("Inventory").gameObject;
         crafting = transform.Find("Crafting").gameObject;
         smelting = transform.Find("Smelting").gameObject;
+        playerCrafting = transform.Find("Player Crafting").gameObject;
     }
     
     void Start()
@@ -38,26 +40,26 @@ public class MainGUIController : MonoBehaviour
         ChangeView("gameview");
     }
 
-    void Update()
-    {
-        string keyPressed = Input.inputString;
-
-        switch (keyPressed)
-        {
-            case "z":
-                ChangeView("gameview");
-                break;
-            case "x":
-                ChangeView("inventory");
-                break;
-            case "c":
-                ChangeView("crafting");
-                break;
-            case "v":
-                ChangeView("smelting");
-                break;
-        }
-    }
+    // void Update()
+    // {
+    //     string keyPressed = Input.inputString;
+    //
+    //     switch (keyPressed)
+    //     {
+    //         case "z":
+    //             ChangeView("gameview");
+    //             break;
+    //         case "x":
+    //             ChangeView("inventory");
+    //             break;
+    //         case "c":
+    //             ChangeView("crafting");
+    //             break;
+    //         case "v":
+    //             ChangeView("smelting");
+    //             break;
+    //     }
+    // }
     
     private void Load()
     {
@@ -93,6 +95,7 @@ public class MainGUIController : MonoBehaviour
         inventory.SetActive(false);
         crafting.SetActive(false);
         smelting.SetActive(false);
+        playerCrafting.SetActive(false);
         
         Load();
 
@@ -119,6 +122,11 @@ public class MainGUIController : MonoBehaviour
                 Cursor.lockState = CursorLockMode.None;
                 Cursor.visible = true;
                 smelting.SetActive(true);
+                break;
+            case "playerCrafting":
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+                playerCrafting.SetActive(true);
                 break;
             default:
                 Debug.LogError("Argument for changeView is invalid. It must be one of either: 'inventory', 'crafting', 'smelting'");
