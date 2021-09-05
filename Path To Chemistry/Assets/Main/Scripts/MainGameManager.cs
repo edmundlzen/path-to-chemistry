@@ -27,6 +27,9 @@ public class MainGameManager : MonoBehaviour
         if (GameObject.FindGameObjectsWithTag("HandItem")[0].TryGetComponent<Placeable>(out Placeable placable)) 
         {
             placable.Use(playerCamera);
+        } else if (GameObject.FindGameObjectsWithTag("HandItem")[0].TryGetComponent<IUsable>(out IUsable usable))
+        {
+            usable.Use(playerCamera);
         }
     }
 

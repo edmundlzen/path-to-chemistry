@@ -392,12 +392,12 @@ MonoBehaviour:
   variableJoystick: {fileID: 0}
   joystick: {fileID: 0}
   useButton: {fileID: 0}
-  characterController: {fileID: 0}
-  cameraTransform: {fileID: 0}
-  cameraSensitivity: 0
+  characterController: {fileID: 9199642017907470523}
+  cameraTransform: {fileID: 9199642017764824575}
+  cameraSensitivity: 1
   freeze: 0
   jumpSpeed: 5
-  desktopInput: 0
+  desktopInput: 1
 --- !u!1001 &9199642016826548285
 PrefabInstance:
   m_ObjectHideFlags: 0

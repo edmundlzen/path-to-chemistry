@@ -6,6 +6,7 @@ TagManager:
   tags:
   - HandItem
   - MainGUIController
+  - Terrain
   layers:
   - Default
   - TransparentFX
