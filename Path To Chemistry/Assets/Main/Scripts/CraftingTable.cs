@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class CraftingTable : MonoBehaviour, Iinteractable
+public class CraftingTable : MonoBehaviour, IInteractable
 {
     public void Interactable(Transform playerCamera)
     {

@@ -13,7 +13,7 @@ public class MainGameManager : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(playerCamera.position, playerCamera.forward, out hit))
         {
-            if (hit.transform.TryGetComponent<Iinteractable>(out Iinteractable interactable))
+            if (hit.transform.TryGetComponent<IInteractable>(out IInteractable interactable))
             {
                 interactable.Interactable(playerCamera);
             }
@@ -43,7 +43,7 @@ public class MainGameManager : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(playerCamera.position, playerCamera.forward, out hit, 2))
         {
-            if (hit.transform.TryGetComponent(out Iinteractable interactable))
+            if (hit.transform.TryGetComponent(out IInteractable interactable))
             {
                 interactButton.SetActive(true);
                 return;

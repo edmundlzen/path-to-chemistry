@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public interface Iinteractable
+public interface IInteractable
 {
     void Interactable(Transform playerCamera);
 }
