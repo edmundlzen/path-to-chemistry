@@ -86,7 +86,7 @@ public class SmeltingController : MonoBehaviour
                 }
 
                 var newRecipeContainer = Instantiate(firstSmeltingRecipeContainer);
-                newRecipeContainer.transform.SetParent(smeltingRecipes);
+                newRecipeContainer.transform.SetParent(smeltingRecipes, false);
 
                 newRecipeContainer.transform.Find("Image Container").GetChild(0).GetComponent<Image>().sprite =
                     Resources.Load<Sprite>("Sprites/" + item["image"].ToString());
@@ -140,7 +140,7 @@ public class SmeltingController : MonoBehaviour
             }
 
             var newRecipeMaterialsContainer = Instantiate(firstSmeltingRecipeMaterialContainer);
-            newRecipeMaterialsContainer.transform.SetParent(smeltingRecipeMaterials.transform);
+            newRecipeMaterialsContainer.transform.SetParent(smeltingRecipeMaterials.transform, false);
             newRecipeMaterialsContainer.transform.Find("Image Container").GetChild(0).GetComponent<Image>()
                 .sprite = Resources.Load<Sprite>("Sprites/" + survivalMaterials[material.Key]["image"].ToString());
             newRecipeMaterialsContainer.transform.Find("Material Count").GetComponent<Text>().text =

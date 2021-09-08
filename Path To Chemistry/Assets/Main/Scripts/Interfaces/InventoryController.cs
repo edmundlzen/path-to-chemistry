@@ -162,7 +162,7 @@ public class InventoryController : MonoBehaviour
             }
 
             Transform newMaterialSlot = Instantiate(firstMaterialSlot);
-            newMaterialSlot.SetParent(materialsSlots.transform);
+            newMaterialSlot.SetParent(materialsSlots.transform, false);
             
             newMaterialSlot.Find("Image").GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprites/" + material.Value["image"].ToString());
             newMaterialSlot.Find("Text").GetComponent<Text>().text = "x " + material.Value["quantity"];
