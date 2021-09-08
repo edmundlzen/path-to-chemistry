@@ -22,24 +22,27 @@ public class MainGameManager : MonoBehaviour
     
     public void UseButtonDown()
     {
-        // useButton = true;
-        
-        if (GameObject.FindGameObjectsWithTag("HandItem")[0].TryGetComponent<Placeable>(out Placeable placable)) 
-        {
-            placable.Use(playerCamera);
-        } else if (GameObject.FindGameObjectsWithTag("HandItem")[0].TryGetComponent<IUsable>(out IUsable usable))
-        {
-            usable.Use(playerCamera);
-        }
+        useButton = true;
     }
 
     public void UseButtonUp()
     {
-        // useButton = false;
+        useButton = false;
     }
 
     void Update()
     {
+        if (useButton)
+        {
+            if (GameObject.FindGameObjectsWithTag("HandItem")[0].TryGetComponent<Placeable>(out Placeable placable)) 
+            {
+                placable.Use(playerCamera);
+            } else if (GameObject.FindGameObjectsWithTag("HandItem")[0].TryGetComponent<IUsable>(out IUsable usable))
+            {
+                usable.Use(playerCamera);
+            }   
+        }
+        
         RaycastHit hit;
         if (Physics.Raycast(playerCamera.position, playerCamera.forward, out hit, 2))
         {

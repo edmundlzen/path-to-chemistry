@@ -23,29 +23,6 @@ public class InventoryController : MonoBehaviour
         UpdateMaterialsView();
     }
 
-    private void Load()
-    {
-        var directory = $"{Application.persistentDataPath}/Data";
-        var filePath = Path.Combine(directory, "Saves.json");
-        var fileContent = File.ReadAllText(filePath);
-        var playerData = JsonConvert.DeserializeObject<PlayerData>(fileContent);
-        PlayerData.Instance().UpdatePlayerData(playerData);
-    }
-
-    private void Save()
-    {
-        var playerData = PlayerData.Instance();
-        var directory = $"{Application.persistentDataPath}/Data";
-        if (!Directory.Exists(directory)) Directory.CreateDirectory(directory);
-
-        var Settings = new JsonSerializerSettings();
-        Settings.Formatting = Formatting.Indented;
-        Settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-        var Json = JsonConvert.SerializeObject(playerData, Settings);
-        var filePath = Path.Combine(directory, "Saves.json");
-        File.WriteAllText(filePath, Json);
-    }
-
     public void InventoryClickHandler(GameObject slot)
     {
         var playerData = PlayerData.Instance();
@@ -58,13 +35,11 @@ public class InventoryController : MonoBehaviour
             playerData.survivalHotbar.RemoveAt(8);
             playerData.survivalHotbar.Insert(0, item["name"].ToString());
             UpdateHotbarView();
-            Save();
         }
         else if (!survivalHotbar.Contains(item["name"].ToString()) && survivalHotbar.Count < 9)
         {
             playerData.survivalHotbar.Insert(0, item["name"].ToString());
             UpdateHotbarView();
-            Save();
         }
     }
 

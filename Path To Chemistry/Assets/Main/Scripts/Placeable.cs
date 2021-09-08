@@ -13,30 +13,7 @@ public class Placeable : MonoBehaviour
     {
         mainGUIController = GameObject.FindGameObjectsWithTag("MainGUIController")[0].GetComponent<MainGUIController>();
     }
-    
-    private void Load()
-    {
-        var directory = $"{Application.persistentDataPath}/Data";
-        var filePath = Path.Combine(directory, "Saves.json");
-        var fileContent = File.ReadAllText(filePath);
-        var playerData = JsonConvert.DeserializeObject<PlayerData>(fileContent);
-        PlayerData.Instance().UpdatePlayerData(playerData);
-    }
 
-    private void Save()
-    {
-        var playerData = PlayerData.Instance();
-        var directory = $"{Application.persistentDataPath}/Data";
-        if (!Directory.Exists(directory)) Directory.CreateDirectory(directory);
-
-        var Settings = new JsonSerializerSettings();
-        Settings.Formatting = Formatting.Indented;
-        Settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-        var Json = JsonConvert.SerializeObject(playerData, Settings);
-        var filePath = Path.Combine(directory, "Saves.json");
-        File.WriteAllText(filePath, Json);
-    }
-    
     public void Use(Transform playerCamera)
     {
         var playerData = PlayerData.Instance();
@@ -49,7 +26,7 @@ public class Placeable : MonoBehaviour
         {
             Instantiate(Resources.Load<GameObject>("Prefabs/P " + transform.name), hit.point, Quaternion.identity);
         }
-        // Save()
+        
         mainGUIController.UpdateGameviewHotbar();
     }
 }
