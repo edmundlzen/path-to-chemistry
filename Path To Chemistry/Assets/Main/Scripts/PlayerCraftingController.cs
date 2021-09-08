@@ -86,7 +86,7 @@ public class PlayerCraftingController : MonoBehaviour
                 }
 
                 var newRecipeContainer = Instantiate(firstRecipeContainer);
-                newRecipeContainer.transform.SetParent(recipes);
+                newRecipeContainer.transform.SetParent(recipes, false);
 
                 newRecipeContainer.transform.Find("Image Container").GetChild(0).GetComponent<Image>().sprite =
                     Resources.Load<Sprite>("Sprites/" + item["image"].ToString());
