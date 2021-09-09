@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class LaserCollectorWeapon : MonoBehaviour, IUsable
 {
+    public int damage = 5;
+    public float fireRate = 0.1f;
     private Transform laserComponents;
     private Transform laserFizz;
     private Transform laserHead;
@@ -38,6 +40,9 @@ public class LaserCollectorWeapon : MonoBehaviour, IUsable
                 if (hit.transform.TryGetComponent(out ICollectable collectable))
                 {
                     collectable.Collect();
+                } else if (hit.transform.TryGetComponent(out IEntity entity))
+                {
+                    entity.Attacked(damage, fireRate);
                 }
             }
         }

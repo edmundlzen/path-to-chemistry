@@ -2,18 +2,23 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using Newtonsoft.Json;
+using ProceduralToolkit;
 using Unity.Mathematics;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Jobs;
 using UnityEngine.UI;
-using Random = System.Random;
+using Random = UnityEngine.Random;
 
 public class MetalonEnemy: MonoBehaviour, IEntity
 {
     public int health { get; set; }
     public EntityStates currentState { get; set; }
     public float speed { get; set; }
+    public Dictionary<string, int> drops { get; set; }
 
     public float patrolRange = 40f;
     public Vector2 restTime = new Vector2(1, 3);
@@ -21,41 +26,91 @@ public class MetalonEnemy: MonoBehaviour, IEntity
     public int sightRange = 30;
     public int minPlayerDetectDistance = 20;
     public int attackRange = 5;
-    public GameObject marker;
-    public Text stateText;
     
     private Transform rayOrigin;
     private NavMeshAgent agent;
     private Animator animator;
+    private AudioSource audioSource;
     private Task patrolTask;
     private Task chaseTask;
     private Task investigateTask;
     private Task attackTask;
     private Task adjustPosTask;
+    private Task attackedTask;
+    private Task fleeTask;
+    private Task deadTask;
     private List<Task> tasks = new List<Task>();
     private Transform player;
     private Vector3 lastSeenPosition;
     private Vector3 patrolPoint;
     private float lastYRotation;
-
-    void Awake()
+    
+    private void Load()
     {
-        patrolPoint = transform.position;
-        rayOrigin = transform.Find("Raycast origin");
-        player = GameObject.FindGameObjectsWithTag("Player")[0].transform;
-        agent = GetComponent<NavMeshAgent>();
-        animator = GetComponent<Animator>();
+        var filePath = Path.Combine(Application.dataPath, "Elements.json");
+        var fileContent = File.ReadAllText(filePath);
+        var elementData = JsonConvert.DeserializeObject<ElementData>(fileContent);
+        ElementData.Instance().UpdateElementData(elementData);
+    }
+    
+    private void Save()
+    {
+        print(Application.persistentDataPath);
+        var playerData = PlayerData.Instance();
+        var directory = $"{Application.persistentDataPath}/Data";
+        if (!Directory.Exists(directory)) Directory.CreateDirectory(directory);
+        var Settings = new JsonSerializerSettings();
+        Settings.Formatting = Formatting.Indented;
+        Settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+        var Json = JsonConvert.SerializeObject(playerData, Settings);
+        var filePath = Path.Combine(directory, "Saves.json");
+        File.WriteAllText(filePath, Json);
     }
 
     void Start()
     {
+        var elementData = ElementData.Instance();
+
+        patrolPoint = transform.position;
+        rayOrigin = transform.Find("Raycast origin");
+        health = Random.Range(100, 150);
+        player = GameObject.FindGameObjectsWithTag("Player")[0].transform;
+        agent = GetComponent<NavMeshAgent>();
+        animator = GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();
+        audioSource.clip = Resources.Load<AudioClip>("Sounds/Nya");
+
+        // Whatever elements you want this enemy to drop, you put it here. You could even make it
+        // drop random elements if you want. 
+        drops = new Dictionary<string, int>()
+        {
+            {elementData.elements.ElementAt(1).Key, Random.Range(1,100)},
+            {elementData.elements.ElementAt(2).Key, Random.Range(1,100)},
+            {elementData.elements.ElementAt(3).Key, Random.Range(1,100)},
+            {elementData.elements.ElementAt(4).Key, Random.Range(1,100)},
+            {elementData.elements.ElementAt(5).Key, Random.Range(1,100)}
+        };
+        
         speed = agent.speed;
         ChangeState(EntityStates.Patrol);
     }
-    
-    public void TakeDamage(int damage)
+
+    public void Attacked(int damage, float fireRate)
     {
-        throw new System.NotImplementedException();
+        if (!(attackedTask is {Running: true}))
+        {
+            attackedTask = new Task(AttackedCoroutine(damage, fireRate));
+        }
+    }
+
+    IEnumerator AttackedCoroutine(int damage, float fireRate)
+    {
+        health -= damage;
+        if (!audioSource.isPlaying)
+        {
+            audioSource.Play();
+        }
+        yield return new WaitForSeconds(fireRate);
     }
 
     IEnumerator Patrol(Vector3 targetPos)
@@ -128,26 +183,33 @@ public class MetalonEnemy: MonoBehaviour, IEntity
         yield return null;
     }
 
-    void Flee()
+    IEnumerator Flee()
     {
-        
-    }
-    
-    void StayOnGround()
-    {
-        Ray downwardsRay = new Ray(transform.position, Vector3.down);
-        RaycastHit hit;
-        if(Physics.Raycast(downwardsRay, out hit, 1.0f))
+        Vector3 runTo = transform.position + ((transform.position = player.position) * 30);
+        float distance = Vector3.Distance(transform.position, player.position);
+        while (distance > 10)
         {
- 
-            //You could check hit.collider.transform/tag to make sure
-            //you're only trying to stand on the terrain
-            transform.position = hit.point;
- 
+            agent.destination = runTo;
+            yield return null;
         }
- 
     }
-    
+
+    IEnumerator Dead()
+    {
+        DisableAllAnimations();
+        animator.SetTrigger("Die");
+        var playerData = PlayerData.Instance();
+        foreach (var elementDrop in drops)
+        {
+            playerData.Inventory[elementDrop.Key] += elementDrop.Value;
+            // print("Added " + elementDrop.Value + " to " + elementDrop.Key);
+        }
+
+        Save();
+        Destroy(gameObject);
+        yield return null;
+    }
+
     public void ChangeState(EntityStates state)
     {
         if (patrolTask != null) patrolTask.Stop();
@@ -228,8 +290,16 @@ public class MetalonEnemy: MonoBehaviour, IEntity
     void DetermineState()
     {
         bool playerVisible = CanSeePlayer();
+        // Flee if health less than 15%
+        if (health <= health * 0.15f)
+        {
+            if (currentState != EntityStates.Flee)
+            {
+                ChangeState(EntityStates.Flee);
+            }
+        }
         // Patrol in normal circumstances
-        if (!playerVisible && currentState != EntityStates.Chase && currentState != EntityStates.Investigate && currentState != EntityStates.Flee)
+        else if (!playerVisible && currentState != EntityStates.Chase && currentState != EntityStates.Investigate && currentState != EntityStates.Flee)
         {
             if (currentState != EntityStates.Patrol)
             {
@@ -271,7 +341,19 @@ public class MetalonEnemy: MonoBehaviour, IEntity
 
     void Update()
     {
-        stateText.text = currentState.ToString();
+        // If too far from player then don't do anything.
+        if (Vector3.Distance(player.position, transform.position) > 500) return;
+        
+        // Die if dead
+        if (health <= 0)
+        {
+            if (!(deadTask is {Running: true}))
+            {
+                deadTask = new Task(Dead());
+            }
+            return;
+        }
+        
         var leftRay = Quaternion.Euler(0, fovRange, 0) * rayOrigin.forward;
         var rightRay = Quaternion.Euler(0, -fovRange, 0) * rayOrigin.forward;
 
@@ -320,7 +402,10 @@ public class MetalonEnemy: MonoBehaviour, IEntity
                 }
                 break;
             case EntityStates.Flee:
-                Flee();
+                if (!(fleeTask is {Running: true}))
+                {
+                    fleeTask = new Task(Flee());
+                }
                 break;
             default:
 

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public enum EntityStates
@@ -12,8 +13,9 @@ public interface IEntity
 {
     int health { get; set; }
     float speed { get; set; }
+    Dictionary<string, int> drops { get; set; }
     EntityStates currentState { get; set; }
 
     void ChangeState(EntityStates state);
-    void TakeDamage(int damage);
+    void Attacked(int damage, float fireRate);
 }

@@ -9,11 +9,14 @@ using UnityEngine.Jobs;
 using UnityEngine.UI;
 using Random = System.Random;
 
+// DO NOT USE, OUTDATED. PLEASE USE METALONENEMY.CS INSTEAD.
+
 public class TestEnemy: MonoBehaviour, IEntity
 {
     public int health { get; set; }
     public EntityStates currentState { get; set; }
     public float speed { get; set; }
+    public Dictionary<string, int> drops { get; set; }
 
     public float patrolRange = 10f;
     public Vector2 restTime;
@@ -21,8 +24,6 @@ public class TestEnemy: MonoBehaviour, IEntity
     public int sightRange;
     public int minPlayerDetectDistance;
     public int attackRange;
-    public GameObject marker;
-    public Text stateText;
     private Transform rayOrigin;
     private NavMeshAgent agent;
 
@@ -37,6 +38,8 @@ public class TestEnemy: MonoBehaviour, IEntity
     private Vector3 lastSeenPosition;
     private Vector3 patrolPoint;
 
+    //PLES DO NOT COPY THIS, PLEASE COPY METALON ENEMY. THIS IS OLD. (and im lazy to update this kwkwk)
+    
     void Awake()
     {
         patrolPoint = transform.position;
@@ -50,6 +53,11 @@ public class TestEnemy: MonoBehaviour, IEntity
             chaseTask,
             investigateTask,
             attackTask
+        };
+        
+        drops = new Dictionary<string, int>()
+        {
+            
         };
     }
 
@@ -188,6 +196,16 @@ public class TestEnemy: MonoBehaviour, IEntity
         }
     }
 
+    public void Attacked(int damage, float fireRate)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void Attack(int damage, float fireRate)
+    {
+        return;
+    }
+
     bool CanSeePlayer()
     {
         RaycastHit hit;
@@ -258,7 +276,6 @@ public class TestEnemy: MonoBehaviour, IEntity
 
     void Update()
     {
-        stateText.text = currentState.ToString();
         var leftRay = Quaternion.Euler(0, fovRange, 0) * rayOrigin.forward;
         var rightRay = Quaternion.Euler(0, -fovRange, 0) * rayOrigin.forward;
 
