@@ -13,7 +13,6 @@ public static class Chemidex
         {"Recipe 4", "C2H3NaO2 + H2O"},
         {"Recipe 5", "KI + H2O2 + C18H35NaO2"}
     };
-
     public static string chemNum { get; set; }
 }
 
