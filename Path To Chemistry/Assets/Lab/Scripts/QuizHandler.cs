@@ -10,7 +10,7 @@ public static class QuizData
 {
     public static int Level = 0;
     public static int Index = 0;
-    public static float Quest = 2;
+    public static float Quest = 0;
     public static float Score = 0;
     public static List<string> Answers = new List<string>()
     {
@@ -51,6 +51,7 @@ public class QuizHandler : MonoBehaviour
     {
         Load();
         generateLevel();
+        QuizData.Quest = QuizData.Quizzes.Count;
     }
     public void mainMenu()
     {

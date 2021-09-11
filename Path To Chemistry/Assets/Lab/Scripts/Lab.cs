@@ -20,13 +20,15 @@ public class Lab : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetTouch(0).phase == TouchPhase.Stationary || Input.GetTouch(0).phase == TouchPhase.Moved &&
-            Input.GetTouch(0).deltaPosition.magnitude < 1.2f)
+        if (Input.touchCount > 0)
+        {
             GameObject.Find("Label").GetComponent<Text>().text = Input.GetTouch(0).position.ToString();
-        if (objectSpawn == null && isPoseValid && Input.touchCount > 0 &&
-            Input.GetTouch(0).phase == TouchPhase.Began) placeObject();
-        updatePose();
-        updateCrosshair();
+        } 
+        if (objectSpawn == null && isPoseValid && Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began) placeObject();
+        {
+            updatePose();
+            updateCrosshair();
+        }
     }
 
     private void placeObject()
@@ -36,11 +38,14 @@ public class Lab : MonoBehaviour
 
     private void updatePose()
     {
-        var screenCenter = Camera.current.ViewportToScreenPoint(new Vector3(0.5f, 0.5f));
+        //var screenCenter = Camera.current.ViewportToScreenPoint(new Vector3(0.5f, 0.5f));
         var Hit = new List<ARRaycastHit>();
-        arRaycastManager.Raycast(screenCenter, Hit, TrackableType.Planes);
+        arRaycastManager.Raycast(Input.GetTouch(0).position, Hit, TrackableType.Planes);
         isPoseValid = Hit.Count > 0;
-        if (isPoseValid) Pose = Hit[0].pose;
+        if (isPoseValid)
+        {
+            Pose = Hit[0].pose;
+        }
     }
 
     private void updateCrosshair()

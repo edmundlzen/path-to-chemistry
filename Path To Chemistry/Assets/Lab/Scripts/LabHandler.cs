@@ -160,7 +160,7 @@ public class LabHandler : MonoBehaviour
     public void placeFlaskQuantity()
     {
         var playerData = PlayerData.Instance();
-        var sliderValue = Convert.ToInt32(GameObject.Find("flaskQuantity/Slider").GetComponent<Slider>().value);
+        var sliderValue = Convert.ToInt32(Math.Floor(GameObject.Find("flaskQuantity/Slider").GetComponent<Slider>().value));
         GameObject.Find("flaskQuantity/Slider").GetComponent<Slider>().value = 0;
         identifyQuantity.SetActive(false);
         if (sliderValue > 0)
@@ -176,6 +176,11 @@ public class LabHandler : MonoBehaviour
                     playerData.flaskElements.Add(playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"].ToString(), sliderValue);
                 }
                 playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"] = Convert.ToInt32(playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"]) - sliderValue;
+                if (Convert.ToInt32(playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"]) < 1)
+                {
+                    playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"] = null;
+                    playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"] = null;
+                }
                 slotCheck();
                 flaskCheck();
             }
@@ -198,6 +203,11 @@ public class LabHandler : MonoBehaviour
                 playerData.Molecule.Add(playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"].ToString(), sliderValue);
             }
             playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"] = Convert.ToInt32(playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"]) - sliderValue;
+            if (Convert.ToInt32(playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"]) < 1)
+            {
+                playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"] = null;
+                playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"] = null;
+            }
             slotCheck();
             craftingTable();
         }
@@ -339,20 +349,20 @@ public class LabHandler : MonoBehaviour
         var playerData = PlayerData.Instance();
         for (var i = 1; i <= 10; i = i + 1)
         {
-            GameObject.Find($"Element{i}").GetComponent<Text>().text = "";
-            GameObject.Find($"Elementnum{i}").GetComponent<Text>().text = "";
+            GameObject.Find($"Slot{i}/Element").GetComponent<Text>().text = "";
+            GameObject.Find($"Slot{i}/Elementnum").GetComponent<Text>().text = "";
         }
         for (var i = 1; i <= playerData.Molecule.Count; i = i + 1)
             if (playerData.Molecule.Values.ElementAt(i - 1) > 1)
             {
-                GameObject.Find($"Element{i}").GetComponent<Text>().text = playerData.Molecule.Keys.ElementAt(i - 1);
-                GameObject.Find($"Elementnum{i}").GetComponent<Text>().text =
+                GameObject.Find($"Slot{i}/Element").GetComponent<Text>().text = playerData.Molecule.Keys.ElementAt(i - 1);
+                GameObject.Find($"Slot{i}/Elementnum").GetComponent<Text>().text =
                     playerData.Molecule.Values.ElementAt(i - 1).ToString();
             }
             else
             {
-                GameObject.Find($"Element{i}").GetComponent<Text>().text = playerData.Molecule.Keys.ElementAt(i - 1);
-                GameObject.Find($"Elementnum{i}").GetComponent<Text>().text = "";
+                GameObject.Find($"Slot{i}/Element").GetComponent<Text>().text = playerData.Molecule.Keys.ElementAt(i - 1);
+                GameObject.Find($"Slot{i}/Elementnum").GetComponent<Text>().text = "";
             }
     }
     private void slotCheck()
@@ -360,11 +370,6 @@ public class LabHandler : MonoBehaviour
         var playerData = PlayerData.Instance();
         for (var i = 1; i <= 9; i = i + 1)
         {
-            if (Convert.ToInt32(playerData.slotItem[$"Slot{i}"]["Quantity"]) <= 0)
-            {
-                playerData.slotItem[$"Slot{i}"]["Element"] = null;
-                playerData.slotItem[$"Slot{i}"]["Quantity"] = null;
-            }
             if (playerData.slotItem[$"Slot{i}"]["Element"] != null &&
                 Convert.ToInt32(playerData.slotItem[$"Slot{i}"]["Quantity"]) == 1)
             {
@@ -448,20 +453,20 @@ public class LabHandler : MonoBehaviour
         var playerData = PlayerData.Instance();
         for (var i = 1; i <= 10; i = i + 1)
         {
-            GameObject.Find($"Item{i}").GetComponent<Text>().text = "";
-            GameObject.Find($"Invenum{i}").GetComponent<Text>().text = "";
+            GameObject.Find($"Slot{i}/Item").GetComponent<Text>().text = "";
+            GameObject.Find($"Slot{i}/Invenum").GetComponent<Text>().text = "";
         }
         for (var i = 1; i <= playerData.flaskElements.Count; i = i + 1)
             if (playerData.flaskElements.Values.ElementAt(i - 1) > 1)
             {
-                GameObject.Find($"Item{i}").GetComponent<Text>().text = playerData.flaskElements.Keys.ElementAt(i - 1);
-                GameObject.Find($"Invenum{i}").GetComponent<Text>().text =
+                GameObject.Find($"Slot{i}/Item").GetComponent<Text>().text = playerData.flaskElements.Keys.ElementAt(i - 1);
+                GameObject.Find($"Slot{i}/Invenum").GetComponent<Text>().text =
                     playerData.flaskElements.Values.ElementAt(i - 1).ToString();
             }
             else
             {
-                GameObject.Find($"Item{i}").GetComponent<Text>().text = playerData.flaskElements.Keys.ElementAt(i - 1);
-                GameObject.Find($"Invenum{i}").GetComponent<Text>().text = "";
+                GameObject.Find($"Slot{i}/Item").GetComponent<Text>().text = playerData.flaskElements.Keys.ElementAt(i - 1);
+                GameObject.Find($"Slot{i}/Invenum").GetComponent<Text>().text = "";
             }
     }
     private void Guide()

@@ -9,9 +9,20 @@ public static class Chemidex
     {
         {"Recipe 1", "K + H2O"},
         {"Recipe 2", "HCl + NH3"},
-        {"Recipe 3", "H2O2 + NaI"},
-        {"Recipe 4", "C2H3NaO2 + H2O"},
-        {"Recipe 5", "KI + H2O2 + C18H35NaO2"}
+        {"Recipe 3", "NaH + H2O"},
+        {"Recipe 4", "HCl + Na2S"},
+        {"Recipe 5", "HCl + NaCN"},
+        {"Recipe 6", "Na3P + H2O"},
+        {"Recipe 7", "NaCl + H2O"},
+        {"Recipe 8", "H2O2 + NaI"},
+        {"Recipe 9", "HNO3 + N2H4"},
+        {"Recipe 10", "AgNO3 + NH3"},
+        {"Recipe 11", "HCl + NaClO"},
+        {"Recipe 12", "NH3 + NaClO"},
+        {"Recipe 13", "IO3 + C3H8O"},
+        {"Recipe 14", "HNO3 + C3H8O"},
+        {"Recipe 15", "C2H3NaO2 + H2O"},
+        {"Recipe 16", "KI + H2O2 + C18H35NaO2"},
     };
     public static string chemNum { get; set; }
 }
