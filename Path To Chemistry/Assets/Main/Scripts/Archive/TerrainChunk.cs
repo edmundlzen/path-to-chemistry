@@ -52,7 +52,7 @@ public class TerrainChunk
         meshCollider = meshObject.AddComponent<MeshCollider>();
         meshObjectGenerator = meshObject.AddComponent<GenerateObjects>();
         meshObject.GetComponent<GenerateObjects>().objectGenerationSettings = objectGenerationSettings;
-        meshObject.GetComponent<GenerateObjects>().particleAttractor = particleAttractor;
+        // meshObject.GetComponent<GenerateObjects>().particleAttractor = particleAttractor;
         meshGrassGenerator = meshObject.AddComponent<GenerateGrass>();
         meshObject.GetComponent<GenerateGrass>().grassGenerationSettings = grassGenerationSettings;
         meshObject.GetComponent<GenerateGrass>().playerTransform = playerTransform;

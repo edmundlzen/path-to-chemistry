@@ -14,6 +14,7 @@ using Random = System.Random;
 public class TestEnemy: MonoBehaviour, IEntity
 {
     public int health { get; set; }
+    public int damage { get; set; }
     public EntityStates currentState { get; set; }
     public float speed { get; set; }
     public Dictionary<string, int> drops { get; set; }
@@ -46,6 +47,7 @@ public class TestEnemy: MonoBehaviour, IEntity
         rayOrigin = transform.Find("Raycast origin");
         player = GameObject.FindGameObjectsWithTag("Player")[0].transform;
         agent = GetComponent<NavMeshAgent>();
+        health = 100; // Set default health here
 
         tasks = new List<Task>()
         {
@@ -67,11 +69,6 @@ public class TestEnemy: MonoBehaviour, IEntity
         ChangeState(EntityStates.Patrol);
     }
     
-    public void TakeDamage(int damage)
-    {
-        throw new System.NotImplementedException();
-    }
-
     IEnumerator Patrol(Vector3 targetPos)
     {
         // Vector3 targetPos = new Vector3(x, transform.position.y, z);
@@ -136,8 +133,9 @@ public class TestEnemy: MonoBehaviour, IEntity
     IEnumerator Attack()
     {
         // Attack here
-        print("ATTACKK");
-        yield return null;
+        var playerData = PlayerData.Instance();
+        playerData.survivalHealth -= damage;
+        yield return new WaitForSeconds(2); // Attack speed
     }
 
     void Flee()

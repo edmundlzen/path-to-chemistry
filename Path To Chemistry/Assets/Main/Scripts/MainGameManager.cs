@@ -75,8 +75,19 @@ public class MainGameManager : MonoBehaviour
         useButton = false;
     }
 
+    void PlayerDead()
+    {
+        // Do stuff you do when player dead here.
+    }
+
     void Update()
     {
+        var playerHealth = PlayerData.Instance().survivalHealth;
+        if (playerHealth <= 0)
+        {
+            PlayerDead();
+            return;
+        }
         if (useButton)
         {
             if (GameObject.FindGameObjectsWithTag("HandItem")[0].TryGetComponent<Placeable>(out Placeable placable)) 

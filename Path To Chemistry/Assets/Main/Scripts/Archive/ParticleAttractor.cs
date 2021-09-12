@@ -7,7 +7,12 @@ public class ParticleAttractor : MonoBehaviour
 
     private ParticleSystem _particleSystem;
 
-    public void Start()
+    void Awake()
+    {
+        _attractorTransform = GameObject.FindGameObjectsWithTag("Player")[0].transform;
+    }
+    
+    void Start()
     {
         _particleSystem = GetComponent<ParticleSystem>();
     }

@@ -24,7 +24,7 @@ public class FirstPersonController : MonoBehaviour
     private Vector2 lookInput;
     private bool touchWeaponOn;
 
-    private void Start()
+    void Start()
     {
         if (!desktopInput)
         {

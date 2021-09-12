@@ -15,6 +15,7 @@ public class MainGUIController : MonoBehaviour
     private GameObject crafting;
     private GameObject smelting;
     private GameObject playerCrafting;
+    private GameObject materialReducer;
     
     private string activeView;
 
@@ -31,6 +32,7 @@ public class MainGUIController : MonoBehaviour
         crafting = transform.Find("Crafting").gameObject;
         smelting = transform.Find("Smelting").gameObject;
         playerCrafting = transform.Find("Player Crafting").gameObject;
+        materialReducer = transform.Find("Material Reducer").gameObject;
     }
     
     void Start()
@@ -96,6 +98,7 @@ public class MainGUIController : MonoBehaviour
         crafting.SetActive(false);
         smelting.SetActive(false);
         playerCrafting.SetActive(false);
+        materialReducer.SetActive(false);
 
         switch (view)
         {
@@ -125,6 +128,11 @@ public class MainGUIController : MonoBehaviour
                 Cursor.lockState = CursorLockMode.None;
                 Cursor.visible = true;
                 playerCrafting.SetActive(true);
+                break;
+            case "materialReducer":
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+                materialReducer.SetActive(true);
                 break;
             default:
                 Debug.LogError("Argument for changeView is invalid. It must be one of either: 'inventory', 'crafting', 'smelting'");

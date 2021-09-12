@@ -4,9 +4,8 @@ using UnityEngine;
 public class GenerateObjects : MonoBehaviour
 {
     public ObjectGenerationSettings objectGenerationSettings;
-    public Transform particleAttractor;
-    public Dictionary<GameObject, int> currentObjects = new Dictionary<GameObject, int>();
-    public Dictionary<GameObject, int> numberOfObjects = new Dictionary<GameObject, int>();
+    private Dictionary<GameObject, int> currentObjects = new Dictionary<GameObject, int>();
+    private Dictionary<GameObject, int> numberOfObjects = new Dictionary<GameObject, int>();
     private Renderer r;
 
     private float randomX;
@@ -45,14 +44,6 @@ public class GenerateObjects : MonoBehaviour
                             {
                                 newObject = Instantiate(objects[i].gameObject, hit.point,
                                     Quaternion.FromToRotation(Vector3.up, hit.normal));
-                                var newParticleSystem = newObject.transform.Find("Particle System");
-                                if (newParticleSystem != null)
-                                {
-                                    var particleAttractorScript =
-                                        newParticleSystem.GetComponent<ParticleAttractor>();
-                                    if (particleAttractorScript != null)
-                                        particleAttractorScript._attractorTransform = particleAttractor;
-                                }
                             }
                             else
                             {

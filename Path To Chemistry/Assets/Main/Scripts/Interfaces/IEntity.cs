@@ -12,6 +12,7 @@ public enum EntityStates
 public interface IEntity
 {
     int health { get; set; }
+    int damage { get; set; }
     float speed { get; set; }
     Dictionary<string, int> drops { get; set; }
     EntityStates currentState { get; set; }

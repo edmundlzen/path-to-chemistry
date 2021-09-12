@@ -16,6 +16,7 @@ using Random = UnityEngine.Random;
 public class MetalonEnemy: MonoBehaviour, IEntity
 {
     public int health { get; set; }
+    public int damage { get; set; }
     public EntityStates currentState { get; set; }
     public float speed { get; set; }
     public Dictionary<string, int> drops { get; set; }
@@ -44,6 +45,13 @@ public class MetalonEnemy: MonoBehaviour, IEntity
     private Vector3 lastSeenPosition;
     private Vector3 patrolPoint;
     private float lastYRotation;
+
+    void Awake()
+    {
+        // Assign health and damage here
+        health = 100;
+        damage = 10;
+    }
     
     private void Load()
     {
@@ -179,8 +187,9 @@ public class MetalonEnemy: MonoBehaviour, IEntity
     IEnumerator Attack()
     {
         // Attack here
-        print("ATTACKK");
-        yield return null;
+        PlayerData.Instance().survivalHealth -= damage;
+        print(PlayerData.Instance().survivalHealth);
+        yield return new WaitForSeconds(2); //Attack speed
     }
 
     IEnumerator Flee()
