@@ -26,9 +26,18 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Chemidex/Scenes/Recipes.unity
     guid: 124d95d0a7e20bd4092dbffbb51fdacc
-  - enabled: 1
+  - enabled: 0
     path: Assets/New Main/Scenes/Terrain.unity
     guid: 8fca245bae27e044db37152b8a1c010e
+  - enabled: 0
+    path: Assets/Lab/Scenes/Element Constructor.unity
+    guid: b058b3209977d8748b0f7045b1342331
+  - enabled: 0
+    path: Assets/Lab/Scenes/Quiz.unity
+    guid: 3e0a72aa69637284c870407fd5f8f604
+  - enabled: 1
+    path: Assets/Lab/Scenes/AR Lab.unity
+    guid: af48b7610c0ae6341a7ba8b120f961a5
   m_configObjects:
     UnityEditor.XR.ARCore.ARCoreSettings: {fileID: 11400000, guid: 6568def299a24bf4993a8bc2455e1114,
       type: 2}
