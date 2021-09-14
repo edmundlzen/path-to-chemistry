@@ -44,11 +44,11 @@ public class PlayerData
                 }
             },
             {
-                "Item 4", new Dictionary<string, object>
+                "Flamethrower", new Dictionary<string, object>
                 {
                     {"image", "placeholder_item"},
-                    {"name", "Item 4"},
-                    {"quantity", 5}
+                    {"name", "Flamethrower"},
+                    {"quantity", 1}
                 }
             },
             {
@@ -116,10 +116,10 @@ public class PlayerData
                 }
             }
         };
-        // TODO: Initialize this with 9 nulls to represent an empty hotbar.
         survivalHotbar = new List<string>()
         {
-            {"Laser Collector"}
+            {"Laser Collector"},
+            {"Flamethrower"}
         };
         survivalMaterials = new Dictionary<string, Dictionary<string, object>>
         {

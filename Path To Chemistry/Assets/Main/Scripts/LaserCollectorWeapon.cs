@@ -10,6 +10,7 @@ public class LaserCollectorWeapon : MonoBehaviour, IUsable
     private Transform laserFizz;
     private Transform laserHead;
     private Transform laserBeam;
+    private float lastShot;
 
     private Transform playerCamera;
 
@@ -34,15 +35,16 @@ public class LaserCollectorWeapon : MonoBehaviour, IUsable
         if (gunEnabled)
         {
             RaycastHit hit;
-            if (Physics.Raycast(playerCamera.position, playerCamera.forward, out hit))
+            if (Physics.Raycast(playerCamera.position, playerCamera.forward, out hit) && (Time.time - lastShot) > fireRate)
             {
+                lastShot = Time.time;
                 EnableLaser(hit.point);
                 if (hit.transform.TryGetComponent(out ICollectable collectable))
                 {
                     collectable.Collect();
                 } else if (hit.transform.TryGetComponent(out IEntity entity))
                 {
-                    entity.Attacked(damage, fireRate);
+                    entity.Attacked(damage);
                 }
             }
         }

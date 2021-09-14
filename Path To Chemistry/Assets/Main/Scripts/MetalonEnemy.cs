@@ -86,7 +86,8 @@ public class MetalonEnemy: MonoBehaviour, IEntity
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
         audioSource = GetComponent<AudioSource>();
-        audioSource.clip = Resources.Load<AudioClip>("Sounds/Nya");
+        //TODO: Pls load a nice sound here for enemy when hit.
+        // audioSource.clip = Resources.Load<AudioClip>("Sounds/Nya");
 
         // Whatever elements you want this enemy to drop, you put it here. You could even make it
         // drop random elements if you want. 
@@ -103,22 +104,22 @@ public class MetalonEnemy: MonoBehaviour, IEntity
         ChangeState(EntityStates.Patrol);
     }
 
-    public void Attacked(int damage, float fireRate)
+    public void Attacked(int damage)
     {
         if (!(attackedTask is {Running: true}))
         {
-            attackedTask = new Task(AttackedCoroutine(damage, fireRate));
+            attackedTask = new Task(AttackedCoroutine(damage));
         }
     }
 
-    IEnumerator AttackedCoroutine(int damage, float fireRate)
+    IEnumerator AttackedCoroutine(int damage)
     {
         health -= damage;
         if (!audioSource.isPlaying)
         {
             audioSource.Play();
         }
-        yield return new WaitForSeconds(fireRate);
+        yield return null;
     }
 
     IEnumerator Patrol(Vector3 targetPos)

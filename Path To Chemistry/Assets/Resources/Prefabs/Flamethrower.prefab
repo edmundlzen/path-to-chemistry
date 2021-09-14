@@ -4936,7 +4936,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 5
-  fireRate: 0.1
+  fireRate: 0.05
 --- !u!1 &2757735921699713011
 GameObject:
   m_ObjectHideFlags: 0
@@ -10641,7 +10641,7 @@ ParticleSystem:
     rateOverTime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 35
+      scalar: 80
       minScalar: 10
       maxCurve:
         serializedVersion: 2
@@ -11079,7 +11079,7 @@ ParticleSystem:
       maxColor: {r: 1, g: 1, b: 1, a: 1}
       maxGradient:
         serializedVersion: 2
-        key0: {r: 0.4481132, g: 1, b: 0.88592285, a: 0}
+        key0: {r: 1, g: 0.8272578, b: 0, a: 0}
         key1: {r: 1, g: 0.8272578, b: 0, a: 1}
         key2: {r: 1, g: 0.4487361, b: 0, a: 1}
         key3: {r: 1, g: 0, b: 0, a: 0}

@@ -18,5 +18,5 @@ public interface IEntity
     EntityStates currentState { get; set; }
 
     void ChangeState(EntityStates state);
-    void Attacked(int damage, float fireRate);
+    void Attacked(int damage);
 }
