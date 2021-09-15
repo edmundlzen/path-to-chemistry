@@ -8,6 +8,7 @@ using UnityEngine.UI;
 
 public static class InventoryData
 {
+    public static bool hasLoaded = false;
     public static string Slot = "Slot (1)";
     public static string Input { get; set; }
 }
@@ -16,21 +17,25 @@ public class Inventory : MonoBehaviour
 {
     private void Start()
     {
-        Load();
-        Load2();
-        elementCheck();
-        var playerData = PlayerData.Instance();
-        GameObject.Find(InventoryData.Slot).GetComponent<Image>().color = Color.cyan;
-        GameObject.Find("Energy").GetComponent<Text>().text = $"Energy: {playerData.Energy}";
-        for (var i = 1; i <= 118; i++)
+        if (!InventoryData.hasLoaded)
         {
-            if (InventoryData.Slot == $"Slot ({i})")
+            Load();
+            Load2();
+            elementCheck();
+            var playerData = PlayerData.Instance();
+            GameObject.Find(InventoryData.Slot).GetComponent<Image>().color = Color.cyan;
+            GameObject.Find("Energy").GetComponent<Text>().text = $"Energy: {playerData.Energy}";
+            for (var i = 1; i <= 118; i++)
             {
-                var Name = playerData.Inventory.Keys.ElementAt(i - 1);
-                var Quantity = playerData.Inventory.Values.ElementAt(i - 1);
-                GameObject.Find("State").GetComponent<Text>().text = $"Name: {Name}\nQuantity: {Quantity}";
-                break;
+                if (InventoryData.Slot == $"Slot ({i})")
+                {
+                    var Name = playerData.Inventory.Keys.ElementAt(i - 1);
+                    var Quantity = playerData.Inventory.Values.ElementAt(i - 1);
+                    GameObject.Find("State").GetComponent<Text>().text = $"Name: {Name}\nQuantity: {Quantity}";
+                    break;
+                }
             }
+            InventoryData.hasLoaded = true;
         }
 /*
         for (int i = 1; i <= 118; i++)

@@ -265,7 +265,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 29
+  m_RootOrder: 28
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &28225753 stripped
 Transform:
@@ -1082,7 +1082,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!154 &178464262
 TerrainCollider:
   m_ObjectHideFlags: 0
@@ -5731,79 +5731,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 71a5880545553674a9f302b0d6db4fec, type: 3}
---- !u!1001 &836897375
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 100000, guid: 41dc84019e9376b46908ba7afdd1d15e, type: 3}
-      propertyPath: m_Name
-      value: Snow_mountain
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 41dc84019e9376b46908ba7afdd1d15e, type: 3}
-      propertyPath: m_RootOrder
-      value: 26
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 41dc84019e9376b46908ba7afdd1d15e, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 41dc84019e9376b46908ba7afdd1d15e, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 41dc84019e9376b46908ba7afdd1d15e, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 41dc84019e9376b46908ba7afdd1d15e, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 500
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 41dc84019e9376b46908ba7afdd1d15e, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 41dc84019e9376b46908ba7afdd1d15e, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -500
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 41dc84019e9376b46908ba7afdd1d15e, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 41dc84019e9376b46908ba7afdd1d15e, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0.000000021855694
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 41dc84019e9376b46908ba7afdd1d15e, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 41dc84019e9376b46908ba7afdd1d15e, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 41dc84019e9376b46908ba7afdd1d15e, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 41dc84019e9376b46908ba7afdd1d15e, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 41dc84019e9376b46908ba7afdd1d15e, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2300000, guid: 41dc84019e9376b46908ba7afdd1d15e, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 41dc84019e9376b46908ba7afdd1d15e, type: 3}
 --- !u!1 &867434862
 GameObject:
   m_ObjectHideFlags: 0
@@ -8061,7 +7988,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!154 &980627145
 TerrainCollider:
   m_ObjectHideFlags: 0
@@ -11446,7 +11373,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 27
+  m_RootOrder: 26
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1383386724
 PrefabInstance:
@@ -12233,7 +12160,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!154 &1474872586
 TerrainCollider:
   m_ObjectHideFlags: 0
@@ -12828,7 +12755,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!154 &1585731702
 TerrainCollider:
   m_ObjectHideFlags: 0
@@ -13404,7 +13331,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!154 &1614346989
 TerrainCollider:
   m_ObjectHideFlags: 0
@@ -14945,7 +14872,7 @@ MonoBehaviour:
     - name: Grass 1
       layerID: 0
       threshold: 0.1
-    instanceCount: 4021
+    instanceCount: 4149
     prefabs:
     - index: 0
       probability: 100
@@ -15099,7 +15026,7 @@ MonoBehaviour:
     - name: Swamp
       layerID: 4
       threshold: 0.1
-    instanceCount: 915212
+    instanceCount: 915714
     index: 0
     type: 0
     renderAsBillboard: 0
@@ -15130,7 +15057,7 @@ MonoBehaviour:
     - name: Swamp
       layerID: 4
       threshold: 0.1
-    instanceCount: 915193
+    instanceCount: 915667
     index: 1
     type: 0
     renderAsBillboard: 0
@@ -15161,7 +15088,7 @@ MonoBehaviour:
     - name: Swamp
       layerID: 4
       threshold: 0.1
-    instanceCount: 915183
+    instanceCount: 915674
     index: 2
     type: 0
     renderAsBillboard: 0
@@ -15192,7 +15119,7 @@ MonoBehaviour:
     - name: Swamp
       layerID: 4
       threshold: 0.1
-    instanceCount: 915191
+    instanceCount: 915692
     index: 3
     type: 0
     renderAsBillboard: 0
@@ -16909,7 +16836,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!154 &1990220027
 TerrainCollider:
   m_ObjectHideFlags: 0
@@ -17084,7 +17011,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 28
+  m_RootOrder: 27
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2027982033
 PrefabInstance:
@@ -17646,7 +17573,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!154 &2044157619
 TerrainCollider:
   m_ObjectHideFlags: 0
