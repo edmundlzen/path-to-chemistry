@@ -18,62 +18,19 @@ public class Hotbar : MonoBehaviour
     private void Start()
     {
         slotCheck();
-        GameObject.Find("Button" + hotbar.slotNum).GetComponent<Image>().color = Color.cyan;
+        GameObject.Find($"HotbarSlot ({hotbar.slotNum})").GetComponent<Image>().color = Color.cyan;
     }
 
-    public void Button1()
+    public void hotbarSlot()
     {
-        slotButton("1");
-    }
-
-    public void Button2()
-    {
-        slotButton("2");
-    }
-
-    public void Button3()
-    {
-        slotButton("3");
-    }
-
-    public void Button4()
-    {
-        slotButton("4");
-    }
-
-    public void Button5()
-    {
-        slotButton("5");
-    }
-
-    public void Button6()
-    {
-        slotButton("6");
-    }
-
-    public void Button7()
-    {
-        slotButton("7");
-    }
-
-    public void Button8()
-    {
-        slotButton("8");
-    }
-
-    public void Button9()
-    {
-        slotButton("9");
-    }
-    private void slotButton(string Num)
-    {
-        if (hotbar.slotNum != Num)
+        if ($"HotbarSlot ({hotbar.slotNum})" != EventSystem.current.currentSelectedGameObject.name)
         {
-            GameObject.Find("Button" + hotbar.slotNum).GetComponent<Image>().color = Color.grey;
-            hotbar.slotNum = Num;
-            GameObject.Find("Button" + hotbar.slotNum).GetComponent<Image>().color = Color.cyan;
+            GameObject.Find($"HotbarSlot ({hotbar.slotNum})").GetComponent<Image>().color = Color.grey;
+            hotbar.slotNum = EventSystem.current.currentSelectedGameObject.name.Replace("HotbarSlot (", "").Replace(")", "");
+            GameObject.Find($"HotbarSlot ({hotbar.slotNum})").GetComponent<Image>().color = Color.cyan;
         }
     }
+
     public void Slider(float Value)
     {
         GameObject.Find("sliderValue").GetComponent<Text>().text = Convert.ToString(Mathf.Floor(Value));
@@ -250,18 +207,18 @@ public class Hotbar : MonoBehaviour
             if (playerData.slotItem[$"Slot{i}"]["Element"] != null &&
                 Convert.ToInt32(playerData.slotItem[$"Slot{i}"]["Quantity"]) == 1)
             {
-                GameObject.Find($"Text{i}").GetComponent<Text>().text = playerData.slotItem[$"Slot{i}"]["Element"].ToString();
-                GameObject.Find($"ItemNum{i}").GetComponent<Text>().text = "";
+                GameObject.Find($"HotbarSlot ({i})/Item").GetComponent<Text>().text = playerData.slotItem[$"Slot{i}"]["Element"].ToString();
+                GameObject.Find($"HotbarSlot ({i})/ItemNum").GetComponent<Text>().text = "";
             }
             else if (playerData.slotItem[$"Slot{i}"]["Element"] != null && Convert.ToInt32(playerData.slotItem[$"Slot{i}"]["Quantity"]) > 1)
             {
-                GameObject.Find($"Text{i}").GetComponent<Text>().text = playerData.slotItem[$"Slot{i}"]["Element"].ToString();
-                GameObject.Find($"ItemNum{i}").GetComponent<Text>().text = playerData.slotItem[$"Slot{i}"]["Quantity"].ToString();
+                GameObject.Find($"HotbarSlot ({i})/Item").GetComponent<Text>().text = playerData.slotItem[$"Slot{i}"]["Element"].ToString();
+                GameObject.Find($"HotbarSlot ({i})/ItemNum").GetComponent<Text>().text = playerData.slotItem[$"Slot{i}"]["Quantity"].ToString();
             }
             else if (playerData.slotItem[$"Slot{i}"]["Element"] == null && playerData.slotItem[$"Slot{i}"]["Quantity"] == null)
             {
-                GameObject.Find($"Text{i}").GetComponent<Text>().text = "";
-                GameObject.Find($"ItemNum{i}").GetComponent<Text>().text = "";
+                GameObject.Find($"HotbarSlot ({i})/Item").GetComponent<Text>().text = "";
+                GameObject.Find($"HotbarSlot ({i})/ItemNum").GetComponent<Text>().text = "";
             }
     }
 

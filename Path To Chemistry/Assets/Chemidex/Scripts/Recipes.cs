@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -33,7 +34,7 @@ public class Recipes : MonoBehaviour
     {
         var playerData = PlayerData.Instance();
         Chemidex.chemNum = "1";
-        GameObject.Find("Chem" + Chemidex.chemNum).GetComponent<Image>().color = Color.cyan;
+        GameObject.Find($"Chem ({Chemidex.chemNum})").GetComponent<Image>().color = Color.cyan;
         levellCheck();
         chemCheck();
     }
@@ -48,39 +49,14 @@ public class Recipes : MonoBehaviour
         SceneManager.LoadScene("Main Menu");
     }
 
-    public void Chem1()
+    public void Chem()
     {
-        chemButton("1");
-    }
-
-    public void Chem2()
-    {
-        chemButton("2");
-    }
-
-    public void Chem3()
-    {
-        chemButton("3");
-    }
-
-    public void Chem4()
-    {
-        chemButton("4");
-    }
-
-    public void Chem5()
-    {
-        chemButton("5");
-    }
-
-    private void chemButton(string Num)
-    {
-        var playerData = PlayerData.Instance();
-        if (Chemidex.chemNum != Num)
+        var chemName = EventSystem.current.currentSelectedGameObject.name.Replace("Chem (", "").Replace(")", "");
+        if (Chemidex.chemNum != chemName)
         {
-            GameObject.Find("Chem" + Chemidex.chemNum).GetComponent<Image>().color = Color.white;
-            Chemidex.chemNum = Num;
-            GameObject.Find("Chem" + Chemidex.chemNum).GetComponent<Image>().color = Color.cyan;
+            GameObject.Find($"Chem ({Chemidex.chemNum})").GetComponent<Image>().color = Color.white;
+            Chemidex.chemNum = chemName;
+            GameObject.Find($"Chem ({Chemidex.chemNum})").GetComponent<Image>().color = Color.cyan;
             chemCheck();
         }
     }
@@ -89,18 +65,28 @@ public class Recipes : MonoBehaviour
     {
         var playerData = PlayerData.Instance();
         if (playerData.levelAvailable.Contains($"Level {Chemidex.chemNum}"))
+        {
             GameObject.Find("Statistic").GetComponent<Text>().text = Chemidex.chemRecipes[$"Recipe {Chemidex.chemNum}"];
+        }
         else
+        {
             GameObject.Find("Statistic").GetComponent<Text>().text = "?";
+        } 
     }
 
     private void levellCheck()
     {
         var playerData = PlayerData.Instance();
-        for (var i = 1; i <= 5; i++)
+        for (var i = 1; i <= 16; i++)
+        {
             if (playerData.levelAvailable.Contains($"Level {i}"))
-                GameObject.Find($"Text{i}").GetComponent<Text>().text = i.ToString();
+            {
+                GameObject.Find($"Chem ({i})/Level").GetComponent<Text>().text = i.ToString();
+            }
             else
-                GameObject.Find($"Text{i}").GetComponent<Text>().text = "?";
+            {
+                GameObject.Find($"Chem ({i})/Level").GetComponent<Text>().text = "?";
+            }
+        }
     }
 }

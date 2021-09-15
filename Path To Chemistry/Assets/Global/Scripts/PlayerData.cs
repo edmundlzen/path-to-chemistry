@@ -8,6 +8,8 @@ public class PlayerData
     private PlayerData()
     {
         Level = 1;
+        Energy = 0;
+        Experience = 0;
         Seat = "Main";
         levelAvailable = new List<string>
         {
@@ -16,6 +18,81 @@ public class PlayerData
         Molecule = new Dictionary<string, int>();
         Inventory = new Dictionary<string, int>();
         flaskElements = new Dictionary<string, int>();
+        hasLabUnlocked = new Dictionary<string, bool>()
+        {
+            { "Classic Lab", true },
+            { "Industry Lab", false },
+            { "Home Lab", false }
+        };
+        Shop = new Dictionary<string, Dictionary<string, int>>()
+        {
+            {
+                "Items", new Dictionary<string, int>()
+                {
+                    { "Health Potion", 0 }
+                }
+            },
+            {
+                "Materials 1", new Dictionary<string, int>()
+                {
+                    {"Gravel", 0},
+                    {"Obsidian", 0},
+                    {"Sand", 0},
+                    {"Sandstone", 0},
+                    {"Stone", 0},
+                    {"Quartz", 0}
+                }
+            },
+            {
+                "Materials 2", new Dictionary<string, int>()
+                {
+                    {"Grass", 0},
+                    {"Dirt", 0},
+                    {"Log", 0},
+                    {"Lava", 0},
+                    {"Cobblestone", 0},
+                    {"Mossy Cobblestone", 0}
+                }
+            },
+            {
+                "Materials 3", new Dictionary<string, int>()
+                {
+                    {"Water", 0},
+                    {"Ice", 0},
+                    {"Packed Ice", 0},
+                    {"Snow", 0},
+                    {"Iron Ore", 0},
+                    {"Gold Ore", 0},
+                }
+            },
+            {
+                "Materials 4", new Dictionary<string, int>()
+                {
+                    {"Diamond Ore", 0},
+                    {"Lapis Lazuli Ore", 0},
+                    {"Coal Ore", 0},
+                    {"Emerald Ore", 0},
+                    {"Clay", 0},
+                    {"Terracotta", 0},
+                }
+            },
+            {
+                "Materials 5", new Dictionary<string, int>()
+                {
+                    {"Sugar", 0},
+                    {"Charcoal", 0},
+                    {"Ink Sac", 0},
+                }
+            },
+            {
+                "Lab Maps", new Dictionary<string, int>()
+                {
+                    {"Industry Lab", 0},
+                    {"Home Lab", 0},
+                    {"AR Lab", 0}
+                }
+            }
+        };
         // TODO: Replace these with real values.
         survivalInventory = new Dictionary<string, Dictionary<string, object>>
         {
@@ -1014,11 +1091,15 @@ public class PlayerData
 
     public int Level { get; set; }
     public int Counter { get; set; }
+    public int Energy { get; set; }
+    public int Experience { get; set; }
     public string Seat { get; set; }
     public List<string> levelAvailable { get; set; }
     public Dictionary<string, int> Molecule { get; set; }
     public Dictionary<string, int> Inventory { get; set; }
     public Dictionary<string, int> flaskElements { get; set; }
+    public Dictionary<string, bool> hasLabUnlocked { get; set; }
+    public Dictionary<string, Dictionary<string, int>> Shop { get; set; }
     public Dictionary<string, Dictionary<string, object>> slotItem { get; set; }
     public Dictionary<string, Dictionary<string, object>> survivalInventory { get; set; }
     public List<string> survivalHotbar { get; set; }
@@ -1051,9 +1132,11 @@ public class ElementData
 
     public ElementData()
     {
+        rarity = new List<string>();
         elements = new Dictionary<string, Dictionary<string, string>>();
     }
 
+    public List<string> rarity { get; set; }
     public Dictionary<string, Dictionary<string, string>> elements { get; set; }
 
     public static ElementData Instance()
