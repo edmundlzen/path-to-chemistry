@@ -8,9 +8,9 @@ using UnityEngine.UI;
 
 public static class InventoryData
 {
+    public static bool hasDone = false;
     public static bool hasLoaded = false;
     public static string Slot = "Slot (1)";
-    public static string Input { get; set; }
 }
 
 public class Inventory : MonoBehaviour
@@ -25,16 +25,7 @@ public class Inventory : MonoBehaviour
             var playerData = PlayerData.Instance();
             GameObject.Find(InventoryData.Slot).GetComponent<Image>().color = Color.cyan;
             GameObject.Find("Energy").GetComponent<Text>().text = $"Energy: {playerData.Energy}";
-            for (var i = 1; i <= 118; i++)
-            {
-                if (InventoryData.Slot == $"Slot ({i})")
-                {
-                    var Name = playerData.Inventory.Keys.ElementAt(i - 1);
-                    var Quantity = playerData.Inventory.Values.ElementAt(i - 1);
-                    GameObject.Find("State").GetComponent<Text>().text = $"Name: {Name}\nQuantity: {Quantity}";
-                    break;
-                }
-            }
+            stateCheck();
             InventoryData.hasLoaded = true;
         }
 /*
@@ -68,27 +59,26 @@ public class Inventory : MonoBehaviour
                 if (Convert.ToString(playerData.slotItem[$"Slot{i}"]["Element"]) == playerData.Inventory.Keys.ElementAt(slotNum - 1))
                 {
                     playerData.slotItem[$"Slot{i}"]["Quantity"] = Convert.ToInt32(playerData.slotItem[$"Slot{i}"]["Quantity"]) + 1;
-                    break;
-                }
-                else if (playerData.slotItem[$"Slot{i}"]["Element"] == null && playerData.slotItem[$"Slot{i}"]["Quantity"] == null)
-                {
-                    playerData.slotItem[$"Slot{i}"]["Element"] = playerData.Inventory.Keys.ElementAt(slotNum - 1);
-                    playerData.slotItem[$"Slot{i}"]["Quantity"] = 1;
+                    InventoryData.hasLoaded = true;
                     break;
                 }
             }
+            if (!InventoryData.hasLoaded)
+            {
+                for (var i = 1; i <= 9; i = i + 1)
+                {
+                    if (playerData.slotItem[$"Slot{i}"]["Element"] == null && playerData.slotItem[$"Slot{i}"]["Quantity"] == null)
+                    {
+                        playerData.slotItem[$"Slot{i}"]["Element"] = playerData.Inventory.Keys.ElementAt(slotNum - 1);
+                        playerData.slotItem[$"Slot{i}"]["Quantity"] = 1;
+                        break;
+                    }
+                }
+            }
+            InventoryData.hasLoaded = false;
             playerData.Inventory[playerData.Inventory.Keys.ElementAt(slotNum - 1)] -= 1;
             slotCheck();
-            for (var i = 1; i <= 118; i++)
-            {
-                if (InventoryData.Slot == $"Slot ({i})")
-                {
-                    var Name = playerData.Inventory.Keys.ElementAt(i - 1);
-                    var Quantity = playerData.Inventory.Values.ElementAt(i - 1);
-                    GameObject.Find("State").GetComponent<Text>().text = $"Name: {Name}\nQuantity: {Quantity}";
-                    break;
-                }
-            }
+            stateCheck();
         }
     }
 
@@ -119,16 +109,7 @@ public class Inventory : MonoBehaviour
                 playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"] = null;
                 playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"] = null;
                 slotCheck();
-                for (var i = 1; i <= 118; i++)
-                {
-                    if (InventoryData.Slot == $"Slot ({i})")
-                    {
-                        var Name = playerData.Inventory.Keys.ElementAt(i - 1);
-                        var Quantity = playerData.Inventory.Values.ElementAt(i - 1);
-                        GameObject.Find("State").GetComponent<Text>().text = $"Name: {Name}\nQuantity: {Quantity}";
-                        break;
-                    }
-                }
+                stateCheck();
             }
         }
     }
@@ -155,16 +136,7 @@ public class Inventory : MonoBehaviour
             playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"] = null;
         }
         slotCheck();
-        for (var i = 1; i <= 118; i++)
-        {
-            if (InventoryData.Slot == $"Slot ({i})")
-            {
-                var Name = playerData.Inventory.Keys.ElementAt(i - 1);
-                var Quantity = playerData.Inventory.Values.ElementAt(i - 1);
-                GameObject.Find("State").GetComponent<Text>().text = $"Name: {Name}\nQuantity: {Quantity}";
-                break;
-            }
-        }
+        stateCheck();
         returnQuantityUI.SetActive(false);
     }
 
@@ -178,27 +150,26 @@ public class Inventory : MonoBehaviour
             if (Convert.ToString(playerData.slotItem[$"Slot{i}"]["Element"]) == playerData.Inventory.Keys.ElementAt(slotNum - 1))
             {
                 playerData.slotItem[$"Slot{i}"]["Quantity"] = Convert.ToInt32(playerData.slotItem[$"Slot{i}"]["Quantity"]) + sliderValue;
-                break;
-            }
-            else if (playerData.slotItem[$"Slot{i}"]["Element"] == null && playerData.slotItem[$"Slot{i}"]["Quantity"] == null)
-            {
-                playerData.slotItem[$"Slot{i}"]["Element"] = playerData.Inventory.Keys.ElementAt(slotNum - 1);
-                playerData.slotItem[$"Slot{i}"]["Quantity"] = sliderValue;
+                InventoryData.hasLoaded = true;
                 break;
             }
         }
+        if (!InventoryData.hasLoaded)
+        {
+            for (var i = 1; i <= 9; i = i + 1)
+            {
+                if (playerData.slotItem[$"Slot{i}"]["Element"] == null && playerData.slotItem[$"Slot{i}"]["Quantity"] == null)
+                {
+                    playerData.slotItem[$"Slot{i}"]["Element"] = playerData.Inventory.Keys.ElementAt(slotNum - 1);
+                    playerData.slotItem[$"Slot{i}"]["Quantity"] = sliderValue;
+                    break;
+                }
+            }
+        }
+        InventoryData.hasLoaded = false;
         playerData.Inventory[playerData.Inventory.Keys.ElementAt(slotNum - 1)] -= sliderValue;
         slotCheck();
-        for (var i = 1; i <= 118; i++)
-        {
-            if (InventoryData.Slot == $"Slot ({i})")
-            {
-                var Name = playerData.Inventory.Keys.ElementAt(i - 1);
-                var Quantity = playerData.Inventory.Values.ElementAt(i - 1);
-                GameObject.Find("State").GetComponent<Text>().text = $"Name: {Name}\nQuantity: {Quantity}";
-                break;
-            }
-        }
+        stateCheck();
         getQuantityUI.SetActive(false);
     }
 
@@ -252,6 +223,13 @@ public class Inventory : MonoBehaviour
         }
         playerData.Inventory[playerData.Inventory.Keys.ElementAt(slotNum - 1)] -= sellQuantity;
         GameObject.Find("Energy").GetComponent<Text>().text = $"Energy: {playerData.Energy}";
+        stateCheck();
+        SellUI.SetActive(false);
+    }
+
+    private void stateCheck()
+    {
+        var playerData = PlayerData.Instance();
         for (var i = 1; i <= 118; i++)
         {
             if (InventoryData.Slot == $"Slot ({i})")
@@ -262,7 +240,6 @@ public class Inventory : MonoBehaviour
                 break;
             }
         }
-        SellUI.SetActive(false);
     }
 
     public void elementSymbol()
@@ -271,16 +248,7 @@ public class Inventory : MonoBehaviour
         GameObject.Find(InventoryData.Slot).GetComponent<Image>().color = Color.white;
         InventoryData.Slot = EventSystem.current.currentSelectedGameObject.name;
         GameObject.Find(InventoryData.Slot).GetComponent<Image>().color = Color.cyan;
-        for (var i = 1; i <= 118; i++)
-        {
-            if (EventSystem.current.currentSelectedGameObject.name == $"Slot ({i})")
-            {
-                var Name = playerData.Inventory.Keys.ElementAt(i - 1);
-                var Quantity = playerData.Inventory.Values.ElementAt(i - 1);
-                GameObject.Find("State").GetComponent<Text>().text = $"Name: {Name}\nQuantity: {Quantity}";
-                break;
-            }
-        }
+        stateCheck();
     }
     public void elementCheck()
     {
