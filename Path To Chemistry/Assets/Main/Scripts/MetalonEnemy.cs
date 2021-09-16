@@ -187,6 +187,7 @@ public class MetalonEnemy: MonoBehaviour, IEntity
     IEnumerator Attack()
     {
         // Attack here
+        agent.destination = transform.position;
         PlayerData.Instance().survivalHealth -= damage;
         print(PlayerData.Instance().survivalHealth);
         yield return new WaitForSeconds(2); //Attack speed
@@ -304,6 +305,8 @@ public class MetalonEnemy: MonoBehaviour, IEntity
         {
             if (currentState != EntityStates.Flee)
             {
+                DisableAllAnimations();
+                animator.SetBool("Run Forward", true);
                 ChangeState(EntityStates.Flee);
             }
         }
