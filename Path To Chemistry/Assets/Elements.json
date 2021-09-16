@@ -1062,5 +1062,6 @@
       "neutrons": "176",
       "weight": "294"
     }
-  }
+  },
+  "rarity": ["O","Si","Al","Fe","Ca","Na","Mg","K","Ti","H","P","Mn","F","Ba","Sr","S","C","Zr","Cl","V","Cr","Rb","Ni","Zn","Cu","Ce","Nd","La","Y","N","Co","Sc","Li","Nb","Ga","Pb","B","Th","Pr","Sm","Gd","Dy","Er","Ar","Yb","Hf","Cs","Be","U","Br","Sn","Ta","Eu","As","Ge","W","Ho","Mo","Tb","Tl","Lu","Tm","I","In","Sb","Cd","Hg","Ag","Se","Pd","Bi","He","Ne","Pt","Au","Os","Te","Ru","Ir","Rh","Re","Kr","Xe","Pa","Ra","Po","Pu","Np","Tc","Ac","Rn","Pm","Fr","At"]
 }

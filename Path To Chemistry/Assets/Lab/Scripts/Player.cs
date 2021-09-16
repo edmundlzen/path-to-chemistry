@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public static class player
 {
-    public static string raycastObject { get; set; }
+    public static string raycastObject = "";
     public static bool hasAnimated = true;
 }
 
@@ -17,7 +17,6 @@ public class Player : MonoBehaviour
 
     private void Start()
     {
-        player.raycastObject = "";
         /*
         Load();
         if (playerData.Seat == "Left")

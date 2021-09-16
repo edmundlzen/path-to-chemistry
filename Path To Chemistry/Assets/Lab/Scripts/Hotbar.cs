@@ -6,6 +6,7 @@ using UnityEngine.EventSystems;
 
 public static class hotbar
 {
+    public static bool hasDone = false;
     public static string slotNum = "1";
     public static int flaskNum;
     public static int craftNum;
@@ -18,62 +19,19 @@ public class Hotbar : MonoBehaviour
     private void Start()
     {
         slotCheck();
-        GameObject.Find("Button" + hotbar.slotNum).GetComponent<Image>().color = Color.cyan;
+        GameObject.Find($"HotbarSlot ({hotbar.slotNum})").GetComponent<Image>().color = Color.cyan;
     }
 
-    public void Button1()
+    public void hotbarSlot()
     {
-        slotButton("1");
-    }
-
-    public void Button2()
-    {
-        slotButton("2");
-    }
-
-    public void Button3()
-    {
-        slotButton("3");
-    }
-
-    public void Button4()
-    {
-        slotButton("4");
-    }
-
-    public void Button5()
-    {
-        slotButton("5");
-    }
-
-    public void Button6()
-    {
-        slotButton("6");
-    }
-
-    public void Button7()
-    {
-        slotButton("7");
-    }
-
-    public void Button8()
-    {
-        slotButton("8");
-    }
-
-    public void Button9()
-    {
-        slotButton("9");
-    }
-    private void slotButton(string Num)
-    {
-        if (hotbar.slotNum != Num)
+        if ($"HotbarSlot ({hotbar.slotNum})" != EventSystem.current.currentSelectedGameObject.name)
         {
-            GameObject.Find("Button" + hotbar.slotNum).GetComponent<Image>().color = Color.grey;
-            hotbar.slotNum = Num;
-            GameObject.Find("Button" + hotbar.slotNum).GetComponent<Image>().color = Color.cyan;
+            GameObject.Find($"HotbarSlot ({hotbar.slotNum})").GetComponent<Image>().color = Color.grey;
+            hotbar.slotNum = EventSystem.current.currentSelectedGameObject.name.Replace("HotbarSlot (", "").Replace(")", "");
+            GameObject.Find($"HotbarSlot ({hotbar.slotNum})").GetComponent<Image>().color = Color.cyan;
         }
     }
+
     public void Slider(float Value)
     {
         GameObject.Find("sliderValue").GetComponent<Text>().text = Convert.ToString(Mathf.Floor(Value));
@@ -97,15 +55,23 @@ public class Hotbar : MonoBehaviour
                     if (Convert.ToString(playerData.slotItem[$"Slot{i}"]["Element"]) == playerData.flaskElements.Keys.ElementAt(hotbar.flaskNum - 1))
                     {
                         playerData.slotItem[$"Slot{i}"]["Quantity"] = Convert.ToInt32(playerData.slotItem[$"Slot{i}"]["Quantity"]) + 1;
-                        break;
-                    }
-                    else if (playerData.slotItem[$"Slot{i}"]["Element"] == null && playerData.slotItem[$"Slot{i}"]["Quantity"] == null)
-                    {
-                        playerData.slotItem[$"Slot{i}"]["Element"] = playerData.flaskElements.Keys.ElementAt(hotbar.flaskNum - 1);
-                        playerData.slotItem[$"Slot{i}"]["Quantity"] = 1;
+                        hotbar.hasDone = true;
                         break;
                     }
                 }
+                if (!hotbar.hasDone)
+                {
+                    for (var i = 1; i <= 9; i = i + 1)
+                    {
+                        if (playerData.slotItem[$"Slot{i}"]["Element"] == null && playerData.slotItem[$"Slot{i}"]["Quantity"] == null)
+                        {
+                            playerData.slotItem[$"Slot{i}"]["Element"] = playerData.flaskElements.Keys.ElementAt(hotbar.flaskNum - 1);
+                            playerData.slotItem[$"Slot{i}"]["Quantity"] = 1;
+                            break;
+                        }
+                    }
+                }
+                hotbar.hasDone = false;
                 playerData.flaskElements.Remove(playerData.flaskElements.Keys.ElementAt(hotbar.flaskNum - 1));
                 slotCheck();
                 flaskCheck();
@@ -141,15 +107,23 @@ public class Hotbar : MonoBehaviour
                 if (Convert.ToString(playerData.slotItem[$"Slot{i}"]["Element"]) == playerData.flaskElements.Keys.ElementAt(hotbar.flaskNum - 1))
                 {
                     playerData.slotItem[$"Slot{i}"]["Quantity"] = Convert.ToInt32(playerData.slotItem[$"Slot{i}"]["Quantity"]) + sliderValue;
-                    break;
-                }
-                else if (playerData.slotItem[$"Slot{i}"]["Element"] == null && playerData.slotItem[$"Slot{i}"]["Quantity"] == null)
-                {
-                    playerData.slotItem[$"Slot{i}"]["Element"] = playerData.flaskElements.Keys.ElementAt(hotbar.flaskNum - 1);
-                    playerData.slotItem[$"Slot{i}"]["Quantity"] = sliderValue;
+                    hotbar.hasDone = true;
                     break;
                 }
             }
+            if (!hotbar.hasDone)
+            {
+                for (var i = 1; i <= 9; i = i + 1)
+                {
+                    if (playerData.slotItem[$"Slot{i}"]["Element"] == null && playerData.slotItem[$"Slot{i}"]["Quantity"] == null)
+                    {
+                        playerData.slotItem[$"Slot{i}"]["Element"] = playerData.flaskElements.Keys.ElementAt(hotbar.flaskNum - 1);
+                        playerData.slotItem[$"Slot{i}"]["Quantity"] = sliderValue;
+                        break;
+                    }
+                }
+            }
+            hotbar.hasDone = false;
             playerData.flaskElements[playerData.flaskElements.Keys.ElementAt(hotbar.flaskNum - 1)] = Convert.ToInt32(playerData.flaskElements[playerData.flaskElements.Keys.ElementAt(hotbar.flaskNum - 1)].ToString()) - sliderValue;
             if (playerData.flaskElements.Values.ElementAt(hotbar.flaskNum - 1) < 1)
             {
@@ -179,15 +153,23 @@ public class Hotbar : MonoBehaviour
                     if (Convert.ToString(playerData.slotItem[$"Slot{i}"]["Element"]) == playerData.Molecule.Keys.ElementAt(hotbar.craftNum - 1))
                     {
                         playerData.slotItem[$"Slot{i}"]["Quantity"] = Convert.ToInt32(playerData.slotItem[$"Slot{i}"]["Quantity"]) + 1;
-                        break;
-                    }
-                    else if (playerData.slotItem[$"Slot{i}"]["Element"] == null && playerData.slotItem[$"Slot{i}"]["Quantity"] == null)
-                    {
-                        playerData.slotItem[$"Slot{i}"]["Element"] = playerData.Molecule.Keys.ElementAt(hotbar.craftNum - 1);
-                        playerData.slotItem[$"Slot{i}"]["Quantity"] = 1;
+                        hotbar.hasDone = true;
                         break;
                     }
                 }
+                if (!hotbar.hasDone)
+                {
+                    for (var i = 1; i <= 9; i = i + 1)
+                    {
+                        if (playerData.slotItem[$"Slot{i}"]["Element"] == null && playerData.slotItem[$"Slot{i}"]["Quantity"] == null)
+                        {
+                            playerData.slotItem[$"Slot{i}"]["Element"] = playerData.Molecule.Keys.ElementAt(hotbar.craftNum - 1);
+                            playerData.slotItem[$"Slot{i}"]["Quantity"] = 1;
+                            break;
+                        }
+                    }
+                }
+                hotbar.hasDone = false;
                 playerData.Molecule.Remove(playerData.Molecule.Keys.ElementAt(hotbar.craftNum - 1));
                 slotCheck();
                 craftingTable();
@@ -223,15 +205,23 @@ public class Hotbar : MonoBehaviour
                 if (Convert.ToString(playerData.slotItem[$"Slot{i}"]["Element"]) == playerData.Molecule.Keys.ElementAt(hotbar.craftNum - 1))
                 {
                     playerData.slotItem[$"Slot{i}"]["Quantity"] = Convert.ToInt32(playerData.slotItem[$"Slot{i}"]["Quantity"]) + sliderValue;
-                    break;
-                }
-                else if (playerData.slotItem[$"Slot{i}"]["Element"] == null && playerData.slotItem[$"Slot{i}"]["Quantity"] == null)
-                {
-                    playerData.slotItem[$"Slot{i}"]["Element"] = playerData.Molecule.Keys.ElementAt(hotbar.craftNum - 1);
-                    playerData.slotItem[$"Slot{i}"]["Quantity"] = sliderValue;
+                    hotbar.hasDone = true;
                     break;
                 }
             }
+            if (!hotbar.hasDone)
+            {
+                for (var i = 1; i <= 9; i = i + 1)
+                {
+                    if (playerData.slotItem[$"Slot{i}"]["Element"] == null && playerData.slotItem[$"Slot{i}"]["Quantity"] == null)
+                    {
+                        playerData.slotItem[$"Slot{i}"]["Element"] = playerData.Molecule.Keys.ElementAt(hotbar.craftNum - 1);
+                        playerData.slotItem[$"Slot{i}"]["Quantity"] = sliderValue;
+                        break;
+                    }
+                }
+            }
+            hotbar.hasDone = false;
             playerData.Molecule[playerData.Molecule.Keys.ElementAt(hotbar.craftNum - 1)] = Convert.ToInt32(playerData.Molecule[playerData.Molecule.Keys.ElementAt(hotbar.craftNum - 1)].ToString()) - sliderValue;
             if (playerData.Molecule.Values.ElementAt(hotbar.craftNum - 1) < 1)
             {
@@ -250,18 +240,18 @@ public class Hotbar : MonoBehaviour
             if (playerData.slotItem[$"Slot{i}"]["Element"] != null &&
                 Convert.ToInt32(playerData.slotItem[$"Slot{i}"]["Quantity"]) == 1)
             {
-                GameObject.Find($"Text{i}").GetComponent<Text>().text = playerData.slotItem[$"Slot{i}"]["Element"].ToString();
-                GameObject.Find($"ItemNum{i}").GetComponent<Text>().text = "";
+                GameObject.Find($"HotbarSlot ({i})/Item").GetComponent<Text>().text = playerData.slotItem[$"Slot{i}"]["Element"].ToString();
+                GameObject.Find($"HotbarSlot ({i})/ItemNum").GetComponent<Text>().text = "";
             }
             else if (playerData.slotItem[$"Slot{i}"]["Element"] != null && Convert.ToInt32(playerData.slotItem[$"Slot{i}"]["Quantity"]) > 1)
             {
-                GameObject.Find($"Text{i}").GetComponent<Text>().text = playerData.slotItem[$"Slot{i}"]["Element"].ToString();
-                GameObject.Find($"ItemNum{i}").GetComponent<Text>().text = playerData.slotItem[$"Slot{i}"]["Quantity"].ToString();
+                GameObject.Find($"HotbarSlot ({i})/Item").GetComponent<Text>().text = playerData.slotItem[$"Slot{i}"]["Element"].ToString();
+                GameObject.Find($"HotbarSlot ({i})/ItemNum").GetComponent<Text>().text = playerData.slotItem[$"Slot{i}"]["Quantity"].ToString();
             }
             else if (playerData.slotItem[$"Slot{i}"]["Element"] == null && playerData.slotItem[$"Slot{i}"]["Quantity"] == null)
             {
-                GameObject.Find($"Text{i}").GetComponent<Text>().text = "";
-                GameObject.Find($"ItemNum{i}").GetComponent<Text>().text = "";
+                GameObject.Find($"HotbarSlot ({i})/Item").GetComponent<Text>().text = "";
+                GameObject.Find($"HotbarSlot ({i})/ItemNum").GetComponent<Text>().text = "";
             }
     }
 
