@@ -20,6 +20,7 @@ public class Animation : MonoBehaviour
     }
     private IEnumerator pourExplode()
     {
+        LabData.isAnimationPlaying = true;
         var Potion = GameObject.Find("Effect").GetComponent<Transform>();
         roundFlask.SetActive(true);
         animator1.SetTrigger("Pour");
@@ -29,5 +30,6 @@ public class Animation : MonoBehaviour
         Instantiate(Effect, Potion.position, Potion.rotation);
         if (flaskDissapear) normalFlask.SetActive(false);
         roundFlask.SetActive(false);
+        LabData.isAnimationPlaying = false;
     }
 }

@@ -15,7 +15,18 @@ public class PlayerData
         {
             $"Level {Level}"
         };
-        Molecule = new Dictionary<string, int>();
+        Molecule = new Dictionary<string, int>()
+        {
+            { "Og", 5 },
+            { "C", 5 },
+            { "N", 5 },
+            { "F", 5 },
+            { "Ne", 5 },
+            { "Ar", 5 },
+            { "Kr", 5 },
+            { "Xe", 5 },
+            { "Si", 5 },
+        };
         Inventory = new Dictionary<string, int>();
         flaskElements = new Dictionary<string, int>();
         hasLabUnlocked = new Dictionary<string, bool>()
@@ -1027,63 +1038,63 @@ public class PlayerData
                 "Slot1", new Dictionary<string, object>
                 {
                     {"Element", "K"},
-                    {"Quantity", 7}
+                    {"Quantity", 5}
                 }
             },
             {
                 "Slot2", new Dictionary<string, object>
                 {
                     {"Element", "H"},
-                    {"Quantity", 1}
+                    {"Quantity", 5}
                 }
             },
             {
                 "Slot3", new Dictionary<string, object>
                 {
                     {"Element", "O"},
-                    {"Quantity", 1}
+                    {"Quantity", 5}
                 }
             },
             {
                 "Slot4", new Dictionary<string, object>
                 {
                     {"Element", "H"},
-                    {"Quantity", 1}
+                    {"Quantity", 5}
                 }
             },
             {
                 "Slot5", new Dictionary<string, object>
                 {
-                    {"Element", null},
-                    {"Quantity", null}
+                    {"Element", "Na"},
+                    {"Quantity", 5}
                 }
             },
             {
                 "Slot6", new Dictionary<string, object>
                 {
-                    {"Element", null},
-                    {"Quantity", null}
+                    {"Element", "Mg"},
+                    {"Quantity", 5}
                 }
             },
             {
                 "Slot7", new Dictionary<string, object>
                 {
-                    {"Element", null},
-                    {"Quantity", null}
+                    {"Element", "Li"},
+                    {"Quantity", 5}
                 }
             },
             {
                 "Slot8", new Dictionary<string, object>
                 {
-                    {"Element", null},
-                    {"Quantity", null}
+                    {"Element", "Be"},
+                    {"Quantity", 5}
                 }
             },
             {
                 "Slot9", new Dictionary<string, object>
                 {
-                    {"Element", null},
-                    {"Quantity", null}
+                    {"Element", "La"},
+                    {"Quantity", 5}
                 }
             }
         };

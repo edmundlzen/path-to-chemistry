@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
@@ -26,6 +27,7 @@ public class Inventory : MonoBehaviour
             GameObject.Find(InventoryData.Slot).GetComponent<Image>().color = Color.cyan;
             GameObject.Find("Energy").GetComponent<Text>().text = $"Energy: {playerData.Energy}";
             stateCheck();
+            Alert();
             InventoryData.hasLoaded = true;
         }
 /*
@@ -59,11 +61,11 @@ public class Inventory : MonoBehaviour
                 if (Convert.ToString(playerData.slotItem[$"Slot{i}"]["Element"]) == playerData.Inventory.Keys.ElementAt(slotNum - 1))
                 {
                     playerData.slotItem[$"Slot{i}"]["Quantity"] = Convert.ToInt32(playerData.slotItem[$"Slot{i}"]["Quantity"]) + 1;
-                    InventoryData.hasLoaded = true;
+                    InventoryData.hasDone = true;
                     break;
                 }
             }
-            if (!InventoryData.hasLoaded)
+            if (!InventoryData.hasDone)
             {
                 for (var i = 1; i <= 9; i = i + 1)
                 {
@@ -71,14 +73,26 @@ public class Inventory : MonoBehaviour
                     {
                         playerData.slotItem[$"Slot{i}"]["Element"] = playerData.Inventory.Keys.ElementAt(slotNum - 1);
                         playerData.slotItem[$"Slot{i}"]["Quantity"] = 1;
+                        InventoryData.hasDone = true;
                         break;
                     }
                 }
             }
-            InventoryData.hasLoaded = false;
+            if (!InventoryData.hasDone)
+            {
+                for (var i = 1; i <= 9; i = i + 1)
+                {
+                    if (playerData.slotItem[$"Slot{i}"]["Element"] != null && playerData.slotItem[$"Slot{i}"]["Quantity"] != null)
+                    {
+                        return;
+                    }
+                }
+            }
             playerData.Inventory[playerData.Inventory.Keys.ElementAt(slotNum - 1)] -= 1;
+            InventoryData.hasDone = false;
             slotCheck();
             stateCheck();
+            Alert();
         }
     }
 
@@ -110,6 +124,7 @@ public class Inventory : MonoBehaviour
                 playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"] = null;
                 slotCheck();
                 stateCheck();
+                Alert();
             }
         }
     }
@@ -118,26 +133,30 @@ public class Inventory : MonoBehaviour
     {
         var playerData = PlayerData.Instance();
         var sliderValue = Convert.ToInt32(Math.Floor(GameObject.Find("returnSliderQuantity/Slider").GetComponent<Slider>().value));
-        for (int i = 1; i <= 118; i++)
+        if (sliderValue > 0)
         {
-            if (Convert.ToString(playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"]) == playerData.Inventory.Keys.ElementAt(i - 1))
+            for (int i = 1; i <= 118; i++)
             {
-                playerData.Inventory[playerData.Inventory.Keys.ElementAt(i - 1)] += sliderValue;
-                playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"] = Convert.ToInt32(playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"]) - sliderValue;
-                GameObject.Find(InventoryData.Slot).GetComponent<Image>().color = Color.white;
-                InventoryData.Slot = $"Slot ({i})";
-                GameObject.Find(InventoryData.Slot).GetComponent<Image>().color = Color.cyan;
-                break;
+                if (Convert.ToString(playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"]) == playerData.Inventory.Keys.ElementAt(i - 1))
+                {
+                    playerData.Inventory[playerData.Inventory.Keys.ElementAt(i - 1)] += sliderValue;
+                    playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"] = Convert.ToInt32(playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"]) - sliderValue;
+                    GameObject.Find(InventoryData.Slot).GetComponent<Image>().color = Color.white;
+                    InventoryData.Slot = $"Slot ({i})";
+                    GameObject.Find(InventoryData.Slot).GetComponent<Image>().color = Color.cyan;
+                    break;
+                }
             }
+            if (Convert.ToInt32(playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"]) < 1)
+            {
+                playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"] = null;
+                playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"] = null;
+            }
+            slotCheck();
+            stateCheck();
+            Alert();
+            returnQuantityUI.SetActive(false);
         }
-        if (Convert.ToInt32(playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"]) < 1)
-        {
-            playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"] = null;
-            playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"] = null;
-        }
-        slotCheck();
-        stateCheck();
-        returnQuantityUI.SetActive(false);
     }
 
     public void takeQuantity(GameObject getQuantityUI)
@@ -145,31 +164,47 @@ public class Inventory : MonoBehaviour
         var playerData = PlayerData.Instance();
         var slotNum = Convert.ToInt32(InventoryData.Slot.Replace("Slot (", "").Replace(")", ""));
         var sliderValue = Convert.ToInt32(Math.Floor(GameObject.Find("getSliderQuantity/Slider").GetComponent<Slider>().value));
-        for (var i = 1; i <= 9; i = i + 1)
-        {
-            if (Convert.ToString(playerData.slotItem[$"Slot{i}"]["Element"]) == playerData.Inventory.Keys.ElementAt(slotNum - 1))
-            {
-                playerData.slotItem[$"Slot{i}"]["Quantity"] = Convert.ToInt32(playerData.slotItem[$"Slot{i}"]["Quantity"]) + sliderValue;
-                InventoryData.hasLoaded = true;
-                break;
-            }
-        }
-        if (!InventoryData.hasLoaded)
+        if (sliderValue > 0)
         {
             for (var i = 1; i <= 9; i = i + 1)
             {
-                if (playerData.slotItem[$"Slot{i}"]["Element"] == null && playerData.slotItem[$"Slot{i}"]["Quantity"] == null)
+                if (Convert.ToString(playerData.slotItem[$"Slot{i}"]["Element"]) == playerData.Inventory.Keys.ElementAt(slotNum - 1))
                 {
-                    playerData.slotItem[$"Slot{i}"]["Element"] = playerData.Inventory.Keys.ElementAt(slotNum - 1);
-                    playerData.slotItem[$"Slot{i}"]["Quantity"] = sliderValue;
+                    playerData.slotItem[$"Slot{i}"]["Quantity"] = Convert.ToInt32(playerData.slotItem[$"Slot{i}"]["Quantity"]) + sliderValue;
+                    InventoryData.hasDone = true;
                     break;
                 }
             }
+            if (!InventoryData.hasDone)
+            {
+                for (var i = 1; i <= 9; i = i + 1)
+                {
+                    if (playerData.slotItem[$"Slot{i}"]["Element"] == null && playerData.slotItem[$"Slot{i}"]["Quantity"] == null)
+                    {
+                        playerData.slotItem[$"Slot{i}"]["Element"] = playerData.Inventory.Keys.ElementAt(slotNum - 1);
+                        playerData.slotItem[$"Slot{i}"]["Quantity"] = sliderValue;
+                        InventoryData.hasDone = true;
+                        break;
+                    }
+                }
+            }
+            if (!InventoryData.hasDone)
+            {
+                for (var i = 1; i <= 9; i = i + 1)
+                {
+                    if (playerData.slotItem[$"Slot{i}"]["Element"] != null && playerData.slotItem[$"Slot{i}"]["Quantity"] != null)
+                    {
+                        getQuantityUI.SetActive(false);
+                        return;
+                    }
+                }
+            }
         }
-        InventoryData.hasLoaded = false;
         playerData.Inventory[playerData.Inventory.Keys.ElementAt(slotNum - 1)] -= sliderValue;
+        InventoryData.hasDone = false;
         slotCheck();
         stateCheck();
+        Alert();
         getQuantityUI.SetActive(false);
     }
 
@@ -200,6 +235,7 @@ public class Inventory : MonoBehaviour
         SellUI.SetActive(true);
         GameObject.Find("sellSliderQuantity/Slider").GetComponent<Slider>().maxValue = playerData.Inventory.Values.ElementAt(slotNum - 1);
         GameObject.Find("sellSliderQuantity/Slider").GetComponent<Slider>().value = 0;
+        Alert();
     }
 
     public void sell(GameObject SellUI)
@@ -224,6 +260,7 @@ public class Inventory : MonoBehaviour
         playerData.Inventory[playerData.Inventory.Keys.ElementAt(slotNum - 1)] -= sellQuantity;
         GameObject.Find("Energy").GetComponent<Text>().text = $"Energy: {playerData.Energy}";
         stateCheck();
+        Alert();
         SellUI.SetActive(false);
     }
 
@@ -313,5 +350,25 @@ public class Inventory : MonoBehaviour
         var fileContent = File.ReadAllText(filePath);
         var playerData = JsonConvert.DeserializeObject<PlayerData>(fileContent);
         PlayerData.Instance().UpdatePlayerData(playerData);
+    }
+    private void Alert()
+    {
+        var playerData = PlayerData.Instance();
+        var slotsUnavailable = new List<int>();
+        for (var i = 1; i <= 9; i = i + 1)
+        {
+            if (playerData.slotItem[$"Slot{i}"]["Element"] != null && playerData.slotItem[$"Slot{i}"]["Quantity"] != null)
+            {
+                slotsUnavailable.Add(i);
+            }
+        }
+        if (slotsUnavailable.Count == 9)
+        {
+            GameObject.Find("Alert").GetComponent<Text>().text = "Alert: Your hotbar slots are full!";
+        }
+        else
+        {
+            GameObject.Find("Alert").GetComponent<Text>().text = "";
+        }
     }
 }
