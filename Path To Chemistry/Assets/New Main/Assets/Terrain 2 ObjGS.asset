@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63f87ff7c07f54ad5bcaf4048d2ea41c, type: 3}
+  m_Name: Terrain 2 ObjGS
+  m_EditorClassIdentifier: 
+  autoUpdate: 0
+  objects:
+  - gameObject: {fileID: 1148613061152340, guid: eded051879df4c147b9010199d240258,
+      type: 3}
+    minimumAmount: 10000
+    maximumAmount: 10000
+    minimumHeight: 8
+    maximumHeight: 20
+    followRotation: 1
+    minimumDistance: 3
+  - gameObject: {fileID: 100010, guid: 76075d4f24491b84eb0b4ac914362e3f, type: 3}
+    minimumAmount: 3000
+    maximumAmount: 3000
+    minimumHeight: 8
+    maximumHeight: 20
+    followRotation: 1
+    minimumDistance: 3
+  - gameObject: {fileID: 100000, guid: ad1f5855a33f0694886cbd301d99cc40, type: 3}
+    minimumAmount: 3000
+    maximumAmount: 3000
+    minimumHeight: 8
+    maximumHeight: 20
+    followRotation: 1
+    minimumDistance: 3
+  despawnDistance: 100000000

@@ -1,0 +1,108 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63f87ff7c07f54ad5bcaf4048d2ea41c, type: 3}
+  m_Name: Terrain 6 ObjGS
+  m_EditorClassIdentifier: 
+  autoUpdate: 0
+  objects:
+  - gameObject: {fileID: 100000, guid: 3170071b601530b49b08f06beca71b57, type: 3}
+    minimumAmount: 3000
+    maximumAmount: 3000
+    minimumHeight: 8
+    maximumHeight: 20
+    followRotation: 1
+    minimumDistance: 3
+  - gameObject: {fileID: 100000, guid: 817a1b461c9e9334795fb68fe965138b, type: 3}
+    minimumAmount: 10000
+    maximumAmount: 10000
+    minimumHeight: 8
+    maximumHeight: 20
+    followRotation: 1
+    minimumDistance: 3
+  - gameObject: {fileID: 100000, guid: f3716af6cb5b4e249abf036d9fa479c8, type: 3}
+    minimumAmount: 3000
+    maximumAmount: 3000
+    minimumHeight: 8
+    maximumHeight: 20
+    followRotation: 1
+    minimumDistance: 3
+  - gameObject: {fileID: 100000, guid: 13db1d4df6986d047a29eb9a35fb321e, type: 3}
+    minimumAmount: 3000
+    maximumAmount: 3000
+    minimumHeight: 8
+    maximumHeight: 20
+    followRotation: 1
+    minimumDistance: 3
+  - gameObject: {fileID: 100000, guid: 924b0146480cdf94491776d3411b1dda, type: 3}
+    minimumAmount: 3000
+    maximumAmount: 3000
+    minimumHeight: 8
+    maximumHeight: 20
+    followRotation: 1
+    minimumDistance: 3
+  - gameObject: {fileID: 100000, guid: a66b4d595441d244387e1e12f82d7e7e, type: 3}
+    minimumAmount: 3000
+    maximumAmount: 3000
+    minimumHeight: 8
+    maximumHeight: 20
+    followRotation: 1
+    minimumDistance: 3
+  - gameObject: {fileID: 100000, guid: 2a54b0efd5ad7c14abbb83677f8b33db, type: 3}
+    minimumAmount: 3000
+    maximumAmount: 3000
+    minimumHeight: 8
+    maximumHeight: 20
+    followRotation: 1
+    minimumDistance: 3
+  - gameObject: {fileID: 100000, guid: 51cf289f761cc8e4eab7fd75ddb0e9a0, type: 3}
+    minimumAmount: 3000
+    maximumAmount: 3000
+    minimumHeight: 8
+    maximumHeight: 20
+    followRotation: 1
+    minimumDistance: 3
+  - gameObject: {fileID: 100000, guid: 491af40ffa3f3dd47b8f5f5ddc473bf5, type: 3}
+    minimumAmount: 3000
+    maximumAmount: 3000
+    minimumHeight: 8
+    maximumHeight: 20
+    followRotation: 1
+    minimumDistance: 3
+  - gameObject: {fileID: 100000, guid: c1091071aa8b35b43bf14b33bc7f5be6, type: 3}
+    minimumAmount: 3000
+    maximumAmount: 3000
+    minimumHeight: 8
+    maximumHeight: 20
+    followRotation: 1
+    minimumDistance: 3
+  - gameObject: {fileID: 100000, guid: aff966e5025eb394f9474186cecbb30d, type: 3}
+    minimumAmount: 3000
+    maximumAmount: 3000
+    minimumHeight: 8
+    maximumHeight: 20
+    followRotation: 1
+    minimumDistance: 3
+  - gameObject: {fileID: 100000, guid: 460c985abbd459b40a6554e606202d00, type: 3}
+    minimumAmount: 3000
+    maximumAmount: 3000
+    minimumHeight: 8
+    maximumHeight: 20
+    followRotation: 1
+    minimumDistance: 3
+  - gameObject: {fileID: 100000, guid: 8c594ad48c4201c4589acbe2ce2cc8c0, type: 3}
+    minimumAmount: 3000
+    maximumAmount: 3000
+    minimumHeight: 8
+    maximumHeight: 20
+    followRotation: 1
+    minimumDistance: 3
+  despawnDistance: 100000000

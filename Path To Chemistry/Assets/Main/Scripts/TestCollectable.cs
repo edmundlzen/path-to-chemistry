@@ -24,6 +24,18 @@ public class TestCollectable : MonoBehaviour, ICollectable
         particleSystemRenderer.material = new Material(GetComponent<Renderer>().material);
     }
 
+    private void Start()
+    {
+        Material currentMaterial = transform.GetComponent<Renderer>().material;
+        Material newMaterial = new Material(Shader.Find("Shader Graphs/Dissolve"));
+        newMaterial.SetTexture("Texture", currentMaterial.GetTexture("_MainTex"));
+        newMaterial.SetTexture("Normal_Map", currentMaterial.GetTexture("_BumpMap"));
+        newMaterial.SetTexture("Occlusion_Map", currentMaterial.GetTexture("_OcclusionMap"));
+        newMaterial.SetTexture("Metallic_Map", currentMaterial.GetTexture("_MetallicGlossMap"));
+        newMaterial.SetFloat("Noise_Scale", 400f);
+        transform.GetComponent<Renderer>().material = newMaterial;
+    }
+
     // void Initialize()
     // {
     //     onCollectedInitialized = true;

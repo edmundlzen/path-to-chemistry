@@ -76,6 +76,7 @@ public class MetalonEnemy: MonoBehaviour, IEntity
 
     void Start()
     {
+        Load();
         var elementData = ElementData.Instance();
 
         patrolPoint = transform.position;
@@ -151,12 +152,19 @@ public class MetalonEnemy: MonoBehaviour, IEntity
         // transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, 10 * Time.deltaTime);
         // StayOnGround();
         agent.speed = speed + speed * 0.4f;
-        agent.destination = player.position;
+        if (NavMesh.SamplePosition(player.position, out NavMeshHit hit, 5f, 1))
+        {
+            agent.destination = hit.position;
+        }
         yield return null;
     }
     
     IEnumerator Investigate()
     {
+        if (NavMesh.SamplePosition(player.position, out NavMeshHit hit, 5f, 1))
+        {
+            lastSeenPosition = hit.position;
+        }
         // Quaternion targetRot = Quaternion.LookRotation(lastSeenPosition - transform.position);
         while (Vector3.Distance(transform.position, lastSeenPosition) > 5)
         {
@@ -180,7 +188,7 @@ public class MetalonEnemy: MonoBehaviour, IEntity
             yield return null;
         }
 
-        patrolPoint = transform.position;
+        patrolPoint = lastSeenPosition;
         ChangeState(EntityStates.Patrol);
     }
 
