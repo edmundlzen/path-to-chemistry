@@ -108,19 +108,19 @@ public class PlayerData
         survivalInventory = new Dictionary<string, Dictionary<string, object>>
         {
             {
-                "Bucket", new Dictionary<string, object>
+                "Pistol", new Dictionary<string, object>
                 {
-                    {"image", "bucket"},
-                    {"name", "Bucket"},
-                    {"quantity", 7}
+                    {"image", "placeholder_item"},
+                    {"name", "Pistol"},
+                    {"quantity", 1}
                 }
             },
             {
-                "Water Bucket", new Dictionary<string, object>
+                "Item 2", new Dictionary<string, object>
                 {
-                    {"image", "waterbucket"},
-                    {"name", "Water Bucket"},
-                    {"quantity", 8}
+                    {"image", "placeholder_item"},
+                    {"name", "Item 2"},
+                    {"quantity", 13}
                 }
             },
             {

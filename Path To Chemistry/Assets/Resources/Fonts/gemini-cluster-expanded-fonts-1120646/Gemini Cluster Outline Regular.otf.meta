@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: a13c0156113ef42038824fdcf5cd4b76
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - Gemini Cluster
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: e09cb3886019f41a9875a041f2038934, type: 3}
+  - {fileID: 12800000, guid: 00a2431776829484e9c6e238facfbad3, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

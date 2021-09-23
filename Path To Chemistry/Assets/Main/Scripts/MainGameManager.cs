@@ -21,7 +21,6 @@ public class MainGameManager : MonoBehaviour
     
     private void Save()
     {
-        print(Application.persistentDataPath);
         var playerData = PlayerData.Instance();
         var directory = $"{Application.persistentDataPath}/Data";
         if (!Directory.Exists(directory)) Directory.CreateDirectory(directory);

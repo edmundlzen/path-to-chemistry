@@ -1,15 +1,17 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class TestCollectable : MonoBehaviour, ICollectable
 {
     public Dictionary<string, int> returnMaterials { get; set; }
+    private List<ParticleSystem> particleSystems = new List<ParticleSystem>();
     private bool onCollectedInitialized = false;
     private float alphaCT = 0f;
     private bool called = false;
-    private ParticleSystemRenderer particleSystemRenderer;
 
     void Awake()
     {
@@ -18,10 +20,23 @@ public class TestCollectable : MonoBehaviour, ICollectable
             {"Crystal", 5},
             {"Gold", 5}
         };
-
-        particleSystemRenderer = GetComponent<ParticleSystemRenderer>();
-        particleSystemRenderer.mesh = GetComponent<MeshFilter>().mesh;
-        particleSystemRenderer.material = new Material(GetComponent<Renderer>().material);
+        
+        foreach (var material in returnMaterials)
+        {
+            var imageName = PlayerData.Instance().survivalMaterials[material.Key]["image"];
+            var image = Resources.Load<Sprite>("Sprites/" + imageName);
+            var newSpriteMaterial = new Material(Resources.Load<Material>("Materials/Particle Mat"));
+            var newGameObject = new GameObject(material.Key + " Particle System");
+            newSpriteMaterial.SetTexture("_BaseMap", image.texture);
+            var newParticleSystem = newGameObject.AddComponent<ParticleSystem>();
+            particleSystems.Add(newParticleSystem);
+            newParticleSystem.Stop();
+            var psMain = newParticleSystem.main;
+            psMain.duration = 1f;
+            psMain.loop = false;
+            newGameObject.GetComponent<ParticleSystemRenderer>().material = newSpriteMaterial;
+            newGameObject.transform.SetParent(transform, false);
+        }
     }
 
     private void Start()
@@ -50,8 +65,10 @@ public class TestCollectable : MonoBehaviour, ICollectable
         {
             alphaCT += 0.01f;
             transform.GetComponent<MeshRenderer>().material.SetFloat("Alpha_Clip_Threshold", alphaCT);
-            
-            GetComponent<ParticleSystem>().Play();
+            foreach (var particleSystem in particleSystems)
+            {
+                particleSystem.Play();
+            }
             return;
         }
         
@@ -62,17 +79,5 @@ public class TestCollectable : MonoBehaviour, ICollectable
     public void Return()
     {
         
-    }
-    
-    private void Update()
-    {
-        if (!called && GetComponent<ParticleSystem>().isPlaying)
-        {
-            GetComponent<ParticleSystem>().Stop();
-        }
-        else
-        {
-            called = false;
-        }
     }
 }
