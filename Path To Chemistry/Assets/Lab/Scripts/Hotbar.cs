@@ -5,7 +5,6 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-using System.Collections.Generic;
 
 public static class hotbar
 {
@@ -27,16 +26,20 @@ public class Hotbar : MonoBehaviour
             Load();
             slotCheck();
             GameObject.Find($"HotbarSlot ({hotbar.slotNum})").GetComponent<Image>().color = Color.cyan;
-        }
+            hotbar.hasLoaded = true;
+        } 
     }
 
     public void hotbarSlot()
     {
-        if ($"HotbarSlot ({hotbar.slotNum})" != EventSystem.current.currentSelectedGameObject.name)
+        if (!player.Pause)
         {
-            GameObject.Find($"HotbarSlot ({hotbar.slotNum})").GetComponent<Image>().color = Color.grey;
-            hotbar.slotNum = EventSystem.current.currentSelectedGameObject.name.Replace("HotbarSlot (", "").Replace(")", "");
-            GameObject.Find($"HotbarSlot ({hotbar.slotNum})").GetComponent<Image>().color = Color.cyan;
+            if ($"HotbarSlot ({hotbar.slotNum})" != EventSystem.current.currentSelectedGameObject.name)
+            {
+                GameObject.Find($"HotbarSlot ({hotbar.slotNum})").GetComponent<Image>().color = Color.grey;
+                hotbar.slotNum = EventSystem.current.currentSelectedGameObject.name.Replace("HotbarSlot (", "").Replace(")", "");
+                GameObject.Find($"HotbarSlot ({hotbar.slotNum})").GetComponent<Image>().color = Color.cyan;
+            }
         }
     }
 
@@ -62,9 +65,17 @@ public class Hotbar : MonoBehaviour
                 {
                     if (Convert.ToString(playerData.slotItem[$"Slot{i}"]["Element"]) == playerData.flaskElements.Keys.ElementAt(hotbar.flaskNum - 1))
                     {
-                        playerData.slotItem[$"Slot{i}"]["Quantity"] = Convert.ToInt32(playerData.slotItem[$"Slot{i}"]["Quantity"]) + 1;
-                        hotbar.hasDone = true;
-                        break;
+                        if (Convert.ToInt32(playerData.slotItem[$"Slot{i}"]["Quantity"]) + 1 <= 64)
+                        {
+                            playerData.slotItem[$"Slot{i}"]["Quantity"] = Convert.ToInt32(playerData.slotItem[$"Slot{i}"]["Quantity"]) + 1;
+                            hotbar.hasDone = true;
+                            break;
+                        }
+                        else
+                        {
+                            addAlert($"Alert: The player's hotbar will only exist one stack of {playerData.slotItem[$"Slot{ hotbar.slotNum}"]["Element"]} Elements!");
+                            return;
+                        }
                     }
                 }
                 if (!hotbar.hasDone)
@@ -86,6 +97,7 @@ public class Hotbar : MonoBehaviour
                     {
                         if (playerData.slotItem[$"Slot{i}"]["Element"] != null && playerData.slotItem[$"Slot{i}"]["Quantity"] != null)
                         {
+                            addAlert("Alert: The player's hotbar are full!");
                             return;
                         }
                     }
@@ -94,7 +106,6 @@ public class Hotbar : MonoBehaviour
                 playerData.flaskElements.Remove(playerData.flaskElements.Keys.ElementAt(hotbar.flaskNum - 1));
                 slotCheck();
                 flaskCheck();
-                Alert();
             }
         }
     }
@@ -129,9 +140,21 @@ public class Hotbar : MonoBehaviour
                 {
                     if (Convert.ToString(playerData.slotItem[$"Slot{i}"]["Element"]) == playerData.flaskElements.Keys.ElementAt(hotbar.flaskNum - 1))
                     {
-                        playerData.slotItem[$"Slot{i}"]["Quantity"] = Convert.ToInt32(playerData.slotItem[$"Slot{i}"]["Quantity"]) + sliderValue;
-                        hotbar.hasDone = true;
-                        break;
+                        var Balance = Convert.ToInt32(playerData.slotItem[$"Slot{i}"]["Quantity"]);
+                        if (Balance + sliderValue <= 64)
+                        {
+                            playerData.slotItem[$"Slot{i}"]["Quantity"] = Balance + sliderValue;
+                            hotbar.hasDone = true;
+                            break;
+                        }
+                        else
+                        {
+                            playerData.slotItem[$"Slot{i}"]["Quantity"] = Balance + (64 - Balance);
+                            playerData.flaskElements[playerData.flaskElements.Keys.ElementAt(hotbar.flaskNum - 1)] -= 64 - Balance;
+                            addAlert($"Alert: The player's hotbar will only exist one stack of {playerData.slotItem[$"Slot{ hotbar.slotNum}"]["Element"]} Elements!");
+                            Flask();
+                            return;
+                        }
                     }
                 }
                 if (!hotbar.hasDone)
@@ -153,23 +176,30 @@ public class Hotbar : MonoBehaviour
                     {
                         if (playerData.slotItem[$"Slot{i}"]["Element"] != null && playerData.slotItem[$"Slot{i}"]["Quantity"] != null)
                         {
+                            addAlert("Alert: The player's hotbar are full!");
                             flaskQuantity.SetActive(false);
                             return;
                         }
                     }
                 }
                 hotbar.hasDone = false;
-                playerData.flaskElements[playerData.flaskElements.Keys.ElementAt(hotbar.flaskNum - 1)] = Convert.ToInt32(playerData.flaskElements[playerData.flaskElements.Keys.ElementAt(hotbar.flaskNum - 1)].ToString()) - sliderValue;
-                if (playerData.flaskElements.Values.ElementAt(hotbar.flaskNum - 1) < 1)
-                {
-                    playerData.flaskElements.Remove(playerData.flaskElements.Keys.ElementAt(hotbar.flaskNum - 1));
-                }
-                slotCheck();
-                flaskCheck();
-                Alert();
+                playerData.flaskElements[playerData.flaskElements.Keys.ElementAt(hotbar.flaskNum - 1)] -= sliderValue;
+                Flask();
             }
         }
     }
+
+    public void Flask()
+    {
+        var playerData = PlayerData.Instance();
+        if (playerData.flaskElements.Values.ElementAt(hotbar.flaskNum - 1) < 1)
+        {
+            playerData.flaskElements.Remove(playerData.flaskElements.Keys.ElementAt(hotbar.flaskNum - 1));
+        }
+        slotCheck();
+        flaskCheck();
+    }
+
     public void craftButton()
     {
         var playerData = PlayerData.Instance();
@@ -188,9 +218,17 @@ public class Hotbar : MonoBehaviour
                 {
                     if (Convert.ToString(playerData.slotItem[$"Slot{i}"]["Element"]) == playerData.Molecule.Keys.ElementAt(hotbar.craftNum - 1))
                     {
-                        playerData.slotItem[$"Slot{i}"]["Quantity"] = Convert.ToInt32(playerData.slotItem[$"Slot{i}"]["Quantity"]) + 1;
-                        hotbar.hasDone = true;
-                        break;
+                        if (Convert.ToInt32(playerData.slotItem[$"Slot{i}"]["Quantity"]) + 1 <= 64)
+                        {
+                            playerData.slotItem[$"Slot{i}"]["Quantity"] = Convert.ToInt32(playerData.slotItem[$"Slot{i}"]["Quantity"]) + 1;
+                            hotbar.hasDone = true;
+                            break;
+                        }
+                        else
+                        {
+                            addAlert($"Alert: The player's hotbar will only exist one stack of {playerData.slotItem[$"Slot{ hotbar.slotNum}"]["Element"]} Elements!");
+                            return;
+                        }
                     }
                 }
                 if (!hotbar.hasDone)
@@ -212,6 +250,7 @@ public class Hotbar : MonoBehaviour
                     {
                         if (playerData.slotItem[$"Slot{i}"]["Element"] != null && playerData.slotItem[$"Slot{i}"]["Quantity"] != null)
                         {
+                            addAlert("Alert: The player's hotbar are full!");
                             return;
                         }
                     }
@@ -220,7 +259,6 @@ public class Hotbar : MonoBehaviour
                 playerData.Molecule.Remove(playerData.Molecule.Keys.ElementAt(hotbar.craftNum - 1));
                 slotCheck();
                 craftingTable();
-                Alert();
             }
         }
     }
@@ -255,9 +293,21 @@ public class Hotbar : MonoBehaviour
                 {
                     if (Convert.ToString(playerData.slotItem[$"Slot{i}"]["Element"]) == playerData.Molecule.Keys.ElementAt(hotbar.craftNum - 1))
                     {
-                        playerData.slotItem[$"Slot{i}"]["Quantity"] = Convert.ToInt32(playerData.slotItem[$"Slot{i}"]["Quantity"]) + sliderValue;
-                        hotbar.hasDone = true;
-                        break;
+                        var Balance = Convert.ToInt32(playerData.slotItem[$"Slot{i}"]["Quantity"]);
+                        if (Balance + sliderValue <= 64)
+                        {
+                            playerData.slotItem[$"Slot{i}"]["Quantity"] = Balance + sliderValue;
+                            hotbar.hasDone = true;
+                            break;
+                        }
+                        else
+                        {
+                            playerData.slotItem[$"Slot{i}"]["Quantity"] = Balance + (64 - Balance);
+                            playerData.Molecule[playerData.Molecule.Keys.ElementAt(hotbar.craftNum - 1)] -= 64 - Balance;
+                            addAlert($"Alert: The player's hotbar will only exist one stack of {playerData.slotItem[$"Slot{ hotbar.slotNum}"]["Element"]} Elements!");
+                            Workbench();
+                            return;
+                        }
                     }
                 }
                 if (!hotbar.hasDone)
@@ -279,24 +329,29 @@ public class Hotbar : MonoBehaviour
                     {
                         if (playerData.slotItem[$"Slot{i}"]["Element"] != null && playerData.slotItem[$"Slot{i}"]["Quantity"] != null)
                         {
+                            addAlert("Alert: The player's hotbar are full!");
                             craftQuantity.SetActive(false);
                             return;
                         }
                     }
                 }
                 hotbar.hasDone = false;
-                playerData.Molecule[playerData.Molecule.Keys.ElementAt(hotbar.craftNum - 1)] = Convert.ToInt32(playerData.Molecule[playerData.Molecule.Keys.ElementAt(hotbar.craftNum - 1)].ToString()) - sliderValue;
-                if (playerData.Molecule.Values.ElementAt(hotbar.craftNum - 1) < 1)
-                {
-                    playerData.Molecule.Remove(playerData.Molecule.Keys.ElementAt(hotbar.craftNum - 1));
-                }
-                slotCheck();
-                craftingTable();
-                Alert();
+                playerData.Molecule[playerData.Molecule.Keys.ElementAt(hotbar.craftNum - 1)] -= sliderValue;
+                Workbench();
             }
         }
     }
 
+    private void Workbench()
+    {
+        var playerData = PlayerData.Instance();
+        if (playerData.Molecule.Values.ElementAt(hotbar.craftNum - 1) < 1)
+        {
+            playerData.Molecule.Remove(playerData.Molecule.Keys.ElementAt(hotbar.craftNum - 1));
+        }
+        slotCheck();
+        craftingTable();
+    }
     private void slotCheck()
     {
         var playerData = PlayerData.Instance();
@@ -378,24 +433,13 @@ public class Hotbar : MonoBehaviour
         PlayerData.Instance().UpdatePlayerData(playerData);
     }
 
-    private void Alert()
+    private void addAlert(string Alert)
     {
-        var playerData = PlayerData.Instance();
-        var slotsUnavailable = new List<int>();
-        for (var i = 1; i <= 9; i = i + 1)
+        int maxQuantity = 50;
+        player.History.Add(Alert);
+        if (player.History.Count > maxQuantity)
         {
-            if (playerData.slotItem[$"Slot{i}"]["Element"] != null && playerData.slotItem[$"Slot{i}"]["Quantity"] != null)
-            {
-                slotsUnavailable.Add(i);
-            }
-        }
-        if (slotsUnavailable.Count == 9)
-        {
-            GameObject.Find("Alert").GetComponent<Text>().text = "Alert: Your hotbar slots are full!";
-        }
-        else
-        {
-            GameObject.Find("Alert").GetComponent<Text>().text = "";
+            player.History.RemoveAt(0);
         }
     }
 }

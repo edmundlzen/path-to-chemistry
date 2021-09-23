@@ -1,71 +1,172 @@
+using Newtonsoft.Json;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
-using System.Collections;
-using Newtonsoft.Json;
-using System.Collections.Generic;
 using UnityEngine.UI;
-using System;
+
+public static class Protection
+{
+    public static int proNum;
+}
+
+public class AllPlayersData
+{
+    public int player_id { get; set; }
+    public string player_nickname { get; set; }
+    public string player_date_created { get; set; }
+    public int player_score { get; set; }
+}
+
+public class LeaderboardData
+{
+    public string msg { get; set; }
+    public int total { get; set; }
+    public int player_id { get; set; }
+    public string player_nickname { get; set; }
+    public string player_date_created { get; set; }
+    public int player_score { get; set; }
+    public List<AllPlayersData> data { get; set; }
+}
 
 public class LeaderboardHandler : MonoBehaviour
 {
+    public GameObject Glory;
+    public GameObject Info;
     private string SecretKey = "3aa281873f2bcb79fe5825755e2ec382d90ba41d";
     private string GameID = "61";
-    public GameObject Info;
-    public void Start()
+
+    private void Start()
     {
-        StartCoroutine(setPlayerScore());
-        StartCoroutine(getAllPlayers());
+        StartCoroutine(Leaderboard());
     }
-    IEnumerator addPlayer(string name)
+    IEnumerator Leaderboard()
     {
-        WWWForm Form = new WWWForm();
-        Form.AddField("secret_key", SecretKey);
-        Form.AddField("game_id", GameID);
-        Form.AddField("nickname", name);
-        using (UnityWebRequest request = UnityWebRequest.Post("https://www.wowscores.com/add-player", Form))
+        var playerData = PlayerData.Instance();
+        if (playerData.ID == null)
+        {
+            WWWForm Form = new WWWForm();
+            Form.AddField("secret_key", SecretKey);
+            Form.AddField("game_id", GameID);
+            Form.AddField("nickname", playerData.Nickname);
+            using (UnityWebRequest request = UnityWebRequest.Post("https://www.wowscores.com/add-player", Form))
+            {
+                yield return request.SendWebRequest();
+                if (request.isNetworkError || request.isHttpError)
+                {
+                    Info.SetActive(true);
+                }
+                else
+                {
+                    var leaderboardData = JsonConvert.DeserializeObject<LeaderboardData>(request.downloadHandler.text);
+                    playerData.ID = leaderboardData.player_nickname.Split('|')[1];
+                }
+            }
+        }
+        WWWForm Form1 = new WWWForm();
+        Form1.AddField("secret_key", SecretKey);
+        Form1.AddField("game_id", GameID);
+        Form1.AddField("nickname", $"{playerData.Nickname}|{playerData.ID}");
+        Form1.AddField("score", playerData.Experience);
+        using (UnityWebRequest request = UnityWebRequest.Post("https://www.wowscores.com/set-player-score", Form1))
+        {
+            yield return request.SendWebRequest();
+            var leaderboardData = JsonConvert.DeserializeObject<LeaderboardData>(request.downloadHandler.text);
+            if (request.isNetworkError || request.isHttpError)
+            {
+                Info.SetActive(true);
+            }
+            else
+            {
+                GameObject.Find("Your Score").GetComponent<Text>().text = $"Your Score: {leaderboardData.player_score}";
+            }
+        }
+        WWWForm Form2 = new WWWForm();
+        Form2.AddField("secret_key", SecretKey);
+        Form2.AddField("game_id", GameID);
+        using (UnityWebRequest request = UnityWebRequest.Post("https://www.wowscores.com/get-all-players", Form2))
         {
             yield return request.SendWebRequest();
             if (request.isNetworkError || request.isHttpError)
-                print(request.error);
+            {
+                Info.SetActive(true);
+            }
             else
-                print(request.downloadHandler.text);
+            {
+                var leaderboardData = JsonConvert.DeserializeObject<LeaderboardData>(request.downloadHandler.text);
+                for (int i = 0; i <= leaderboardData.data.Count - 1; i++)
+                {
+                    GameObject newGlory = Instantiate(Glory);
+                    newGlory.name = $"Glory{i + 1}";
+                    newGlory.transform.SetParent(GameObject.Find("Content").transform);
+                    GameObject.Find($"Glory{i + 1}/Nickname").GetComponent<Text>().text = $"{i + 1}. {leaderboardData.data[i].player_nickname}\n";
+                    GameObject.Find($"Glory{i + 1}/Score").GetComponent<Text>().text = $"{leaderboardData.data[i].player_score}\n";
+                    GameObject.Find($"Glory{i + 1}/Date").GetComponent<Text>().text = $"{leaderboardData.data[i].player_date_created.Replace("-", "/")}\n";
+                }
+                GameObject.Find("Statistics").GetComponent<Text>().text = $"Nickname: {playerData.Nickname}\nID: #{ playerData.ID}";
+                Info.SetActive(false);
+            }
+        }
+    }
+    IEnumerator addPlayer()
+    {
+        var playerData = PlayerData.Instance();
+        if (playerData.ID == null)
+        {
+            WWWForm Form = new WWWForm();
+            Form.AddField("secret_key", SecretKey);
+            Form.AddField("game_id", GameID);
+            Form.AddField("nickname", playerData.Nickname);
+            using (UnityWebRequest request = UnityWebRequest.Post("https://www.wowscores.com/add-player", Form))
+            {
+                yield return request.SendWebRequest();
+                if (request.isNetworkError || request.isHttpError)
+                {
+                    Info.SetActive(true);
+                }
+                else
+                {
+                    var leaderboardData = JsonConvert.DeserializeObject<LeaderboardData>(request.downloadHandler.text);
+                    playerData.ID = leaderboardData.player_nickname.Split('|')[1];
+                }
+            }
         }
     }
     IEnumerator setPlayerScore()
     {
-        WWWForm Form = new WWWForm();
-        Form.AddField("secret_key", SecretKey);
-        Form.AddField("game_id", GameID);
-        Form.AddField("nickname", "soonheng11|1631463028");
-        Form.AddField("score", "100");
-        using (UnityWebRequest request = UnityWebRequest.Post("https://www.wowscores.com/set-player-score", Form))
+        var playerData = PlayerData.Instance();
+        WWWForm Form1 = new WWWForm();
+        Form1.AddField("secret_key", SecretKey);
+        Form1.AddField("game_id", GameID);
+        Form1.AddField("nickname", $"{playerData.Nickname}|{playerData.ID}");
+        Form1.AddField("score", playerData.Experience);
+        using (UnityWebRequest request = UnityWebRequest.Post("https://www.wowscores.com/set-player-score", Form1))
         {
             yield return request.SendWebRequest();
             if (request.isNetworkError || request.isHttpError)
-                print(request.error);
-            else
-                print(request.downloadHandler.text);
+            {
+                Info.SetActive(true);
+            }
         }
     }
     IEnumerator getPlayerScore()
     {
+        var playerData = PlayerData.Instance();
         WWWForm Form = new WWWForm();
         Form.AddField("secret_key", SecretKey);
         Form.AddField("game_id", GameID);
-        Form.AddField("nickname", "Lasma|1631501653");
-        using (UnityWebRequest request = UnityWebRequest.Post("https://www.wowscores.com/get-player-score", Form))
+        Form.AddField("nickname", $"{playerData.Nickname}|{playerData.ID}");
+        using (UnityWebRequest request = UnityWebRequest.Post("https://www.wowscores.com/get-player", Form))
         {
             yield return request.SendWebRequest();
-            if (request.isNetworkError || request.isHttpError)
-                print(request.error);
-            else
-                print(request.downloadHandler.text);
+            print(request.downloadHandler.text);
         }
     }
     IEnumerator getAllPlayers()
     {
-        string Text = "";
-        string text2 = "";
+        var playerData = PlayerData.Instance();
+        string Nickname = "";
+        string Score = "";
         WWWForm Form = new WWWForm();
         Form.AddField("secret_key", SecretKey);
         Form.AddField("game_id", GameID);
@@ -73,30 +174,29 @@ public class LeaderboardHandler : MonoBehaviour
         {
             yield return request.SendWebRequest();
             if (request.isNetworkError || request.isHttpError)
+            {
                 Info.SetActive(true);
+            }
             else
             {
-                Text += "Ranks\n";
-                text2 += "Score\n";
-                for (int i = 0; i <= JsonConvert.DeserializeObject<List<object>>(Convert.ToString(JsonConvert.DeserializeObject<Dictionary<string, object>>(request.downloadHandler.text)["data"])).Count - 1; i++)
+                var leaderboardData = JsonConvert.DeserializeObject<LeaderboardData>(request.downloadHandler.text);
+                Nickname += "Nickname\n";
+                Score += "Score\n";
+                for (int i = 0; i <= leaderboardData.data.Count - 1; i++)
                 {
-                    Text += $"{i + 1}. {JsonConvert.DeserializeObject<Dictionary<string, object>>(Convert.ToString(JsonConvert.DeserializeObject<List<object>>(Convert.ToString(JsonConvert.DeserializeObject<Dictionary<string, object>>(request.downloadHandler.text)["data"]))[i]))["player_nickname"]}\n";
-                    text2 +=$"{ JsonConvert.DeserializeObject<Dictionary<string, object>>(Convert.ToString(JsonConvert.DeserializeObject<List<object>>(Convert.ToString(JsonConvert.DeserializeObject<Dictionary<string, object>>(request.downloadHandler.text)["data"]))[i]))["player_score"]}\n";
+                    Nickname += $"{i + 1}. {leaderboardData.data[i].player_nickname}\n";
+                    Score += $"{leaderboardData.data[i].player_score}\n";
                 }
-                GameObject.Find("Ranks").GetComponent<Text>().text = Text;
-                GameObject.Find("Score").GetComponent<Text>().text = text2;
+                GameObject.Find("Nickname").GetComponent<Text>().text = Nickname;
+                GameObject.Find("Score").GetComponent<Text>().text = Score;
+                GameObject.Find("Statistics").GetComponent<Text>().text = $"Nickname: {playerData.Nickname}\nID: #{ playerData.ID}";
                 Info.SetActive(false);
             }
         }
     }
     public void tryAgain()
     {
-        StartCoroutine(getAllPlayers());
-    }
-    public void add()
-    {
-        StartCoroutine(addPlayer(GameObject.Find("Name").GetComponent<Text>().text));
-        StartCoroutine(getAllPlayers());
+        StartCoroutine(Leaderboard());
     }
     public void openUrl()
     {

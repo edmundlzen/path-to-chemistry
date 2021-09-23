@@ -19,6 +19,19 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!65 &8164091367717912756
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3218014816386067351}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.8206813, y: 1.854408, z: 1.8094391}
+  m_Center: {x: -0.016863346, y: -0.10117984, z: -0.000000059604645}
 --- !u!1 &7418936083803387902
 GameObject:
   m_ObjectHideFlags: 0
@@ -201,7 +214,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Flask
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 6595740346585646788, guid: 777e5641242d18647913d1736a56df2e, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 777e5641242d18647913d1736a56df2e, type: 3}
 --- !u!1 &3218014816386067351 stripped
 GameObject:

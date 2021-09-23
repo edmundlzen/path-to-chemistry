@@ -16,8 +16,8 @@ MonoBehaviour:
   objects:
   - gameObject: {fileID: 1214657917099862, guid: 78f6b68ad931a824c920d7b953612370,
       type: 3}
-    minimumAmount: 5000
-    maximumAmount: 5000
+    minimumAmount: 1000
+    maximumAmount: 1000
     minimumHeight: 8
     maximumHeight: 20
     followRotation: 1
@@ -26,8 +26,8 @@ MonoBehaviour:
     layers: 02000000
   - gameObject: {fileID: 1364922359172550, guid: 1aaf3ef80841d9c4990a27fee328eb1c,
       type: 3}
-    minimumAmount: 5000
-    maximumAmount: 5000
+    minimumAmount: 500
+    maximumAmount: 500
     minimumHeight: 8
     maximumHeight: 20
     followRotation: 1
@@ -35,8 +35,8 @@ MonoBehaviour:
     followLayers: 1
     layers: 02000000
   - gameObject: {fileID: 100000, guid: ad1f5855a33f0694886cbd301d99cc40, type: 3}
-    minimumAmount: 3000
-    maximumAmount: 3000
+    minimumAmount: 1000
+    maximumAmount: 1000
     minimumHeight: 8
     maximumHeight: 20
     followRotation: 1
@@ -44,8 +44,8 @@ MonoBehaviour:
     followLayers: 1
     layers: 02000000
   - gameObject: {fileID: 100000, guid: d209be13548e70947bc39053977ce977, type: 3}
-    minimumAmount: 3000
-    maximumAmount: 3000
+    minimumAmount: 500
+    maximumAmount: 500
     minimumHeight: 8
     maximumHeight: 20
     followRotation: 1
