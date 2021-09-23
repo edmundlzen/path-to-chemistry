@@ -12,7 +12,6 @@ public class GenerateObjects : MonoBehaviour
     private Transform player;
     private TerrainData terrainData;
     private TerrainTextureDetector terrainTextureDetector;
-
     private float randomX;
     private float randomZ;
 
@@ -38,7 +37,6 @@ public class GenerateObjects : MonoBehaviour
                         Random.Range(objects[i].minimumAmount, objects[i].maximumAmount));
                     currentObjects.Add(objects[i].gameObject, 0);
                 }
-
                 RaycastHit hit;
                 if (currentObjects[objects[i].gameObject] <= numberOfObjects[objects[i].gameObject])
                 {
@@ -107,7 +105,6 @@ public class GenerateObjects : MonoBehaviour
                     obj.SetActive(true);
                 }
             }
-
             yield return new WaitForSeconds(1f);
         }
     }

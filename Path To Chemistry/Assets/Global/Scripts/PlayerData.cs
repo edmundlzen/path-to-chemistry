@@ -7,9 +7,12 @@ public class PlayerData
 
     private PlayerData()
     {
+        
         Level = 1;
-        Energy = 0;
-        Experience = 0;
+        Energy = 100000;
+        Experience = 69;
+        Nickname = "You Are Gay";
+        ID = null;
         Seat = "Main";
         levelAvailable = new List<string>
         {
@@ -29,78 +32,79 @@ public class PlayerData
         };
         Inventory = new Dictionary<string, int>();
         flaskElements = new Dictionary<string, int>();
-        hasLabUnlocked = new Dictionary<string, bool>()
+        nonResellable = new Dictionary<string, bool>()
         {
             { "Classic Lab", true },
             { "Industry Lab", false },
-            { "Home Lab", false }
+            { "Home Lab", false },
+            { "AR Lab", false }
         };
         Shop = new Dictionary<string, Dictionary<string, int>>()
         {
             {
                 "Items", new Dictionary<string, int>()
                 {
-                    { "Health Potion", 0 }
+                    { "Health Potion", 1000 }
                 }
             },
             {
                 "Materials 1", new Dictionary<string, int>()
                 {
-                    {"Gravel", 0},
-                    {"Obsidian", 0},
-                    {"Sand", 0},
-                    {"Sandstone", 0},
-                    {"Stone", 0},
-                    {"Quartz", 0}
+                    {"Gravel", 1000},
+                    {"Obsidian", 1000},
+                    {"Sand", 1000},
+                    {"Sandstone", 1000},
+                    {"Stone", 1000},
+                    {"Quartz", 1000}
                 }
             },
             {
                 "Materials 2", new Dictionary<string, int>()
                 {
-                    {"Grass", 0},
-                    {"Dirt", 0},
-                    {"Log", 0},
-                    {"Lava", 0},
-                    {"Cobblestone", 0},
-                    {"Mossy Cobblestone", 0}
+                    {"Grass", 1000},
+                    {"Dirt", 1000},
+                    {"Log", 1000},
+                    {"Lava", 1000},
+                    {"Cobblestone", 1000},
+                    {"Mossy Cobblestone", 1000}
                 }
             },
             {
                 "Materials 3", new Dictionary<string, int>()
                 {
-                    {"Water", 0},
-                    {"Ice", 0},
-                    {"Packed Ice", 0},
-                    {"Snow", 0},
-                    {"Iron Ore", 0},
-                    {"Gold Ore", 0},
+                    {"Water", 1000},
+                    {"Ice", 1000},
+                    {"Packed Ice", 1000},
+                    {"Snow", 1000},
+                    {"Iron Ore", 1000},
+                    {"Gold Ore", 1000},
                 }
             },
             {
                 "Materials 4", new Dictionary<string, int>()
                 {
-                    {"Diamond Ore", 0},
-                    {"Lapis Lazuli Ore", 0},
-                    {"Coal Ore", 0},
-                    {"Emerald Ore", 0},
-                    {"Clay", 0},
-                    {"Terracotta", 0},
+                    {"Diamond Ore", 1000},
+                    {"Lapis Lazuli Ore", 1000},
+                    {"Coal Ore", 1000},
+                    {"Emerald Ore", 1000},
+                    {"Clay", 1000},
+                    {"Terracotta", 1000},
                 }
             },
             {
                 "Materials 5", new Dictionary<string, int>()
                 {
-                    {"Sugar", 0},
-                    {"Charcoal", 0},
-                    {"Ink Sac", 0},
+                    {"Sugar", 1000},
+                    {"Charcoal", 1000},
+                    {"Ink Sac", 1000},
                 }
             },
             {
                 "Lab Maps", new Dictionary<string, int>()
                 {
-                    {"Industry Lab", 0},
-                    {"Home Lab", 0},
-                    {"AR Lab", 0}
+                    {"Industry Lab", 10000},
+                    {"Home Lab", 10000},
+                    {"AR Lab", 10000}
                 }
             }
         };
@@ -1038,14 +1042,14 @@ public class PlayerData
                 "Slot1", new Dictionary<string, object>
                 {
                     {"Element", "K"},
-                    {"Quantity", 5}
+                    {"Quantity", 60}
                 }
             },
             {
                 "Slot2", new Dictionary<string, object>
                 {
-                    {"Element", "H"},
-                    {"Quantity", 5}
+                    {"Element", "K"},
+                    {"Quantity", 64}
                 }
             },
             {
@@ -1104,12 +1108,14 @@ public class PlayerData
     public int Counter { get; set; }
     public int Energy { get; set; }
     public int Experience { get; set; }
+    public string Nickname { get; set; }
+    public string ID { get; set; }
     public string Seat { get; set; }
     public List<string> levelAvailable { get; set; }
     public Dictionary<string, int> Molecule { get; set; }
     public Dictionary<string, int> Inventory { get; set; }
     public Dictionary<string, int> flaskElements { get; set; }
-    public Dictionary<string, bool> hasLabUnlocked { get; set; }
+    public Dictionary<string, bool> nonResellable { get; set; }
     public Dictionary<string, Dictionary<string, int>> Shop { get; set; }
     public Dictionary<string, Dictionary<string, object>> slotItem { get; set; }
     public Dictionary<string, Dictionary<string, object>> survivalInventory { get; set; }

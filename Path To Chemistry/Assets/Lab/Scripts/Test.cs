@@ -17,11 +17,9 @@ public class Test : MonoBehaviour
     public void one(GameObject Image)
     {
         Image.SetActive(false);
-        Time.timeScale = 1;
     }
     public void two(GameObject Image)
     {
         Image.SetActive(true);
-        Time.timeScale = 0;
     }
 }

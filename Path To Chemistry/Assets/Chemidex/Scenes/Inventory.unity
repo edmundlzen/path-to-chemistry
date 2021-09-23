@@ -1901,7 +1901,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 893.08, y: 105}
+  m_AnchoredPosition: {x: 893.08, y: -463.86}
   m_SizeDelta: {x: 291.0566, y: 109.0506}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &94239853
@@ -21865,7 +21865,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 893.08, y: -323}
+  m_AnchoredPosition: {x: 893.08, y: -0.0000076293945}
   m_SizeDelta: {x: 291.0566, y: 109.0506}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1539034438
@@ -21914,7 +21914,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1539034441}
         m_TargetAssemblyTypeName: Inventory, Assembly-CSharp
-        m_MethodName: indentifySellQuantity
+        m_MethodName: sellQuantity
         m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 888729171}
@@ -28896,7 +28896,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 893.08, y: -207.1926}
+  m_AnchoredPosition: {x: 893.08, y: 115.81}
   m_SizeDelta: {x: 291.06, y: 122.5648}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2104487796

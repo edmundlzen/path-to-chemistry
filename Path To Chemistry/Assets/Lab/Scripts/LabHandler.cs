@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections;
 using System.Linq;
 using TMPro;
 using UnityEngine;
@@ -14,14 +14,15 @@ public static class LabData
 
 public class LabHandler : MonoBehaviour
 {
-    public GameObject pauseMenu;
-    public GameObject identifyQuantity;
-    public GameObject craftQuantity;
     public GameObject flaskHotbar;
     public GameObject craftingTableHotbar;
     public GameObject elementConstructorPanel;
+    public GameObject HistoryUI;
+    private float Value = 1;
+    private bool Stop = false;
     private void Start()
     {
+        GameObject.Find("Coma").GetComponent<Animator>().SetTrigger("Wake");
         var playerData = PlayerData.Instance();
         GameObject.Find("Level").GetComponent<Text>().text = playerData.Level.ToString();
         Guide();
@@ -29,24 +30,22 @@ public class LabHandler : MonoBehaviour
     private void Update()
     {
         var playerData = PlayerData.Instance();
-        if (Input.GetMouseButtonDown(0) && player.raycastObject == "Experiment" && !LabData.isAnimationPlaying)
+        if (Input.GetMouseButtonDown(0) && player.raycastObject == "Experiment" && !player.Pause && !player.labPause && !LabData.isAnimationPlaying)
         {
             flaskHotbar.SetActive(true);
-            Alert();
-            Time.timeScale = 0;
+            player.labPause = true;
             flaskCheck();
         }
-        else if (Input.GetMouseButtonDown(0) && player.raycastObject == "Add2" && !LabData.isAnimationPlaying)
+        else if (Input.GetMouseButtonDown(0) && player.raycastObject == "Add2" && !player.Pause && !player.labPause && !LabData.isAnimationPlaying)
         {
             craftingTableHotbar.SetActive(true);
-            Alert();
-            Time.timeScale = 0;
+            player.labPause = true;
             craftingTable();
         }
-        else if (Input.GetMouseButtonDown(0) && player.raycastObject == "Add3" && !LabData.isAnimationPlaying)
+        else if (Input.GetMouseButtonDown(0) && player.raycastObject == "Add3" && !player.Pause && !player.labPause && !LabData.isAnimationPlaying)
         {
             elementConstructorPanel.SetActive(true);
-            Time.timeScale = 0;
+            player.labPause = true;
             elementConstructor.Protons = 0;
             elementConstructor.Electrons = 0;
             elementConstructor.Neutrons = 0;
@@ -56,35 +55,66 @@ public class LabHandler : MonoBehaviour
             GameObject.Find("Product").GetComponent<Text>().text = "Craft";
         }
     }
-    public void addFlaskQuantity()
+
+    public void History(GameObject Alert)
     {
-        if (GameObject.Find("flaskQuantity/Slider").GetComponent<Slider>().value + 1 <= GameObject.Find("flaskQuantity/Slider").GetComponent<Slider>().maxValue)
+        if (!player.labPause)
         {
-            GameObject.Find("flaskQuantity/Slider").GetComponent<Slider>().value += 1;
+            player.labPause = true;
+            HistoryUI.SetActive(true);
+            if (player.History.Count > 0)
+            {
+                for (int i = 1; i <= player.History.Count; i++)
+                {
+                    if (GameObject.Find("Nothing") != null)
+                    {
+                        Destroy(GameObject.Find("Nothing"));
+                    }
+                    GameObject newAlert = Instantiate(Alert);
+                    newAlert.name = $"Alert{i}";
+                    newAlert.GetComponent<Text>().text = $"{i}. {player.History[i - 1]}";
+                    newAlert.transform.SetParent(GameObject.Find("History").transform);
+                }
+            }
+            else
+            {
+                GameObject newAlert = Instantiate(Alert);
+                newAlert.name = $"Nothing";
+                newAlert.GetComponent<Text>().text = "Nothing here ¯\\_(ツ)_/¯";
+                newAlert.transform.SetParent(GameObject.Find("History").transform);
+            }
         }
     }
-    public void addCraftQuantity()
+
+    public void closeHistory()
     {
-        if (GameObject.Find("craftQuantity/Slider").GetComponent<Slider>().value + 1 <= GameObject.Find("craftQuantity/Slider").GetComponent<Slider>().maxValue)
+        if (GameObject.Find("Nothing") != null)
         {
-            GameObject.Find("craftQuantity/Slider").GetComponent<Slider>().value += 1;
+            Destroy(GameObject.Find("Nothing"));
+        }
+        for (int i = 1; i <= player.History.Count; i++)
+        {
+            Destroy(GameObject.Find($"Alert{i}"));
+        }
+        player.labPause = false;
+        HistoryUI.SetActive(false);
+    }
+
+    public void addQuantity()
+    {
+        if (GameObject.Find("Slider").GetComponent<Slider>().value + 1 <= GameObject.Find("Slider").GetComponent<Slider>().maxValue)
+        {
+            GameObject.Find("Slider").GetComponent<Slider>().value += 1;
         }
     }
-    public void removeFlaskQuantity()
+    public void removeQuantity()
     {
-        if (GameObject.Find("flaskQuantity/Slider").GetComponent<Slider>().value - 1 >= GameObject.Find("flaskQuantity/Slider").GetComponent<Slider>().minValue)
+        if (GameObject.Find("Slider").GetComponent<Slider>().value - 1 >= GameObject.Find("Slider").GetComponent<Slider>().minValue)
         {
-            GameObject.Find("flaskQuantity/Slider").GetComponent<Slider>().value -= 1;
+            GameObject.Find("Slider").GetComponent<Slider>().value -= 1;
         }
     }
-    public void removeCraftQuantity()
-    {
-        if (GameObject.Find("craftQuantity/Slider").GetComponent<Slider>().value - 1 >= GameObject.Find("craftQuantity/Slider").GetComponent<Slider>().minValue)
-        {
-            GameObject.Find("craftQuantity/Slider").GetComponent<Slider>().value -= 1;
-        }
-    }
-    public void addCraftElement()
+    public void addCraftElement(GameObject craftQuantity)
     {
         var playerData = PlayerData.Instance();
         if ((playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"] != null) && (playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"] != null))
@@ -96,9 +126,17 @@ public class LabHandler : MonoBehaviour
             }
             else
             {
-                if (playerData.Molecule.ContainsKey(playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"].ToString()))
+                if (playerData.Molecule.ContainsKey(playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"].ToString()) && playerData.Molecule[playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"].ToString()] + 1 <= 64)
                 {
-                    playerData.Molecule[playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"].ToString()] = Convert.ToInt32(playerData.Molecule[playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"].ToString()]) + 1;
+                    if (playerData.Molecule[playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"].ToString()] + 1 <= 64)
+                    {
+                        playerData.Molecule[playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"].ToString()] = Convert.ToInt32(playerData.Molecule[playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"].ToString()]) + 1;
+                    }
+                    else
+                    {
+                        addAlert($"Alert: The compound creator's hotbar will only exist one stack of {playerData.slotItem[$"Slot{ hotbar.slotNum}"]["Element"]} Elements!");
+                        return;
+                    }
                 }
                 else
                 {
@@ -108,6 +146,7 @@ public class LabHandler : MonoBehaviour
                     }
                     else
                     {
+                        addAlert("Alert: The compound creator's hotbar are full!");
                         return;
                     }
                 }
@@ -118,30 +157,39 @@ public class LabHandler : MonoBehaviour
             }
         }
     }
-    public void addFlaskElement()
+    public void addFlaskElement(GameObject flaskQuantity)
     {
         var playerData = PlayerData.Instance();
         if ((playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"] != null) && (playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"] != null))
         {
             if (Convert.ToInt32(playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"]) > 1)
             {
-                identifyQuantity.SetActive(true);
+                flaskQuantity.SetActive(true);
                 GameObject.Find("flaskQuantity/Slider").GetComponent<Slider>().maxValue = Convert.ToInt32(playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"]);
             }
             else
             {
                 if (playerData.flaskElements.ContainsKey(playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"].ToString()))
                 {
-                    playerData.flaskElements[playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"].ToString()] = Convert.ToInt32(playerData.flaskElements[playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"].ToString()]) + 1;
+                    if (playerData.flaskElements[playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"].ToString()] + 1 <= 64)
+                    {
+                        playerData.flaskElements[playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"].ToString()] = Convert.ToInt32(playerData.flaskElements[playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"].ToString()]) + 1;
+                    }
+                    else
+                    {
+                        addAlert($"Alert: The flask's hotbar will only exist one stack of {playerData.slotItem[$"Slot{ hotbar.slotNum}"]["Element"]} Elements!");
+                        return;
+                    }
                 }
                 else
                 {
-                    if (playerData.Molecule.Count + 1 <= 10)
+                    if (playerData.flaskElements.Count + 1 <= 10)
                     {
                         playerData.flaskElements.Add(playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"].ToString(), 1);
                     }
                     else
                     {
+                        addAlert("Alert: The flask's hotbar are full!");
                         return;
                     }
                 }
@@ -152,22 +200,59 @@ public class LabHandler : MonoBehaviour
             }
         }
     }
-    public void Pause()
+    public void Pause(GameObject pauseMenu)
     {
+        player.labPause = true;
         pauseMenu.SetActive(true);
-        Time.timeScale = 0;
     }
 
-    public void Resume()
+    public void Resume(GameObject pauseMenu)
     {
+        player.labPause = false;
         pauseMenu.SetActive(false);
-        Time.timeScale = 1;
     }
 
     public void mainMenu()
     {
+        player.labPause = false;
         SceneManager.LoadScene("Main Menu");
-        Time.timeScale = 1;
+    }
+
+    public void experimentRecipes()
+    {
+        player.labPause = false;
+        SceneManager.LoadScene("Recipes");
+    }
+
+    public void molRecipes()
+    {
+        player.labPause = false;
+        SceneManager.LoadScene("Molecule Recipes");
+    }
+
+    public void Inventory()
+    {
+        player.labPause = false;
+        hotbar.hasLoaded = false;
+        SceneManager.LoadScene("Inventory");
+    }
+
+    public void Quiz()
+    {
+        StartCoroutine(Main());
+    }
+
+    private IEnumerator Main()
+    {
+        GameObject.Find("Player").GetComponent<Transform>().rotation = Quaternion.Euler(0, 90, 0);
+        player.labPause = true;
+        GameObject.Find("Player").GetComponent<Animator>().cullingMode = AnimatorCullingMode.AlwaysAnimate;
+        GameObject.Find("Player").GetComponent<Animator>().SetTrigger("Quiz");
+        yield return new WaitForSeconds(9);
+        GameObject.Find("Coma").GetComponent<Animator>().SetTrigger("Sleep");
+        yield return new WaitForSeconds(2);
+        SceneManager.LoadScene("Quiz");
+        player.labPause = false;
     }
 
     public void Slider(float Value)
@@ -178,46 +263,65 @@ public class LabHandler : MonoBehaviour
     public void Back1()
     {
         elementConstructorPanel.SetActive(false);
-        Time.timeScale = 1;
+        player.labPause = false;
     }
-    public void placeFlaskQuantity()
+    public void placeFlaskQuantity(GameObject flaskQuantity)
     {
         var playerData = PlayerData.Instance();
         var sliderValue = Convert.ToInt32(Math.Floor(GameObject.Find("flaskQuantity/Slider").GetComponent<Slider>().value));
         GameObject.Find("flaskQuantity/Slider").GetComponent<Slider>().value = 0;
-        identifyQuantity.SetActive(false);
+        flaskQuantity.SetActive(false);
         if (sliderValue > 0)
         {
             if (playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"] != null && playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"] != null && playerData.flaskElements.Count <= 10)
             {
                 if (playerData.flaskElements.ContainsKey(playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"].ToString()))
                 {
-                    playerData.flaskElements[playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"].ToString()] = Convert.ToInt32(playerData.flaskElements[playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"].ToString()]) + sliderValue;
+                    var Balance = Convert.ToInt32(playerData.flaskElements[playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"].ToString()]);
+                    if (playerData.flaskElements[playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"].ToString()] + sliderValue <= 64)
+                    {
+                        playerData.flaskElements[playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"].ToString()] = Balance + sliderValue;
+                    }
+                    else
+                    {
+                        playerData.flaskElements[playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"].ToString()] = Balance + (64 - Balance);
+                        playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"] = Convert.ToInt32(playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"]) - (64 - Balance);
+                        addAlert($"Alert: The flask's hotbar will only exist one stack of {playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"]} Elements!");
+                        Flask();
+                        return;
+                    }
                 }
                 else
                 {
-                    if (playerData.Molecule.Count + 1 <= 10)
+                    if (playerData.flaskElements.Count + 1 <= 10)
                     {
                         playerData.flaskElements.Add(playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"].ToString(), sliderValue);
                     }
                     else
                     {
+                        addAlert("Alert: The flask's hotbar are full!");
                         return;
                     }
                 }
                 playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"] = Convert.ToInt32(playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"]) - sliderValue;
-                if (Convert.ToInt32(playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"]) < 1)
-                {
-                    playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"] = null;
-                    playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"] = null;
-                }
-                slotCheck();
-                flaskCheck();
-                Alert();
+                Flask();
             }
         }
     }
-    public void placeCraftQuantity()
+
+    private void Flask()
+    {
+        var playerData = PlayerData.Instance();
+        if (Convert.ToInt32(playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"]) < 1)
+        {
+            playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"] = null;
+            playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"] = null;
+        }
+        slotCheck();
+        flaskCheck();
+    }
+
+    public void placeCraftQuantity(GameObject craftQuantity)
     {
         var playerData = PlayerData.Instance();
         var sliderValue = Convert.ToInt32(GameObject.Find("craftQuantity/Slider").GetComponent<Slider>().value);
@@ -225,32 +329,54 @@ public class LabHandler : MonoBehaviour
         craftQuantity.SetActive(false);
         if (sliderValue > 0)
         {
-            if (playerData.Molecule.ContainsKey(playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"].ToString()))
+            if (playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"] != null && playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"] != null && playerData.flaskElements.Count <= 10)
             {
-                playerData.Molecule[playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"].ToString()] = Convert.ToInt32(playerData.Molecule[playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"].ToString()]) + sliderValue;
-            }
-            else
-            {
-                if (playerData.Molecule.Count + 1 <= 10)
+                if (playerData.Molecule.ContainsKey(playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"].ToString()))
                 {
-                    playerData.Molecule.Add(playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"].ToString(), sliderValue);
+                    var Balance = Convert.ToInt32(playerData.Molecule[playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"].ToString()]);
+                    if (playerData.Molecule[playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"].ToString()] + sliderValue <= 64)
+                    {
+                        playerData.Molecule[playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"].ToString()] = Convert.ToInt32(playerData.Molecule[playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"].ToString()]) + sliderValue;
+                    }
+                    else
+                    {
+                        playerData.Molecule[playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"].ToString()] = Balance + (64 - Balance);
+                        playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"] = Convert.ToInt32(playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"]) - (64 - Balance);
+                        addAlert($"Alert: The compound creator's will only exist one stack of {playerData.slotItem[$"Slot{ hotbar.slotNum}"]["Element"]} Elements!");
+                        Workbench();
+                        return;
+                    }
                 }
                 else
                 {
-                    return;
+                    if (playerData.Molecule.Count + 1 <= 10)
+                    {
+                        playerData.Molecule.Add(playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"].ToString(), sliderValue);
+                    }
+                    else
+                    {
+                        addAlert("Alert: The compound creator's hotbar are full!");
+                        return;
+                    }
                 }
+                playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"] = Convert.ToInt32(playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"]) - sliderValue;
+                Workbench();
             }
-            playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"] = Convert.ToInt32(playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"]) - sliderValue;
-            if (Convert.ToInt32(playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"]) < 1)
-            {
-                playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"] = null;
-                playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"] = null;
-            }
-            slotCheck();
-            craftingTable();
-            Alert();
         }
     }
+    
+    private void Workbench()
+    {
+        var playerData = PlayerData.Instance();
+        if (Convert.ToInt32(playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"]) < 1)
+        {
+            playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"] = null;
+            playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"] = null;
+        }
+        slotCheck();
+        craftingTable();
+    }
+
     public void Craft()
     {
         var playerData = PlayerData.Instance();
@@ -387,25 +513,25 @@ public class LabHandler : MonoBehaviour
                 Product("C18H35NaO2");
             }
         }
+        else
+        {
+            addAlert("Alert: Nothing can be craft. Please refer to the recipes in Chemidex!");
+        }
         craftingTable();
     }
-    public void maxFlask()
+    public void Max()
     {
-        GameObject.Find("flaskQuantity/Slider").GetComponent<Slider>().value = GameObject.Find("flaskQuantity/Slider").GetComponent<Slider>().maxValue;
-    }
-    public void maxCraft()
-    {
-        GameObject.Find("craftQuantity/Slider").GetComponent<Slider>().value = GameObject.Find("craftQuantity/Slider").GetComponent<Slider>().maxValue;
+        GameObject.Find("Slider").GetComponent<Slider>().value = GameObject.Find("Slider").GetComponent<Slider>().maxValue;
     }
     public void closeFlaskTab()
     {
         flaskHotbar.SetActive(false);
-        Time.timeScale = 1;
+        player.labPause = false;
     }
     public void closeCraftTab()
     {
         craftingTableHotbar.SetActive(false);
-        Time.timeScale = 1;
+        player.labPause = false;
     }
     private void Product(string molecule)
     {
@@ -438,15 +564,14 @@ public class LabHandler : MonoBehaviour
             {
                 if (playerData.slotItem[$"Slot{i}"]["Element"] != null && playerData.slotItem[$"Slot{i}"]["Quantity"] != null)
                 {
-                    GameObject.Find("Alert").GetComponent<Text>().text = "Your hotbar slots are full now!";
-                    GameObject.Find("Alert").GetComponent<Animator>().SetTrigger("Alert");
+                    addAlert("Your hotbar slots are full now!");
                     return;
                 }
             }
         }
         LabData.hasDone = false;
-        slotCheck();
         playerData.Molecule.Clear();
+        slotCheck();
     }
     private void craftingTable()
     {
@@ -670,8 +795,10 @@ public class LabHandler : MonoBehaviour
                 }
             }
         }
-        flaskHotbar.SetActive(false); 
-        Time.timeScale = 1;
+        else
+        {
+            addAlert("Alert: Nothing happened. Plz refer to the recipes in Chemidex!");
+        }
     }
     private void flaskCheck()
     {
@@ -715,26 +842,18 @@ public class LabHandler : MonoBehaviour
         GameObject.Find("Level").GetComponent<Text>().text = playerData.Level.ToString();
         Guide();
         flaskCheck();
+        flaskHotbar.SetActive(false);
+        Time.timeScale = 1;
+        player.labPause = false;
     }
-    
-    private void Alert()
+
+    private void addAlert(string Alert)
     {
-        var playerData = PlayerData.Instance();
-        var slotsUnavailable = new List<int>();
-        for (var i = 1; i <= 9; i = i + 1)
+        int maxQuantity = 50;
+        player.History.Add(Alert);
+        if (player.History.Count > maxQuantity)
         {
-            if (playerData.slotItem[$"Slot{i}"]["Element"] != null && playerData.slotItem[$"Slot{i}"]["Quantity"] != null)
-            {
-                slotsUnavailable.Add(i);
-            }
-        }
-        if (slotsUnavailable.Count == 9)
-        {
-            GameObject.Find("Alert").GetComponent<Text>().text = "Alert: Your hotbar slots are full!";
-        }
-        else
-        {
-            GameObject.Find("Alert").GetComponent<Text>().text = "";
+            player.History.RemoveAt(0);
         }
     }
 }
