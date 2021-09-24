@@ -35,9 +35,9 @@ public class PlayerData
         nonResellable = new Dictionary<string, bool>()
         {
             { "Classic Lab", true },
-            { "Industry Lab", false },
-            { "Home Lab", false },
-            { "AR Lab", false }
+            { "Industry Lab", true },
+            { "Home Lab", true },
+            { "AR Lab", true }
         };
         Shop = new Dictionary<string, Dictionary<string, int>>()
         {
@@ -1035,6 +1035,41 @@ public class PlayerData
             //         }
             //     }
         };
+        teleports = new Dictionary<string, Dictionary<string, object>>
+        {
+            {
+                "Classic Lab", new Dictionary<string, object>
+                {
+                    {"description", "Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,\nmolestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum\nnumquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium\noptio, eaque rerum! Provident similique accusantium nemo autem. Veritatis\nobcaecati tenetur iure eiu"},
+                    {"image", "Classic Lab"},
+                    {"scene", "3D Lab"}
+                }
+            },
+            {
+                "Industry Lab", new Dictionary<string, object>
+                {
+                    {"description", "Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,\nmolestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum\nnumquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium\noptio, eaque rerum! Provident similique accusantium nemo autem. Veritatis\nobcaecati tenetur iure eiu"},
+                    {"image", "Industry Lab"},
+                    {"scene", "3D Industry"}
+                }
+            },
+            {
+                "Home Lab", new Dictionary<string, object>
+                {
+                    {"description", "Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,\nmolestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum\nnumquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium\noptio, eaque rerum! Provident similique accusantium nemo autem. Veritatis\nobcaecati tenetur iure eiu"},
+                    {"image", "Home Lab"},
+                    {"scene", "3D Home"}
+                }
+            },
+            {
+                "AR Lab", new Dictionary<string, object>
+                {
+                    {"description", "Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,\nmolestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum\nnumquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium\noptio, eaque rerum! Provident similique accusantium nemo autem. Veritatis\nobcaecati tenetur iure eiu"},
+                    {"image", "Placeholder"},
+                    {"scene", "AR Lab"}
+                }
+            }
+        };
         survivalHealth = 100;
         slotItem = new Dictionary<string, Dictionary<string, object>>
         {
@@ -1125,6 +1160,7 @@ public class PlayerData
     public Dictionary<string, Dictionary<string, object>> survivalPlayerRecipes { get; set; }
     public Dictionary<string, Dictionary<string, object>> survivalSmeltingRecipes { get; set; }
     public Dictionary<string, Dictionary<string, object>> materialReducerRecipes { get; set; }
+    public Dictionary<string, Dictionary<string, object>> teleports { get; set; }
     public int survivalHealth { get; set; }
 
     public static PlayerData Instance()
