@@ -9,6 +9,7 @@ public static class player
     public static bool Pause = false;
     public static bool labPause = false;
     public static bool hasAnimated = true;
+    public static string currentLab = "3D Lab";
     public static string raycastObject = "";
     public static List<string> History = new List<string>();
 }

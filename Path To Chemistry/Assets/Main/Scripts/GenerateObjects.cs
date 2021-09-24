@@ -81,7 +81,6 @@ public class GenerateObjects : MonoBehaviour
                                 var newEulerAngles = new Quaternion().eulerAngles;
                                 newEulerAngles.y = Random.Range(0f, 360f);
                                 newObject.transform.eulerAngles = newEulerAngles;
-                                // newObject.AddComponent<TestCollectable>();
                                 currentObjects[objects[i].gameObject]++;
                             }
                         }

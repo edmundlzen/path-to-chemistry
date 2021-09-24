@@ -7,7 +7,6 @@ public class PlayerData
 
     private PlayerData()
     {
-        
         Level = 1;
         Energy = 100000;
         Experience = 69;
@@ -1076,63 +1075,63 @@ public class PlayerData
             {
                 "Slot1", new Dictionary<string, object>
                 {
-                    {"Element", "K"},
-                    {"Quantity", 60}
+                    {"Element", "H2O"},
+                    {"Quantity", 5}
                 }
             },
             {
                 "Slot2", new Dictionary<string, object>
                 {
-                    {"Element", "K"},
-                    {"Quantity", 64}
+                    {"Element", "H2O"},
+                    {"Quantity", 5}
                 }
             },
             {
                 "Slot3", new Dictionary<string, object>
                 {
-                    {"Element", "O"},
+                    {"Element", "H2O"},
                     {"Quantity", 5}
                 }
             },
             {
                 "Slot4", new Dictionary<string, object>
                 {
-                    {"Element", "H"},
+                    {"Element", "H2O"},
                     {"Quantity", 5}
                 }
             },
             {
                 "Slot5", new Dictionary<string, object>
                 {
-                    {"Element", "Na"},
+                    {"Element", "H2O"},
                     {"Quantity", 5}
                 }
             },
             {
                 "Slot6", new Dictionary<string, object>
                 {
-                    {"Element", "Mg"},
+                    {"Element", "H2O"},
                     {"Quantity", 5}
                 }
             },
             {
                 "Slot7", new Dictionary<string, object>
                 {
-                    {"Element", "Li"},
+                    {"Element", "H2O"},
                     {"Quantity", 5}
                 }
             },
             {
                 "Slot8", new Dictionary<string, object>
                 {
-                    {"Element", "Be"},
+                    {"Element", "H2O"},
                     {"Quantity", 5}
                 }
             },
             {
                 "Slot9", new Dictionary<string, object>
                 {
-                    {"Element", "La"},
+                    {"Element", "H2O"},
                     {"Quantity", 5}
                 }
             }
