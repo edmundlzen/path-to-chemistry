@@ -5,6 +5,7 @@ using System.Linq;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public static class InventoryData
@@ -25,6 +26,7 @@ public class Inventory : MonoBehaviour
             stateCheck();
             Alert();
             var playerData = PlayerData.Instance();
+            GameObject.Find("Coma").GetComponent<Animator>().SetTrigger("Wake");
             GameObject.Find(InventoryData.Slot).GetComponent<Image>().color = Color.cyan;
             GameObject.Find("Energy").GetComponent<Text>().text = $"Energy: {playerData.Energy}";
             InventoryData.hasLoaded = true;
@@ -61,6 +63,13 @@ public class Inventory : MonoBehaviour
         {
             GameObject.Find("Slider").GetComponent<Slider>().value -= 1;
         }
+    }
+
+    public void BackLab()
+    {
+        hotbar.hasLoaded = false;
+        InventoryData.hasLoaded = false;
+        SceneManager.LoadScene(player.currentLab);
     }
 
     public void getQuantity(GameObject getQuantityUI)

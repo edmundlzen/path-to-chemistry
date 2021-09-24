@@ -14,26 +14,94 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   autoUpdate: 0
   objects:
-  - gameObject: {fileID: 1148613061152340, guid: eded051879df4c147b9010199d240258,
-      type: 3}
-    minimumAmount: 10000
-    maximumAmount: 10000
+  - gameObject: {fileID: 100006, guid: 4735160b42a3154428094dff59ef0f4e, type: 3}
+    minimumAmount: 3400
+    maximumAmount: 3500
     minimumHeight: 8
-    maximumHeight: 20
+    maximumHeight: 70
     followRotation: 1
     minimumDistance: 3
-  - gameObject: {fileID: 100010, guid: 76075d4f24491b84eb0b4ac914362e3f, type: 3}
-    minimumAmount: 3000
-    maximumAmount: 3000
+    followLayers: 1
+    layers: 0100000007000000
+  - gameObject: {fileID: 100000, guid: d209be13548e70947bc39053977ce977, type: 3}
+    minimumAmount: 200
+    maximumAmount: 250
     minimumHeight: 8
-    maximumHeight: 20
+    maximumHeight: 70
     followRotation: 1
-    minimumDistance: 3
+    minimumDistance: 10
+    followLayers: 1
+    layers: 0100000007000000
+  - gameObject: {fileID: 100000, guid: f282d9fb9b399dd4384b20aba08642fb, type: 3}
+    minimumAmount: 100
+    maximumAmount: 200
+    minimumHeight: 8
+    maximumHeight: 70
+    followRotation: 1
+    minimumDistance: 10
+    followLayers: 1
+    layers: 0100000007000000
+  - gameObject: {fileID: 100000, guid: 55f94b3dfaaba26458dbf470efc8cfa4, type: 3}
+    minimumAmount: 100
+    maximumAmount: 200
+    minimumHeight: 8
+    maximumHeight: 70
+    followRotation: 1
+    minimumDistance: 10
+    followLayers: 1
+    layers: 0100000007000000
   - gameObject: {fileID: 100000, guid: ad1f5855a33f0694886cbd301d99cc40, type: 3}
-    minimumAmount: 3000
-    maximumAmount: 3000
+    minimumAmount: 100
+    maximumAmount: 200
     minimumHeight: 8
-    maximumHeight: 20
+    maximumHeight: 70
+    followRotation: 1
+    minimumDistance: 10
+    followLayers: 1
+    layers: 0100000007000000
+  - gameObject: {fileID: 100010, guid: 76075d4f24491b84eb0b4ac914362e3f, type: 3}
+    minimumAmount: 100
+    maximumAmount: 200
+    minimumHeight: 8
+    maximumHeight: 70
+    followRotation: 1
+    minimumDistance: 10
+    followLayers: 1
+    layers: 0100000007000000
+  - gameObject: {fileID: 100012, guid: 1ee76940f560f654fbbe86776c26942b, type: 3}
+    minimumAmount: 100
+    maximumAmount: 200
+    minimumHeight: 8
+    maximumHeight: 70
+    followRotation: 1
+    minimumDistance: 10
+    followLayers: 1
+    layers: 0100000007000000
+  - gameObject: {fileID: 114418, guid: be878d9ea17907f4a8068678a5ce7908, type: 3}
+    minimumAmount: 50
+    maximumAmount: 100
+    minimumHeight: 1
+    maximumHeight: 15
     followRotation: 1
     minimumDistance: 3
+    followLayers: 1
+    layers: 03000000
+  - gameObject: {fileID: 114418, guid: 956bd2acf7aae244dac8fc20cf57858d, type: 3}
+    minimumAmount: 50
+    maximumAmount: 100
+    minimumHeight: 1
+    maximumHeight: 15
+    followRotation: 1
+    minimumDistance: 3
+    followLayers: 1
+    layers: 03000000
+  - gameObject: {fileID: 114418, guid: 9b8fc966f95ea9c4194dc091fc40b478, type: 3}
+    minimumAmount: 50
+    maximumAmount: 100
+    minimumHeight: 1
+    maximumHeight: 15
+    followRotation: 1
+    minimumDistance: 3
+    followLayers: 1
+    layers: 03000000
   despawnDistance: 100000000

@@ -234,6 +234,7 @@ public class LabHandler : MonoBehaviour
     {
         player.labPause = false;
         hotbar.hasLoaded = false;
+        InventoryData.hasLoaded = false;
         SceneManager.LoadScene("Inventory");
     }
 
