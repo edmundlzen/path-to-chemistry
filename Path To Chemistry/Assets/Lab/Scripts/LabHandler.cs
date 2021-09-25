@@ -599,23 +599,55 @@ public class LabHandler : MonoBehaviour
     {
         var playerData = PlayerData.Instance();
         for (var i = 1; i <= 9; i = i + 1)
+        {
             if (playerData.slotItem[$"Slot{i}"]["Element"] != null &&
                 Convert.ToInt32(playerData.slotItem[$"Slot{i}"]["Quantity"]) == 1)
             {
-                GameObject.Find($"HotbarSlot ({i})/Item").GetComponent<Text>().text = playerData.slotItem[$"Slot{i}"]["Element"].ToString();
+                if (Chemidex.moleculeRecipes["Symbol"].ContainsKey(Convert.ToString(playerData.slotItem[$"Slot{i}"]["Element"])))
+                {
+                    if (GameObject.Find($"HotbarSlot ({i})/Item/Image") == null)
+                    {
+                        GameObject slotImage = Instantiate(Resources.Load<GameObject>($"Lab/H Image"));
+                        slotImage.transform.SetParent(GameObject.Find($"HotbarSlot ({i})/Item").transform);
+                    }
+                    GameObject.Find($"HotbarSlot ({i})/Item/Image").GetComponent<Image>().sprite = Resources.Load<Sprite>($"Lab/{playerData.slotItem[$"Slot{i}"]["Element"]}");
+                }
+                else
+                {
+                    Destroy(GameObject.Find($"HotbarSlot ({i})/Image/Item"));
+                    GameObject.Find($"HotbarSlot ({i})/Symbol").GetComponent<Text>().text = $"{playerData.slotItem[$"Slot{i}"]["Element"]}";
+                }
+                GameObject.Find("ItemName").GetComponent<Text>().text = Convert.ToString(playerData.slotItem[$"Slot{Convert.ToInt32(hotbar.slotNum)}"]["Element"]);
                 GameObject.Find($"HotbarSlot ({i})/ItemNum").GetComponent<Text>().text = "";
             }
             else if (playerData.slotItem[$"Slot{i}"]["Element"] != null && Convert.ToInt32(playerData.slotItem[$"Slot{i}"]["Quantity"]) > 1)
             {
-                GameObject.Find($"HotbarSlot ({i})/Item").GetComponent<Text>().text = playerData.slotItem[$"Slot{i}"]["Element"].ToString();
+                if (Chemidex.moleculeRecipes["Symbol"].ContainsKey(Convert.ToString(playerData.slotItem[$"Slot{i}"]["Element"])))
+                {
+                    if (GameObject.Find($"HotbarSlot ({i})/Item/Image") == null)
+                    {
+                        GameObject slotImage = Instantiate(Resources.Load<GameObject>($"Lab/H Image"));
+                        slotImage.transform.SetParent(GameObject.Find($"HotbarSlot ({i})/Item").transform);
+                    }
+                    GameObject.Find($"HotbarSlot ({i})/Item/Image").GetComponent<Image>().sprite = Resources.Load<Sprite>($"Lab/{playerData.slotItem[$"Slot{i}"]["Element"]}");
+                }
+                else
+                {
+                    Destroy(GameObject.Find($"HotbarSlot ({i})/Item/Image"));
+                    GameObject.Find($"HotbarSlot ({i})/Symbol").GetComponent<Text>().text = $"{playerData.slotItem[$"Slot{i}"]["Element"]}";
+                }
+                GameObject.Find("ItemName").GetComponent<Text>().text = Convert.ToString(playerData.slotItem[$"Slot{Convert.ToInt32(hotbar.slotNum)}"]["Element"]);
                 GameObject.Find($"HotbarSlot ({i})/ItemNum").GetComponent<Text>().text = playerData.slotItem[$"Slot{i}"]["Quantity"].ToString();
             }
             else if (playerData.slotItem[$"Slot{i}"]["Element"] == null && playerData.slotItem[$"Slot{i}"]["Quantity"] == null)
             {
-                GameObject.Find($"HotbarSlot ({i})/Item").GetComponent<Text>().text = "";
+                Destroy(GameObject.Find($"HotbarSlot ({i})/Item/Image"));
+                GameObject.Find($"ItemName").GetComponent<Text>().text = "";
                 GameObject.Find($"HotbarSlot ({i})/ItemNum").GetComponent<Text>().text = "";
             }
+        }
     }
+
     public void React()
     {
         var playerData = PlayerData.Instance();
@@ -804,23 +836,53 @@ public class LabHandler : MonoBehaviour
     private void flaskCheck()
     {
         var playerData = PlayerData.Instance();
-        for (var i = 1; i <= 10; i = i + 1)
+        for (var i = 1; i <= 10; i++)
         {
-            GameObject.Find($"Slot{i}/Item").GetComponent<Text>().text = "";
-            GameObject.Find($"Slot{i}/Invenum").GetComponent<Text>().text = "";
+            Destroy(GameObject.Find($"flaskHotbar/Slot ({i})/Item/Image"));
+            GameObject.Find($"flaskHotbar/Slot ({i})/Symbol").GetComponent<Text>().text = "";
+            GameObject.Find($"flaskHotbar/Slot ({i})/Invenum").GetComponent<Text>().text = "";
         }
-        for (var i = 1; i <= playerData.flaskElements.Count; i = i + 1)
+        for (var i = 1; i <= playerData.flaskElements.Count; i++)
+        {
             if (playerData.flaskElements.Values.ElementAt(i - 1) > 1)
             {
-                GameObject.Find($"Slot{i}/Item").GetComponent<Text>().text = playerData.flaskElements.Keys.ElementAt(i - 1);
-                GameObject.Find($"Slot{i}/Invenum").GetComponent<Text>().text =
-                    playerData.flaskElements.Values.ElementAt(i - 1).ToString();
+                if (Chemidex.moleculeRecipes["Symbol"].ContainsKey(playerData.flaskElements.Keys.ElementAt(i - 1)))
+                {
+                    if (GameObject.Find($"flaskHotbar/Slot ({i})/Item/Image") == null)
+                    {
+                        GameObject slotImage = Instantiate(Resources.Load<GameObject>($"Lab/F Image"));
+                        slotImage.name = "Image";
+                        slotImage.transform.SetParent(GameObject.Find($"flaskHotbar/Slot ({i})/Item").transform);
+                    }
+                    GameObject.Find($"flaskHotbar/Slot ({i})/Item/Image").GetComponent<Image>().sprite = Resources.Load<Sprite>($"Lab/{playerData.flaskElements.Keys.ElementAt(i - 1)}");
+                }
+                else
+                {
+                    Destroy(GameObject.Find($"flaskHotbar/Slot ({i})/Item/Image"));
+                    GameObject.Find($"flaskHotbar/Slot ({i})/Symbol").GetComponent<Text>().text = playerData.flaskElements.Keys.ElementAt(i - 1);
+                }
+                GameObject.Find($"flaskHotbar/Slot ({i})/Invenum").GetComponent<Text>().text = Convert.ToString(playerData.flaskElements.Values.ElementAt(i - 1));
             }
             else
             {
-                GameObject.Find($"Slot{i}/Item").GetComponent<Text>().text = playerData.flaskElements.Keys.ElementAt(i - 1);
-                GameObject.Find($"Slot{i}/Invenum").GetComponent<Text>().text = "";
+                if (Chemidex.moleculeRecipes["Symbol"].ContainsKey(playerData.flaskElements.Keys.ElementAt(i - 1)))
+                {
+                    if (GameObject.Find($"flaskHotbar/Slot ({i})/Item/Image") == null)
+                    {
+                        GameObject slotImage = Instantiate(Resources.Load<GameObject>($"Lab/F Image"));
+                        slotImage.name = "Image";
+                        slotImage.transform.SetParent(GameObject.Find($"flaskHotbar/Slot ({i})/Item").transform);
+                    }
+                    GameObject.Find($"flaskHotbar/Slot ({i})/Item/Image").GetComponent<Image>().sprite = Resources.Load<Sprite>($"Lab/{playerData.flaskElements.Keys.ElementAt(i - 1)}");
+                }
+                else
+                {
+                    Destroy(GameObject.Find($"flaskHotbar ({i})/Item/Image"));
+                    GameObject.Find($"flaskHotbar/Slot ({i})/Symbol").GetComponent<Text>().text = playerData.flaskElements.Keys.ElementAt(i - 1);
+                }
+                GameObject.Find($"flaskHotbar/Slot{i}/Invenum").GetComponent<Text>().text = "";
             }
+        }
     }
     private void Guide()
     {
