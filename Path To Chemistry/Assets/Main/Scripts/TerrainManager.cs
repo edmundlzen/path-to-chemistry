@@ -36,6 +36,7 @@ public class TerrainManager : MonoBehaviour
     {
         while (true)
         {
+            print(Vector3.Distance(player.transform.position, terrains[0].transform.position));
             foreach (var obj in terrains) {
                 if (Vector3.Distance(player.transform.position, obj.transform.position) >= terrainDespawnDistance)
                 {

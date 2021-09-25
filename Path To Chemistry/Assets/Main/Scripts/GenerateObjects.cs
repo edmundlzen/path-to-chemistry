@@ -19,7 +19,6 @@ public class GenerateObjects : MonoBehaviour
     {
         terrainData = GetComponent<Terrain>().terrainData;
         player = GameObject.FindGameObjectsWithTag("Player")[0].transform;
-        new Task(DisableOnDistance()).Start();
         terrainTextureDetector = gameObject.AddComponent<TerrainTextureDetector>();
     }
 
@@ -86,25 +85,6 @@ public class GenerateObjects : MonoBehaviour
                         }
                 }
             }
-        }
-    }
-
-    IEnumerator DisableOnDistance()
-    {
-        while (true) 
-        {
-            foreach (GameObject obj in generatedObjects)
-            {
-                if (Vector3.Distance(player.position, obj.transform.position) >= objectGenerationSettings.despawnDistance)
-                {
-                    obj.SetActive(false);
-                }
-                else
-                {
-                    obj.SetActive(true);
-                }
-            }
-            yield return new WaitForSeconds(1f);
         }
     }
 }

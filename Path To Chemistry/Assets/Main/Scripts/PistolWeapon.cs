@@ -71,7 +71,6 @@ public class PistolWeapon: MonoBehaviour, IUsable
         newLineRenderer.material = Resources.Load<Material>("Materials/Gun Trail");
         newLineRenderer.SetPosition(0, firePoint.transform.position);
         newLineRenderer.SetPosition(1, hitPoint);
-        print(hitPoint);
         yield return new WaitForSeconds(0.2f);
         Destroy(newEmpty);
     }
