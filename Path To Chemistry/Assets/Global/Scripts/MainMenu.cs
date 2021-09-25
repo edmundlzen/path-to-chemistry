@@ -67,8 +67,6 @@ public class MainMenu : MonoBehaviour
             progressBar.value = Mathf.Clamp01(sceneLoadingOperation.progress / 0.9f);
             yield return null;
         }
-        
-        print("DONE");
     }
 
     public void ContinueGame()

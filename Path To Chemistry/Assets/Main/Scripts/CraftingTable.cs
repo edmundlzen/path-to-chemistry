@@ -7,6 +7,5 @@ public class CraftingTable : MonoBehaviour, IUsable
     public void Use(Transform playerCamera)
     {
         GameObject.FindGameObjectsWithTag("MainGUIController")[0].GetComponent<MainGUIController>().ChangeView("inventory");
-        GameObject.FindGameObjectsWithTag("GameController")[0].GetComponent<MainGameManager>().useButton = false;
     }
 }

@@ -158,50 +158,9 @@ public class PlayerData
                     {"quantity", 82}
                 }
             },
-            {
-                "Item 8", new Dictionary<string, object>
-                {
-                    {"image", "placeholder_item"},
-                    {"name", "Item 8"},
-                    {"quantity", 77}
-                }
-            },
-            {
-                "Item 9", new Dictionary<string, object>
-                {
-                    {"image", "placeholder_item"},
-                    {"name", "Item 9"},
-                    {"quantity", 25}
-                }
-            },
-            {
-                "Item 10", new Dictionary<string, object>
-                {
-                    {"image", "placeholder_item"},
-                    {"name", "Item 10"},
-                    {"quantity", 98}
-                }
-            },
-            {
-                "Item 11", new Dictionary<string, object>
-                {
-                    {"image", "placeholder_item"},
-                    {"name", "Item 11"},
-                    {"quantity", 86}
-                }
-            },
-            {
-                "Item 12", new Dictionary<string, object>
-                {
-                    {"image", "placeholder_item"},
-                    {"name", "Item 12"},
-                    {"quantity", 54}
-                }
-            }
         };
         survivalHotbar = new List<string>()
         {
-            
         };
         survivalMaterials = new Dictionary<string, Dictionary<string, object>>
         {
@@ -292,7 +251,55 @@ public class PlayerData
                     {"name", "Wood"},
                     {"quantity", 735}
                 }
-            }
+            },
+            {
+                "Coal Ore", new Dictionary<string, object>
+                {
+                    {"image", "coalore"},
+                    {"name", "Coal Ore"},
+                    {"quantity", 735}
+                }
+            },
+            {
+                "Diamond Ore", new Dictionary<string, object>
+                {
+                    {"image", "diamondore"},
+                    {"name", "Diamond Ore"},
+                    {"quantity", 500}
+                }
+            },
+            {
+                "Emerald Ore", new Dictionary<string, object>
+                {
+                    {"image", "emeraldore"},
+                    {"name", "Emerald Ore"},
+                    {"quantity", 735}
+                }
+            },
+            {
+                "Gold Ore", new Dictionary<string, object>
+                {
+                    {"image", "goldore"},
+                    {"name", "Gold Ore"},
+                    {"quantity", 735}
+                }
+            },
+            {
+                "Iron Ore", new Dictionary<string, object>
+                {
+                    {"image", "ironore"},
+                    {"name", "Iron Ore"},
+                    {"quantity", 735}
+                }
+            },
+            {
+                "Lapis Lazuli Ore", new Dictionary<string, object>
+                {
+                    {"image", "lapislazuliore"},
+                    {"name", "Lapis Lazuli Ore"},
+                    {"quantity", 735}
+                }
+            },
         };
         survivalRecipes = new Dictionary<string, Dictionary<string, object>>
         {
@@ -324,153 +331,6 @@ public class PlayerData
                         }
                     }
                 }
-            // },
-            // {
-            //     "Item 3", new Dictionary<string, object>
-            //     {
-            //         {"enabled", true},
-            //         {"name", "Item 3"},
-            //         {
-            //             "materials", new Dictionary<string, int>
-            //             {
-            //                 {"Material 1", 76},
-            //                 {"Material 2", 23},
-            //                 {"Material 5", 98}
-            //             }
-            //         }
-            //     }
-            // },
-            // {
-            //     "Item 4", new Dictionary<string, object>
-            //     {
-            //         {"enabled", true},
-            //         {"name", "Item 4"},
-            //         {
-            //             "materials", new Dictionary<string, int>
-            //             {
-            //                 {"Material 1", 7},
-            //                 {"Material 3", 28}
-            //             }
-            //         }
-            //     }
-            // },
-            // {
-            //     "Item 5", new Dictionary<string, object>
-            //     {
-            //         {"enabled", true},
-            //         {"name", "Item 5"},
-            //         {
-            //             "materials", new Dictionary<string, int>
-            //             {
-            //                 {"Material 3", 927},
-            //                 {"Material 4", 26},
-            //                 {"Material 5", 76}
-            //             }
-            //         }
-            //     }
-            // },
-            // {
-            //     "Item 6", new Dictionary<string, object>
-            //     {
-            //         {"enabled", true},
-            //         {"name", "Item 6"},
-            //         {
-            //             "materials", new Dictionary<string, int>
-            //             {
-            //                 {"Material 1", 76},
-            //                 {"Material 2", 23},
-            //                 {"Material 5", 98}
-            //             }
-            //         }
-            //     }
-            // },
-            // {
-            //     "Item 7", new Dictionary<string, object>
-            //     {
-            //         {"enabled", true},
-            //         {"name", "Item 7"},
-            //         {
-            //             "materials", new Dictionary<string, int>
-            //             {
-            //                 {"Material 1", 7},
-            //                 {"Material 3", 28}
-            //             }
-            //         }
-            //     }
-            // },
-            // {
-            //     "Item 8", new Dictionary<string, object>
-            //     {
-            //         {"enabled", true},
-            //         {"name", "Item 8"},
-            //         {
-            //             "materials", new Dictionary<string, int>
-            //             {
-            //                 {"Material 3", 927},
-            //                 {"Material 4", 26},
-            //                 {"Material 5", 76}
-            //             }
-            //         }
-            //     }
-            // },
-            // {
-            //     "Item 9", new Dictionary<string, object>
-            //     {
-            //         {"enabled", true},
-            //         {"name", "Item 9"},
-            //         {
-            //             "materials", new Dictionary<string, int>
-            //             {
-            //                 {"Material 1", 76},
-            //                 {"Material 2", 23},
-            //                 {"Material 5", 98}
-            //             }
-            //         }
-            //     }
-            // },
-            // {
-            //     "Item 10", new Dictionary<string, object>
-            //     {
-            //         {"enabled", true},
-            //         {"name", "Item 10"},
-            //         {
-            //             "materials", new Dictionary<string, int>
-            //             {
-            //                 {"Material 1", 7},
-            //                 {"Material 3", 28}
-            //             }
-            //         }
-            //     }
-            // },
-            // {
-            //     "Item 11", new Dictionary<string, object>
-            //     {
-            //         {"enabled", true},
-            //         {"name", "Item 11"},
-            //         {
-            //             "materials", new Dictionary<string, int>
-            //             {
-            //                 {"Material 3", 927},
-            //                 {"Material 4", 26},
-            //                 {"Material 5", 76}
-            //             }
-            //         }
-            //     }
-            // },
-            // {
-            //     "Item 12", new Dictionary<string, object>
-            //     {
-            //         {"enabled", true},
-            //         {"name", "Item 12"},
-            //         {
-            //             "materials", new Dictionary<string, int>
-            //             {
-            //                 {"Material 1", 76},
-            //                 {"Material 2", 23},
-            //                 {"Material 5", 98}
-            //             }
-            //         }
-            //     }
             }
         };
         survivalPlayerRecipes = new Dictionary<string, Dictionary<string, object>>
