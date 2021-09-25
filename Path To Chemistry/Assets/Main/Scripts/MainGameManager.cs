@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class MainGameManager : MonoBehaviour
 {
-    private bool useButton = false;
+    public bool useButton = false;
     public Transform playerCamera;
     public GameObject interactButton;
     
@@ -92,13 +92,10 @@ public class MainGameManager : MonoBehaviour
             if (GameObject.FindGameObjectsWithTag("HandItem")[0].TryGetComponent<Placeable>(out Placeable placable)) 
             {
                 placable.Use(playerCamera);
-                useButton = false;
             } else if (GameObject.FindGameObjectsWithTag("HandItem")[0].TryGetComponent<IUsable>(out IUsable usable))
             {
                 usable.Use(playerCamera);
-                useButton = false;
-            }   
-            useButton = false;
+            }
         }
         
         RaycastHit hit;

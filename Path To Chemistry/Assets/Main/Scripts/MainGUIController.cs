@@ -90,7 +90,6 @@ public class MainGUIController : MonoBehaviour
 
     public void ChangeView(string view)
     {
-        print("CHANGE");
         player.freeze = true;
         activeView = view;
         

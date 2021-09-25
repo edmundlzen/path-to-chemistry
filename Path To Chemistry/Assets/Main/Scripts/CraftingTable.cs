@@ -1,9 +1,12 @@
+using System;
 using UnityEngine;
 
-public class CraftingTable : MonoBehaviour, IInteractable
+public class CraftingTable : MonoBehaviour, IUsable
 {
-    public void Interactable(Transform playerCamera)
+    private bool changeView = false;
+    public void Use(Transform playerCamera)
     {
         GameObject.FindGameObjectsWithTag("MainGUIController")[0].GetComponent<MainGUIController>().ChangeView("inventory");
+        GameObject.FindGameObjectsWithTag("GameController")[0].GetComponent<MainGameManager>().useButton = false;
     }
 }

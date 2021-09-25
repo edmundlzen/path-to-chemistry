@@ -24,12 +24,10 @@ public class TeleportController : MonoBehaviour
         var teleports = playerData.teleports;
         
         //Load scene here later
-        print(teleport.name);
     }
 
     private void UpdateTeleports()
     {
-        print("HWIWIIW");
         var firstTeleport = teleportItems.transform.GetChild(0);
         firstTeleport.gameObject.SetActive(false);
         foreach (Transform materialSlot in teleportItems.transform)
