@@ -118,4 +118,4 @@ MonoBehaviour:
     minimumDistance: 10
     followLayers: 1
     layers: 01000000
-  despawnDistance: 100000000
+  despawnDistance: 180
