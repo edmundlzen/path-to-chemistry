@@ -43,5 +43,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e034643184f8d42069a1c747e64d9f82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  useButton: 0
   playerCamera: {fileID: 0}
   interactButton: {fileID: 0}
+  hpBar: {fileID: 0}

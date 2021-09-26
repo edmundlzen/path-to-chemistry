@@ -479,7 +479,7 @@ public class PlayerData
                 }
             }
         };
-        survivalHealth = 100;
+        survivalHealth = 100; // Normal full value -> 100
         slotItem = new Dictionary<string, Dictionary<string, object>>
         {
             {

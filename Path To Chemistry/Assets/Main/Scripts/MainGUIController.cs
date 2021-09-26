@@ -17,6 +17,8 @@ public class MainGUIController : MonoBehaviour
     private GameObject playerCrafting;
     private GameObject materialReducer;
     private GameObject teleport;
+    private GameObject death;
+    private GameObject pause;
     
     private string activeView;
 
@@ -24,6 +26,7 @@ public class MainGUIController : MonoBehaviour
     
     public GameObject hand;
     public FirstPersonController player;
+    public bool goBackToDeath;
 
     void Awake()
     {
@@ -35,12 +38,14 @@ public class MainGUIController : MonoBehaviour
         playerCrafting = transform.Find("Player Crafting").gameObject;
         materialReducer = transform.Find("Material Reducer").gameObject;
         teleport = transform.Find("Teleport").gameObject;
+        death = transform.Find("Death").gameObject;
+        pause = transform.Find("Pause").gameObject;
     }
     
     void Start()
     {
         // Load();
-        
+        goBackToDeath = false;
         ChangeView("gameview");
     }
 
@@ -102,10 +107,18 @@ public class MainGUIController : MonoBehaviour
         playerCrafting.SetActive(false);
         materialReducer.SetActive(false);
         teleport.SetActive(false);
+        death.SetActive(false);
+        pause.SetActive(false);
 
         switch (view)
         {
             case "gameview":
+                if (goBackToDeath)
+                {
+                    goBackToDeath = false;
+                    ChangeView("death");
+                    return;
+                }
                 player.freeze = false;
                 // Cursor.lockState = CursorLockMode.Locked;
                 // Cursor.visible = false;
@@ -141,6 +154,17 @@ public class MainGUIController : MonoBehaviour
                 Cursor.lockState = CursorLockMode.None;
                 Cursor.visible = true;
                 teleport.SetActive(true);
+                break;
+            case "death":
+                goBackToDeath = false;
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+                death.SetActive(true);
+                break;
+            case "pause":
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+                pause.SetActive(true);
                 break;
             default:
                 Debug.LogError("Argument for changeView is invalid. It must be one of either: 'inventory', 'crafting', 'smelting'");

@@ -4,13 +4,15 @@ using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MainGameManager : MonoBehaviour
 {
     public bool useButton = false;
     public Transform playerCamera;
     public GameObject interactButton;
-    
+    public Slider hpBar;
+
     private void Load()
     {
         var filePath = Path.Combine(Application.dataPath, "Elements.json");
@@ -77,13 +79,19 @@ public class MainGameManager : MonoBehaviour
     void PlayerDead()
     {
         // Do stuff you do when player dead here.
+        GameObject.FindGameObjectsWithTag("MainGUIController")[0].GetComponent<MainGUIController>().ChangeView("death");
     }
 
     void Update()
     {
         var playerHealth = PlayerData.Instance().survivalHealth;
+        float smoothTime = 0.3f;
+        float yVelocity = 0.0f;
+        hpBar.value = playerHealth > 0 ? playerHealth / 100f : 0f; // Mathf.SmoothDamp(hpBar.value, playerHealth / 100f, ref yVelocity, smoothTime)
         if (playerHealth <= 0)
         {
+            Time.timeScale = 0f;
+            PlayerData.Instance().survivalHealth = 100;
             PlayerDead();
             return;
         }

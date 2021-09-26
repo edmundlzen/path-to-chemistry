@@ -52,7 +52,7 @@ public class DragonSoulEaterEnemy: MonoBehaviour, IEntity
     {
         // Assign health and damage here
         health = 100;
-        damage = 10;
+        damage = 5;
     }
     
     private void Load()

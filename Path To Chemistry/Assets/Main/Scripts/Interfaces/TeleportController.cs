@@ -1,6 +1,8 @@
+using System;
 using System.IO;
 using Newtonsoft.Json;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class TeleportController : MonoBehaviour
@@ -16,6 +18,13 @@ public class TeleportController : MonoBehaviour
     void OnEnable()
     {
         UpdateTeleports();
+        
+        Time.timeScale = 0f;
+    }
+
+    private void OnDisable()
+    {
+        Time.timeScale = 1f;
     }
 
     public void TeleportClickHandler(GameObject teleport)
@@ -24,6 +33,9 @@ public class TeleportController : MonoBehaviour
         var teleports = playerData.teleports;
         
         //Load scene here later
+        print(teleport.name);
+        Transition.ToScene = teleport.name;
+        SceneManager.LoadScene("Transition");
     }
 
     private void UpdateTeleports()
@@ -51,7 +63,7 @@ public class TeleportController : MonoBehaviour
                 firstTeleport.Find("Title").GetComponent<Text>().text = teleport.Key;
                 firstTeleport.Find("Description").GetComponent<Text>().text = teleport.Value["description"].ToString();
 
-                firstTeleport.name = teleport.Key;
+                firstTeleport.name = teleport.Value["scene"].ToString();
                 firstTeleport.gameObject.SetActive(true);
                 continue;
             }
@@ -63,7 +75,7 @@ public class TeleportController : MonoBehaviour
             newMaterialSlot.Find("Title").GetComponent<Text>().text = teleport.Key;
             newMaterialSlot.Find("Description").GetComponent<Text>().text = teleport.Value["description"].ToString();
             
-            newMaterialSlot.name = teleport.Key;
+            newMaterialSlot.name = teleport.Value["scene"].ToString();
             newMaterialSlot.gameObject.SetActive(true);
         }
     }
