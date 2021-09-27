@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -12,6 +11,7 @@ public class SprintAnim : MonoBehaviour
 {
     private void Start()
     {
+        Transition.ToScene = "3D Lab";
         StartCoroutine(Sprint());
     }
     private IEnumerator Sprint()
