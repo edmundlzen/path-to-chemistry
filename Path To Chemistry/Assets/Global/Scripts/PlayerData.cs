@@ -451,7 +451,7 @@ public class PlayerData
                 {
                     {"description", "Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,\nmolestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum\nnumquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium\noptio, eaque rerum! Provident similique accusantium nemo autem. Veritatis\nobcaecati tenetur iure eiu"},
                     {"image", "Classic Lab"},
-                    {"scene", "3D Lab"}
+                    {"scene", "Classic Lab"}
                 }
             },
             {
@@ -459,7 +459,7 @@ public class PlayerData
                 {
                     {"description", "Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,\nmolestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum\nnumquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium\noptio, eaque rerum! Provident similique accusantium nemo autem. Veritatis\nobcaecati tenetur iure eiu"},
                     {"image", "Industry Lab"},
-                    {"scene", "3D Industry"}
+                    {"scene", "Industry Lab"}
                 }
             },
             {
