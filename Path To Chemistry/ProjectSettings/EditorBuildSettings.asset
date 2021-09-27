@@ -11,9 +11,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Main/Scenes/Main.unity
     guid: c23724e82e33aa64791f5b3e69699aa2
-  - enabled: 1
-    path: Assets/Lab/Scenes/3D Lab.unity
-    guid: e74db27fb4475834796ecc76e695b0e6
+  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000
   - enabled: 1
     path: Assets/Chemidex/Scenes/Chemidex.unity
     guid: 3b2b654fbab482748aee9c0b0a8305c2

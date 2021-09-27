@@ -51,15 +51,13 @@ public class DragonSoulEaterEnemy: MonoBehaviour, IEntity
     void Awake()
     {
         // Assign health and damage here
-        health = 100;
-        damage = 5;
+        health = Random.Range(100, 200);
+        damage = 15;
     }
     
     private void Load()
     {
-        var filePath = Path.Combine(Application.dataPath, "Elements.json");
-        var fileContent = File.ReadAllText(filePath);
-        var elementData = JsonConvert.DeserializeObject<ElementData>(fileContent);
+        var elementData = JsonConvert.DeserializeObject<ElementData>(ElementData.Instance().allElementsData);
         ElementData.Instance().UpdateElementData(elementData);
     }
     
@@ -101,13 +99,18 @@ public class DragonSoulEaterEnemy: MonoBehaviour, IEntity
         //TODO: Change this thing
         drops = new Dictionary<string, int>()
         {
-            {elementData.elements.ElementAt(1).Key, Random.Range(1,100)},
-            {elementData.elements.ElementAt(2).Key, Random.Range(1,100)},
-            {elementData.elements.ElementAt(3).Key, Random.Range(1,100)},
-            {elementData.elements.ElementAt(4).Key, Random.Range(1,100)},
-            {elementData.elements.ElementAt(5).Key, Random.Range(1,100)}
+            {elementData.elements.ElementAt(Random.Range(0,117)).Key, Random.Range(5,10)},
+            {elementData.elements.ElementAt(Random.Range(0,117)).Key, Random.Range(5,10)},
+            {elementData.elements.ElementAt(Random.Range(0,117)).Key, Random.Range(5,10)},
+            {elementData.elements.ElementAt(Random.Range(0,117)).Key, Random.Range(5,10)},
+            {elementData.elements.ElementAt(Random.Range(0,117)).Key, Random.Range(5,10)},
+            {elementData.elements.ElementAt(Random.Range(0,117)).Key, Random.Range(5,10)},
+            {elementData.elements.ElementAt(Random.Range(0,117)).Key, Random.Range(5,10)},
+            {elementData.elements.ElementAt(Random.Range(0,117)).Key, Random.Range(5,10)},
+            {elementData.elements.ElementAt(Random.Range(0,117)).Key, Random.Range(5,10)},
+            {elementData.elements.ElementAt(Random.Range(0,117)).Key, Random.Range(5,10)},
         };
-        
+
         speed = agent.speed;
         ChangeState(EntityStates.Patrol);
     }
@@ -239,7 +242,7 @@ public class DragonSoulEaterEnemy: MonoBehaviour, IEntity
     {
         DisableAllAnimations();
         animator.SetTrigger("Die");
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(4f);
         var playerData = PlayerData.Instance();
         foreach (var elementDrop in drops)
         {
