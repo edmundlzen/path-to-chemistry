@@ -32,7 +32,7 @@ public class periodicTable : MonoBehaviour
 
     public void Back()
     {
-        SceneManager.LoadScene("Chemidex");
+        SceneManager.LoadScene(player.startPlace);
     }
 
     public void mainMenu()
@@ -69,9 +69,7 @@ public class periodicTable : MonoBehaviour
 
     private void Load()
     {
-        var filePath = Path.Combine(Application.dataPath, "Elements.json");
-        var fileContent = File.ReadAllText(filePath);
-        var elementData = JsonConvert.DeserializeObject<ElementData>(fileContent);
+        var elementData = JsonConvert.DeserializeObject<ElementData>(allElements.Data);
         ElementData.Instance().UpdateElementData(elementData);
     }
 }

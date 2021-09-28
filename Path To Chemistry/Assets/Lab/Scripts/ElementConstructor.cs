@@ -12,7 +12,6 @@ public static class elementConstructor
     public static int Neutrons { get; set; }
     public static bool hasLoaded = false;
     public static bool hasDone = false;
-    public static bool Pause = false;
     public static string SelectedElement = "";
 }
 
@@ -28,7 +27,7 @@ public class ElementConstructor : MonoBehaviour
     }
     public void addProton()
     {
-        if (!elementConstructor.Pause)
+        if (!player.deepPause)
         {
             if (elementConstructor.Protons + 1 <= 120)
             {
@@ -40,7 +39,7 @@ public class ElementConstructor : MonoBehaviour
     }
     public void addElectron()
     {
-        if (!elementConstructor.Pause)
+        if (!player.deepPause)
         {
             if (elementConstructor.Electrons + 1 <= 120)
             {
@@ -52,7 +51,7 @@ public class ElementConstructor : MonoBehaviour
     }
     public void addNeutron()
     {
-        if (!elementConstructor.Pause)
+        if (!player.deepPause)
         {
             if (elementConstructor.Neutrons + 1 <= 180)
             {
@@ -64,7 +63,7 @@ public class ElementConstructor : MonoBehaviour
     }
     public void removeProton()
     {
-        if (!elementConstructor.Pause)
+        if (!player.deepPause)
         {
             if (elementConstructor.Protons - 1 >= 0)
             {
@@ -76,7 +75,7 @@ public class ElementConstructor : MonoBehaviour
     }
     public void removeElectron()
     {
-        if (!elementConstructor.Pause)
+        if (!player.deepPause)
         {
             if (elementConstructor.Electrons - 1 >= 0)
             {
@@ -88,7 +87,7 @@ public class ElementConstructor : MonoBehaviour
     }
     public void removeNeuton()
     {
-        if (!elementConstructor.Pause)
+        if (!player.deepPause)
         {
             if (elementConstructor.Neutrons - 1 >= 0)
             {
@@ -101,7 +100,22 @@ public class ElementConstructor : MonoBehaviour
 
     public void Slider(float Value)
     {
-        GameObject.Find("sliderValue").GetComponent<Text>().text = Convert.ToString(Math.Floor(Value));
+        var playerData = PlayerData.Instance();
+        var elementData = ElementData.Instance();
+        for (int i = 1; i <= 94; i++)
+        {
+            if (elementData.rarity[i - 1] == elementConstructor.SelectedElement)
+            {
+                GameObject.Find("sliderValue").GetComponent<Text>().text = $"Quantity: {Math.Floor(Value)}\nCost: ${Math.Floor(Value) * 50 * i + 1}";
+                break;
+            }
+            else
+            {
+                GameObject.Find("sliderValue").GetComponent<Text>().text = $"Quantity: {Math.Floor(Value)}\nCost: ${Math.Floor(Value) * 50}";
+                break;
+            }
+        }
+        
     }
 
     public void maxQuantity()
@@ -127,7 +141,7 @@ public class ElementConstructor : MonoBehaviour
     {
         var playerData = PlayerData.Instance();
         var elementData = ElementData.Instance();
-        if (!elementConstructor.Pause)
+        if (!player.deepPause)
         {
             foreach (var Keys in elementData.elements.Keys)
             {
@@ -137,7 +151,7 @@ public class ElementConstructor : MonoBehaviour
                 {
                     BuyUI.SetActive(true);
                     player.labPause = true;
-                    elementConstructor.Pause = true;
+                    player.deepPause = true;
                     elementConstructor.SelectedElement = Keys;
                     GameObject.Find("Product").GetComponent<Text>().text = Keys;
                     GameObject.Find("ElementPanel/ElementName").GetComponent<Text>().text = Keys;
@@ -192,6 +206,7 @@ public class ElementConstructor : MonoBehaviour
                     {
                         playerData.slotItem[$"Slot{i}"]["Quantity"] = Balance + (64 - Balance);
                         addAlert($"Alert: The player's hotbar will only exist one stack of {playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"]} Elements!");
+                        player.deepPause = false;
                         BuyUI.SetActive(false);
                         slotCheck();
                         return;
@@ -230,6 +245,7 @@ public class ElementConstructor : MonoBehaviour
                     if (playerData.slotItem[$"Slot{i}"]["Element"] != null && playerData.slotItem[$"Slot{i}"]["Quantity"] != null)
                     {
                         addAlert("Alert: The player's hotbar are full!");
+                        player.deepPause = false;
                         BuyUI.SetActive(false);
                         return;
                     }
@@ -252,16 +268,14 @@ public class ElementConstructor : MonoBehaviour
         GameObject.Find("Product").GetComponent<Text>().text = "Craft";
         GameObject.Find("Energy").GetComponent<Text>().text = Convert.ToString(playerData.Energy);
         elementConstructor.hasDone = false;
-        elementConstructor.Pause = false;
+        player.deepPause = false;
         BuyUI.SetActive(false);
         slotCheck();
     }
 
     private void Load()
     {
-        var filePath = Path.Combine(Application.dataPath, "Elements.json");
-        var fileContent = File.ReadAllText(filePath);
-        var elementData = JsonConvert.DeserializeObject<ElementData>(fileContent);
+        var elementData = JsonConvert.DeserializeObject<ElementData>(allElements.Data);
         ElementData.Instance().UpdateElementData(elementData);
     }
 
@@ -274,6 +288,7 @@ public class ElementConstructor : MonoBehaviour
     {
         int maxQuantity = 50;
         player.History.Add(Alert);
+        GameObject.Find("Red Dot").GetComponent<Image>().color = Color.white;
         if (player.History.Count > maxQuantity)
         {
             player.History.RemoveAt(0);

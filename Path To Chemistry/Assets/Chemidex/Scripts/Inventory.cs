@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -17,27 +18,27 @@ public static class InventoryData
 public class Inventory : MonoBehaviour
 {
     private void Start()
-    {
+    {      
         if (!InventoryData.hasLoaded)
         {
             Load();
             Load2();
+            var playerData = PlayerData.Instance();
+            var elementData = ElementData.Instance();   
             elementCheck();
             stateCheck();
-            Alert();
-            var playerData = PlayerData.Instance();
             GameObject.Find("Coma").GetComponent<Animator>().SetTrigger("Wake");
             GameObject.Find(InventoryData.Slot).GetComponent<Image>().color = Color.cyan;
             GameObject.Find("Energy").GetComponent<Text>().text = $"Energy: {playerData.Energy}";
             InventoryData.hasLoaded = true;
         }
-/*
+        /*
         for (int i = 1; i <= 118; i++)
         {
             playerData.Inventory.Add(elementData.elements.Keys.ElementAt(i - 1), 0);
         }
         Save();
-*/
+        */
     }
     
     public void Slider(float Value)
@@ -69,9 +70,59 @@ public class Inventory : MonoBehaviour
     {
         hotbar.hasLoaded = false;
         InventoryData.hasLoaded = false;
-        SceneManager.LoadScene(player.currentLab);
+        StartCoroutine(sleepAnime(player.startPlace));
+    }
+    private IEnumerator sleepAnime(string Scene)
+    {
+        GameObject.Find("Sleep").GetComponent<Animator>().SetTrigger("Sleep");
+        yield return new WaitForSeconds(2);
+        SceneManager.LoadScene(Scene);
     }
 
+    public void History(GameObject HistoryUI)
+    {
+        if (!player.Pause)
+        {
+            player.Pause = true;
+            HistoryUI.SetActive(true);
+            GameObject.Find("Red Dot").GetComponent<Image>().color = Color.clear;
+            if (player.History.Count > 0)
+            {
+                for (int i = 1; i <= player.History.Count; i++)
+                {
+                    if (GameObject.Find("Nothing") != null)
+                    {
+                        Destroy(GameObject.Find("Nothing"));
+                    }
+                    GameObject newAlert = Instantiate(Resources.Load<GameObject>($"Lab/Alertline"));
+                    newAlert.name = $"Alert{i}";
+                    newAlert.GetComponent<Text>().text = $"{i}. {player.History[i - 1]}";
+                    newAlert.transform.SetParent(GameObject.Find("History").transform);
+                }
+            }
+            else
+            {
+                GameObject newAlert = Instantiate(Resources.Load<GameObject>($"Lab/Alertline"));
+                newAlert.name = $"Nothing";
+                newAlert.GetComponent<Text>().text = "Nothing here ¯\\_(ツ)_/¯";
+                newAlert.transform.SetParent(GameObject.Find("History").transform);
+            }
+        }
+    }
+
+    public void closeHistory(GameObject HistoryUI)
+    {
+        if (GameObject.Find("Nothing") != null)
+        {
+            Destroy(GameObject.Find("Nothing"));
+        }
+        for (int i = 1; i <= player.History.Count; i++)
+        {
+            Destroy(GameObject.Find($"Alert{i}"));
+        }
+        player.Pause = false;
+        HistoryUI.SetActive(false);
+    }
     public void getQuantity(GameObject getQuantityUI)
     {
         var playerData = PlayerData.Instance();
@@ -131,7 +182,6 @@ public class Inventory : MonoBehaviour
                 InventoryData.hasDone = false;
                 stateCheck();
                 slotCheck();
-                Alert();
             }
         }
     }
@@ -213,7 +263,6 @@ public class Inventory : MonoBehaviour
         player.Pause = false;
         stateCheck();
         slotCheck();
-        Alert();
     }
 
     public void returnQuantity(GameObject returnQuantityUI)
@@ -223,7 +272,11 @@ public class Inventory : MonoBehaviour
         {
             if ((playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"] != null) && (playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"] != null))
             {
-                if (Convert.ToInt32(playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"]) > 1)
+                if (Chemidex.moleculeRecipes["Symbol"].ContainsKey(Convert.ToString(playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"])))
+                {
+                    addAlert("Alert: Compounds are not addable to Inventory!");
+                }
+                else if (Convert.ToInt32(playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"]) > 1)
                 {
                     player.Pause = true;
                     returnQuantityUI.SetActive(true);
@@ -247,7 +300,6 @@ public class Inventory : MonoBehaviour
                     playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"] = null;
                     stateCheck();
                     slotCheck();
-                    Alert();
                 }
             }
         }
@@ -281,7 +333,6 @@ public class Inventory : MonoBehaviour
         player.Pause = false;
         stateCheck();
         slotCheck();
-        Alert();
     }
 
     public void sellQuantity(GameObject SellUI)
@@ -321,7 +372,6 @@ public class Inventory : MonoBehaviour
                 playerData.Inventory[playerData.Inventory.Keys.ElementAt(slotNum - 1)] -= 1;
                 GameObject.Find("Energy").GetComponent<Text>().text = $"Energy: {playerData.Energy}";
                 stateCheck();
-                Alert();
             }
         }
     }
@@ -357,7 +407,6 @@ public class Inventory : MonoBehaviour
         SellUI.SetActive(false);
         player.Pause = false;
         stateCheck();
-        Alert();
     }
 
     private void stateCheck()
@@ -400,50 +449,52 @@ public class Inventory : MonoBehaviour
     {
         var playerData = PlayerData.Instance();
         for (var i = 1; i <= 9; i = i + 1)
-            if (playerData.slotItem[$"Slot{i}"]["Element"] != null &&
-                Convert.ToInt32(playerData.slotItem[$"Slot{i}"]["Quantity"]) == 1)
+        {
+            if (playerData.slotItem[$"Slot{i}"]["Element"] != null && Convert.ToInt32(playerData.slotItem[$"Slot{i}"]["Quantity"]) == 1)
             {
-                GameObject.Find($"HotbarSlot ({i})/Item").GetComponent<Text>().text = playerData.slotItem[$"Slot{i}"]["Element"].ToString();
+                slotDeepCheck(i);
                 GameObject.Find($"HotbarSlot ({i})/ItemNum").GetComponent<Text>().text = "";
             }
             else if (playerData.slotItem[$"Slot{i}"]["Element"] != null && Convert.ToInt32(playerData.slotItem[$"Slot{i}"]["Quantity"]) > 1)
             {
-                GameObject.Find($"HotbarSlot ({i})/Item").GetComponent<Text>().text = playerData.slotItem[$"Slot{i}"]["Element"].ToString();
+                slotDeepCheck(i);
                 GameObject.Find($"HotbarSlot ({i})/ItemNum").GetComponent<Text>().text = playerData.slotItem[$"Slot{i}"]["Quantity"].ToString();
             }
             else if (playerData.slotItem[$"Slot{i}"]["Element"] == null && playerData.slotItem[$"Slot{i}"]["Quantity"] == null)
             {
-                GameObject.Find($"HotbarSlot ({i})/Item").GetComponent<Text>().text = "";
+                Destroy(GameObject.Find($"HotbarSlot ({i})/Item/Image"));
+                GameObject.Find($"ItemName").GetComponent<Text>().text = "";
                 GameObject.Find($"HotbarSlot ({i})/ItemNum").GetComponent<Text>().text = "";
             }
+        }
     }
 
-    private void Alert()
+    private void slotDeepCheck(int i)
     {
         var playerData = PlayerData.Instance();
-        var slotsUnavailable = new List<int>();
-        for (var i = 1; i <= 9; i = i + 1)
+        if (Chemidex.moleculeRecipes["Symbol"].ContainsKey(Convert.ToString(playerData.slotItem[$"Slot{i}"]["Element"])))
         {
-            if (playerData.slotItem[$"Slot{i}"]["Element"] != null && playerData.slotItem[$"Slot{i}"]["Quantity"] != null)
+            if (GameObject.Find($"HotbarSlot ({i})/Item/Image") == null)
             {
-                slotsUnavailable.Add(i);
+                GameObject slotImage = Instantiate(Resources.Load<GameObject>($"Lab/H Image"));
+                slotImage.name = "Image";
+                slotImage.transform.SetParent(GameObject.Find($"HotbarSlot ({i})/Item").transform);
             }
-        }
-        if (slotsUnavailable.Count == 9)
-        {
-            GameObject.Find("Alert").GetComponent<Text>().text = "Alert: Your hotbar slots are full!";
+            GameObject.Find($"HotbarSlot ({i})/Item/Image").GetComponent<Image>().sprite = Resources.Load<Sprite>($"Lab/{playerData.slotItem[$"Slot{i}"]["Element"]}");
         }
         else
         {
-            GameObject.Find("Alert").GetComponent<Text>().text = "";
+            Destroy(GameObject.Find($"HotbarSlot ({i})/Item/Image"));
+            GameObject.Find($"HotbarSlot ({i})/Symbol").GetComponent<Text>().text = $"{playerData.slotItem[$"Slot{i}"]["Element"]}";
+        }
+        if (GameObject.Find("ItemName") != null)
+        {
+            GameObject.Find("ItemName").GetComponent<Text>().text = Convert.ToString(playerData.slotItem[$"Slot{Convert.ToInt32(hotbar.slotNum)}"]["Element"]);
         }
     }
-
     private void Load()
     {
-        var filePath = Path.Combine(Application.dataPath, "Elements.json");
-        var fileContent = File.ReadAllText(filePath);
-        var elementData = JsonConvert.DeserializeObject<ElementData>(fileContent);
+        var elementData = JsonConvert.DeserializeObject<ElementData>(allElements.Data);
         ElementData.Instance().UpdateElementData(elementData);
     }
 
@@ -458,18 +509,24 @@ public class Inventory : MonoBehaviour
 
     private void Save()
     {
-        print(Application.persistentDataPath);
         var playerData = PlayerData.Instance();
         var directory = $"{Application.persistentDataPath}/Data";
-        if (!Directory.Exists(directory))
+        Directory.CreateDirectory(directory);
+        var Settings = new JsonSerializerSettings();
+        Settings.Formatting = Formatting.Indented;
+        Settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+        var Json = JsonConvert.SerializeObject(playerData, Settings);
+        var filePath = Path.Combine(directory, "Saves.json");
+        File.WriteAllText(filePath, Json);
+    }
+    private void addAlert(string Alert)
+    {
+        int maxQuantity = 50;
+        player.History.Add(Alert);
+        GameObject.Find("Red Dot").GetComponent<Image>().color = Color.white;
+        if (player.History.Count > maxQuantity)
         {
-            Directory.CreateDirectory(directory);
-            var Settings = new JsonSerializerSettings();
-            Settings.Formatting = Formatting.Indented;
-            Settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-            var Json = JsonConvert.SerializeObject(playerData, Settings);
-            var filePath = Path.Combine(directory, "Saves.json");
-            File.WriteAllText(filePath, Json);
+            player.History.RemoveAt(0);
         }
     }
 }

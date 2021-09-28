@@ -5,6 +5,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 public static class hotbar
 {
@@ -25,20 +26,52 @@ public class Hotbar : MonoBehaviour
         {
             Load();
             slotCheck();
-            GameObject.Find($"HotbarSlot ({hotbar.slotNum})").GetComponent<Image>().color = Color.cyan;
+            var playerData = PlayerData.Instance();
+            string Scene = SceneUtility.GetScenePathByBuildIndex(SceneManager.GetActiveScene().buildIndex);
+            if (Scene.Split('/')[3].Replace(".unity", "") != "Inventory")
+            {
+                GameObject.Find($"HotbarSlot ({hotbar.slotNum})").GetComponent<Image>().color = Color.cyan;
+            }
+            else
+            {
+                if (Chemidex.moleculeRecipes["Symbol"].ContainsKey(Convert.ToString(playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"])))
+                {
+                    GameObject.Find($"HotbarSlot ({hotbar.slotNum})").GetComponent<Image>().color = Color.red;
+                }
+                else
+                {
+                    GameObject.Find($"HotbarSlot ({hotbar.slotNum})").GetComponent<Image>().color = Color.cyan;
+                }
+            }
             hotbar.hasLoaded = true;
         } 
     }
 
     public void hotbarSlot()
     {
-        if (!player.Pause)
+        var playerData = PlayerData.Instance();
+        string Scene = SceneUtility.GetScenePathByBuildIndex(SceneManager.GetActiveScene().buildIndex);
+        if (!player.Pause && !player.deepPause)
         {
             if ($"HotbarSlot ({hotbar.slotNum})" != EventSystem.current.currentSelectedGameObject.name)
             {
                 GameObject.Find($"HotbarSlot ({hotbar.slotNum})").GetComponent<Image>().color = Color.grey;
                 hotbar.slotNum = EventSystem.current.currentSelectedGameObject.name.Replace("HotbarSlot (", "").Replace(")", "");
-                GameObject.Find($"HotbarSlot ({hotbar.slotNum})").GetComponent<Image>().color = Color.cyan;
+                if (Scene.Split('/')[3].Replace(".unity", "") != "Inventory")
+                {
+                    GameObject.Find($"HotbarSlot ({hotbar.slotNum})").GetComponent<Image>().color = Color.cyan;
+                }
+                else
+                {
+                    if (Chemidex.moleculeRecipes["Symbol"].ContainsKey(Convert.ToString(playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"])))
+                    {
+                        GameObject.Find($"HotbarSlot ({hotbar.slotNum})").GetComponent<Image>().color = Color.red;
+                    }
+                    else
+                    {
+                        GameObject.Find($"HotbarSlot ({hotbar.slotNum})").GetComponent<Image>().color = Color.cyan;
+                    }
+                }
                 slotCheck();
             }
         }
@@ -51,62 +84,66 @@ public class Hotbar : MonoBehaviour
     public void flaskButton()
     {
         var playerData = PlayerData.Instance();
-        hotbar.flaskNum = Convert.ToInt32(EventSystem.current.currentSelectedGameObject.name.Replace("Slot (", "").Replace(")", ""));
-        if (hotbar.flaskNum <= playerData.flaskElements.Count)
+        if (!player.deepPause)
         {
-            if (playerData.flaskElements.Values.ElementAt(hotbar.flaskNum - 1) > 1)
+            hotbar.flaskNum = Convert.ToInt32(EventSystem.current.currentSelectedGameObject.name.Replace("Slot (", "").Replace(")", ""));
+            if (hotbar.flaskNum <= playerData.flaskElements.Count)
             {
-                flaskQuantity.SetActive(true);
-                GameObject.Find("getFlaskQuantity/Slider").GetComponent<Slider>().maxValue = playerData.flaskElements.Values.ElementAt(hotbar.flaskNum - 1);
-                GameObject.Find("getFlaskQuantity/Slider").GetComponent<Slider>().value = 0;
-            }
-            else
-            {
-                for (var i = 1; i <= 9; i = i + 1)
+                if (playerData.flaskElements.Values.ElementAt(hotbar.flaskNum - 1) > 1)
                 {
-                    if (Convert.ToString(playerData.slotItem[$"Slot{i}"]["Element"]) == playerData.flaskElements.Keys.ElementAt(hotbar.flaskNum - 1))
-                    {
-                        if (Convert.ToInt32(playerData.slotItem[$"Slot{i}"]["Quantity"]) + 1 <= 64)
-                        {
-                            playerData.slotItem[$"Slot{i}"]["Quantity"] = Convert.ToInt32(playerData.slotItem[$"Slot{i}"]["Quantity"]) + 1;
-                            hotbar.hasDone = true;
-                            break;
-                        }
-                        else
-                        {
-                            addAlert($"Alert: The player's hotbar will only exist one stack of {playerData.slotItem[$"Slot{ hotbar.slotNum}"]["Element"]} Elements!");
-                            return;
-                        }
-                    }
+                    flaskQuantity.SetActive(true);
+                    player.deepPause = true;
+                    GameObject.Find("getFlaskQuantity/Slider").GetComponent<Slider>().maxValue = playerData.flaskElements.Values.ElementAt(hotbar.flaskNum - 1);
+                    GameObject.Find("getFlaskQuantity/Slider").GetComponent<Slider>().value = 0;
                 }
-                if (!hotbar.hasDone)
+                else
                 {
                     for (var i = 1; i <= 9; i = i + 1)
                     {
-                        if (playerData.slotItem[$"Slot{i}"]["Element"] == null && playerData.slotItem[$"Slot{i}"]["Quantity"] == null)
+                        if (Convert.ToString(playerData.slotItem[$"Slot{i}"]["Element"]) == playerData.flaskElements.Keys.ElementAt(hotbar.flaskNum - 1))
                         {
-                            playerData.slotItem[$"Slot{i}"]["Element"] = playerData.flaskElements.Keys.ElementAt(hotbar.flaskNum - 1);
-                            playerData.slotItem[$"Slot{i}"]["Quantity"] = 1;
-                            hotbar.hasDone = true;
-                            break;
+                            if (Convert.ToInt32(playerData.slotItem[$"Slot{i}"]["Quantity"]) + 1 <= 64)
+                            {
+                                playerData.slotItem[$"Slot{i}"]["Quantity"] = Convert.ToInt32(playerData.slotItem[$"Slot{i}"]["Quantity"]) + 1;
+                                hotbar.hasDone = true;
+                                break;
+                            }
+                            else
+                            {
+                                addAlert($"Alert: The player's hotbar will only exist one stack of {playerData.slotItem[$"Slot{ hotbar.slotNum}"]["Element"]} Elements!");
+                                return;
+                            }
                         }
                     }
-                }
-                if (!hotbar.hasDone)
-                {
-                    for (var i = 1; i <= 9; i = i + 1)
+                    if (!hotbar.hasDone)
                     {
-                        if (playerData.slotItem[$"Slot{i}"]["Element"] != null && playerData.slotItem[$"Slot{i}"]["Quantity"] != null)
+                        for (var i = 1; i <= 9; i = i + 1)
                         {
-                            addAlert("Alert: The player's hotbar are full!");
-                            return;
+                            if (playerData.slotItem[$"Slot{i}"]["Element"] == null && playerData.slotItem[$"Slot{i}"]["Quantity"] == null)
+                            {
+                                playerData.slotItem[$"Slot{i}"]["Element"] = playerData.flaskElements.Keys.ElementAt(hotbar.flaskNum - 1);
+                                playerData.slotItem[$"Slot{i}"]["Quantity"] = 1;
+                                hotbar.hasDone = true;
+                                break;
+                            }
                         }
                     }
+                    if (!hotbar.hasDone)
+                    {
+                        for (var i = 1; i <= 9; i = i + 1)
+                        {
+                            if (playerData.slotItem[$"Slot{i}"]["Element"] != null && playerData.slotItem[$"Slot{i}"]["Quantity"] != null)
+                            {
+                                addAlert("Alert: The player's hotbar are full!");
+                                return;
+                            }
+                        }
+                    }
+                    hotbar.hasDone = false;
+                    playerData.flaskElements.Remove(playerData.flaskElements.Keys.ElementAt(hotbar.flaskNum - 1));
+                    slotCheck();
+                    flaskCheck();
                 }
-                hotbar.hasDone = false;
-                playerData.flaskElements.Remove(playerData.flaskElements.Keys.ElementAt(hotbar.flaskNum - 1));
-                slotCheck();
-                flaskCheck();
             }
         }
     }
@@ -133,6 +170,7 @@ public class Hotbar : MonoBehaviour
         var playerData = PlayerData.Instance();
         var sliderValue = Convert.ToInt32(Math.Floor(GameObject.Find("getFlaskQuantity/Slider").GetComponent<Slider>().value));
         flaskQuantity.SetActive(false);
+        player.deepPause = false;
         if (sliderValue > 0)
         {
             if (playerData.flaskElements.Count >= hotbar.flaskNum)
@@ -216,62 +254,66 @@ public class Hotbar : MonoBehaviour
     public void craftButton()
     {
         var playerData = PlayerData.Instance();
-        hotbar.craftNum = Convert.ToInt32(EventSystem.current.currentSelectedGameObject.name.Replace("Slot (", "").Replace(")", ""));
-        if (hotbar.craftNum <= playerData.Molecule.Count)
+        if (!player.deepPause)
         {
-            if (playerData.Molecule.Values.ElementAt(hotbar.craftNum - 1) > 1)
+            hotbar.craftNum = Convert.ToInt32(EventSystem.current.currentSelectedGameObject.name.Replace("Slot (", "").Replace(")", ""));
+            if (hotbar.craftNum <= playerData.Molecule.Count)
             {
-                craftQuantity.SetActive(true);
-                GameObject.Find("getCraftQuantity/Slider").GetComponent<Slider>().maxValue = playerData.Molecule.Values.ElementAt(hotbar.craftNum - 1);
-                GameObject.Find("getCraftQuantity/Slider").GetComponent<Slider>().value = 0;
-            }
-            else
-            {
-                for (var i = 1; i <= 9; i = i + 1)
+                if (playerData.Molecule.Values.ElementAt(hotbar.craftNum - 1) > 1)
                 {
-                    if (Convert.ToString(playerData.slotItem[$"Slot{i}"]["Element"]) == playerData.Molecule.Keys.ElementAt(hotbar.craftNum - 1))
-                    {
-                        if (Convert.ToInt32(playerData.slotItem[$"Slot{i}"]["Quantity"]) + 1 <= 64)
-                        {
-                            playerData.slotItem[$"Slot{i}"]["Quantity"] = Convert.ToInt32(playerData.slotItem[$"Slot{i}"]["Quantity"]) + 1;
-                            hotbar.hasDone = true;
-                            break;
-                        }
-                        else
-                        {
-                            addAlert($"Alert: The player's hotbar will only exist one stack of {playerData.slotItem[$"Slot{ hotbar.slotNum}"]["Element"]} Elements!");
-                            return;
-                        }
-                    }
+                    craftQuantity.SetActive(true);
+                    player.deepPause = true;
+                    GameObject.Find("getCraftQuantity/Slider").GetComponent<Slider>().maxValue = playerData.Molecule.Values.ElementAt(hotbar.craftNum - 1);
+                    GameObject.Find("getCraftQuantity/Slider").GetComponent<Slider>().value = 0;
                 }
-                if (!hotbar.hasDone)
+                else
                 {
                     for (var i = 1; i <= 9; i = i + 1)
                     {
-                        if (playerData.slotItem[$"Slot{i}"]["Element"] == null && playerData.slotItem[$"Slot{i}"]["Quantity"] == null)
+                        if (Convert.ToString(playerData.slotItem[$"Slot{i}"]["Element"]) == playerData.Molecule.Keys.ElementAt(hotbar.craftNum - 1))
                         {
-                            playerData.slotItem[$"Slot{i}"]["Element"] = playerData.Molecule.Keys.ElementAt(hotbar.craftNum - 1);
-                            playerData.slotItem[$"Slot{i}"]["Quantity"] = 1;
-                            hotbar.hasDone = true;
-                            break;
+                            if (Convert.ToInt32(playerData.slotItem[$"Slot{i}"]["Quantity"]) + 1 <= 64)
+                            {
+                                playerData.slotItem[$"Slot{i}"]["Quantity"] = Convert.ToInt32(playerData.slotItem[$"Slot{i}"]["Quantity"]) + 1;
+                                hotbar.hasDone = true;
+                                break;
+                            }
+                            else
+                            {
+                                addAlert($"Alert: The player's hotbar will only exist one stack of {playerData.slotItem[$"Slot{ hotbar.slotNum}"]["Element"]} Elements!");
+                                return;
+                            }
                         }
                     }
-                }
-                if (!hotbar.hasDone)
-                {
-                    for (var i = 1; i <= 9; i = i + 1)
+                    if (!hotbar.hasDone)
                     {
-                        if (playerData.slotItem[$"Slot{i}"]["Element"] != null && playerData.slotItem[$"Slot{i}"]["Quantity"] != null)
+                        for (var i = 1; i <= 9; i = i + 1)
                         {
-                            addAlert("Alert: The player's hotbar are full!");
-                            return;
+                            if (playerData.slotItem[$"Slot{i}"]["Element"] == null && playerData.slotItem[$"Slot{i}"]["Quantity"] == null)
+                            {
+                                playerData.slotItem[$"Slot{i}"]["Element"] = playerData.Molecule.Keys.ElementAt(hotbar.craftNum - 1);
+                                playerData.slotItem[$"Slot{i}"]["Quantity"] = 1;
+                                hotbar.hasDone = true;
+                                break;
+                            }
                         }
                     }
+                    if (!hotbar.hasDone)
+                    {
+                        for (var i = 1; i <= 9; i = i + 1)
+                        {
+                            if (playerData.slotItem[$"Slot{i}"]["Element"] != null && playerData.slotItem[$"Slot{i}"]["Quantity"] != null)
+                            {
+                                addAlert("Alert: The player's hotbar are full!");
+                                return;
+                            }
+                        }
+                    }
+                    hotbar.hasDone = false;
+                    playerData.Molecule.Remove(playerData.Molecule.Keys.ElementAt(hotbar.craftNum - 1));
+                    slotCheck();
+                    craftingTable();
                 }
-                hotbar.hasDone = false;
-                playerData.Molecule.Remove(playerData.Molecule.Keys.ElementAt(hotbar.craftNum - 1));
-                slotCheck();
-                craftingTable();
             }
         }
     }
@@ -298,6 +340,7 @@ public class Hotbar : MonoBehaviour
         var playerData = PlayerData.Instance();
         var sliderValue = Convert.ToInt32(Math.Floor(GameObject.Find("getCraftQuantity/Slider").GetComponent<Slider>().value));
         craftQuantity.SetActive(false);
+        player.deepPause = false;
         if (sliderValue > 0)
         {
             if (playerData.Molecule.Count >= hotbar.craftNum)
@@ -420,7 +463,10 @@ public class Hotbar : MonoBehaviour
             Destroy(GameObject.Find($"HotbarSlot ({i})/Item/Image"));
             GameObject.Find($"HotbarSlot ({i})/Symbol").GetComponent<Text>().text = $"{playerData.slotItem[$"Slot{i}"]["Element"]}";
         }
-        GameObject.Find("ItemName").GetComponent<Text>().text = Convert.ToString(playerData.slotItem[$"Slot{Convert.ToInt32(hotbar.slotNum)}"]["Element"]);
+        if (GameObject.Find("ItemName") != null)
+        {
+            GameObject.Find("ItemName").GetComponent<Text>().text = Convert.ToString(playerData.slotItem[$"Slot{Convert.ToInt32(hotbar.slotNum)}"]["Element"]);
+        }
     }
 
     private void flaskCheck()
@@ -530,6 +576,7 @@ public class Hotbar : MonoBehaviour
     {
         int maxQuantity = 50;
         player.History.Add(Alert);
+        GameObject.Find("Red Dot").GetComponent<Image>().color = Color.white;
         if (player.History.Count > maxQuantity)
         {
             player.History.RemoveAt(0);

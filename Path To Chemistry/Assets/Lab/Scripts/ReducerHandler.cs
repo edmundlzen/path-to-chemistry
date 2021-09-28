@@ -7,6 +7,7 @@ using UnityEngine.EventSystems;
 public static class ReducerData
 {
     public static int reduceNum;
+    public static int originNum;
     public static bool hasDone = false;
 }
 
@@ -116,7 +117,7 @@ public class ReducerHandler : MonoBehaviour
                         playerData.Compound[playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"].ToString()] = Balance + (64 - Balance);
                         playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"] = Convert.ToInt32(playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"]) - (64 - Balance);
                         addAlert($"Alert: The compound reducer's hotbar will only exist one stack of {playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"]} Elements!");
-                        addReducer();
+                        addReducerCheck();
                         return;
                     }
                 }
@@ -150,7 +151,7 @@ public class ReducerHandler : MonoBehaviour
                     }
                 }
                 playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"] = Convert.ToInt32(playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"]) - sliderValue;
-                addReducer();
+                addReducerCheck();
             }
         }
     }
@@ -242,7 +243,7 @@ public class ReducerHandler : MonoBehaviour
                             playerData.slotItem[$"Slot{i}"]["Quantity"] = Balance + (64 - Balance);
                             playerData.Compound[playerData.Compound.Keys.ElementAt(0)] -= 64 - Balance;
                             addAlert($"Alert: The player's hotbar will only exist one stack of {playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"]} Elements!");
-                            getReducer();
+                            getReducerCheck();
                             return;
                         }
                     }
@@ -286,7 +287,7 @@ public class ReducerHandler : MonoBehaviour
                 }
                 ReducerData.hasDone = false;
                 playerData.Compound[playerData.Compound.Keys.ElementAt(0)] -= sliderValue;
-                getReducer();
+                getReducerCheck();
             }
         }
     }
@@ -294,140 +295,317 @@ public class ReducerHandler : MonoBehaviour
     public void Reduce()
     {
         var playerData = PlayerData.Instance();
-        if (playerData.Compound.Keys.ElementAt(0) == "H2O")
+        if (playerData.Elements.Count <= 0)
         {
-            playerData.Elements.Add("H", 2);
-            playerData.Elements.Add("O", 1);
-            playerData.Compound.Clear();
+            if (playerData.Compound.Count > 0)
+            {
+                var Quantity = playerData.Compound.Values.ElementAt(0);
+                if (playerData.Compound.Keys.ElementAt(0) == "H2O")
+                {
+                    playerData.Elements.Add("H", 2 * Quantity);
+                    playerData.Elements.Add("O", 1 * Quantity);
+                    playerData.Compound.Clear();
+                }
+                else if (playerData.Compound.Keys.ElementAt(0) == "HCl")
+                {
+                    playerData.Elements.Add("H", 1 * Quantity);
+                    playerData.Elements.Add("Cl", 1 * Quantity);
+                    playerData.Compound.Clear();
+                }
+                else if (playerData.Compound.Keys.ElementAt(0) == "NH3")
+                {
+                    playerData.Elements.Add("N", 1 * Quantity);
+                    playerData.Elements.Add("H", 3 * Quantity);
+                    playerData.Compound.Clear();
+                }
+                else if (playerData.Compound.Keys.ElementAt(0) == "H2O2")
+                {
+                    playerData.Elements.Add("H", 2 * Quantity);
+                    playerData.Elements.Add("O", 2 * Quantity);
+                    playerData.Compound.Clear();
+                }
+                else if (playerData.Compound.Keys.ElementAt(0) == "NaI")
+                {
+                    playerData.Elements.Add("Na", 1 * Quantity);
+                    playerData.Elements.Add("I", 1 * Quantity);
+                    playerData.Compound.Clear();
+                }
+                else if (playerData.Compound.Keys.ElementAt(0) == "Na2S")
+                {
+                    playerData.Elements.Add("Na", 2 * Quantity);
+                    playerData.Elements.Add("S", 1 * Quantity);
+                    playerData.Compound.Clear();
+                }
+                else if (playerData.Compound.Keys.ElementAt(0) == "KI")
+                {
+                    playerData.Elements.Add("K", 1 * Quantity);
+                    playerData.Elements.Add("I", 1 * Quantity);
+                    playerData.Compound.Clear();
+                }
+                else if (playerData.Compound.Keys.ElementAt(0) == "N2H4")
+                {
+                    playerData.Elements.Add("N", 2 * Quantity);
+                    playerData.Elements.Add("H", 4 * Quantity);
+                    playerData.Compound.Clear();
+                }
+                else if (playerData.Compound.Keys.ElementAt(0) == "AgNO3")
+                {
+                    playerData.Elements.Add("Ag", 1 * Quantity);
+                    playerData.Elements.Add("N", 1 * Quantity);
+                    playerData.Elements.Add("O", 3 * Quantity);
+                    playerData.Compound.Clear();
+                }
+                else if (playerData.Compound.Keys.ElementAt(0) == "Na3P")
+                {
+                    playerData.Elements.Add("Na", 3 * Quantity);
+                    playerData.Elements.Add("P", 1 * Quantity);
+                    playerData.Compound.Clear();
+                }
+                else if (playerData.Compound.Keys.ElementAt(0) == "NaH")
+                {
+                    playerData.Elements.Add("Na", 1 * Quantity);
+                    playerData.Elements.Add("H", 1 * Quantity);
+                    playerData.Compound.Clear();
+                }
+                else if (playerData.Compound.Keys.ElementAt(0) == "IO3")
+                {
+                    playerData.Elements.Add("I", 1 * Quantity);
+                    playerData.Elements.Add("O", 3 * Quantity);
+                    playerData.Compound.Clear();
+                }
+                else if (playerData.Compound.Keys.ElementAt(0) == "C3H8O")
+                {
+                    playerData.Elements.Add("C", 3 * Quantity);
+                    playerData.Elements.Add("H", 8 * Quantity);
+                    playerData.Elements.Add("O", 1 * Quantity);
+                    playerData.Compound.Clear();
+                }
+                else if (playerData.Compound.Keys.ElementAt(0) == "HNO3")
+                {
+                    playerData.Elements.Add("H", 1 * Quantity);
+                    playerData.Elements.Add("N", 1 * Quantity);
+                    playerData.Elements.Add("O", 3 * Quantity);
+                    playerData.Compound.Clear();
+                }
+                else if (playerData.Compound.Keys.ElementAt(0) == "NaClO")
+                {
+                    playerData.Elements.Add("Na", 1 * Quantity);
+                    playerData.Elements.Add("Cl", 1 * Quantity);
+                    playerData.Elements.Add("O", 1 * Quantity);
+                    playerData.Compound.Clear();
+                }
+                else if (playerData.Compound.Keys.ElementAt(0) == "NaCN")
+                {
+                    playerData.Elements.Add("Na", 1 * Quantity);
+                    playerData.Elements.Add("C", 1 * Quantity);
+                    playerData.Elements.Add("N", 1 * Quantity);
+                    playerData.Compound.Clear();
+                }
+                else if (playerData.Compound.Keys.ElementAt(0) == "C2H3NaO2")
+                {
+                    playerData.Elements.Add("C", 2 * Quantity);
+                    playerData.Elements.Add("H", 3 * Quantity);
+                    playerData.Elements.Add("Na", 1 * Quantity);
+                    playerData.Elements.Add("O", 2 * Quantity);
+                    playerData.Compound.Clear();
+                }
+                else if (playerData.Compound.Keys.ElementAt(0) == "C18H35NaO2")
+                {
+                    playerData.Elements.Add("C", 18 * Quantity);
+                    playerData.Elements.Add("H", 35 * Quantity);
+                    playerData.Elements.Add("Na", 1 * Quantity);
+                    playerData.Elements.Add("O", 2 * Quantity);
+                    playerData.Compound.Clear();
+                }
+                reduceCheck();
+            }
+            else
+            {
+                addAlert("Nothing to reduce");
+            }
         }
-        else if (playerData.Compound.Keys.ElementAt(0) == "HCl")
+        else
         {
-            playerData.Elements.Add("H", 1);
-            playerData.Elements.Add("Cl", 1);
-            playerData.Compound.Clear();
+            addAlert("Please clear of the elements in compound reducer or else you can't reduce anything");
         }
-        else if (playerData.Compound.Keys.ElementAt(0) == "NH3")
+    }
+
+    private void reduceCheck()
+    {
+        var playerData = PlayerData.Instance();
+        for (int i = 1; i <= 5; i++)
         {
-            playerData.Elements.Add("N", 1);
-            playerData.Elements.Add("H", 3);
-            playerData.Compound.Clear();
+            GameObject.Find($"Original/Slot ({i})/Origin").GetComponent<Text>().text = "";
+            GameObject.Find($"Original/Slot ({i})/Originnum").GetComponent<Text>().text = "";
         }
-        else if (playerData.Compound.Keys.ElementAt(0) == "H2O2")
-        {
-            playerData.Elements.Add("H", 2);
-            playerData.Elements.Add("O", 2);
-            playerData.Compound.Clear();
-        }
-        else if (playerData.Compound.Keys.ElementAt(0) == "NaI")
-        {
-            playerData.Elements.Add("Na", 1);
-            playerData.Elements.Add("I", 1);
-            playerData.Compound.Clear();
-        }
-        else if (playerData.Compound.Keys.ElementAt(0) == "Na2S")
-        {
-            playerData.Elements.Add("Na", 2);
-            playerData.Elements.Add("S", 1);
-            playerData.Compound.Clear();
-        }
-        else if (playerData.Compound.Keys.ElementAt(0) == "KI")
-        {
-            playerData.Elements.Add("K", 1);
-            playerData.Elements.Add("I", 1);
-            playerData.Compound.Clear();
-        }
-        else if (playerData.Compound.Keys.ElementAt(0) == "N2H4")
-        {
-            playerData.Elements.Add("N", 2);
-            playerData.Elements.Add("H", 4);
-            playerData.Compound.Clear();
-        }
-        else if (playerData.Compound.Keys.ElementAt(0) == "AgNO3")
-        {
-            playerData.Elements.Add("Ag", 1);
-            playerData.Elements.Add("N", 1);
-            playerData.Elements.Add("O", 3);
-            playerData.Compound.Clear();
-        }
-        else if (playerData.Compound.Keys.ElementAt(0) == "Na3P")
-        {
-            playerData.Elements.Add("Na", 3);
-            playerData.Elements.Add("P", 1);
-            playerData.Compound.Clear();
-        }
-        else if (playerData.Compound.Keys.ElementAt(0) == "NaH")
-        {
-            playerData.Elements.Add("Na", 1);
-            playerData.Elements.Add("H", 1);
-            playerData.Compound.Clear();
-        }
-        else if (playerData.Compound.Keys.ElementAt(0) == "IO3")
-        {
-            playerData.Elements.Add("I", 1);
-            playerData.Elements.Add("O", 3);
-            playerData.Compound.Clear();
-        }
-        else if (playerData.Compound.Keys.ElementAt(0) == "C3H8O")
-        {
-            playerData.Elements.Add("C", 3);
-            playerData.Elements.Add("H", 8);
-            playerData.Elements.Add("O", 1);
-            playerData.Compound.Clear();
-        }
-        else if (playerData.Compound.Keys.ElementAt(0) == "HNO3")
-        {
-            playerData.Elements.Add("H", 1);
-            playerData.Elements.Add("N", 1);
-            playerData.Elements.Add("O", 3);
-            playerData.Compound.Clear();
-        }
-        else if (playerData.Compound.Keys.ElementAt(0) == "NaClO")
-        {
-            playerData.Elements.Add("Na", 1);
-            playerData.Elements.Add("Cl", 1);
-            playerData.Elements.Add("O", 1);
-            playerData.Compound.Clear();
-        }
-        else if (playerData.Compound.Keys.ElementAt(0) == "NaCN")
-        {
-            playerData.Elements.Add("Na", 1);
-            playerData.Elements.Add("C", 1);
-            playerData.Elements.Add("N", 1);
-            playerData.Compound.Clear();
-        }
-        else if (playerData.Compound.Keys.ElementAt(0) == "C2H3NaO2")
-        {
-            playerData.Elements.Add("C", 2);
-            playerData.Elements.Add("H", 3);
-            playerData.Elements.Add("Na", 1);
-            playerData.Elements.Add("O", 2);
-            playerData.Compound.Clear();
-        }
-        else if (playerData.Compound.Keys.ElementAt(0) == "C18H35NaO2")
-        {
-            playerData.Elements.Add("C", 18);
-            playerData.Elements.Add("H", 35);
-            playerData.Elements.Add("Na", 1);
-            playerData.Elements.Add("O", 2);
-            playerData.Compound.Clear();
-        }
-        print(playerData.Elements.Count);
         for (int i = 1; i <= playerData.Elements.Count; i++)
         {
-            GameObject.Find("Branches").GetComponent<RectTransform>().sizeDelta = new Vector2(10 + 95 * (i - 1), GameObject.Find("Branches").GetComponent<RectTransform>().sizeDelta.y);
-            GameObject Branch = Instantiate(Resources.Load<GameObject>($"Lab/Branch"));
-            Branch.name = $"Branch ({i})";
-            Branch.transform.SetParent(GameObject.Find($"Branches").transform);
-            GameObject slotImage = Instantiate(Resources.Load<GameObject>($"Lab/reduceSlot"));
-            slotImage.name = $"Slot ({i})";
-            slotImage.transform.SetParent(GameObject.Find($"Original").transform);
-            GameObject.Find($"Original/Slot ({i})/Origin").GetComponent<Text>().text = playerData.Elements.Keys.ElementAt(i - 1);
-            GameObject.Find($"Original/Slot ({i})/Originnum").GetComponent<Text>().text = Convert.ToString(playerData.Elements.Values.ElementAt(i - 1));
+            if (playerData.Elements.Values.ElementAt(i - 1) > 1)
+            {
+                GameObject.Find($"Original/Slot ({i})/Origin").GetComponent<Text>().text = playerData.Elements.Keys.ElementAt(i - 1);
+                GameObject.Find($"Original/Slot ({i})/Originnum").GetComponent<Text>().text = Convert.ToString(playerData.Elements.Values.ElementAt(i - 1));
+            }
+            else if (playerData.Elements.Values.ElementAt(i - 1) <= 1)
+            {
+                GameObject.Find($"Original/Slot ({i})/Origin").GetComponent<Text>().text = playerData.Elements.Keys.ElementAt(i - 1);
+                GameObject.Find($"Original/Slot ({i})/Originnum").GetComponent<Text>().text = "";
+            }
         }
         reducerCheck();
     }
 
-    private void addReducer()
+    public void getOrigin(GameObject OriginQuantity)
+    {
+        var playerData = PlayerData.Instance();
+        ReducerData.originNum = Convert.ToInt32(EventSystem.current.currentSelectedGameObject.name.Replace("Slot (", "").Replace(")", ""));
+        if (ReducerData.originNum <= playerData.Elements.Count)
+        {
+            if (playerData.Elements.Values.ElementAt(ReducerData.originNum - 1) > 1)
+            {
+                OriginQuantity.SetActive(true);
+                GameObject.Find("getOriginQuantity/Slider").GetComponent<Slider>().maxValue = playerData.Elements.Values.ElementAt(ReducerData.originNum - 1);
+                GameObject.Find("getOriginQuantity/Slider").GetComponent<Slider>().value = 0;
+            }
+            else
+            {
+                for (var i = 1; i <= 9; i = i + 1)
+                {
+                    if (Convert.ToString(playerData.slotItem[$"Slot{i}"]["Element"]) == playerData.Elements.Keys.ElementAt(ReducerData.originNum - 1))
+                    {
+                        if (Convert.ToInt32(playerData.slotItem[$"Slot{i}"]["Quantity"]) + 1 <= 64)
+                        {
+                            playerData.slotItem[$"Slot{i}"]["Quantity"] = Convert.ToInt32(playerData.slotItem[$"Slot{i}"]["Quantity"]) + 1;
+                            ReducerData.hasDone = true;
+                            break;
+                        }
+                        else
+                        {
+                            addAlert($"Alert: The player's hotbar will only exist one stack of {playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"]} Elements!");
+                            return;
+                        }
+                    }
+                }
+                if (!ReducerData.hasDone)
+                {
+                    for (var i = 1; i <= 9; i = i + 1)
+                    {
+                        if (playerData.slotItem[$"Slot{i}"]["Element"] == null && playerData.slotItem[$"Slot{i}"]["Quantity"] == null)
+                        {
+                            playerData.slotItem[$"Slot{i}"]["Element"] = playerData.Elements.Keys.ElementAt(ReducerData.originNum - 1);
+                            playerData.slotItem[$"Slot{i}"]["Quantity"] = 1;
+                            ReducerData.hasDone = true;
+                            break;
+                        }
+                    }
+                }
+                if (!ReducerData.hasDone)
+                {
+                    for (var i = 1; i <= 9; i = i + 1)
+                    {
+                        if (playerData.slotItem[$"Slot{i}"]["Element"] != null && playerData.slotItem[$"Slot{i}"]["Quantity"] != null)
+                        {
+                            addAlert("Alert: The player's hotbar are full!");
+                            return;
+                        }
+                    }
+                }
+                ReducerData.hasDone = false;
+                playerData.Elements.Remove(playerData.Elements.Keys.ElementAt(ReducerData.originNum - 1));
+                slotCheck();
+                reduceCheck();
+            }
+        }
+    }
+
+    public void getOriginQuantity(GameObject OriginQuantity)
+    {
+        var playerData = PlayerData.Instance();
+        var sliderValue = Convert.ToInt32(Math.Floor(GameObject.Find("getOriginQuantity/Slider").GetComponent<Slider>().value));
+        OriginQuantity.SetActive(false);
+        if (sliderValue > 0)
+        {
+            if (playerData.Elements.Count >= ReducerData.originNum)
+            {
+                for (var i = 1; i <= 9; i = i + 1)
+                {
+                    if (Convert.ToString(playerData.slotItem[$"Slot{i}"]["Element"]) == playerData.Elements.Keys.ElementAt(ReducerData.originNum - 1))
+                    {
+                        var Balance = Convert.ToInt32(playerData.slotItem[$"Slot{i}"]["Quantity"]);
+                        if (Balance + sliderValue <= 64)
+                        {
+                            playerData.slotItem[$"Slot{i}"]["Quantity"] = Balance + sliderValue;
+                            ReducerData.hasDone = true;
+                            break;
+                        }
+                        else
+                        {
+                            playerData.slotItem[$"Slot{i}"]["Quantity"] = Balance + (64 - Balance);
+                            playerData.Elements[playerData.Elements.Keys.ElementAt(ReducerData.originNum - 1)] -= 64 - Balance;
+                            addAlert($"Alert: The player's hotbar will only exist one stack of {playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"]} Elements!");
+                            getOriginCheck();
+                            return;
+                        }
+                    }
+                }
+                if (!ReducerData.hasDone)
+                {
+                    for (var i = 1; i <= 9; i = i + 1)
+                    {
+                        if (playerData.slotItem[$"Slot{i}"]["Element"] == null && playerData.slotItem[$"Slot{i}"]["Quantity"] == null)
+                        {
+                            if (sliderValue <= 64)
+                            {
+                                playerData.slotItem[$"Slot{i}"]["Element"] = playerData.Elements.Keys.ElementAt(ReducerData.originNum - 1);
+                                playerData.slotItem[$"Slot{i}"]["Quantity"] = sliderValue;
+                                ReducerData.hasDone = true;
+                                break;
+                            }
+                            else
+                            {
+                                sliderValue = 64;
+                                playerData.slotItem[$"Slot{i}"]["Element"] = playerData.Elements.Keys.ElementAt(ReducerData.originNum - 1);
+                                playerData.slotItem[$"Slot{i}"]["Quantity"] = sliderValue;
+                                addAlert($"Alert: The maximum quantity in one stack of {playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"]} elements is 64!");
+                                ReducerData.hasDone = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+                if (!ReducerData.hasDone)
+                {
+                    for (var i = 1; i <= 9; i = i + 1)
+                    {
+                        if (playerData.slotItem[$"Slot{i}"]["Element"] != null && playerData.slotItem[$"Slot{i}"]["Quantity"] != null)
+                        {
+                            addAlert("Alert: The player's hotbar are full!");
+                            Destroy(GameObject.Find("getOriginQuantity"));
+                            return;
+                        }
+                    }
+                }
+                ReducerData.hasDone = false;
+                playerData.Elements[playerData.Elements.Keys.ElementAt(ReducerData.originNum - 1)] -= sliderValue;
+                getOriginCheck();
+            }
+        }
+    }
+
+    private void getOriginCheck()
+    {
+        var playerData = PlayerData.Instance();
+        for (int i = 1; i <= playerData.Elements.Count; i++)
+        {
+            if (playerData.Elements.Values.ElementAt(i - 1) < 1)
+            {
+                playerData.Elements.Remove(playerData.Elements.Keys.ElementAt(i - 1));
+            }
+        }
+        slotCheck();
+        reduceCheck();
+    }
+
+    private void addReducerCheck()
     {
         var playerData = PlayerData.Instance();
         if (Convert.ToInt32(playerData.slotItem[$"Slot{hotbar.slotNum}"]["Quantity"]) < 1)
@@ -439,7 +617,7 @@ public class ReducerHandler : MonoBehaviour
         reducerCheck();
     }
 
-    private void getReducer()
+    private void getReducerCheck()
     {
         var playerData = PlayerData.Instance();
         if (playerData.Compound.Values.ElementAt(0) < 1)
@@ -454,6 +632,7 @@ public class ReducerHandler : MonoBehaviour
     {
         int maxQuantity = 50;
         player.History.Add(Alert);
+        GameObject.Find("Red Dot").GetComponent<Image>().color = Color.white;
         if (player.History.Count > maxQuantity)
         {
             player.History.RemoveAt(0);

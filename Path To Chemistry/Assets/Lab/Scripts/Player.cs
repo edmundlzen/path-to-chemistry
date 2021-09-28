@@ -7,10 +7,11 @@ using UnityEngine.UI;
 public static class player
 {
     public static bool Pause = false;
+    public static bool deepPause = false;
     public static bool labPause = false;
     public static bool hasAnimated = true;
-    public static string currentLab = "3D Lab";
     public static string raycastObject = "";
+    public static string startPlace = "";
     public static List<string> History = new List<string>();
 }
 
@@ -22,22 +23,7 @@ public class Player : MonoBehaviour
 
     private void Start()
     {
-        /*
-        Load();
-        if (playerData.Seat == "Left")
-        {
-            GameObject.Find("Player").GetComponent<Transform>().position = new Vector3(5f, 0.6f, 6.2f);
-        }
-        else if (playerData.Seat == "Main")
-        {
-            GameObject.Find("Player").GetComponent<Transform>().position = new Vector3(7.5f, 0.6f, 6.2f);
-        }
-        else if (playerData.Seat == "Right")
-        {
-            GameObject.Find("Player").GetComponent<Transform>().position = new Vector3(9.79f, 0.6f, 6.2f);
-        }
-        Cursor.lockState = CursorLockMode.Locked;
-        */
+        //Cursor.lockState = CursorLockMode.Locked;
     }
     private void Update()
     {
@@ -55,23 +41,26 @@ public class Player : MonoBehaviour
             if (Physics.Raycast(ray, out hit))
             {
                 Debug.DrawLine(ray.origin, hit.point, Color.red);
-                var selection = hit.transform;
-                player.raycastObject = selection.name;
-                GameObject.Find("Label1").GetComponent<Text>().text = player.raycastObject;
-                if (Input.GetMouseButtonDown(0) && player.raycastObject == "Left Chair" && playerData.Seat != "Left")
+                player.raycastObject = hit.transform.name;
+                if (player.raycastObject == "Experiments")
                 {
-                    GameObject.Find("Player").GetComponent<Transform>().position = new Vector3(5f, 0.6f, 6.2f);
-                    playerData.Seat = "Left";
+                    GameObject.Find("Crosshair").GetComponent<Image>().sprite = Resources.Load<Sprite>("Lab/Interactable");
+                    GameObject.Find("Label1").GetComponent<Text>().text = "Experiments";
                 }
-                else if (Input.GetMouseButtonDown(0) && player.raycastObject == "Main Chair" && playerData.Seat != "Main")
+                else if (player.raycastObject == "Element Constructor")
                 {
-                    GameObject.Find("Player").GetComponent<Transform>().position = new Vector3(7.5f, 0.6f, 6.2f);
-                    playerData.Seat = "Main";
+                    GameObject.Find("Crosshair").GetComponent<Image>().sprite = Resources.Load<Sprite>("Lab/Interactable");
+                    GameObject.Find("Label1").GetComponent<Text>().text = "Element Constructor";
                 }
-                else if (Input.GetMouseButtonDown(0) && player.raycastObject == "Right Chair" && playerData.Seat != "Right")
+                else if (player.raycastObject == "Compound Creator & Compound Reducer")
                 {
-                    GameObject.Find("Player").GetComponent<Transform>().position = new Vector3(9.79f, 0.6f, 6.2f);
-                    playerData.Seat = "Right";
+                    GameObject.Find("Crosshair").GetComponent<Image>().sprite = Resources.Load<Sprite>("Lab/Interactable");
+                    GameObject.Find("Label1").GetComponent<Text>().text = "Compound Creator & Compound Reducer";
+                }
+                else
+                {
+                    GameObject.Find("Crosshair").GetComponent<Image>().sprite = Resources.Load<Sprite>("Lab/Crosshair");
+                    GameObject.Find("Label1").GetComponent<Text>().text = "";
                 }
             }
             if (Input.GetKeyDown(KeyCode.S))

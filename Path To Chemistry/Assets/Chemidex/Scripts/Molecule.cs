@@ -16,7 +16,7 @@ public class Molecule : MonoBehaviour
 
     public void Back()
     {
-        SceneManager.LoadScene("Chemidex");
+        SceneManager.LoadScene(player.startPlace);
     }
 
     public void mainMenu()
