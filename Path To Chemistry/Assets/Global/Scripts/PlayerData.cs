@@ -42,7 +42,7 @@ public class PlayerData
         {
             { "Classic Lab", true },
             { "Industry Lab", true },
-            { "Home Lab", false },
+            { "Home Lab", true },
             { "AR Lab", false }
         };
         Shop = new Dictionary<string, Dictionary<string, int>>()
@@ -310,67 +310,91 @@ public class PlayerData
         };
         survivalRecipes = new Dictionary<string, Dictionary<string, object>>
         {
-            {
-                "Bucket", new Dictionary<string, object>
-                {
-                    {"enabled", true},
-                    {"name", "Item 1"},
-                    {
-                        "materials", new Dictionary<string, int>
-                        {
-                            {"Metal", 7},
-                            {"Sand", 28} 
-                        }
-                    }
-                }
-            },
-            {
-                "Water Bucket", new Dictionary<string, object>
-                {
-                    {"enabled", true},
-                    {"name", "Item 2"},
-                    {
-                        "materials", new Dictionary<string, int>
-                        {
-                            {"Metal", 927},
-                            {"Cane", 26},
-                            {"Stone", 76}
-                        }
-                    }
-                }
-            }
         };
         survivalPlayerRecipes = new Dictionary<string, Dictionary<string, object>>
         {
             {
-                "Bucket", new Dictionary<string, object>
+                "Pistol", new Dictionary<string, object>
                 {
                     {"enabled", true},
-                    {"name", "Item 1"},
+                    {"name", "Pistol"},
                     {
                         "materials", new Dictionary<string, int>
                         {
-                            {"Metal", 7},
-                            {"Sand", 28} 
+                            {"Metal", 10},
+                            {"Wood", 30} 
                         }
                     }
                 }
             },
             {
-                "Water Bucket", new Dictionary<string, object>
+                "Laser Collector", new Dictionary<string, object>
                 {
                     {"enabled", true},
-                    {"name", "Item 2"},
+                    {"name", "Flamethrower"},
                     {
                         "materials", new Dictionary<string, int>
                         {
-                            {"Metal", 927},
-                            {"Cane", 26},
-                            {"Stone", 76}
+                            {"Metal", 40},
+                            {"Wood", 10}
                         }
                     }
                 }
-            }
+            },
+            {
+                "Flamethrower", new Dictionary<string, object>
+                {
+                    {"enabled", true},
+                    {"name", "Flamethrower"},
+                    {
+                        "materials", new Dictionary<string, int>
+                        {
+                            {"Metal", 30},
+                            {"Wood", 20}
+                        }
+                    }
+                }
+            },
+            {
+                "Flamethrower", new Dictionary<string, object>
+                {
+                    {"enabled", true},
+                    {"name", "Flamethrower"},
+                    {
+                        "materials", new Dictionary<string, int>
+                        {
+                            {"Metal", 30},
+                            {"Wood", 20}
+                        }
+                    }
+                }
+            },
+            {
+                "Flamethrower", new Dictionary<string, object> // Furnace
+                {
+                    {"enabled", true},
+                    {"name", "Flamethrower"},
+                    {
+                        "materials", new Dictionary<string, int>
+                        {
+                            {"Stone", 20},
+                        }
+                    }
+                }
+            },
+            {
+                "Flamethrower", new Dictionary<string, object> // Crafting Table
+                {
+                    {"enabled", true},
+                    {"name", "Flamethrower"},
+                    {
+                        "materials", new Dictionary<string, int>
+                        {
+                            {"Wood", 20}
+                        }
+                    }
+                }
+            },
         };
         survivalSmeltingRecipes = new Dictionary<string, Dictionary<string, object>>
         {
@@ -456,35 +480,104 @@ public class PlayerData
             {
                 "Classic Lab", new Dictionary<string, object>
                 {
-                    {"description", "Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,\nmolestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum\nnumquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium\noptio, eaque rerum! Provident similique accusantium nemo autem. Veritatis\nobcaecati tenetur iure eiu"},
+                    {
+                        "description",
+                        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,\nmolestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum\nnumquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium\noptio, eaque rerum! Provident similique accusantium nemo autem. Veritatis\nobcaecati tenetur iure eiu"
+                    },
                     {"image", "Classic Lab"},
-                    {"scene", "3D Lab"}
+                    {"scene", "Classic Lab"}
                 }
             },
             {
                 "Industry Lab", new Dictionary<string, object>
                 {
-                    {"description", "Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,\nmolestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum\nnumquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium\noptio, eaque rerum! Provident similique accusantium nemo autem. Veritatis\nobcaecati tenetur iure eiu"},
+                    {
+                        "description",
+                        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,\nmolestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum\nnumquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium\noptio, eaque rerum! Provident similique accusantium nemo autem. Veritatis\nobcaecati tenetur iure eiu"
+                    },
                     {"image", "Industry Lab"},
-                    {"scene", "3D Industry"}
+                    {"scene", "Industry Lab"}
                 }
             },
             {
                 "Home Lab", new Dictionary<string, object>
                 {
-                    {"description", "Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,\nmolestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum\nnumquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium\noptio, eaque rerum! Provident similique accusantium nemo autem. Veritatis\nobcaecati tenetur iure eiu"},
+                    {
+                        "description",
+                        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,\nmolestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum\nnumquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium\noptio, eaque rerum! Provident similique accusantium nemo autem. Veritatis\nobcaecati tenetur iure eiu"
+                    },
                     {"image", "Home Lab"},
-                    {"scene", "3D Home"}
+                    {"scene", "Home Lab"}
                 }
             },
             {
                 "AR Lab", new Dictionary<string, object>
                 {
-                    {"description", "Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,\nmolestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum\nnumquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium\noptio, eaque rerum! Provident similique accusantium nemo autem. Veritatis\nobcaecati tenetur iure eiu"},
+                    {
+                        "description",
+                        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,\nmolestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum\nnumquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium\noptio, eaque rerum! Provident similique accusantium nemo autem. Veritatis\nobcaecati tenetur iure eiu"
+                    },
                     {"image", "Placeholder"},
                     {"scene", "AR Lab"}
                 }
             }
+        };
+        terrains = new Dictionary<string, Dictionary<string, object>>
+        {
+            {
+                "Forest", new Dictionary<string, object>
+                {
+                    {"description", "Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,\nmolestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum\nnumquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium\noptio, eaque rerum! Provident similique accusantium nemo autem. Veritatis\nobcaecati tenetur iure eiu"},
+                }
+            },
+            {
+                "Swamp Forest", new Dictionary<string, object>
+                {
+                    {"description", "Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,\nmolestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum\nnumquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium\noptio, eaque rerum! Provident similique accusantium nemo autem. Veritatis\nobcaecati tenetur iure eiu"},
+                }
+            },
+            {
+                "Savanna", new Dictionary<string, object>
+                {
+                    {"description", "Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,\nmolestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum\nnumquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium\noptio, eaque rerum! Provident similique accusantium nemo autem. Veritatis\nobcaecati tenetur iure eiu"},
+                }
+            },
+            {
+                "Beach", new Dictionary<string, object>
+                {
+                    {"description", "Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,\nmolestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum\nnumquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium\noptio, eaque rerum! Provident similique accusantium nemo autem. Veritatis\nobcaecati tenetur iure eiu"},
+                }
+            },
+            {
+                "Grassland Tundra", new Dictionary<string, object>
+                {
+                    {"description", "Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,\nmolestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum\nnumquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium\noptio, eaque rerum! Provident similique accusantium nemo autem. Veritatis\nobcaecati tenetur iure eiu"},
+                }
+            },
+            {
+                "Desert 1", new Dictionary<string, object>
+                {
+                    {"description", "Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,\nmolestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum\nnumquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium\noptio, eaque rerum! Provident similique accusantium nemo autem. Veritatis\nobcaecati tenetur iure eiu"},
+                }
+            },
+            {
+                "Snowy Tundra", new Dictionary<string, object>
+                {
+                    {"description", "Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,\nmolestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum\nnumquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium\noptio, eaque rerum! Provident similique accusantium nemo autem. Veritatis\nobcaecati tenetur iure eiu"},
+                }
+            },
+            {
+                "Highland Tundra", new Dictionary<string, object>
+                {
+                    {"description", "Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,\nmolestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum\nnumquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium\noptio, eaque rerum! Provident similique accusantium nemo autem. Veritatis\nobcaecati tenetur iure eiu"},
+                }
+            },
+            {
+                "Desert 2", new Dictionary<string, object>
+                {
+                    {"description", "Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,\nmolestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum\nnumquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium\noptio, eaque rerum! Provident similique accusantium nemo autem. Veritatis\nobcaecati tenetur iure eiu"},
+                }
+            },
         };
         survivalHealth = 100; // Normal full value -> 100
         slotItem = new Dictionary<string, Dictionary<string, object>>
@@ -579,6 +672,7 @@ public class PlayerData
     public Dictionary<string, Dictionary<string, object>> survivalSmeltingRecipes { get; set; }
     public Dictionary<string, Dictionary<string, object>> materialReducerRecipes { get; set; }
     public Dictionary<string, Dictionary<string, object>> teleports { get; set; }
+    public Dictionary<string, Dictionary<string, object>> terrains { get; set; }
     public int survivalHealth { get; set; }
 
     public static PlayerData Instance()

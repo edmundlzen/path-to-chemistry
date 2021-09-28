@@ -9,10 +9,13 @@ public class TeleportController : MonoBehaviour
 {
     private GameObject hotbar;
     private GameObject teleportItems;
+    private GameObject GUIController;
+    public string returnTo;
 
     private void Awake()
     {
         teleportItems = transform.Find("Teleport Items").Find("Viewport").Find("Teleports").gameObject;
+        GUIController = GameObject.FindGameObjectsWithTag("MainGUIController")[0].gameObject;
     }
 
     void OnEnable()
@@ -78,5 +81,10 @@ public class TeleportController : MonoBehaviour
             newMaterialSlot.name = teleport.Value["scene"].ToString();
             newMaterialSlot.gameObject.SetActive(true);
         }
+    }
+
+    public void CloseButtonHandler()
+    {
+        GUIController.GetComponent<MainGUIController>().ChangeView(returnTo);
     }
 }

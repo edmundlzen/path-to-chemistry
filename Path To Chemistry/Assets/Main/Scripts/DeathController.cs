@@ -14,8 +14,8 @@ public class DeathController : MonoBehaviour
     public void Respawn()
     {
         // TODO: Respawn logic
-        Time.timeScale = 1f;
-        GameObject.FindGameObjectsWithTag("MainGUIController")[0].GetComponent<MainGUIController>().ChangeView("gameview");
+        transform.parent.Find("Respawn").GetComponent<RespawnController>().returnTo = "death";
+        GameObject.FindGameObjectsWithTag("MainGUIController")[0].GetComponent<MainGUIController>().ChangeView("respawn");
     }
 
     public void Menu()
@@ -25,7 +25,7 @@ public class DeathController : MonoBehaviour
 
     public void Lab()
     {
-        GameObject.FindGameObjectsWithTag("MainGUIController")[0].GetComponent<MainGUIController>().goBackToDeath = true;
+        transform.parent.Find("Teleport").GetComponent<TeleportController>().returnTo = "death";
         GameObject.FindGameObjectsWithTag("MainGUIController")[0].GetComponent<MainGUIController>().ChangeView("teleport");
     }
 }

@@ -6,6 +6,12 @@ using UnityEngine.SceneManagement;
 
 public class PauseController : MonoBehaviour
 {
+    private GameObject GUIController;
+
+    void Start()
+    {
+        GUIController = GameObject.FindGameObjectsWithTag("MainGUIController")[0].gameObject;
+    }
     private void OnEnable()
     {
         Time.timeScale = 0f;
@@ -16,16 +22,6 @@ public class PauseController : MonoBehaviour
         Time.timeScale = 1f;
     }
 
-    public void Lab()
-    {
-        GameObject.FindGameObjectsWithTag("MainGUIController")[0].GetComponent<MainGUIController>().ChangeView("teleport");
-    }
-    
-    public void Respawn()
-    {
-        // Respawn window
-    }
-    
     public void Quit()
     {
         // TODO: SAVEEEEEE
@@ -35,5 +31,11 @@ public class PauseController : MonoBehaviour
     public void Shop()
     {
         SceneManager.LoadScene("Shop");
+    }
+    
+    public void Respawn()
+    {
+        transform.parent.Find("Respawn").GetComponent<RespawnController>().returnTo = "pause";
+        GUIController.GetComponent<MainGUIController>().ChangeView("respawn");
     }
 }

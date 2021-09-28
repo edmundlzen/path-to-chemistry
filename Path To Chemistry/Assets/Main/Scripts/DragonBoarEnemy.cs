@@ -54,9 +54,7 @@ public class DragonBoarEnemy: MonoBehaviour, IEntity
     
     private void Load()
     {
-        var filePath = Path.Combine(Application.dataPath, "Elements.json");
-        var fileContent = File.ReadAllText(filePath);
-        var elementData = JsonConvert.DeserializeObject<ElementData>(fileContent);
+        var elementData = JsonConvert.DeserializeObject<ElementData>(ElementData.Instance().allElementsData);
         ElementData.Instance().UpdateElementData(elementData);
     }
     
@@ -93,14 +91,16 @@ public class DragonBoarEnemy: MonoBehaviour, IEntity
         // drop random elements if you want.
         
         //TODO: Change this thing
-        drops = new Dictionary<string, int>()
+        drops = new Dictionary<string, int>();
+
+        while (drops.Count < 10)
         {
-            {elementData.elements.ElementAt(1).Key, Random.Range(1,100)},
-            {elementData.elements.ElementAt(2).Key, Random.Range(1,100)},
-            {elementData.elements.ElementAt(3).Key, Random.Range(1,100)},
-            {elementData.elements.ElementAt(4).Key, Random.Range(1,100)},
-            {elementData.elements.ElementAt(5).Key, Random.Range(1,100)}
-        };
+            string randomElement = elementData.elements.ElementAt(Random.Range(0, 117)).Key;
+            if (!drops.ContainsKey(randomElement))
+            {
+                drops.Add(randomElement, Random.Range(5,10));
+            }
+        }
         
         speed = agent.speed;
         ChangeState(EntityStates.Patrol);

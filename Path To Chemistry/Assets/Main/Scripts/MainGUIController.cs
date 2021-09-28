@@ -19,6 +19,7 @@ public class MainGUIController : MonoBehaviour
     private GameObject teleport;
     private GameObject death;
     private GameObject pause;
+    private GameObject respawn;
     
     private string activeView;
 
@@ -26,7 +27,6 @@ public class MainGUIController : MonoBehaviour
     
     public GameObject hand;
     public FirstPersonController player;
-    public bool goBackToDeath;
 
     void Awake()
     {
@@ -40,12 +40,12 @@ public class MainGUIController : MonoBehaviour
         teleport = transform.Find("Teleport").gameObject;
         death = transform.Find("Death").gameObject;
         pause = transform.Find("Pause").gameObject;
+        respawn = transform.Find("Respawn").gameObject;
     }
     
     void Start()
     {
         // Load();
-        goBackToDeath = false;
         ChangeView("gameview");
     }
 
@@ -109,16 +109,12 @@ public class MainGUIController : MonoBehaviour
         teleport.SetActive(false);
         death.SetActive(false);
         pause.SetActive(false);
+        respawn.SetActive(false);
 
         switch (view)
         {
             case "gameview":
-                if (goBackToDeath)
-                {
-                    goBackToDeath = false;
-                    ChangeView("death");
-                    return;
-                }
+                Time.timeScale = 1f;
                 player.freeze = false;
                 // Cursor.lockState = CursorLockMode.Locked;
                 // Cursor.visible = false;
@@ -156,7 +152,6 @@ public class MainGUIController : MonoBehaviour
                 teleport.SetActive(true);
                 break;
             case "death":
-                goBackToDeath = false;
                 Cursor.lockState = CursorLockMode.None;
                 Cursor.visible = true;
                 death.SetActive(true);
@@ -165,6 +160,11 @@ public class MainGUIController : MonoBehaviour
                 Cursor.lockState = CursorLockMode.None;
                 Cursor.visible = true;
                 pause.SetActive(true);
+                break;
+            case "respawn":
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+                respawn.SetActive(true);
                 break;
             default:
                 Debug.LogError("Argument for changeView is invalid. It must be one of either: 'inventory', 'crafting', 'smelting'");

@@ -6,6 +6,8 @@ public class FlamethrowerWeapon: MonoBehaviour, IUsable
 {
     public int damage = 5;
     public float fireRate = 0.1f;
+    public AudioClip laserSound;
+    public AudioSource audioSource;
     
     private Transform playerCamera;
     private GameObject PFlame;
@@ -17,6 +19,8 @@ public class FlamethrowerWeapon: MonoBehaviour, IUsable
 
     void Awake()
     {
+        audioSource = GetComponent<AudioSource>();
+        audioSource.clip = laserSound;
         PFlame = transform.Find("Flamethrower").Find("Fire Point").Find("PFlame").gameObject;
         PSmoke = PFlame.transform.Find("PSmoke").gameObject;
         PSpark = PSmoke.transform.Find("PSpark").gameObject;
@@ -28,10 +32,15 @@ public class FlamethrowerWeapon: MonoBehaviour, IUsable
         playerCamera = pCamera;
     }
     
-    void Update()
+    void LateUpdate()
     {
         if (gunEnabled)
         {
+            if (!audioSource.isPlaying)
+            {
+                audioSource.Play();
+            }
+            
             EnableFlame();
             RaycastHit hit;
             if (Physics.Raycast(playerCamera.position, playerCamera.forward, out hit) && (Time.time - lastShot) > fireRate)
@@ -63,5 +72,6 @@ public class FlamethrowerWeapon: MonoBehaviour, IUsable
         PFlame.GetComponent<ParticleSystem>().Stop();
         PSmoke.GetComponent<ParticleSystem>().Stop();
         PSpark.GetComponent<ParticleSystem>().Stop();
+        audioSource.Stop();
     }
 }

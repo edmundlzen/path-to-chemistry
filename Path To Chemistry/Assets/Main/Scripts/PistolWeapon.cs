@@ -7,6 +7,8 @@ public class PistolWeapon: MonoBehaviour, IUsable
 {
     public int damage = 5;
     public float fireRate = 0.5f;
+    public AudioClip laserSound;
+    public AudioSource audioSource;
     
     private Transform playerCamera;
     private GameObject firePoint;
@@ -17,6 +19,8 @@ public class PistolWeapon: MonoBehaviour, IUsable
 
     void Awake()
     {
+        audioSource = GetComponent<AudioSource>();
+        audioSource.clip = laserSound;
         firePoint = transform.Find("Fire Point").gameObject;
         PSpark = firePoint.transform.Find("PSpark").gameObject;
         lastShot = Time.time;
@@ -36,6 +40,7 @@ public class PistolWeapon: MonoBehaviour, IUsable
             if (Time.time - lastShot > fireRate) EnableSparks();
             if (Physics.Raycast(playerCamera.position, playerCamera.forward, out hit) && (Time.time - lastShot) > fireRate)
             {
+                audioSource.Play();
                 lastShot = Time.time;
                 new Task(DrawSmoke(hit.point));
                 if (hit.transform.TryGetComponent(out IEntity entity))

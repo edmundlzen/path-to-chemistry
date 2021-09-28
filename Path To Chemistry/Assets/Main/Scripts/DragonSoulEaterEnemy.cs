@@ -26,6 +26,7 @@ public class DragonSoulEaterEnemy: MonoBehaviour, IEntity
     public int sightRange = 30;
     public int minPlayerDetectDistance = 20;
     public int attackRange = 11;
+    public AudioClip dragonRoar;
     
     private Transform rayOrigin;
     private NavMeshAgent agent;
@@ -53,6 +54,9 @@ public class DragonSoulEaterEnemy: MonoBehaviour, IEntity
         // Assign health and damage here
         health = Random.Range(100, 200);
         damage = 15;
+        audioSource = GetComponent<AudioSource>();
+
+        StartCoroutine(Roar());
     }
     
     private void Load()
@@ -97,22 +101,30 @@ public class DragonSoulEaterEnemy: MonoBehaviour, IEntity
         // drop random elements if you want.
         
         //TODO: Change this thing
-        drops = new Dictionary<string, int>()
+        drops = new Dictionary<string, int>();
+
+        while (drops.Count < 10)
         {
-            {elementData.elements.ElementAt(Random.Range(0,117)).Key, Random.Range(5,10)},
-            {elementData.elements.ElementAt(Random.Range(0,117)).Key, Random.Range(5,10)},
-            {elementData.elements.ElementAt(Random.Range(0,117)).Key, Random.Range(5,10)},
-            {elementData.elements.ElementAt(Random.Range(0,117)).Key, Random.Range(5,10)},
-            {elementData.elements.ElementAt(Random.Range(0,117)).Key, Random.Range(5,10)},
-            {elementData.elements.ElementAt(Random.Range(0,117)).Key, Random.Range(5,10)},
-            {elementData.elements.ElementAt(Random.Range(0,117)).Key, Random.Range(5,10)},
-            {elementData.elements.ElementAt(Random.Range(0,117)).Key, Random.Range(5,10)},
-            {elementData.elements.ElementAt(Random.Range(0,117)).Key, Random.Range(5,10)},
-            {elementData.elements.ElementAt(Random.Range(0,117)).Key, Random.Range(5,10)},
-        };
+            string randomElement = elementData.elements.ElementAt(Random.Range(0, 117)).Key;
+            if (!drops.ContainsKey(randomElement))
+            {
+                drops.Add(randomElement, Random.Range(5,10));
+            }
+        }
 
         speed = agent.speed;
         ChangeState(EntityStates.Patrol);
+    }
+
+    IEnumerator Roar()
+    {
+        while (true)
+        {
+            audioSource.clip = Resources.Load<AudioClip>("Sounds/Dragon_Roar");
+            // audioSource.Play();
+            
+            yield return new WaitForSeconds(Random.Range(8, 25));
+        }
     }
 
     private void EnableFlame()
@@ -120,6 +132,13 @@ public class DragonSoulEaterEnemy: MonoBehaviour, IEntity
         pFlame.GetComponent<ParticleSystem>().Play();
         pSmoke.GetComponent<ParticleSystem>().Play();
         pSpark.GetComponent<ParticleSystem>().Play();
+        
+        audioSource.clip = Resources.Load<AudioClip>("Sounds/Flame_Blast");
+        if (!audioSource.isPlaying)
+        {
+            //TODO: FIX THIS SHIT
+            // audioSource.Play();
+        }
     }
     
     private void DisableFlame()
@@ -127,6 +146,8 @@ public class DragonSoulEaterEnemy: MonoBehaviour, IEntity
         pFlame.GetComponent<ParticleSystem>().Stop();
         pSmoke.GetComponent<ParticleSystem>().Stop();
         pSpark.GetComponent<ParticleSystem>().Stop();
+        
+        // audioSource.Stop();
     }
 
     public void Attacked(int damage)
@@ -240,19 +261,23 @@ public class DragonSoulEaterEnemy: MonoBehaviour, IEntity
 
     IEnumerator Dead()
     {
-        DisableAllAnimations();
-        animator.SetTrigger("Die");
-        yield return new WaitForSeconds(4f);
-        var playerData = PlayerData.Instance();
-        foreach (var elementDrop in drops)
+        while (gameObject.activeSelf)
         {
-            playerData.Inventory[elementDrop.Key] += elementDrop.Value;
-            // print("Added " + elementDrop.Value + " to " + elementDrop.Key);
-        }
+            DisableAllAnimations();
+            animator.SetTrigger("Die");
+            yield return new WaitForSeconds(4f);
+            var playerData = PlayerData.Instance();
+            foreach (var elementDrop in drops)
+            {
+                playerData.Inventory[elementDrop.Key] += elementDrop.Value;
+                // print("Added " + elementDrop.Value + " to " + elementDrop.Key);
+            }
 
-        Save();
-        Destroy(gameObject);
-        yield return null;
+            Save();
+            gameObject.SetActive(false);
+            Destroy(gameObject);
+            yield return null;
+        }
     }
 
     public void ChangeState(EntityStates state)

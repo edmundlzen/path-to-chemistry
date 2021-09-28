@@ -11,6 +11,8 @@ public class FirstPersonController : MonoBehaviour
     public Transform cameraTransform;
     public float cameraSensitivity = 1f;
     public bool freeze;
+    public AudioSource audioSource;
+    public AudioClip footstepSound;
 
     [SerializeField] private float jumpSpeed = 5f;
 
@@ -25,6 +27,8 @@ public class FirstPersonController : MonoBehaviour
 
     private void Start()
     {
+        audioSource = GetComponent<AudioSource>();
+        audioSource.clip = footstepSound;
         if (!desktopInput)
         {
             _leftFingerId = -1;
@@ -49,7 +53,17 @@ public class FirstPersonController : MonoBehaviour
         {
             GetTouchInput();
             JoystickMove();
-            
+            if (!characterController.isGrounded) _moveDirection.y -= gravity * Time.deltaTime;
+
+            if ((variableJoystick.Vertical != 0 || variableJoystick.Horizontal != 0) && !audioSource.isPlaying)
+            {
+                audioSource.Play();
+            }
+            else if ((variableJoystick.Vertical == 0 || variableJoystick.Horizontal == 0) && audioSource.isPlaying)
+            {
+                audioSource.Stop();
+            }
+
             if (_rightFingerId != -1) LookAround();
 
             return;

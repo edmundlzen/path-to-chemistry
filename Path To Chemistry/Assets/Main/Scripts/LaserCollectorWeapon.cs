@@ -6,6 +6,8 @@ public class LaserCollectorWeapon : MonoBehaviour, IUsable
 {
     public int damage = 5;
     public float fireRate = 0.1f;
+    public AudioClip laserSound;
+    public AudioSource audioSource;
     private Transform laserComponents;
     private Transform laserFizz;
     private Transform laserHead;
@@ -18,6 +20,8 @@ public class LaserCollectorWeapon : MonoBehaviour, IUsable
 
     void Awake()
     {
+        audioSource = GetComponent<AudioSource>();
+        audioSource.clip = laserSound;
         laserComponents = transform.Find("R_Head").Find("Laser");
         laserFizz = laserComponents.Find("Laser Fizz");
         laserHead = laserComponents.Find("Laser Head");
@@ -30,10 +34,15 @@ public class LaserCollectorWeapon : MonoBehaviour, IUsable
         playerCamera = pCamera;
     }
     
-    void Update()
+    void LateUpdate()
     {
         if (gunEnabled)
         {
+            if (!audioSource.isPlaying)
+            {
+                audioSource.Play();
+            }
+            
             RaycastHit hit;
             if (Physics.Raycast(playerCamera.position, playerCamera.forward, out hit) && (Time.time - lastShot) > fireRate)
             {
@@ -69,5 +78,6 @@ public class LaserCollectorWeapon : MonoBehaviour, IUsable
     {
         laserHead.gameObject.SetActive(false);
         laserBeam.gameObject.SetActive(false);
+        audioSource.Stop();
     }
 }

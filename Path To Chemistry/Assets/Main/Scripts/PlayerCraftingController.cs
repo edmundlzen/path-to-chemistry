@@ -15,9 +15,33 @@ public class PlayerCraftingController : MonoBehaviour
     private GameObject recipeInfo;
     private GameObject recipeMaterials;
     private Transform recipes;
+    
+    private void Load()
+    {
+        var directory = $"{Application.persistentDataPath}/Data";
+        var filePath = Path.Combine(directory, "Saves.json");
+        var fileContent = File.ReadAllText(filePath);
+        var playerData = JsonConvert.DeserializeObject<PlayerData>(fileContent);
+        PlayerData.Instance().UpdatePlayerData(playerData);
+    }
+    
+    private void Save()
+    {
+        var playerData = PlayerData.Instance();
+        var directory = $"{Application.persistentDataPath}/Data";
+        if (!Directory.Exists(directory)) Directory.CreateDirectory(directory);
+        var Settings = new JsonSerializerSettings();
+        Settings.Formatting = Formatting.Indented;
+        Settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+        var Json = JsonConvert.SerializeObject(playerData, Settings);
+        var filePath = Path.Combine(directory, "Saves.json");
+        File.WriteAllText(filePath, Json);
+    }
 
     private void Awake()
     {
+        Save();
+        Load();
         recipes = transform.Find("Recipes Container").GetChild(0).GetChild(0).GetChild(0);
         firstRecipeContainer = recipes.GetChild(0).gameObject;
 
@@ -62,7 +86,7 @@ public class PlayerCraftingController : MonoBehaviour
                 if (!firstRecipeContainer.activeSelf)
                 {
                     firstRecipeContainer.transform.Find("Image Container").GetChild(0).GetComponent<Image>().sprite =
-                        Resources.Load<Sprite>("Sprites/" + item["image"].ToString());
+                        Resources.Load<Sprite>("Sprites/" + item["image"]);
                     firstRecipeContainer.transform.Find("Recipe Name").GetComponent<Text>().text =
                         item["name"].ToString();
                     firstRecipeContainer.SetActive(true);

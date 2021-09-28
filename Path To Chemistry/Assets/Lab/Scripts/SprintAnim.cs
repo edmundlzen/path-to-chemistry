@@ -11,7 +11,7 @@ public class SprintAnim : MonoBehaviour
 {
     private void Start()
     {
-        Transition.ToScene = "3D Lab";
+        // Transition.ToScene = "3D Lab"; // Commented out because it interferes with others setting this value.
         StartCoroutine(Sprint());
     }
     private IEnumerator Sprint()
