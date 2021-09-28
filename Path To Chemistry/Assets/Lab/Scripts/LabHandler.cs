@@ -343,6 +343,10 @@ public class LabHandler : MonoBehaviour
         }
     }
 
+    public void Terrain()
+    {
+        StartCoroutine(sleepAnime("Terrain"));
+    }
     public void Quiz()
     {
         StartCoroutine(sleepAnime("Quiz"));
