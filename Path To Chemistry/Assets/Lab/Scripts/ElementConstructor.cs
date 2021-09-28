@@ -17,14 +17,6 @@ public static class elementConstructor
 
 public class ElementConstructor : MonoBehaviour
 {
-    public void Start()
-    {
-        if (!elementConstructor.hasLoaded)
-        {
-            Load();
-            elementConstructor.hasLoaded = true;
-        }
-    }
     public void addProton()
     {
         if (!player.deepPause)
@@ -141,13 +133,13 @@ public class ElementConstructor : MonoBehaviour
     {
         var playerData = PlayerData.Instance();
         var elementData = ElementData.Instance();
+        var shallPass = true;
         if (!player.deepPause)
         {
             foreach (var Keys in elementData.elements.Keys)
             {
-                if (Convert.ToString(elementConstructor.Protons) == elementData.elements[Keys]["protons"] &&
-                    Convert.ToString(elementConstructor.Electrons) == elementData.elements[Keys]["electrons"] &&
-                    Convert.ToString(elementConstructor.Neutrons) == elementData.elements[Keys]["neutrons"])
+                print(Keys);
+                if (Convert.ToString(elementConstructor.Protons) == elementData.elements[Keys]["protons"] && Convert.ToString(elementConstructor.Electrons) == elementData.elements[Keys]["electrons"] && Convert.ToString(elementConstructor.Neutrons) == elementData.elements[Keys]["neutrons"])
                 {
                     BuyUI.SetActive(true);
                     player.labPause = true;
@@ -161,25 +153,28 @@ public class ElementConstructor : MonoBehaviour
                 {
                     elementConstructor.SelectedElement = null;
                     GameObject.Find("Product").GetComponent<Text>().text = "Nothing!";
-                    return;
+                    shallPass = false;
                 }
             }
-            if (elementConstructor.SelectedElement != null)
+            if (shallPass)
             {
-                for (int i = 1; i <= 94; i++)
+                if (elementConstructor.SelectedElement != null)
                 {
-                    if (elementData.rarity[i - 1] == elementConstructor.SelectedElement)
+                    for (int i = 1; i <= 94; i++)
                     {
-                        GameObject.Find("Slider").GetComponent<Slider>().maxValue = playerData.Energy / 50 * i + 1;
-                        break;
+                        if (elementData.rarity[i - 1] == elementConstructor.SelectedElement)
+                        {
+                            GameObject.Find("Slider").GetComponent<Slider>().maxValue = playerData.Energy / 50 * i + 1;
+                            break;
+                        }
+                        else
+                        {
+                            GameObject.Find("Slider").GetComponent<Slider>().maxValue = playerData.Energy / 50;
+                            break;
+                        }
                     }
-                    else
-                    {
-                        GameObject.Find("Slider").GetComponent<Slider>().maxValue = playerData.Energy / 50;
-                        break;
-                    }
+                    GameObject.Find("Slider").GetComponent<Slider>().value = 0;
                 }
-                GameObject.Find("Slider").GetComponent<Slider>().value = 0;
             }
         }
     }
@@ -273,12 +268,6 @@ public class ElementConstructor : MonoBehaviour
         slotCheck();
     }
 
-    private void Load()
-    {
-        var elementData = JsonConvert.DeserializeObject<ElementData>(allElements.Data);
-        ElementData.Instance().UpdateElementData(elementData);
-    }
-
     public void mainMenu()
     {
         SceneManager.LoadScene("Main Menu");
@@ -313,7 +302,7 @@ public class ElementConstructor : MonoBehaviour
             else if (playerData.slotItem[$"Slot{i}"]["Element"] == null && playerData.slotItem[$"Slot{i}"]["Quantity"] == null)
             {
                 Destroy(GameObject.Find($"HotbarSlot ({i})/Item/Image"));
-                GameObject.Find($"ItemName").GetComponent<Text>().text = "";
+                GameObject.Find($"HotbarSlot ({i})/Symbol").GetComponent<Text>().text = "";
                 GameObject.Find($"HotbarSlot ({i})/ItemNum").GetComponent<Text>().text = "";
             }
         }
@@ -337,6 +326,5 @@ public class ElementConstructor : MonoBehaviour
             Destroy(GameObject.Find($"HotbarSlot ({i})/Item/Image"));
             GameObject.Find($"HotbarSlot ({i})/Symbol").GetComponent<Text>().text = $"{playerData.slotItem[$"Slot{i}"]["Element"]}";
         }
-        GameObject.Find("ItemName").GetComponent<Text>().text = Convert.ToString(playerData.slotItem[$"Slot{Convert.ToInt32(hotbar.slotNum)}"]["Element"]);
     }
 }

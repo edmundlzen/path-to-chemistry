@@ -314,6 +314,7 @@ public class LabHandler : MonoBehaviour
         if (!player.deepPause)
         {
             player.labPause = false;
+            hotbar.hasLoaded = false;
             player.startPlace = SceneUtility.GetScenePathByBuildIndex(SceneManager.GetActiveScene().buildIndex);
             SceneManager.LoadScene("Recipes");
         }
@@ -324,6 +325,7 @@ public class LabHandler : MonoBehaviour
         if (!player.deepPause)
         {
             player.labPause = false;
+            hotbar.hasLoaded = false;
             player.startPlace = SceneUtility.GetScenePathByBuildIndex(SceneManager.GetActiveScene().buildIndex);
             SceneManager.LoadScene("Molecule Recipes");
         }
@@ -1053,7 +1055,7 @@ public class LabHandler : MonoBehaviour
             else if (playerData.slotItem[$"Slot{i}"]["Element"] == null && playerData.slotItem[$"Slot{i}"]["Quantity"] == null)
             {
                 Destroy(GameObject.Find($"HotbarSlot ({i})/Item/Image"));
-                GameObject.Find($"ItemName").GetComponent<Text>().text = "";
+                GameObject.Find($"HotbarSlot ({i})/Symbol").GetComponent<Text>().text = "";
                 GameObject.Find($"HotbarSlot ({i})/ItemNum").GetComponent<Text>().text = "";
             }
         }
@@ -1077,7 +1079,6 @@ public class LabHandler : MonoBehaviour
             Destroy(GameObject.Find($"HotbarSlot ({i})/Item/Image"));
             GameObject.Find($"HotbarSlot ({i})/Symbol").GetComponent<Text>().text = $"{playerData.slotItem[$"Slot{i}"]["Element"]}";
         }
-        GameObject.Find("ItemName").GetComponent<Text>().text = Convert.ToString(playerData.slotItem[$"Slot{Convert.ToInt32(hotbar.slotNum)}"]["Element"]);
     }
 
     private void Guide()

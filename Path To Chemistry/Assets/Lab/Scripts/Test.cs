@@ -1,31 +1,26 @@
 using Newtonsoft.Json;
 using System.IO;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Test : MonoBehaviour
 {
+    private int gay = 0;
+    private string all;
     private void Start()
     {
         Load();
-        Save();
+        var elementData = ElementData.Instance();
+        foreach (var i in elementData.elements.Keys)
+        {
+            gay += 1;
+            all += $"{gay}. {i}\n";
+        }
+        GameObject.Find("Text").GetComponent<Text>().text = all;
     }
     private void Load()
     {
-        var filePath = Path.Combine(Application.dataPath, "Elements.json");
-        var fileContent = File.ReadAllText(filePath);
-        var elementData = JsonConvert.DeserializeObject<ElementData>(fileContent);
+        var elementData = JsonConvert.DeserializeObject<ElementData>(allElements.Data);
         ElementData.Instance().UpdateElementData(elementData);
-    }
-    private void Save()
-    {
-        var playerData = ElementData.Instance();
-        var directory = $"{Application.persistentDataPath}/Data";
-        Directory.CreateDirectory(directory);
-        var Settings = new JsonSerializerSettings();
-        Settings.Formatting = Formatting.None;
-        Settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-        var Json = JsonConvert.SerializeObject(playerData, Settings);
-        var filePath = Path.Combine(directory, "Saves.json");
-        File.WriteAllText(filePath, Json);
     }
 }

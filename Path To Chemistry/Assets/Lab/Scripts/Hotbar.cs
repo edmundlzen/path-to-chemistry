@@ -24,7 +24,6 @@ public class Hotbar : MonoBehaviour
     {
         if (!hotbar.hasLoaded)
         {
-            Load();
             slotCheck();
             var playerData = PlayerData.Instance();
             string Scene = SceneUtility.GetScenePathByBuildIndex(SceneManager.GetActiveScene().buildIndex);
@@ -439,7 +438,7 @@ public class Hotbar : MonoBehaviour
             else if (playerData.slotItem[$"Slot{i}"]["Element"] == null && playerData.slotItem[$"Slot{i}"]["Quantity"] == null)
             {
                 Destroy(GameObject.Find($"HotbarSlot ({i})/Item/Image"));
-                GameObject.Find($"ItemName").GetComponent<Text>().text = "";
+                GameObject.Find($"HotbarSlot ({i})/Symbol").GetComponent<Text>().text = "";
                 GameObject.Find($"HotbarSlot ({i})/ItemNum").GetComponent<Text>().text = "";
             }
         }
@@ -462,10 +461,6 @@ public class Hotbar : MonoBehaviour
         {
             Destroy(GameObject.Find($"HotbarSlot ({i})/Item/Image"));
             GameObject.Find($"HotbarSlot ({i})/Symbol").GetComponent<Text>().text = $"{playerData.slotItem[$"Slot{i}"]["Element"]}";
-        }
-        if (GameObject.Find("ItemName") != null)
-        {
-            GameObject.Find("ItemName").GetComponent<Text>().text = Convert.ToString(playerData.slotItem[$"Slot{Convert.ToInt32(hotbar.slotNum)}"]["Element"]);
         }
     }
 

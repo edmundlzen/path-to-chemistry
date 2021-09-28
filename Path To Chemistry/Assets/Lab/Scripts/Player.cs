@@ -3,6 +3,7 @@ using System.IO;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 
 public static class player
 {
@@ -10,6 +11,7 @@ public static class player
     public static bool deepPause = false;
     public static bool labPause = false;
     public static bool hasAnimated = true;
+    public static bool isSaving = false;
     public static string raycastObject = "";
     public static string startPlace = "";
     public static List<string> History = new List<string>();
@@ -20,13 +22,22 @@ public class Player : MonoBehaviour
     public float mouseSensitivity = 100f;
     public Transform playerBody;
     private float xRotation;
-
+    private void Awake()
+    {
+        isFirstSave();
+        loadPlayerData();
+        loadElementsData();
+    }
     private void Start()
     {
         //Cursor.lockState = CursorLockMode.Locked;
     }
     private void Update()
     {
+        if (!player.isSaving)
+        {
+            StartCoroutine(autoSave());
+        }
         if (!player.labPause)
         {
             var playerData = PlayerData.Instance();
@@ -63,21 +74,35 @@ public class Player : MonoBehaviour
                     GameObject.Find("Label1").GetComponent<Text>().text = "";
                 }
             }
-            if (Input.GetKeyDown(KeyCode.S))
-            {
-                Save();
-            }
-            if (Input.GetKeyDown(KeyCode.L))
-            {
-                Load();
-            }
+        }
+    }
+    private IEnumerator autoSave()
+    {
+        player.isSaving = true;
+        yield return new WaitForSeconds(1);
+        Save();
+        player.isSaving = false;
+    }
+    private void isFirstSave()
+    {
+        var playerData = PlayerData.Instance();
+        var directory = $"{Application.persistentDataPath}/Data";
+        if (!Directory.Exists(directory))
+        {
+            Directory.CreateDirectory(directory);
+            var Settings = new JsonSerializerSettings();
+            Settings.Formatting = Formatting.Indented;
+            Settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            var Json = JsonConvert.SerializeObject(playerData, Settings);
+            var filePath = Path.Combine(directory, "Saves.json");
+            File.WriteAllText(filePath, Json);
         }
     }
     private void Save()
     {
         var playerData = PlayerData.Instance();
         var directory = $"{Application.persistentDataPath}/Data";
-        if (!Directory.Exists(directory)) Directory.CreateDirectory(directory);
+        Directory.CreateDirectory(directory);
         var Settings = new JsonSerializerSettings();
         Settings.Formatting = Formatting.Indented;
         Settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
@@ -85,7 +110,12 @@ public class Player : MonoBehaviour
         var filePath = Path.Combine(directory, "Saves.json");
         File.WriteAllText(filePath, Json);
     }
-    private void Load()
+    private void loadElementsData()
+    {
+        var elementData = JsonConvert.DeserializeObject<ElementData>(allElements.Data);
+        ElementData.Instance().UpdateElementData(elementData);
+    }
+    private void loadPlayerData()
     {
         var directory = $"{Application.persistentDataPath}/Data";
         var filePath = Path.Combine(directory, "Saves.json");
