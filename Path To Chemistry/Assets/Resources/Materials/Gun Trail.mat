@@ -28,6 +28,22 @@ Material:
         m_Texture: {fileID: 2800000, guid: ab0b3213b480a4c2787b6e10f10f1b55, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - Metallic_Map:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Normal_Map:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Occlusion_Map:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -42,11 +58,15 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - Alpha_Clip_Threshold: 0
     - DissolveAmount: 0.65
+    - Edge_Thickness: 0.01
     - NoiseAmount: 0.15
     - NoisePower: 2
     - NoiseScale: 54.02
+    - Noise_Scale: 30
     m_Colors:
+    - Edge_Color: {r: 32, g: 0.3764706, b: 0, a: 0}
     - MainSpeed: {r: 0, g: 0, b: 0, a: 0}
     - NoiseSpeed: {r: 0.12, g: 0, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 0}

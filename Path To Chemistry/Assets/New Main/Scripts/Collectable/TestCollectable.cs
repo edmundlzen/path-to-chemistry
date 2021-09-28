@@ -42,7 +42,7 @@ public class TestCollectable : MonoBehaviour, ICollectable
     private void Start()
     {
         Material currentMaterial = transform.GetComponent<Renderer>().material;
-        Material newMaterial = new Material(Shader.Find("Shader Graphs/Dissolve"));
+        Material newMaterial = new Material(Shader.Find("Shader Graphs/Collectable Dissolve"));
         newMaterial.SetTexture("Texture", currentMaterial.GetTexture("_MainTex"));
         newMaterial.SetTexture("Normal_Map", currentMaterial.GetTexture("_BumpMap"));
         newMaterial.SetTexture("Occlusion_Map", currentMaterial.GetTexture("_OcclusionMap"));

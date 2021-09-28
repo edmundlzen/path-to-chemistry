@@ -4,8 +4,9 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering;
+using Random = UnityEngine.Random;
 
-public class LODCollectable : MonoBehaviour, ICollectable
+public class TreeLODCollectable : MonoBehaviour, ICollectable
 {
     public Dictionary<string, int> returnMaterials { get; set; }
     private List<ParticleSystem> particleSystems = new List<ParticleSystem>();
@@ -18,12 +19,16 @@ public class LODCollectable : MonoBehaviour, ICollectable
     {
         returnMaterials = new Dictionary<string, int>()
         {
-            {"Crystal", 5},
-            {"Gold", 5}
+            {"Wood", Random.Range(1, 3)},
         };
+    }
 
+    void Initialize()
+    {
+        onCollectedInitialized = true;
+        
         Material currentMaterial = transform.GetChild(0).GetComponent<Renderer>().material;
-        Material newMaterial = new Material(Shader.Find("Shader Graphs/Dissolve"));
+        Material newMaterial = new Material(Shader.Find("Shader Graphs/Collectable Dissolve"));
         newMaterial.SetTexture("Texture", currentMaterial.GetTexture("_MainTex"));
         newMaterial.SetTexture("Normal_Map", currentMaterial.GetTexture("_BumpMap"));
         newMaterial.SetTexture("Occlusion_Map", currentMaterial.GetTexture("_OcclusionMap"));
@@ -54,15 +59,10 @@ public class LODCollectable : MonoBehaviour, ICollectable
         }
     }
 
-    // void Initialize()
-    // {
-    //     onCollectedInitialized = true;
-    // }
-
     public void Collect()
     {
-        // if (!onCollectedInitialized) Initialize();
-        // particleSystem
+        if (!onCollectedInitialized) Initialize();
+        
         called = true;
         while (alphaCT < 0.8f)
         {

@@ -49,7 +49,7 @@ public class S1ACollectable : MonoBehaviour, ICollectable
         }
         
         Material currentMaterial = transform.GetComponent<Renderer>().material;
-        Material newMaterial = new Material(Shader.Find("Shader Graphs/Dissolve"));
+        Material newMaterial = new Material(Shader.Find("Shader Graphs/Collectable Dissolve"));
         newMaterial.SetTexture("Texture", currentMaterial.GetTexture("_MainTex"));
         newMaterial.SetTexture("Normal_Map", currentMaterial.GetTexture("_BumpMap"));
         newMaterial.SetTexture("Occlusion_Map", currentMaterial.GetTexture("_OcclusionMap"));
@@ -63,7 +63,7 @@ public class S1ACollectable : MonoBehaviour, ICollectable
         if (!onCollectedInitialized) Initialize();
         while (alphaCT < 0.8f)
         {
-            alphaCT += 0.01f;
+            alphaCT += 0.1f * Time.deltaTime;
             transform.GetComponent<MeshRenderer>().material.SetFloat("Alpha_Clip_Threshold", alphaCT);
             foreach (var particleSystem in particleSystems)
             {
@@ -78,6 +78,6 @@ public class S1ACollectable : MonoBehaviour, ICollectable
 
     public void Return()
     {
-        
+        // TODO: RETURN ELEMENTSSSSSS
     }
 }
