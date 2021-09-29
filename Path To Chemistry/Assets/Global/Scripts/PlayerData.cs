@@ -331,7 +331,7 @@ public class PlayerData
                 "Laser Collector", new Dictionary<string, object>
                 {
                     {"enabled", true},
-                    {"name", "Flamethrower"},
+                    {"name", "Laser Collector"},
                     {
                         "materials", new Dictionary<string, int>
                         {
@@ -355,46 +355,32 @@ public class PlayerData
                     }
                 }
             },
-            {
-                "Flamethrower", new Dictionary<string, object>
-                {
-                    {"enabled", true},
-                    {"name", "Flamethrower"},
-                    {
-                        "materials", new Dictionary<string, int>
-                        {
-                            {"Metal", 30},
-                            {"Wood", 20}
-                        }
-                    }
-                }
-            },
-            {
-                "Flamethrower", new Dictionary<string, object> // Furnace
-                {
-                    {"enabled", true},
-                    {"name", "Flamethrower"},
-                    {
-                        "materials", new Dictionary<string, int>
-                        {
-                            {"Stone", 20},
-                        }
-                    }
-                }
-            },
-            {
-                "Flamethrower", new Dictionary<string, object> // Crafting Table
-                {
-                    {"enabled", true},
-                    {"name", "Flamethrower"},
-                    {
-                        "materials", new Dictionary<string, int>
-                        {
-                            {"Wood", 20}
-                        }
-                    }
-                }
-            },
+            // {
+            //     "Flamethrower", new Dictionary<string, object> // Furnace
+            //     {
+            //         {"enabled", true},
+            //         {"name", "Flamethrower"},
+            //         {
+            //             "materials", new Dictionary<string, int>
+            //             {
+            //                 {"Stone", 20},
+            //             }
+            //         }
+            //     }
+            // },
+            // {
+            //     "Flamethrower", new Dictionary<string, object> // Crafting Table
+            //     {
+            //         {"enabled", true},
+            //         {"name", "Flamethrower"},
+            //         {
+            //             "materials", new Dictionary<string, int>
+            //             {
+            //                 {"Wood", 20}
+            //             }
+            //         }
+            //     }
+            // },
         };
         survivalSmeltingRecipes = new Dictionary<string, Dictionary<string, object>>
         {

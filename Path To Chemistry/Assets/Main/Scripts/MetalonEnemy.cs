@@ -27,6 +27,7 @@ public class MetalonEnemy: MonoBehaviour, IEntity
     public int minPlayerDetectDistance = 20;
     public int attackRange = 5;
     
+    private NotificationsController notificationsController;
     private Transform rayOrigin;
     private NavMeshAgent agent;
     private Animator animator;
@@ -51,30 +52,10 @@ public class MetalonEnemy: MonoBehaviour, IEntity
         health = 100;
         damage = 10;
     }
-    
-    private void Load()
-    {
-        var elementData = JsonConvert.DeserializeObject<ElementData>(ElementData.Instance().allElementsData);
-        ElementData.Instance().UpdateElementData(elementData);
-    }
-    
-    private void Save()
-    {
-        print(Application.persistentDataPath);
-        var playerData = PlayerData.Instance();
-        var directory = $"{Application.persistentDataPath}/Data";
-        if (!Directory.Exists(directory)) Directory.CreateDirectory(directory);
-        var Settings = new JsonSerializerSettings();
-        Settings.Formatting = Formatting.Indented;
-        Settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-        var Json = JsonConvert.SerializeObject(playerData, Settings);
-        var filePath = Path.Combine(directory, "Saves.json");
-        File.WriteAllText(filePath, Json);
-    }
 
     void Start()
     {
-        Load();
+        notificationsController = GameObject.FindGameObjectsWithTag("NotificationsController")[0].transform.GetComponent<NotificationsController>();
         var elementData = ElementData.Instance();
 
         patrolPoint = transform.position;
@@ -219,11 +200,10 @@ public class MetalonEnemy: MonoBehaviour, IEntity
         var playerData = PlayerData.Instance();
         foreach (var elementDrop in drops)
         {
+            notificationsController.SendTextImageNotification(elementDrop.Key, "+ " + elementDrop.Value, "green");
             playerData.Inventory[elementDrop.Key] += elementDrop.Value;
-            // print("Added " + elementDrop.Value + " to " + elementDrop.Key);
         }
 
-        Save();
         Destroy(gameObject);
         yield return null;
     }

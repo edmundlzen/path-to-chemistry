@@ -28,6 +28,7 @@ public class DragonSoulEaterEnemy: MonoBehaviour, IEntity
     public int attackRange = 11;
     public AudioClip dragonRoar;
     
+    private NotificationsController notificationsController;
     private Transform rayOrigin;
     private NavMeshAgent agent;
     private Animator animator;
@@ -58,33 +59,13 @@ public class DragonSoulEaterEnemy: MonoBehaviour, IEntity
 
         StartCoroutine(Roar());
     }
-    
-    private void Load()
-    {
-        var elementData = JsonConvert.DeserializeObject<ElementData>(ElementData.Instance().allElementsData);
-        ElementData.Instance().UpdateElementData(elementData);
-    }
-    
-    private void Save()
-    {
-        print(Application.persistentDataPath);
-        var playerData = PlayerData.Instance();
-        var directory = $"{Application.persistentDataPath}/Data";
-        if (!Directory.Exists(directory)) Directory.CreateDirectory(directory);
-        var Settings = new JsonSerializerSettings();
-        Settings.Formatting = Formatting.Indented;
-        Settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-        var Json = JsonConvert.SerializeObject(playerData, Settings);
-        var filePath = Path.Combine(directory, "Saves.json");
-        File.WriteAllText(filePath, Json);
-    }
 
     void Start()
-    {
-        Load();
+    { 
+        notificationsController = GameObject.FindGameObjectsWithTag("NotificationsController")[0].transform.GetComponent<NotificationsController>();
         var elementData = ElementData.Instance();
 
-        patrolPoint = transform.position;
+        patrolPoint = transform.position; 
         rayOrigin = transform.Find("Raycast origin");
         health = Random.Range(100, 150);
         player = GameObject.FindGameObjectsWithTag("Player")[0].transform;
@@ -120,10 +101,9 @@ public class DragonSoulEaterEnemy: MonoBehaviour, IEntity
     {
         while (true)
         {
-            audioSource.clip = Resources.Load<AudioClip>("Sounds/Dragon_Roar");
-            // audioSource.Play();
-            
             yield return new WaitForSeconds(Random.Range(8, 25));
+            audioSource.clip = Resources.Load<AudioClip>("Sounds/Dragon_Roar");
+            audioSource.Play();
         }
     }
 
@@ -136,8 +116,7 @@ public class DragonSoulEaterEnemy: MonoBehaviour, IEntity
         audioSource.clip = Resources.Load<AudioClip>("Sounds/Flame_Blast");
         if (!audioSource.isPlaying)
         {
-            //TODO: FIX THIS SHIT
-            // audioSource.Play();
+            audioSource.Play();
         }
     }
     
@@ -270,10 +249,9 @@ public class DragonSoulEaterEnemy: MonoBehaviour, IEntity
             foreach (var elementDrop in drops)
             {
                 playerData.Inventory[elementDrop.Key] += elementDrop.Value;
-                // print("Added " + elementDrop.Value + " to " + elementDrop.Key);
+                notificationsController.SendTextImageNotification(elementDrop.Key, "+ " + elementDrop.Value, "green");
             }
 
-            Save();
             gameObject.SetActive(false);
             Destroy(gameObject);
             yield return null;

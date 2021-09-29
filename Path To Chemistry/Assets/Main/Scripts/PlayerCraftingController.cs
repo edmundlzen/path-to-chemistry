@@ -10,38 +10,18 @@ using UnityEngine.UI;
 public class PlayerCraftingController : MonoBehaviour
 {
     private string activeRecipe;
+    private NotificationsController notificationsController;
     private GameObject firstRecipeContainer;
     private GameObject firstRecipeMaterialContainer;
     private GameObject recipeInfo;
     private GameObject recipeMaterials;
     private Transform recipes;
-    
-    private void Load()
-    {
-        var directory = $"{Application.persistentDataPath}/Data";
-        var filePath = Path.Combine(directory, "Saves.json");
-        var fileContent = File.ReadAllText(filePath);
-        var playerData = JsonConvert.DeserializeObject<PlayerData>(fileContent);
-        PlayerData.Instance().UpdatePlayerData(playerData);
-    }
-    
-    private void Save()
-    {
-        var playerData = PlayerData.Instance();
-        var directory = $"{Application.persistentDataPath}/Data";
-        if (!Directory.Exists(directory)) Directory.CreateDirectory(directory);
-        var Settings = new JsonSerializerSettings();
-        Settings.Formatting = Formatting.Indented;
-        Settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-        var Json = JsonConvert.SerializeObject(playerData, Settings);
-        var filePath = Path.Combine(directory, "Saves.json");
-        File.WriteAllText(filePath, Json);
-    }
 
     private void Awake()
     {
-        Save();
-        Load();
+        // Save();
+        // Load();
+        notificationsController = GameObject.FindGameObjectsWithTag("NotificationsController")[0].transform.GetComponent<NotificationsController>();
         recipes = transform.Find("Recipes Container").GetChild(0).GetChild(0).GetChild(0);
         firstRecipeContainer = recipes.GetChild(0).gameObject;
 
@@ -193,6 +173,7 @@ public class PlayerCraftingController : MonoBehaviour
 
         foreach (var recipeMaterial in dictRecipeMaterials)
         {
+            notificationsController.SendImageNotification(Resources.Load<Sprite>("Sprites/" + survivalMaterials[recipeMaterial.Key]["image"]), "- " + recipeMaterial.Value, "red");
             survivalMaterials[recipeMaterial.Key]["quantity"] =
                 int.Parse(survivalMaterials[recipeMaterial.Key]["quantity"].ToString()) - recipeMaterial.Value;
         }
@@ -204,4 +185,4 @@ public class PlayerCraftingController : MonoBehaviour
         activeRecipe = recipeContainer.name;
         UpdateRecipeInfoView();
     }
-}
+} 

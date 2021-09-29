@@ -10,6 +10,7 @@ using UnityEngine.UI;
 public class SmeltingController : MonoBehaviour
 {
     private string activeSmeltingRecipe;
+    private NotificationsController notificationsController;
     private GameObject firstSmeltingRecipeContainer;
     private GameObject firstSmeltingRecipeMaterialContainer;
     private GameObject smeltingRecipeInfo;
@@ -18,6 +19,7 @@ public class SmeltingController : MonoBehaviour
 
     private void Awake()
     {
+        notificationsController = GameObject.FindGameObjectsWithTag("NotificationsController")[0].transform.GetComponent<NotificationsController>();
         smeltingRecipes = transform.Find("Smelting Recipes Container").GetChild(0).GetChild(0).GetChild(0);
         firstSmeltingRecipeContainer = smeltingRecipes.GetChild(0).gameObject;
         smeltingRecipeInfo = transform.Find("Smelting Recipe Info").gameObject;
@@ -159,8 +161,11 @@ public class SmeltingController : MonoBehaviour
             int.Parse(survivalInventory[activeSmeltingRecipe]["quantity"].ToString()) + 1;
 
         foreach (var recipeMaterial in dictRecipeMaterials)
+        {
             survivalMaterials[recipeMaterial.Key]["quantity"] =
                 int.Parse(survivalMaterials[recipeMaterial.Key]["quantity"].ToString()) - recipeMaterial.Value;
+            notificationsController.SendImageNotification(Resources.Load<Sprite>("Sprites/" + survivalMaterials[recipeMaterial.Key]["image"]), "- " + recipeMaterial.Value, "red");
+        }
 
         // StartCoroutine(Countdown(3f));
         UpdateRecipeInfoView();

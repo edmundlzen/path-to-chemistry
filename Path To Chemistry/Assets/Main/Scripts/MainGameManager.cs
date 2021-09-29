@@ -13,46 +13,65 @@ public class MainGameManager : MonoBehaviour
     public GameObject interactButton;
     public Slider hpBar;
 
-    // private void Load()
-    // {
-    //     var filePath = Path.Combine(Application.dataPath, "Elements.json");
-    //     var fileContent = File.ReadAllText(filePath);
-    //     var elementData = JsonConvert.DeserializeObject<ElementData>(fileContent);
-    //     ElementData.Instance().UpdateElementData(elementData);
-    // }
-    //
-    // private void Save()
-    // {
-    //     var playerData = PlayerData.Instance();
-    //     var directory = $"{Application.persistentDataPath}/Data";
-    //     if (!Directory.Exists(directory)) Directory.CreateDirectory(directory);
-    //     var Settings = new JsonSerializerSettings();
-    //     Settings.Formatting = Formatting.Indented;
-    //     Settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-    //     var Json = JsonConvert.SerializeObject(playerData, Settings);
-    //     var filePath = Path.Combine(directory, "Saves.json");
-    //     File.WriteAllText(filePath, Json);
-    // }
+    private void isFirstSave()
+    {
+        var playerData = PlayerData.Instance();
+        var directory = $"{Application.persistentDataPath}/Data";
+        if (!Directory.Exists(directory))
+        {
+            Directory.CreateDirectory(directory);
+            var Settings = new JsonSerializerSettings();
+            Settings.Formatting = Formatting.Indented;
+            Settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            var Json = JsonConvert.SerializeObject(playerData, Settings);
+            var filePath = Path.Combine(directory, "Saves.json");
+            File.WriteAllText(filePath, Json);
+        }
+    }
+    private void Save()
+    {
+        var playerData = PlayerData.Instance();
+        var directory = $"{Application.persistentDataPath}/Data";
+        Directory.CreateDirectory(directory);
+        var Settings = new JsonSerializerSettings();
+        Settings.Formatting = Formatting.Indented;
+        Settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+        var Json = JsonConvert.SerializeObject(playerData, Settings);
+        var filePath = Path.Combine(directory, "Saves.json");
+        File.WriteAllText(filePath, Json);
+    }
+    private void loadElementsData()
+    {
+        var elementData = JsonConvert.DeserializeObject<ElementData>(allElements.Data);
+        ElementData.Instance().UpdateElementData(elementData);
+    }
+    private void loadPlayerData()
+    {
+        var directory = $"{Application.persistentDataPath}/Data";
+        var filePath = Path.Combine(directory, "Saves.json");
+        var fileContent = File.ReadAllText(filePath);
+        var playerData = JsonConvert.DeserializeObject<PlayerData>(fileContent);
+        PlayerData.Instance().UpdatePlayerData(playerData);
+    }
 
     void Awake()
     {
-        // ElementDataSetup();
+        isFirstSave();
+        loadElementsData();
+        Save();
+        loadPlayerData();
+
+        StartCoroutine(SaveCoroutine());
     }
 
-    // void ElementDataSetup()
-    // {
-    //     var playerData = PlayerData.Instance();
-    //     Load();
-    //     var elementData = ElementData.Instance();
-    //     if (playerData.Inventory.Count == 0)
-    //     {
-    //         for (int i = 0; i < 118; i++)
-    //         {
-    //             playerData.Inventory.Add(elementData.elements.ElementAt(i).Key, 0);
-    //         }
-    //         Save();
-    //     }
-    // }
+    IEnumerator SaveCoroutine()
+    {
+        while (true)
+        {
+            Save();
+            yield return new WaitForSeconds(1f);
+        }
+    }
 
     public void InteractButtonDown()
     {

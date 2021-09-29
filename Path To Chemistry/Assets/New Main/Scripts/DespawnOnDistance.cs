@@ -28,6 +28,11 @@ public class DespawnOnDistance : MonoBehaviour
         {
             foreach (GameObject obj in generatedObjects)
             {
+                if (obj == null)
+                {
+                    generatedObjects.Remove(obj);
+                    yield break;
+                }
                 if (Vector3.Distance(player.position, obj.transform.position) >= objectGenerationSettings.despawnDistance)
                 {
                     obj.SetActive(false);

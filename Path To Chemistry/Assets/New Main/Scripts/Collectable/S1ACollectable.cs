@@ -10,11 +10,14 @@ public class S1ACollectable : MonoBehaviour, ICollectable
 {
     public Dictionary<string, int> returnMaterials { get; set; }
     private List<ParticleSystem> particleSystems = new List<ParticleSystem>();
+    private NotificationsController notificationsController;
     private bool onCollectedInitialized = false;
     private float alphaCT = 0f;
 
-    void Awake()
+    void Start()
     {
+        notificationsController = GameObject.FindGameObjectsWithTag("NotificationsController")[0].transform.GetComponent<NotificationsController>();
+
         returnMaterials = new Dictionary<string, int>()
         {
             {"Stone", 4},
@@ -78,6 +81,12 @@ public class S1ACollectable : MonoBehaviour, ICollectable
 
     public void Return()
     {
-        // TODO: RETURN ELEMENTSSSSSS
+        var survivalMaterials = PlayerData.Instance().survivalMaterials;
+        foreach (var material in returnMaterials)
+        {
+            if (material.Value == 0) return;
+            notificationsController.SendImageNotification(Resources.Load<Sprite>("Sprites/" + survivalMaterials[material.Key]["image"]), "+ " + material.Value, "green");
+            survivalMaterials[material.Key]["quantity"] = Int32.Parse(survivalMaterials[material.Key]["quantity"].ToString()) + material.Value;
+        }
     }
 }

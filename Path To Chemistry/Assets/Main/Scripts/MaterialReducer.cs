@@ -10,6 +10,7 @@ using UnityEngine.UI;
 public class MaterialReducer : MonoBehaviour
 {
     private string activeRecipe;
+    private NotificationsController notificationsController;
     private GameObject firstRecipeContainer;
     private GameObject firstRecipeMaterialContainer;
     private GameObject recipeInfo;
@@ -18,6 +19,7 @@ public class MaterialReducer : MonoBehaviour
 
     private void Awake()
     {
+        notificationsController = GameObject.FindGameObjectsWithTag("NotificationsController")[0].transform.GetComponent<NotificationsController>();
         recipes = transform.Find("Recipes Container").GetChild(0).GetChild(0).GetChild(0);
         firstRecipeContainer = recipes.GetChild(0).gameObject;
 
@@ -147,6 +149,7 @@ public class MaterialReducer : MonoBehaviour
         foreach (var element in (Dictionary<string, int>) materialReducerRecipes[activeRecipe]["elements"])
         {
             elementInventory[element.Key] += 1;
+            notificationsController.SendTextImageNotification(element.Key, "+ " + element.Value, "green");
         }
         UpdateRecipeInfoView();
         UpdateRecipesView();
