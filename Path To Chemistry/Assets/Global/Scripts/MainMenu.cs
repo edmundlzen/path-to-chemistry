@@ -94,5 +94,7 @@ public class MainMenu : MonoBehaviour
     public void Quit()
     {
         if (!(sceneLoadingTask is {Running: true})) return;
+        
+        Application.Quit();
     }
 }
