@@ -89,6 +89,8 @@ public class MainMenu : MonoBehaviour
     public void Credits()
     {
         if (!(sceneLoadingTask is {Running: true})) return;
+
+        SceneManager.LoadScene("Credits");
     }
 
     public void Quit()
