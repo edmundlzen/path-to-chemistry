@@ -415,7 +415,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 168.28001}
+  m_AnchoredPosition: {x: 0, y: 168.28003}
   m_SizeDelta: {x: 73.29822, y: 171.98999}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &250581207
@@ -962,7 +962,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 689917026}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
         m_MethodName: Credits
         m_Mode: 1
@@ -1492,48 +1492,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 689917024}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0d82a1abcab42422ca38d94a31651778, type: 3}
+  m_Script: {fileID: 11500000, guid: d24634b770ebb46aaa41071ec0aaba9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  discoMe:
-  - {fileID: 250581207}
-  discoGradient:
-    serializedVersion: 2
-    key0: {r: 1, g: 0, b: 0, a: 1}
-    key1: {r: 1, g: 0, b: 1, a: 1}
-    key2: {r: 0.005623481, g: 0.06691238, b: 1, a: 0}
-    key3: {r: 0, g: 1, b: 1, a: 0}
-    key4: {r: 0.09214048, g: 1, b: 0, a: 0}
-    key5: {r: 0.9339297, g: 1, b: 0, a: 0}
-    key6: {r: 1, g: 0, b: 0, a: 0}
-    key7: {r: 1, g: 0, b: 0, a: 0}
-    ctime0: 0
-    ctime1: 10922
-    ctime2: 21845
-    ctime3: 32768
-    ctime4: 43690
-    ctime5: 54613
-    ctime6: 65535
-    ctime7: 65535
-    atime0: 0
-    atime1: 65535
-    atime2: 0
-    atime3: 0
-    atime4: 0
-    atime5: 0
-    atime6: 0
-    atime7: 0
-    m_Mode: 0
-    m_NumColorKeys: 7
-    m_NumAlphaKeys: 2
-  discoSpeed: 0.15
-  blackImage: {fileID: 1271806436}
-  loadingText: {fileID: 890203894}
-  loadingBar: {fileID: 1093553380}
-  titleT: {fileID: 250581206}
-  alphaAddAmount: 0.02
-  titleMoveDistance: 30
-  progressBar: {fileID: 1455045293}
 --- !u!1 &698749100
 GameObject:
   m_ObjectHideFlags: 0
@@ -1617,7 +1578,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 689917026}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
         m_MethodName: Settings
         m_Mode: 1
@@ -2155,7 +2116,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 689917026}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
         m_MethodName: NewGame
         m_Mode: 1
@@ -2403,7 +2364,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 689917026}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
         m_MethodName: Quit
         m_Mode: 1
@@ -2911,7 +2872,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 689917026}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
         m_MethodName: ContinueGame
         m_Mode: 1
