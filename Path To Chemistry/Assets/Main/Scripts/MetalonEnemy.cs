@@ -51,10 +51,13 @@ public class MetalonEnemy: MonoBehaviour, IEntity
         // Assign health and damage here
         health = 100;
         damage = 10;
+        audioSource = GetComponent<AudioSource>();
+        agent = GetComponent<NavMeshAgent>();
     }
 
     void Start()
     {
+        StartCoroutine(Roar());
         notificationsController = GameObject.FindGameObjectsWithTag("NotificationsController")[0].transform.GetComponent<NotificationsController>();
         var elementData = ElementData.Instance();
 
@@ -62,7 +65,6 @@ public class MetalonEnemy: MonoBehaviour, IEntity
         rayOrigin = transform.Find("Raycast origin");
         health = Random.Range(100, 150);
         player = GameObject.FindGameObjectsWithTag("Player")[0].transform;
-        agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
         audioSource = GetComponent<AudioSource>();
         //TODO: Pls load a nice sound here for enemy when hit.
@@ -83,6 +85,21 @@ public class MetalonEnemy: MonoBehaviour, IEntity
         
         speed = agent.speed;
         ChangeState(EntityStates.Patrol);
+    }
+    
+    IEnumerator Roar()
+    {
+        while (true)
+        {
+            print(agent.remainingDistance);
+            if (!audioSource.isPlaying && agent.remainingDistance != 0f)
+            {
+                audioSource.clip = Resources.Load<AudioClip>("Sounds/Crawl_Sound");
+                audioSource.Play();
+            }
+
+            yield return null;
+        }
     }
 
     public void Attacked(int damage)
@@ -176,6 +193,8 @@ public class MetalonEnemy: MonoBehaviour, IEntity
     IEnumerator Attack()
     {
         // Attack here
+        audioSource.clip = Resources.Load<AudioClip>("Sounds/Hiss_" + Random.Range(1,3));
+        audioSource.Play();
         agent.destination = transform.position;
         PlayerData.Instance().survivalHealth -= damage;
         print(PlayerData.Instance().survivalHealth);
