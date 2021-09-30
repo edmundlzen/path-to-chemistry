@@ -6,10 +6,10 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 public static class hotbar
 {
-    public static bool hasLoaded = false;
     public static bool hasDone = false;
     public static string slotNum = "1";
     public static int flaskNum;
@@ -22,28 +22,39 @@ public class Hotbar : MonoBehaviour
     public GameObject craftQuantity;
     private void Start()
     {
-        if (!hotbar.hasLoaded)
+        slotCheck();
+        var playerData = PlayerData.Instance();
+        string Scene = SceneUtility.GetScenePathByBuildIndex(SceneManager.GetActiveScene().buildIndex);
+        if (Scene.Split('/')[3].Replace(".unity", "") != "Inventory")
         {
-            slotCheck();
-            var playerData = PlayerData.Instance();
-            string Scene = SceneUtility.GetScenePathByBuildIndex(SceneManager.GetActiveScene().buildIndex);
-            if (Scene.Split('/')[3].Replace(".unity", "") != "Inventory")
+            if (playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"] != null)
             {
-                GameObject.Find($"HotbarSlot ({hotbar.slotNum})").GetComponent<Image>().color = Color.cyan;
+                GameObject.Find("CurrentItem/ItemName").GetComponent<Text>().text = Convert.ToString(playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"]);
             }
             else
             {
-                if (Chemidex.moleculeRecipes["Symbol"].ContainsKey(Convert.ToString(playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"])))
-                {
-                    GameObject.Find($"HotbarSlot ({hotbar.slotNum})").GetComponent<Image>().color = Color.red;
-                }
-                else
-                {
-                    GameObject.Find($"HotbarSlot ({hotbar.slotNum})").GetComponent<Image>().color = Color.cyan;
-                }
+                GameObject.Find("CurrentItem/ItemName").GetComponent<Text>().text = "Empty";
             }
-            hotbar.hasLoaded = true;
-        } 
+            GameObject.Find($"HotbarSlot ({hotbar.slotNum})").GetComponent<Image>().color = Color.cyan;
+        }
+        else
+        {
+            if (Chemidex.moleculeRecipes["Symbol"].ContainsKey(Convert.ToString(playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"])))
+            {
+                GameObject.Find($"HotbarSlot ({hotbar.slotNum})").GetComponent<Image>().color = Color.red;
+            }
+            else
+            {
+                GameObject.Find($"HotbarSlot ({hotbar.slotNum})").GetComponent<Image>().color = Color.cyan;
+            }
+        }
+    }
+
+    private IEnumerator autoSave()
+    {
+        player.isSaving = true;
+        yield return new WaitForSeconds(1);
+        player.isSaving = false;
     }
 
     public void hotbarSlot()
@@ -58,6 +69,14 @@ public class Hotbar : MonoBehaviour
                 hotbar.slotNum = EventSystem.current.currentSelectedGameObject.name.Replace("HotbarSlot (", "").Replace(")", "");
                 if (Scene.Split('/')[3].Replace(".unity", "") != "Inventory")
                 {
+                    if (playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"] != null)
+                    {
+                        GameObject.Find("CurrentItem/ItemName").GetComponent<Text>().text = Convert.ToString(playerData.slotItem[$"Slot{hotbar.slotNum}"]["Element"]);
+                    }
+                    else
+                    {
+                        GameObject.Find("CurrentItem/ItemName").GetComponent<Text>().text = "Empty";
+                    }
                     GameObject.Find($"HotbarSlot ({hotbar.slotNum})").GetComponent<Image>().color = Color.cyan;
                 }
                 else
@@ -433,13 +452,14 @@ public class Hotbar : MonoBehaviour
             else if (playerData.slotItem[$"Slot{i}"]["Element"] != null && Convert.ToInt32(playerData.slotItem[$"Slot{i}"]["Quantity"]) > 1)
             {
                 slotDeepCheck(i);
-                GameObject.Find($"HotbarSlot ({i})/ItemNum").GetComponent<Text>().text = playerData.slotItem[$"Slot{i}"]["Quantity"].ToString();
+                GameObject.Find($"HotbarSlot ({i})/ItemNum").GetComponent<Text>().text = Convert.ToString(playerData.slotItem[$"Slot{i}"]["Quantity"]);
             }
             else if (playerData.slotItem[$"Slot{i}"]["Element"] == null && playerData.slotItem[$"Slot{i}"]["Quantity"] == null)
             {
                 Destroy(GameObject.Find($"HotbarSlot ({i})/Item/Image"));
                 GameObject.Find($"HotbarSlot ({i})/Symbol").GetComponent<Text>().text = "";
                 GameObject.Find($"HotbarSlot ({i})/ItemNum").GetComponent<Text>().text = "";
+
             }
         }
     }
@@ -502,7 +522,7 @@ public class Hotbar : MonoBehaviour
                 slotImage.name = "Image";
                 slotImage.transform.SetParent(GameObject.Find($"flaskHotbar/Slot ({i})/Item").transform);
             }
-            //GameObject.Find($"flaskHotbar/Slot ({i})/Item/Image").GetComponent<Image>().sprite = Resources.Load<Sprite>($"Lab/{playerData.flaskElements.Keys.ElementAt(i - 1)}");
+            GameObject.Find($"flaskHotbar/Slot ({i})/Item/Image").GetComponent<Image>().sprite = Resources.Load<Sprite>($"Lab/{playerData.flaskElements.Keys.ElementAt(i - 1)}");
         }
         else
         {
@@ -556,15 +576,6 @@ public class Hotbar : MonoBehaviour
             Destroy(GameObject.Find($"craftTable/Slot ({i})/Item/Image"));
             GameObject.Find($"craftTable/Slot ({i})/Element").GetComponent<Text>().text = playerData.Molecule.Keys.ElementAt(i - 1);
         }
-    }
-
-    private void Load()
-    {
-        var directory = $"{Application.persistentDataPath}/Data";
-        var filePath = Path.Combine(directory, "Saves.json");
-        var fileContent = File.ReadAllText(filePath);
-        var playerData = JsonConvert.DeserializeObject<PlayerData>(fileContent);
-        PlayerData.Instance().UpdatePlayerData(playerData);
     }
 
     private void addAlert(string Alert)

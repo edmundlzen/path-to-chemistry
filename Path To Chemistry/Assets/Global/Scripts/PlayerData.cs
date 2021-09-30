@@ -14,26 +14,15 @@ public class PlayerData
     {
         Level = 1;
         Energy = 100000;
-        Experience = 69;
-        EXPLevel = 0;
-        Nickname = "You Are Gay";
+        Experience = 0;
+        EXPLevel = 1;
+        Nickname = "";
         ID = null;
         levelAvailable = new List<string>
         {
             $"Level {Level}"
         };
-        Molecule = new Dictionary<string, int>()
-        {
-            { "Og", 5 },
-            { "C", 5 },
-            { "N", 5 },
-            { "F", 5 },
-            { "Ne", 5 },
-            { "Ar", 5 },
-            { "Kr", 5 },
-            { "Xe", 5 },
-            { "Si", 5 },
-        };
+        Molecule = new Dictionary<string, int>();
         Compound = new Dictionary<string, int>();
         Elements = new Dictionary<string, int>();
         Inventory = new Dictionary<string, int>();
@@ -571,64 +560,64 @@ public class PlayerData
             {
                 "Slot1", new Dictionary<string, object>
                 {
-                    {"Element", "H2O"},
+                    {"Element", "K"},
                     {"Quantity", 5}
                 }
             },
             {
                 "Slot2", new Dictionary<string, object>
                 {
-                    {"Element", "H2O"},
+                    {"Element", "H"},
                     {"Quantity", 5}
                 }
             },
             {
                 "Slot3", new Dictionary<string, object>
                 {
-                    {"Element", "H2O"},
+                    {"Element", "O"},
                     {"Quantity", 5}
                 }
             },
             {
                 "Slot4", new Dictionary<string, object>
                 {
-                    {"Element", "H2O"},
-                    {"Quantity", 5}
+                    {"Element", null},
+                    {"Quantity", null}
                 }
             },
             {
                 "Slot5", new Dictionary<string, object>
                 {
-                    {"Element", "H2O"},
-                    {"Quantity", 5}
+                    {"Element", null},
+                    {"Quantity", null}
                 }
             },
             {
                 "Slot6", new Dictionary<string, object>
                 {
-                    {"Element", "H2O"},
-                    {"Quantity", 5}
+                    {"Element", null},
+                    {"Quantity", null}
                 }
             },
             {
                 "Slot7", new Dictionary<string, object>
                 {
-                    {"Element", "H2O"},
-                    {"Quantity", 5}
+                    {"Element", null},
+                    {"Quantity", null}
                 }
             },
             {
                 "Slot8", new Dictionary<string, object>
                 {
-                    {"Element", "H2O"},
-                    {"Quantity", 5}
+                    {"Element", null},
+                    {"Quantity", null}
                 }
             },
             {
                 "Slot9", new Dictionary<string, object>
                 {
-                    {"Element", "H2O"},
-                    {"Quantity", 5}
+                    {"Element", null},
+                    {"Quantity", null}
                 }
             }
         };

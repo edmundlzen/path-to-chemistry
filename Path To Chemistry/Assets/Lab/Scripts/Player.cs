@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.UI;
@@ -22,6 +23,7 @@ public class Player : MonoBehaviour
     public float mouseSensitivity = 100f;
     public Transform playerBody;
     private float xRotation;
+    private bool isSaving = false;
     private void Awake()
     {
         isFirstSave();
@@ -34,7 +36,7 @@ public class Player : MonoBehaviour
     }
     private void Update()
     {
-        if (!player.isSaving)
+        if (!isSaving)
         {
             StartCoroutine(autoSave());
         }
@@ -85,10 +87,16 @@ public class Player : MonoBehaviour
     }
     private void isFirstSave()
     {
+        loadElementsData();
         var playerData = PlayerData.Instance();
         var directory = $"{Application.persistentDataPath}/Data";
         if (!Directory.Exists(directory))
         {
+            var elementData = ElementData.Instance();
+            for (int i = 1; i <= 118; i++)
+            {
+                playerData.Inventory.Add(elementData.elements.Keys.ElementAt(i - 1), 0);
+            }
             Directory.CreateDirectory(directory);
             var Settings = new JsonSerializerSettings();
             Settings.Formatting = Formatting.Indented;

@@ -1,18 +1,22 @@
 using Newtonsoft.Json;
-using System.IO;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
+using System;
+using System.IO;
+using System.Collections;
+using System.Linq;
 
 public static class QuizData
 {
+    public static int Difficulty;
     public static int Level = 0;
     public static int Index = 0;
     public static float Quest = 0;
     public static float Score = 0;
-    public static bool hasLoaded = false;
+    public static bool Skip = false;
     public static List<string> Answers = new List<string>()
     {
         { "A" },
@@ -160,7 +164,7 @@ public static class QuizData
                 { "Answer0", "mole is atom of the same elments with the same nombor of proton and electron but different number of neutron" },
                 { "Answer1", "It's a small mammal animal" },
                 { "Answer2", "Mole is a base unit of mesaure of quantity of a substance" },
-                { "Answer3", "non of this above" },
+                { "Answer3", "none of this above" },
             }
         },
         {
@@ -285,7 +289,7 @@ public static class QuizData
         },
         {
             new Dictionary<string, string>(){
-                { "Question", "14. Most of the mass in an atom is made up of _________?" },
+                { "Question", "Most of the mass in an atom is made up of _________?" },
                 { "correctAnswer", "D" },
                 { "Answer0", "protons and electrons" },
                 { "Answer1", "electrons and quarks" },
@@ -328,39 +332,156 @@ public static class QuizData
 
 public class QuizHandler : MonoBehaviour
 {
+    private bool isSaving = false;
     public GameObject Overall;
-    private void Start()
+    public GameObject ShowTime;
+    private void Awake()
     {
-        if (!QuizData.hasLoaded)
-        {
-            Load();
-            QuizData.Quizzes = QuizData.CopyQuizzes;
-            QuizData.Quest = QuizData.Quizzes.Count;
-            generateLevel();
-            QuizData.hasLoaded = true;
-        }
+        isFirstSave();
+        loadPlayerData();
+        loadElementsData();
     }
+
+    public void alertMessage(GameObject Alert)
+    {
+        Alert.SetActive(true);
+    }
+
+    public void Cancel(GameObject Alert)
+    {
+        Alert.SetActive(false);
+    }
+
+    public void Back()
+    {
+        QuizData.Level = 0;
+        QuizData.Score = 0;
+        QuizData.Quest = 0;
+        QuizData.Index = 0;
+        QuizData.Quizzes.Clear();
+        SceneManager.LoadScene(player.startPlace);
+    }
+
     public void mainMenu()
     {
+        QuizData.Level = 0;
+        QuizData.Score = 0;
+        QuizData.Quest = 0;
+        QuizData.Index = 0;
+        QuizData.Quizzes.Clear();
         SceneManager.LoadScene("Main Menu");
     }
+
+    public void Skip(GameObject ShowTime)
+    {
+        QuizData.Skip = true;
+        ShowTime.SetActive(false);
+    }
+
+    public void difficultyCheck(GameObject Menu)
+    {
+        var Butname = EventSystem.current.currentSelectedGameObject.name;
+        List<Dictionary<string, string>> allQuizzes = new List<Dictionary<string, string>>();
+        if (Butname == "Easy")
+        {
+            QuizData.Difficulty = 1;
+        }
+        else if (Butname == "Normal")
+        {
+            QuizData.Difficulty = 2;
+        }
+        else if (Butname == "Hard")
+        {
+            QuizData.Difficulty = 3;
+        }
+        System.Random Randomize = new System.Random();
+        foreach (var Quizzes in QuizData.CopyQuizzes)
+        {
+            allQuizzes.Add(Quizzes);
+        }
+        for (int i = 1; i <= 10 * QuizData.Difficulty; i++)
+        {
+            int Index = Randomize.Next(allQuizzes.Count);
+            QuizData.Quizzes.Add(allQuizzes[Index]);
+            allQuizzes.RemoveAt(Index);
+        }
+        QuizData.Level = 0;
+        QuizData.Score = 0;
+        QuizData.Quest = QuizData.Quizzes.Count;
+        GameObject.Find("Level").GetComponent<Text>().text = $"Level: {QuizData.Level} / {QuizData.Quest}";
+        GameObject.Find("Score").GetComponent<Text>().text = $"Score: {QuizData.Score}";
+        Menu.SetActive(false);
+        generateLevel();
+    }
+
+    public void tryAgain(GameObject Menu)
+    {
+        Overall.SetActive(false);
+        Menu.SetActive(true);
+    }
+
     public void Answer()
     {
-        if (QuizData.Quizzes.Count > 0)
+        if (!player.Pause)
         {
-            QuizData.Level += 1;
-            if (EventSystem.current.currentSelectedGameObject.name == QuizData.Quizzes[QuizData.Index]["correctAnswer"])
+            if (QuizData.Quizzes.Count > 0)
             {
-                QuizData.Score += 1;
+                QuizData.Level += 1;
+                if (EventSystem.current.currentSelectedGameObject.name == QuizData.Quizzes[QuizData.Index]["correctAnswer"])
+                {
+                    QuizData.Score += 1;
+                }
+                QuizData.Skip = false;
+                ShowTime.SetActive(true);
+                StartCoroutine(correctAnswer());
             }
-            QuizData.Quizzes.RemoveAt(QuizData.Index);
-            GameObject.Find("Level").GetComponent<Text>().text = $"Level: {QuizData.Level} / {QuizData.Quest}";
-            GameObject.Find("Score").GetComponent<Text>().text = $"Score: {QuizData.Score}";
-            generateLevel();
         }
     }
+
+    private IEnumerator correctAnswer()
+    {
+        int Countdown = 4;
+        foreach (var Keys in QuizData.Answers)
+        {
+            if (Keys == QuizData.Quizzes[QuizData.Index]["correctAnswer"])
+            {
+                GameObject.Find(Keys).GetComponent<Image>().color = Color.green;
+            }
+            else
+            {
+                GameObject.Find(Keys).GetComponent<Image>().color = Color.red;
+            }
+        }
+        player.Pause = true;
+        for (int i = 1; i <= 3; i++)
+        {
+            if (!QuizData.Skip)
+            {
+                Countdown -= 1;
+                GameObject.Find("ShowTime").GetComponent<Text>().text = Convert.ToString(Countdown);
+                yield return new WaitForSeconds(1);
+            }
+            else
+            {
+                break;
+            }
+        }
+        ShowTime.SetActive(false);
+        QuizData.Skip = false;
+        player.Pause = false;
+        foreach (var Keys in QuizData.Answers)
+        {
+            GameObject.Find(Keys).GetComponent<Image>().color = Color.white;
+        }
+        QuizData.Quizzes.RemoveAt(QuizData.Index);
+        GameObject.Find("Level").GetComponent<Text>().text = $"Level: {QuizData.Level} / {QuizData.Quest}";
+        GameObject.Find("Score").GetComponent<Text>().text = $"Score: {QuizData.Score}";
+        generateLevel();
+    }
+
     private void generateLevel()
     {
+        var playerData = PlayerData.Instance();
         var elementData = ElementData.Instance();
         if (QuizData.Quizzes.Count > 0)
         {
@@ -387,15 +508,42 @@ public class QuizHandler : MonoBehaviour
         else
         {
             List<string> Reward = new List<string>();
-            System.Random Randomize = new System.Random();
-            int Index = Randomize.Next(118);
-            foreach (var Key in elementData.elements.Keys)
+            var Score = Convert.ToInt32(QuizData.Score / QuizData.Quest * 100);
+            int Chance = (QuizData.Difficulty * 10) * Score / 100;
+            string Total = "";
+            Dictionary<string, int> Dupe = new Dictionary<string, int>();
+            if (Chance != 0)
             {
-                Reward.Add(Key);
+                for (int i = 1; i <= Chance; i++)
+                {
+                    Reward.Add(elementData.elements.Keys.ElementAt(Convert.ToInt32(UnityEngine.Random.Range(1, 118) - 1)));
+                }
+                Overall.SetActive(true);
+                foreach (var Key in Reward)
+                {
+                    if (!Dupe.ContainsKey(Key))
+                    {
+                        Dupe.Add(Key, 1);
+                    }
+                    else
+                    {
+                        Dupe[Key] += 1;
+                    }
+                }
+                foreach (var Sort in Dupe.Keys)
+                { 
+                    Total += $"{Sort} x {Dupe[Sort]},";
+                    playerData.Inventory[Sort] += Dupe[Sort];
+                    Save();
+                }
+                GameObject.Find("Evaluation").GetComponent<Text>().text = $"Score: {Score}%\nReward:\n{Total}";
             }
-            Overall.SetActive(true);
-            GameObject.Find("Evaluation").GetComponent<Text>().text = $"Score: {QuizData.Score / QuizData.Quest * 100}%\nReward: {Reward[Index]}";
-            GameObject.Find("Score Bar").GetComponent<Slider>().value = QuizData.Score / QuizData.Quest * 100;
+            else
+            {
+                Overall.SetActive(true);
+                GameObject.Find("Evaluation").GetComponent<Text>().text = $"Score: {Score}%\nReward: Nothing!";
+            }
+            GameObject.Find("Score Bar").GetComponent<Slider>().value = Score;
             if (QuizData.Score / QuizData.Quest * 100 >= 67)
             {
                 GameObject.Find("Fill").GetComponent<Image>().color = Color.green;
@@ -410,11 +558,51 @@ public class QuizHandler : MonoBehaviour
             }
         }
     }
-    private void Load()
+
+    private void isFirstSave()
     {
-        var filePath = Path.Combine(Application.dataPath, "Elements.json");
-        var fileContent = File.ReadAllText(filePath);
-        var elementData = JsonConvert.DeserializeObject<ElementData>(fileContent);
+        loadElementsData();
+        var playerData = PlayerData.Instance();
+        var directory = $"{Application.persistentDataPath}/Data";
+        if (!Directory.Exists(directory))
+        {
+            var elementData = ElementData.Instance();
+            for (int i = 1; i <= 118; i++)
+            {
+                playerData.Inventory.Add(elementData.elements.Keys.ElementAt(i - 1), 0);
+            }
+            Directory.CreateDirectory(directory);
+            var Settings = new JsonSerializerSettings();
+            Settings.Formatting = Formatting.Indented;
+            Settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            var Json = JsonConvert.SerializeObject(playerData, Settings);
+            var filePath = Path.Combine(directory, "Saves.json");
+            File.WriteAllText(filePath, Json);
+        }
+    }
+    private void Save()
+    {
+        var playerData = PlayerData.Instance();
+        var directory = $"{Application.persistentDataPath}/Data";
+        Directory.CreateDirectory(directory);
+        var Settings = new JsonSerializerSettings();
+        Settings.Formatting = Formatting.Indented;
+        Settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+        var Json = JsonConvert.SerializeObject(playerData, Settings);
+        var filePath = Path.Combine(directory, "Saves.json");
+        File.WriteAllText(filePath, Json);
+    }
+    private void loadElementsData()
+    {
+        var elementData = JsonConvert.DeserializeObject<ElementData>(allElements.Data);
         ElementData.Instance().UpdateElementData(elementData);
+    }
+    private void loadPlayerData()
+    {
+        var directory = $"{Application.persistentDataPath}/Data";
+        var filePath = Path.Combine(directory, "Saves.json");
+        var fileContent = File.ReadAllText(filePath);
+        var playerData = JsonConvert.DeserializeObject<PlayerData>(fileContent);
+        PlayerData.Instance().UpdatePlayerData(playerData);
     }
 }

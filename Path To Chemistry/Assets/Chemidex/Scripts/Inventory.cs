@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
@@ -17,30 +16,37 @@ public static class InventoryData
 }
 public class Inventory : MonoBehaviour
 {
-    private void Start()
-    {      
-        if (!InventoryData.hasLoaded)
-        {
-            Load();
-            Load2();
-            var playerData = PlayerData.Instance();
-            var elementData = ElementData.Instance();   
-            elementCheck();
-            stateCheck();
-            GameObject.Find("Coma").GetComponent<Animator>().SetTrigger("Wake");
-            GameObject.Find(InventoryData.Slot).GetComponent<Image>().color = Color.cyan;
-            GameObject.Find("Energy").GetComponent<Text>().text = $"Energy: {playerData.Energy}";
-            InventoryData.hasLoaded = true;
-        }
-        /*
-        for (int i = 1; i <= 118; i++)
-        {
-            playerData.Inventory.Add(elementData.elements.Keys.ElementAt(i - 1), 0);
-        }
-        Save();
-        */
+    private bool isSaving = false;
+    private void Awake()
+    {
+        isFirstSave();
+        loadPlayerData();
+        loadElementsData();
     }
-    
+    private void Start()
+    {
+        var playerData = PlayerData.Instance();
+        elementCheck();
+        stateCheck();
+        GameObject.Find("Coma").GetComponent<Animator>().SetTrigger("Wake");
+        GameObject.Find(InventoryData.Slot).GetComponent<Image>().color = Color.cyan;
+        GameObject.Find("Energy").GetComponent<Text>().text = $"Energy: {playerData.Energy}";
+    }
+    public void Update()
+    {
+        if (!isSaving)
+        {
+            StartCoroutine(autoSave());
+        }
+    }
+    private IEnumerator autoSave()
+    {
+        isSaving = true;
+        yield return new WaitForSeconds(1);
+        Save();
+        isSaving = false;
+    }
+
     public void Slider(float Value)
     {
         GameObject.Find("sliderValue").GetComponent<Text>().text = Convert.ToString(Math.Floor(Value));
@@ -68,7 +74,6 @@ public class Inventory : MonoBehaviour
 
     public void BackLab()
     {
-        hotbar.hasLoaded = false;
         InventoryData.hasLoaded = false;
         StartCoroutine(sleepAnime(player.startPlace));
     }
@@ -458,13 +463,14 @@ public class Inventory : MonoBehaviour
             else if (playerData.slotItem[$"Slot{i}"]["Element"] != null && Convert.ToInt32(playerData.slotItem[$"Slot{i}"]["Quantity"]) > 1)
             {
                 slotDeepCheck(i);
-                GameObject.Find($"HotbarSlot ({i})/ItemNum").GetComponent<Text>().text = playerData.slotItem[$"Slot{i}"]["Quantity"].ToString();
+                GameObject.Find($"HotbarSlot ({i})/ItemNum").GetComponent<Text>().text = Convert.ToString(playerData.slotItem[$"Slot{i}"]["Quantity"]);
             }
             else if (playerData.slotItem[$"Slot{i}"]["Element"] == null && playerData.slotItem[$"Slot{i}"]["Quantity"] == null)
             {
                 Destroy(GameObject.Find($"HotbarSlot ({i})/Item/Image"));
                 GameObject.Find($"HotbarSlot ({i})/Symbol").GetComponent<Text>().text = "";
                 GameObject.Find($"HotbarSlot ({i})/ItemNum").GetComponent<Text>().text = "";
+
             }
         }
     }
@@ -488,21 +494,27 @@ public class Inventory : MonoBehaviour
             GameObject.Find($"HotbarSlot ({i})/Symbol").GetComponent<Text>().text = $"{playerData.slotItem[$"Slot{i}"]["Element"]}";
         }
     }
-    private void Load()
+    private void isFirstSave()
     {
-        var elementData = JsonConvert.DeserializeObject<ElementData>(allElements.Data);
-        ElementData.Instance().UpdateElementData(elementData);
-    }
-
-    private void Load2()
-    {
+        loadElementsData();
+        var playerData = PlayerData.Instance();
         var directory = $"{Application.persistentDataPath}/Data";
-        var filePath = Path.Combine(directory, "Saves.json");
-        var fileContent = File.ReadAllText(filePath);
-        var playerData = JsonConvert.DeserializeObject<PlayerData>(fileContent);
-        PlayerData.Instance().UpdatePlayerData(playerData);
+        if (!Directory.Exists(directory))
+        {
+            var elementData = ElementData.Instance();
+            for (int i = 1; i <= 118; i++)
+            {
+                playerData.Inventory.Add(elementData.elements.Keys.ElementAt(i - 1), 0);
+            }
+            Directory.CreateDirectory(directory);
+            var Settings = new JsonSerializerSettings();
+            Settings.Formatting = Formatting.Indented;
+            Settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            var Json = JsonConvert.SerializeObject(playerData, Settings);
+            var filePath = Path.Combine(directory, "Saves.json");
+            File.WriteAllText(filePath, Json);
+        }
     }
-
     private void Save()
     {
         var playerData = PlayerData.Instance();
@@ -514,6 +526,19 @@ public class Inventory : MonoBehaviour
         var Json = JsonConvert.SerializeObject(playerData, Settings);
         var filePath = Path.Combine(directory, "Saves.json");
         File.WriteAllText(filePath, Json);
+    }
+    private void loadElementsData()
+    {
+        var elementData = JsonConvert.DeserializeObject<ElementData>(allElements.Data);
+        ElementData.Instance().UpdateElementData(elementData);
+    }
+    private void loadPlayerData()
+    {
+        var directory = $"{Application.persistentDataPath}/Data";
+        var filePath = Path.Combine(directory, "Saves.json");
+        var fileContent = File.ReadAllText(filePath);
+        var playerData = JsonConvert.DeserializeObject<PlayerData>(fileContent);
+        PlayerData.Instance().UpdatePlayerData(playerData);
     }
     private void addAlert(string Alert)
     {

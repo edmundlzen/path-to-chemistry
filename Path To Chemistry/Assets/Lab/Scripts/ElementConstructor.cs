@@ -1,22 +1,34 @@
 ﻿using System;
-using System.IO;
-using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 public static class elementConstructor
 {
     public static int Protons { get; set; }
     public static int Electrons { get; set; }
     public static int Neutrons { get; set; }
-    public static bool hasLoaded = false;
     public static bool hasDone = false;
     public static string SelectedElement = "";
 }
 
 public class ElementConstructor : MonoBehaviour
 {
+    public void Recipes()
+    {
+        player.startPlace = SceneUtility.GetScenePathByBuildIndex(SceneManager.GetActiveScene().buildIndex);
+        StartCoroutine(sleepAnime("Periodic Table"));
+    }
+
+    private IEnumerator sleepAnime(string Scene)
+    {
+        GameObject.Find("Sleep").GetComponent<Animator>().SetTrigger("Sleep");
+        yield return new WaitForSeconds(2);
+        player.labPause = false;
+        SceneManager.LoadScene(Scene);
+    }
+
     public void addProton()
     {
         if (!player.deepPause)
@@ -138,7 +150,6 @@ public class ElementConstructor : MonoBehaviour
         {
             foreach (var Keys in elementData.elements.Keys)
             {
-                print(Keys);
                 if (Convert.ToString(elementConstructor.Protons) == elementData.elements[Keys]["protons"] && Convert.ToString(elementConstructor.Electrons) == elementData.elements[Keys]["electrons"] && Convert.ToString(elementConstructor.Neutrons) == elementData.elements[Keys]["neutrons"])
                 {
                     BuyUI.SetActive(true);
@@ -297,13 +308,14 @@ public class ElementConstructor : MonoBehaviour
             else if (playerData.slotItem[$"Slot{i}"]["Element"] != null && Convert.ToInt32(playerData.slotItem[$"Slot{i}"]["Quantity"]) > 1)
             {
                 slotDeepCheck(i);
-                GameObject.Find($"HotbarSlot ({i})/ItemNum").GetComponent<Text>().text = playerData.slotItem[$"Slot{i}"]["Quantity"].ToString();
+                GameObject.Find($"HotbarSlot ({i})/ItemNum").GetComponent<Text>().text = Convert.ToString(playerData.slotItem[$"Slot{i}"]["Quantity"]);
             }
             else if (playerData.slotItem[$"Slot{i}"]["Element"] == null && playerData.slotItem[$"Slot{i}"]["Quantity"] == null)
             {
                 Destroy(GameObject.Find($"HotbarSlot ({i})/Item/Image"));
                 GameObject.Find($"HotbarSlot ({i})/Symbol").GetComponent<Text>().text = "";
                 GameObject.Find($"HotbarSlot ({i})/ItemNum").GetComponent<Text>().text = "";
+
             }
         }
     }

@@ -305,18 +305,15 @@ public class LabHandler : MonoBehaviour
 
     public void mainMenu()
     {
-        player.labPause = false;
-        SceneManager.LoadScene("Main Menu");
+        StartCoroutine(sleepAnime("Main Menu"));
     }
 
     public void experimentRecipes()
     {
         if (!player.deepPause)
         {
-            player.labPause = false;
-            hotbar.hasLoaded = false;
             player.startPlace = SceneUtility.GetScenePathByBuildIndex(SceneManager.GetActiveScene().buildIndex);
-            SceneManager.LoadScene("Recipes");
+            StartCoroutine(sleepAnime("Recipes"));
         }
     }
 
@@ -324,10 +321,8 @@ public class LabHandler : MonoBehaviour
     {
         if (!player.deepPause)
         {
-            player.labPause = false;
-            hotbar.hasLoaded = false;
             player.startPlace = SceneUtility.GetScenePathByBuildIndex(SceneManager.GetActiveScene().buildIndex);
-            SceneManager.LoadScene("Molecule Recipes");
+            StartCoroutine(sleepAnime("Molecule Recipes"));
         }
     }
 
@@ -335,9 +330,6 @@ public class LabHandler : MonoBehaviour
     {
         if (!player.labPause)
         {
-            player.labPause = false;
-            hotbar.hasLoaded = false;
-            InventoryData.hasLoaded = false;
             player.startPlace = SceneUtility.GetScenePathByBuildIndex(SceneManager.GetActiveScene().buildIndex);
             StartCoroutine(sleepAnime("Inventory"));
         }
@@ -349,13 +341,21 @@ public class LabHandler : MonoBehaviour
     }
     public void Quiz()
     {
+        player.startPlace = SceneUtility.GetScenePathByBuildIndex(SceneManager.GetActiveScene().buildIndex);
         StartCoroutine(sleepAnime("Quiz"));
+    }
+
+    public void goLeaderboard()
+    {
+        player.startPlace = SceneUtility.GetScenePathByBuildIndex(SceneManager.GetActiveScene().buildIndex);
+        StartCoroutine(sleepAnime("Leaderboard"));
     }
 
     private IEnumerator sleepAnime(string Scene)
     {
         GameObject.Find("Sleep").GetComponent<Animator>().SetTrigger("Sleep");
         yield return new WaitForSeconds(2);
+        player.labPause = false;
         SceneManager.LoadScene(Scene);
     }
 
@@ -515,7 +515,7 @@ public class LabHandler : MonoBehaviour
             {
                 if (playerData.Molecule["H"] == 2 && playerData.Molecule["O"] == 1)
                 {
-                    Product("Water");
+                    Product("H2O");
                 }
             }
             else if (playerData.Molecule.ContainsKey("Na") && playerData.Molecule.ContainsKey("Cl"))
@@ -721,6 +721,7 @@ public class LabHandler : MonoBehaviour
                         player.hasAnimated = false;
                         Experience(5);
                         updateLevel();
+                        return;
                     }
                 }
             }
@@ -731,8 +732,9 @@ public class LabHandler : MonoBehaviour
                     if ((playerData.flaskElements["HCl"] == 1) && (playerData.flaskElements["NH3"] == 1))
                     {
                         GameObject.Find("Label2").GetComponent<Text>().text = "Smoke!";
-                        Experience(1);
+                        Experience(5);
                         updateLevel();
+                        return;
                     }
                 }
             }
@@ -743,7 +745,7 @@ public class LabHandler : MonoBehaviour
                     if ((playerData.flaskElements["NaH"] == 1) && (playerData.flaskElements["H2O"] == 1))
                     {
                         GameObject.Find("Label2").GetComponent<Text>().text = "Smoke!";
-                        Experience(1);
+                        Experience(5);
                         updateLevel();
                     }
                 }
@@ -755,7 +757,7 @@ public class LabHandler : MonoBehaviour
                     if ((playerData.flaskElements["HCl"] == 1) && (playerData.flaskElements["Na2S"] == 1))
                     {
                         GameObject.Find("Label2").GetComponent<Text>().text = "Smoke!";
-                        Experience(2);
+                        Experience(6);
                         updateLevel();
                     }
                 }
@@ -767,7 +769,7 @@ public class LabHandler : MonoBehaviour
                     if ((playerData.flaskElements["HCl"] == 1) && (playerData.flaskElements["NaCN"] == 1))
                     {
                         GameObject.Find("Label2").GetComponent<Text>().text = "Smoke!";
-                        Experience(2);
+                        Experience(6);
                         updateLevel();
                     }
                 }
@@ -779,7 +781,7 @@ public class LabHandler : MonoBehaviour
                     if ((playerData.flaskElements["Na3P"] == 1) && (playerData.flaskElements["H2O"] == 1))
                     {
                         GameObject.Find("Label2").GetComponent<Text>().text = "Smoke!";
-                        Experience(2);
+                        Experience(6);
                         updateLevel();
                     }
                 }
@@ -791,7 +793,7 @@ public class LabHandler : MonoBehaviour
                     if ((playerData.flaskElements["NaCl"] == 1) && (playerData.flaskElements["H2O"] == 1))
                     {
                         GameObject.Find("Label2").GetComponent<Text>().text = "Smoke!";
-                        Experience(3);
+                        Experience(7);
                         updateLevel();
                     }
                 }
@@ -803,7 +805,7 @@ public class LabHandler : MonoBehaviour
                     if ((playerData.flaskElements["H2O2"] == 1) && (playerData.flaskElements["NaI"] == 1))
                     {
                         GameObject.Find("Label2").GetComponent<Text>().text = "Smoke!";
-                        Experience(3);
+                        Experience(7);
                         updateLevel();
                     }
                 }
@@ -815,7 +817,7 @@ public class LabHandler : MonoBehaviour
                     if ((playerData.flaskElements["HNO3"] == 1) && (playerData.flaskElements["N2H4"] == 1))
                     {
                         GameObject.Find("Label2").GetComponent<Text>().text = "Smoke!";
-                        Experience(3);
+                        Experience(7);
                         updateLevel();
                     }
                 }
@@ -827,7 +829,7 @@ public class LabHandler : MonoBehaviour
                     if ((playerData.flaskElements["AgNO3"] == 1) && (playerData.flaskElements["NH3"] == 1))
                     {
                         GameObject.Find("Label2").GetComponent<Text>().text = "Smoke!";
-                        Experience(4);
+                        Experience(8);
                         updateLevel();
                     }
                 }
@@ -839,7 +841,7 @@ public class LabHandler : MonoBehaviour
                     if ((playerData.flaskElements["HCl"] == 1) && (playerData.flaskElements["NaClO"] == 1))
                     {
                         GameObject.Find("Label2").GetComponent<Text>().text = "Smoke!";
-                        Experience(4);
+                        Experience(8);
                         updateLevel();
                     }
                 }
@@ -851,7 +853,7 @@ public class LabHandler : MonoBehaviour
                     if ((playerData.flaskElements["NH3"] == 1) && (playerData.flaskElements["NaClO"] == 1))
                     {
                         GameObject.Find("Label2").GetComponent<Text>().text = "Smoke!";
-                        Experience(4);
+                        Experience(8);
                         updateLevel();
                     }
                 }
@@ -863,7 +865,7 @@ public class LabHandler : MonoBehaviour
                     if ((playerData.flaskElements["IO3"] == 1) && (playerData.flaskElements["C3H8O"] == 1))
                     {
                         GameObject.Find("Label2").GetComponent<Text>().text = "Smoke!";
-                        Experience(5);
+                        Experience(8);
                         updateLevel();
                     }
                 }
@@ -875,7 +877,7 @@ public class LabHandler : MonoBehaviour
                     if ((playerData.flaskElements["HNO3"] == 1) && (playerData.flaskElements["C3H8O"] == 1))
                     {
                         GameObject.Find("Label2").GetComponent<Text>().text = "Smoke!";
-                        Experience(11);
+                        Experience(9);
                         updateLevel();
                     }
                 }
@@ -887,7 +889,7 @@ public class LabHandler : MonoBehaviour
                     if ((playerData.flaskElements["C2H3NaO2"] == 1) && (playerData.flaskElements["H2O"] == 1))
                     {
                         GameObject.Find("Label2").GetComponent<Text>().text = "Smoke!";
-                        Experience(5);
+                        Experience(9);
                         updateLevel();
                     }
                 }
@@ -899,14 +901,10 @@ public class LabHandler : MonoBehaviour
                     if ((playerData.flaskElements["KI"] == 1) && (playerData.flaskElements["H2O2"] == 1) && (playerData.flaskElements["C18H35NaO2"] == 1))
                     {
                         GameObject.Find("Label2").GetComponent<Text>().text = "Smoke!";
-                        Experience(7);
+                        Experience(11);
                         updateLevel();
                     }
                 }
-            }
-            else
-            {
-                addAlert("Alert: Nothing happened. Plz refer to the recipes in Chemidex!");
             }
         }
     }
@@ -1054,13 +1052,14 @@ public class LabHandler : MonoBehaviour
             else if (playerData.slotItem[$"Slot{i}"]["Element"] != null && Convert.ToInt32(playerData.slotItem[$"Slot{i}"]["Quantity"]) > 1)
             {
                 slotDeepCheck(i);
-                GameObject.Find($"HotbarSlot ({i})/ItemNum").GetComponent<Text>().text = playerData.slotItem[$"Slot{i}"]["Quantity"].ToString();
+                GameObject.Find($"HotbarSlot ({i})/ItemNum").GetComponent<Text>().text = Convert.ToString(playerData.slotItem[$"Slot{i}"]["Quantity"]);
             }
             else if (playerData.slotItem[$"Slot{i}"]["Element"] == null && playerData.slotItem[$"Slot{i}"]["Quantity"] == null)
             {
                 Destroy(GameObject.Find($"HotbarSlot ({i})/Item/Image"));
                 GameObject.Find($"HotbarSlot ({i})/Symbol").GetComponent<Text>().text = "";
                 GameObject.Find($"HotbarSlot ({i})/ItemNum").GetComponent<Text>().text = "";
+
             }
         }
     }
@@ -1107,7 +1106,6 @@ public class LabHandler : MonoBehaviour
         Guide();
         flaskCheck();
         flaskHotbar.SetActive(false);
-        Time.timeScale = 1;
         player.labPause = false;
     }
 

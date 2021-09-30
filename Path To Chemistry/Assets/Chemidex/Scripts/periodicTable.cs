@@ -1,5 +1,4 @@
-﻿using System.IO;
-using System.Linq;
+﻿using System.Linq;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -21,6 +20,7 @@ public class periodicTable : MonoBehaviour
         PeriodicTable.periodicNum = "Element (1)";
         GameObject.Find(PeriodicTable.periodicNum).GetComponent<Image>().color = Color.cyan;
         for (var i = 1; i <= 118; i++)
+        {
             if (PeriodicTable.periodicNum == $"Element ({i})")
             {
                 var elementState = elementData.elements[elementData.elements.Keys.ElementAt(i - 1)];
@@ -28,6 +28,7 @@ public class periodicTable : MonoBehaviour
                     $"Symbol: {elementState["symbol"]}\nName: {elementState["name"]}\nGroup: {elementState["group"]}\nProtons: {elementState["protons"]}\nElectrons: {elementState["electrons"]}\nNeutrons: {elementState["neutrons"]}\nWeight: {elementState["weight"]}";
                 break;
             }
+        }
     }
 
     public void Back()
@@ -44,11 +45,12 @@ public class periodicTable : MonoBehaviour
     {
         var elementData = ElementData.Instance();
         for (var i = 1; i <= 118; i++)
-            GameObject.Find($"Element ({i})/Symbol").GetComponent<Text>().text =
-                elementData.elements.Keys.ElementAt(i - 1);
+        {
+            GameObject.Find($"Element ({i})/Symbol").GetComponent<Text>().text = elementData.elements.Keys.ElementAt(i - 1);
+        }
     }
 
-    private void addElement()
+    public void addElement()
     {
         var elementData = ElementData.Instance();
         if (PeriodicTable.periodicNum != EventSystem.current.currentSelectedGameObject.name)
@@ -57,6 +59,7 @@ public class periodicTable : MonoBehaviour
             PeriodicTable.periodicNum = EventSystem.current.currentSelectedGameObject.name;
             GameObject.Find(PeriodicTable.periodicNum).GetComponent<Image>().color = Color.cyan;
             for (var i = 1; i <= 118; i++)
+            {
                 if (EventSystem.current.currentSelectedGameObject.name == $"Element ({i})")
                 {
                     var elementState = elementData.elements[elementData.elements.Keys.ElementAt(i - 1)];
@@ -64,6 +67,7 @@ public class periodicTable : MonoBehaviour
                         $"Symbol: {elementState["symbol"]}\nName: {elementState["name"]}\nGroup: {elementState["group"]}\nProtons: {elementState["protons"]}\nElectrons: {elementState["electrons"]}\nNeutrons: {elementState["neutrons"]}\nWeight: {elementState["weight"]}";
                     break;
                 }
+            }
         }
     }
 

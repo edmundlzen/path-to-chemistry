@@ -24,13 +24,13 @@ EditorBuildSettings:
     path: Assets/New Main/Scenes/Terrain.unity
     guid: 8fca245bae27e044db37152b8a1c010e
   - enabled: 1
-    path: Assets/Lab/Scenes/Element Constructor.unity
+    path: Assets/Lab/Scenes/Useless/Element Constructor.unity
     guid: b058b3209977d8748b0f7045b1342331
   - enabled: 1
     path: Assets/Lab/Scenes/Quiz.unity
     guid: 3e0a72aa69637284c870407fd5f8f604
   - enabled: 1
-    path: Assets/Lab/Scenes/AR Lab.unity
+    path: Assets/Lab/Scenes/Useless/AR Lab.unity
     guid: af48b7610c0ae6341a7ba8b120f961a5
   - enabled: 1
     path: Assets/Lab/Scenes/Transition.unity
@@ -42,7 +42,7 @@ EditorBuildSettings:
     path: Assets/Chemidex/Scenes/Inventory.unity
     guid: 429e5341d834133488fb310a7d5e49fb
   - enabled: 1
-    path: Assets/Chemidex/Scenes/Experiments Recipes.unity
+    path: Assets/Chemidex/Scenes/Useless/Experiments Recipes.unity
     guid: 7a21b72dce6116e4a87e5a134a17b4e7
   - enabled: 1
     path: Assets/Chemidex/Scenes/Recipes.unity
@@ -57,8 +57,13 @@ EditorBuildSettings:
     path: Assets/Lab/Scenes/Home Lab.unity
     guid: dc7a80f6b7cdfe846848e37ef372ffc2
   - enabled: 1
+<<<<<<< Updated upstream
     path: Assets/Global/Scenes/Credits.unity
     guid: cd0a7fbed08294d70b1f271e015710e0
+=======
+    path: Assets/Shop/Scenes/Leaderboard.unity
+    guid: 37d4460c0075c3e44820d83ad5f496a9
+>>>>>>> Stashed changes
   m_configObjects:
     UnityEditor.XR.ARCore.ARCoreSettings: {fileID: 11400000, guid: 6568def299a24bf4993a8bc2455e1114,
       type: 2}

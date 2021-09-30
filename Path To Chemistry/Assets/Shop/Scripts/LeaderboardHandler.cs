@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
-
+using UnityEngine.SceneManagement;
+using System.IO;
+using System.Linq;
 public static class Protection
 {
     public static int proNum;
@@ -35,11 +37,40 @@ public class LeaderboardHandler : MonoBehaviour
     public GameObject Info;
     private string SecretKey = "3aa281873f2bcb79fe5825755e2ec382d90ba41d";
     private string GameID = "61";
+    private bool isSaving = false;
 
+    private void Awake()
+    {
+        isFirstSave();
+        loadPlayerData();
+        loadElementsData();
+    }
+
+    public void Update()
+    {
+        if (!isSaving)
+        {
+            StartCoroutine(autoSave());
+        }
+    }
+
+    private IEnumerator autoSave()
+    {
+        isSaving = true;
+        yield return new WaitForSeconds(1);
+        Save();
+        isSaving = false;
+    }
     private void Start()
     {
         StartCoroutine(Leaderboard());
     }
+
+    public void Back()
+    {
+        SceneManager.LoadScene(player.startPlace);
+    }
+
     IEnumerator Leaderboard()
     {
         var playerData = PlayerData.Instance();
@@ -60,6 +91,7 @@ public class LeaderboardHandler : MonoBehaviour
                 {
                     var leaderboardData = JsonConvert.DeserializeObject<LeaderboardData>(request.downloadHandler.text);
                     playerData.ID = leaderboardData.player_nickname.Split('|')[1];
+                    print(playerData.ID);
                 }
             }
         }
@@ -67,7 +99,7 @@ public class LeaderboardHandler : MonoBehaviour
         Form1.AddField("secret_key", SecretKey);
         Form1.AddField("game_id", GameID);
         Form1.AddField("nickname", $"{playerData.Nickname}|{playerData.ID}");
-        Form1.AddField("score", playerData.Experience);
+        Form1.AddField("score", playerData.EXPLevel);
         using (UnityWebRequest request = UnityWebRequest.Post("https://www.wowscores.com/set-player-score", Form1))
         {
             yield return request.SendWebRequest();
@@ -201,6 +233,53 @@ public class LeaderboardHandler : MonoBehaviour
     public void openUrl()
     {
         Application.OpenURL("https://www.wowscores.com/game/testing");
+    }
+
+    private void isFirstSave()
+    {
+        loadElementsData();
+        var playerData = PlayerData.Instance();
+        var directory = $"{Application.persistentDataPath}/Data";
+        if (!Directory.Exists(directory))
+        {
+            var elementData = ElementData.Instance();
+            for (int i = 1; i <= 118; i++)
+            {
+                playerData.Inventory.Add(elementData.elements.Keys.ElementAt(i - 1), 0);
+            }
+            Directory.CreateDirectory(directory);
+            var Settings = new JsonSerializerSettings();
+            Settings.Formatting = Formatting.Indented;
+            Settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            var Json = JsonConvert.SerializeObject(playerData, Settings);
+            var filePath = Path.Combine(directory, "Saves.json");
+            File.WriteAllText(filePath, Json);
+        }
+    }
+    private void Save()
+    {
+        var playerData = PlayerData.Instance();
+        var directory = $"{Application.persistentDataPath}/Data";
+        Directory.CreateDirectory(directory);
+        var Settings = new JsonSerializerSettings();
+        Settings.Formatting = Formatting.Indented;
+        Settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+        var Json = JsonConvert.SerializeObject(playerData, Settings);
+        var filePath = Path.Combine(directory, "Saves.json");
+        File.WriteAllText(filePath, Json);
+    }
+    private void loadElementsData()
+    {
+        var elementData = JsonConvert.DeserializeObject<ElementData>(allElements.Data);
+        ElementData.Instance().UpdateElementData(elementData);
+    }
+    private void loadPlayerData()
+    {
+        var directory = $"{Application.persistentDataPath}/Data";
+        var filePath = Path.Combine(directory, "Saves.json");
+        var fileContent = File.ReadAllText(filePath);
+        var playerData = JsonConvert.DeserializeObject<PlayerData>(fileContent);
+        PlayerData.Instance().UpdatePlayerData(playerData);
     }
 }
 /*
