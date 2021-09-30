@@ -16,7 +16,7 @@ public class PlayerData
         Energy = 100000;
         Experience = 0;
         EXPLevel = 1;
-        Nickname = "";
+        Nickname = null;
         ID = null;
         levelAvailable = new List<string>
         {
@@ -99,7 +99,6 @@ public class PlayerData
                 {
                     {"Industry Lab", 10000},
                     {"Home Lab", 10000},
-                    {"AR Lab", 10000}
                 }
             }
         };
@@ -581,29 +580,29 @@ public class PlayerData
             {
                 "Slot4", new Dictionary<string, object>
                 {
-                    {"Element", null},
-                    {"Quantity", null}
+                    {"Element", "HCl"},
+                    {"Quantity", 5}
                 }
             },
             {
                 "Slot5", new Dictionary<string, object>
                 {
-                    {"Element", null},
-                    {"Quantity", null}
+                    {"Element", "NH3"},
+                    {"Quantity", 5}
                 }
             },
             {
                 "Slot6", new Dictionary<string, object>
                 {
-                    {"Element", null},
-                    {"Quantity", null}
+                    {"Element", "IO3" },
+                    {"Quantity", 5}
                 }
             },
             {
                 "Slot7", new Dictionary<string, object>
                 {
-                    {"Element", null},
-                    {"Quantity", null}
+                    {"Element",  "C3H8O"},
+                    {"Quantity", 5}
                 }
             },
             {

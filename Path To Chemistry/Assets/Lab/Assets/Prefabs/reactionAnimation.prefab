@@ -1,5 +1,18 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!65 &8164091367717912756
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3218014816386067351}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.8206813, y: 1.854408, z: 1.8094391}
+  m_Center: {x: -0.016863346, y: -0.10117984, z: -0.000000059604645}
 --- !u!95 &7418936083309247410
 Animator:
   serializedVersion: 3
@@ -19,19 +32,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!65 &8164091367717912756
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3218014816386067351}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1.8206813, y: 1.854408, z: 1.8094391}
-  m_Center: {x: -0.016863346, y: -0.10117984, z: -0.000000059604645}
 --- !u!1 &7418936083803387902
 GameObject:
   m_ObjectHideFlags: 0
@@ -107,12 +107,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c933704ca6fcba40aa16bb2c9959e30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animator1: {fileID: 7418936084312499131}
-  animator2: {fileID: 7418936083309247410}
-  normalFlask: {fileID: 3218014816386067351}
+  Effect1: {fileID: 1828176872806910, guid: 64891a0eb28db934898420d80ca07cb3, type: 3}
+  Effect2: {fileID: 1478314613700728, guid: be6847dd39ab95f4daa2ed98e4f90564, type: 3}
+  Effect3: {fileID: 1547757601392324, guid: 6f672a31584a6a748912a49c1dce2f0c, type: 3}
+  Effect4: {fileID: 1273915125232972, guid: 73767e07adddc394d82b994801f89bbb, type: 3}
+  Effect5: {fileID: 1735024089641582, guid: 378b2c30ef426554495292cb902cb8f4, type: 3}
   roundFlask: {fileID: 7419392514536962455}
-  Effect: {fileID: 1121192042590650, guid: e1b08032bec16ba4eb1ae23cbd572664, type: 3}
-  flaskDissapear: 1
+  animator: {fileID: 0}
 --- !u!95 &7418936084312499131
 Animator:
   serializedVersion: 3

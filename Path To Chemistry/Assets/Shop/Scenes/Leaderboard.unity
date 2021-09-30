@@ -420,6 +420,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Glory: {fileID: 2913902391139012585, guid: 30ef0db6f0204864e8aa6c59db9adb1d, type: 3}
   Info: {fileID: 1714565990}
+  nicknameInfo: {fileID: 0}
 --- !u!1 &366453591
 GameObject:
   m_ObjectHideFlags: 0
@@ -1141,6 +1142,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Glory: {fileID: 0}
   Info: {fileID: 1714565990}
+  nicknameInfo: {fileID: 0}
 --- !u!114 &1242637192
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1617,6 +1619,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Glory: {fileID: 2913902391139012585, guid: 30ef0db6f0204864e8aa6c59db9adb1d, type: 3}
   Info: {fileID: 1714565990}
+  nicknameInfo: {fileID: 0}
 --- !u!114 &1490281313
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2000,6 +2003,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Glory: {fileID: 0}
   Info: {fileID: 1714565990}
+  nicknameInfo: {fileID: 0}
 --- !u!1 &1689484549
 GameObject:
   m_ObjectHideFlags: 0
@@ -2302,6 +2306,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Glory: {fileID: 2913902391139012585, guid: 30ef0db6f0204864e8aa6c59db9adb1d, type: 3}
   Info: {fileID: 1714565990}
+  nicknameInfo: {fileID: 0}
 --- !u!1 &1926010057
 GameObject:
   m_ObjectHideFlags: 0
@@ -2576,3 +2581,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Glory: {fileID: 2913902391139012585, guid: 30ef0db6f0204864e8aa6c59db9adb1d, type: 3}
   Info: {fileID: 1714565990}
+  nicknameInfo: {fileID: 0}

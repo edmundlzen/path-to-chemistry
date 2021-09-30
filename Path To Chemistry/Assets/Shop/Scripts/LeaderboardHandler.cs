@@ -38,6 +38,7 @@ public class LeaderboardHandler : MonoBehaviour
     private string SecretKey = "3aa281873f2bcb79fe5825755e2ec382d90ba41d";
     private string GameID = "61";
     private bool isSaving = false;
+    public GameObject nicknameInfo;
 
     private void Awake()
     {
@@ -91,6 +92,7 @@ public class LeaderboardHandler : MonoBehaviour
                 {
                     var leaderboardData = JsonConvert.DeserializeObject<LeaderboardData>(request.downloadHandler.text);
                     playerData.ID = leaderboardData.player_nickname.Split('|')[1];
+                    Save();
                     print(playerData.ID);
                 }
             }

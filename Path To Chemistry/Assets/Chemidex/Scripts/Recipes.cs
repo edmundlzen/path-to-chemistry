@@ -8,22 +8,22 @@ public static class Chemidex
 {
     public static Dictionary<string, string> chemRecipes = new Dictionary<string, string>
     {
-        { "Recipe 1", "K + H2O" },
-        { "Recipe 2", "HCl + NH3" },
-        { "Recipe 3", "NaH + H2O" },
-        { "Recipe 4", "HCl + Na2S" },
-        { "Recipe 5", "HCl + NaCN" },
-        { "Recipe 6", "Na3P + H2O" },
-        { "Recipe 7", "NaCl + H2O" },
-        { "Recipe 8", "H2O2 + NaI" },
-        { "Recipe 9", "HNO3 + N2H4" },
-        { "Recipe 10", "AgNO3 + NH3" },
-        { "Recipe 11", "HCl + NaClO" },
-        { "Recipe 12", "NH3 + NaClO" },
-        { "Recipe 13", "IO3 + C3H8O" },
-        { "Recipe 14", "HNO3 + C3H8O" },
-        { "Recipe 15", "C2H3NaO2 + H2O" },
-        { "Recipe 16", "KI + H2O2 + C18H35NaO2" },
+        { "Recipe 1", "K + H2O = May form flammable hydrogen gas." },
+        { "Recipe 2", "HCl + NH3 = Generates smoke." },
+        { "Recipe 3", "IO3 + C3H8O = May result in a fire." },
+        { "Recipe 4", "Na3P + H2O = May form highly toxic phosphine gas." },
+        { "Recipe 5", "HCl + Na2S = Generates highly toxic hydrogen cyanide gas." },
+        { "Recipe 6", "HCl + NaCN = Generates highly toxic hydrogen sulfide gas." },
+        { "Recipe 7", "NaH + H2O = May form flammable hydrogen gas." },
+        { "Recipe 8", "HNO3 + N2H4 = May cause fires or explosions." },
+        { "Recipe 9", "HCl + NaClO = Generates highly toxic chlorine gas." },
+        { "Recipe 10", "NH3 + NaClO + Releases toxic chloramine vapors." },
+        { "Recipe 11", "HNO3 + C3H8O = May result in a fire." },
+        { "Recipe 12", "AgNO3 + NH3 = May generate an explosively unstable solid." },
+        { "Recipe 13", "C2H3NaO2 + H2O = Hot Ice." },
+        { "Recipe 14", "KI + H2O2 + C18H35NaO2 = Element Toothpaste." },
+        { "Recipe 15", "H2O2 + NaI = Under Construction!" },
+        { "Recipe 16", "NaCl + H2O = Under Construction!" },
     };
     public static Dictionary<string, Dictionary<string, string>> moleculeRecipes = new Dictionary<string, Dictionary<string, string>>()
     {
