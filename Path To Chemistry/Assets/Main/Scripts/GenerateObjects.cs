@@ -40,7 +40,9 @@ public class GenerateObjects : MonoBehaviour
                 {
                     randomX = Random.Range(terrainData.bounds.min.x, terrainData.bounds.max.x) + transform.position.x;
                     randomZ = Random.Range(terrainData.bounds.min.z, terrainData.bounds.max.z) + transform.position.z;
-                    if (Physics.Raycast(new Vector3(randomX, terrainData.bounds.max.y + 5f, randomZ), -Vector3.up, out hit))
+                    if (Physics.Raycast(new Vector3(randomX, terrainData.bounds.max.y + 5f, randomZ), -Vector3.up,
+                        out hit))
+                    {
                         if (objectGenerationSettings.objects[i].followLayers)
                         {
                             if (!objectGenerationSettings.objects[i].layers.Contains(terrainTextureDetector.GetDominantTextureIndexAt(hit.point)+1))
@@ -48,7 +50,8 @@ public class GenerateObjects : MonoBehaviour
                                 return;
                             }
                         }
-                        if (hit.point.y >= objects[i].minimumHeight && hit.point.y <= objects[i].maximumHeight)
+                        if (!hit.transform.name.Contains("Terrain")) return;
+                    if (hit.point.y >= objects[i].minimumHeight && hit.point.y <= objects[i].maximumHeight)
                         {
                             GameObject newObject;
                             if (objectGenerationSettings.objects[i].followRotation)
@@ -82,6 +85,7 @@ public class GenerateObjects : MonoBehaviour
                                 currentObjects[objects[i].gameObject]++;
                             }
                         }
+                    }
                 }
             }
         }

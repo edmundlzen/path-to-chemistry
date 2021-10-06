@@ -224,7 +224,9 @@ public class MainGUIController : MonoBehaviour
                     Destroy(hand.transform.GetChild(0).gameObject);
                 }
 
-                continue;
+                survivalHotbar.Remove(item["name"].ToString());
+                UpdateGameviewHotbar();
+                break;
             }
             foreach (Transform slot in gameviewHotbar.transform)
             {

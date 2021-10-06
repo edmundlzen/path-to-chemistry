@@ -46,7 +46,7 @@ public class NotificationsController : MonoBehaviour
         {
             Color greenColor = new Color32(180, 255, 180, 255);
             Color redColor = new Color32(255, 180, 180, 255);
-            GameObject newNotification = Instantiate(Resources.Load<GameObject>("Prefabs/ImageNotification"), transform);
+            GameObject newNotification = Instantiate(Resources.Load<GameObject>("Prefabs/TextImageNotification"), transform);
             newNotification.transform.Find("TextImage").GetComponent<Text>().text = textImage;
             newNotification.transform.GetComponent<Image>().color = redOrGreen == "red" ? redColor : greenColor;
             newNotification.transform.Find("Text").GetComponent<Text>().text = text;

@@ -5,6 +5,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using TMPro;
+using UnityEngine.SceneManagement;
+
 public static class ShopData
 {
     public static int slotNum;
@@ -60,6 +62,11 @@ public class ShopHander : MonoBehaviour
             ShopData.Section.Add($"Materials {i}");
         }
         ShopData.Section.Add("Lab Maps");
+    }
+
+    public void Back()
+    {
+        SceneManager.LoadScene("Terrain");
     }
 
     public void Next()

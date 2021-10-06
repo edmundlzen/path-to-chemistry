@@ -12,13 +12,20 @@ public class MainGameManager : MonoBehaviour
     public Transform playerCamera;
     public GameObject interactButton;
     public Slider hpBar;
+    private bool isSaving;
 
     private void isFirstSave()
     {
+        loadElementsData();
         var playerData = PlayerData.Instance();
         var directory = $"{Application.persistentDataPath}/Data";
         if (!Directory.Exists(directory))
         {
+            var elementData = ElementData.Instance();
+            for (int i = 1; i <= 118; i++)
+            {
+                playerData.Inventory.Add(elementData.elements.Keys.ElementAt(i - 1), 0);
+            }
             Directory.CreateDirectory(directory);
             var Settings = new JsonSerializerSettings();
             Settings.Formatting = Formatting.Indented;
@@ -28,6 +35,7 @@ public class MainGameManager : MonoBehaviour
             File.WriteAllText(filePath, Json);
         }
     }
+    
     private void Save()
     {
         var playerData = PlayerData.Instance();
@@ -54,23 +62,20 @@ public class MainGameManager : MonoBehaviour
         PlayerData.Instance().UpdatePlayerData(playerData);
     }
 
-    void Awake()
+    private void Awake()
     {
         isFirstSave();
-        loadElementsData();
-        Save();
         loadPlayerData();
-
-        StartCoroutine(SaveCoroutine());
+        loadElementsData();
     }
-
-    IEnumerator SaveCoroutine()
+    
+    private IEnumerator autoSave()
     {
-        while (true)
-        {
-            Save();
-            yield return new WaitForSeconds(1f);
-        }
+        isSaving = true;
+        yield return new WaitForSeconds(1);
+        Save();
+        isSaving = false;
+        yield return null;
     }
 
     public void InteractButtonDown()
@@ -103,6 +108,10 @@ public class MainGameManager : MonoBehaviour
 
     void Update()
     {
+        if (!isSaving)
+        {
+            StartCoroutine(autoSave());
+        }
         var playerHealth = PlayerData.Instance().survivalHealth;
         float smoothTime = 0.3f;
         float yVelocity = 0.0f;

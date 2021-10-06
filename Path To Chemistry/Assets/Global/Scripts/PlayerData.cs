@@ -39,7 +39,7 @@ public class PlayerData
             {
                 "Items", new Dictionary<string, int>()
                 {
-                    { "Health Potion", 1000 }
+                    { "Nasi Lemak", 1000 }
                 }
             },
             {
@@ -99,6 +99,7 @@ public class PlayerData
                 {
                     {"Industry Lab", 10000},
                     {"Home Lab", 10000},
+                    {"AR Lab", 10000}
                 }
             }
         };
@@ -134,25 +135,33 @@ public class PlayerData
                 {
                     {"image", "teleporter"},
                     {"name", "Teleporter"},
-                    {"quantity", 13}
+                    {"quantity", 1}
                 }
             },
             {
-                "Item 6", new Dictionary<string, object> // Crafting table
+                "Material Reducer", new Dictionary<string, object>
                 {
-                    {"image", "placeholder_item"},
-                    {"name", "Item 6"},
-                    {"quantity", 45}
+                    {"image", "materialreducer"},
+                    {"name", "Material Reducer"},
+                    {"quantity", 1}
                 }
             },
             {
-                "Item 7", new Dictionary<string, object> // Furnace
+                "Nasi Lemak", new Dictionary<string, object>
                 {
-                    {"image", "placeholder_item"},
-                    {"name", "Item 7"},
-                    {"quantity", 82}
+                    {"image", "nasilemak"},
+                    {"name", "Nasi Lemak"},
+                    {"quantity", 150}
                 }
             },
+            // {
+            //     "Item 7", new Dictionary<string, object> // Furnace
+            //     {
+            //         {"image", "placeholder_item"},
+            //         {"name", "Item 7"},
+            //         {"quantity", 82}
+            //     }
+            // },
         };
         survivalHotbar = new List<string>()
         {
@@ -164,7 +173,7 @@ public class PlayerData
                 {
                     {"image", "cane"},
                     {"name", "Cane"},
-                    {"quantity", 10}
+                    {"quantity", 0}
                 }
             },
             {
@@ -172,15 +181,15 @@ public class PlayerData
                 {
                     {"image", "clay"},
                     {"name", "Clay"},
-                    {"quantity", 987}
+                    {"quantity", 0}
                 }
             },
             {
-                "Coal", new Dictionary<string, object>
+                "Charcoal", new Dictionary<string, object>
                 {
-                    {"image", "coal"},
-                    {"name", "Coal"},
-                    {"quantity", 234}
+                    {"image", "charcoal"},
+                    {"name", "Charcoal"},
+                    {"quantity", 0}
                 }
             },
             {
@@ -188,7 +197,7 @@ public class PlayerData
                 {
                     {"image", "crystal"},
                     {"name", "Crystal"},
-                    {"quantity", 463}
+                    {"quantity", 0}
                 }
             },
             {
@@ -196,7 +205,7 @@ public class PlayerData
                 {
                     {"image", "flint"},
                     {"name", "Flint"},
-                    {"quantity", 256}
+                    {"quantity", 0}
                 }
             },
             {
@@ -204,7 +213,7 @@ public class PlayerData
                 {
                     {"image", "gold"},
                     {"name", "Gold"},
-                    {"quantity", 256}
+                    {"quantity", 0}
                 }
             },
             {
@@ -212,7 +221,7 @@ public class PlayerData
                 {
                     {"image", "metal"},
                     {"name", "Metal"},
-                    {"quantity", 234}
+                    {"quantity", 0}
                 }
             },
             {
@@ -220,7 +229,7 @@ public class PlayerData
                 {
                     {"image", "sand"},
                     {"name", "Sand"},
-                    {"quantity", 983}
+                    {"quantity", 0}
                 }
             },
             {
@@ -228,7 +237,7 @@ public class PlayerData
                 {
                     {"image", "sandrock"},
                     {"name", "Sand Rock"},
-                    {"quantity", 746}
+                    {"quantity", 0}
                 }
             },
             {
@@ -236,7 +245,7 @@ public class PlayerData
                 {
                     {"image", "stone"},
                     {"name", "Stone"},
-                    {"quantity", 237}
+                    {"quantity", 0}
                 }
             },
             {
@@ -244,7 +253,7 @@ public class PlayerData
                 {
                     {"image", "wood"},
                     {"name", "Wood"},
-                    {"quantity", 735}
+                    {"quantity", 0}
                 }
             },
             {
@@ -252,7 +261,7 @@ public class PlayerData
                 {
                     {"image", "coalore"},
                     {"name", "Coal Ore"},
-                    {"quantity", 735}
+                    {"quantity", 0}
                 }
             },
             {
@@ -260,7 +269,7 @@ public class PlayerData
                 {
                     {"image", "diamondore"},
                     {"name", "Diamond Ore"},
-                    {"quantity", 500}
+                    {"quantity", 0}
                 }
             },
             {
@@ -268,7 +277,7 @@ public class PlayerData
                 {
                     {"image", "emeraldore"},
                     {"name", "Emerald Ore"},
-                    {"quantity", 735}
+                    {"quantity", 0}
                 }
             },
             {
@@ -276,7 +285,7 @@ public class PlayerData
                 {
                     {"image", "goldore"},
                     {"name", "Gold Ore"},
-                    {"quantity", 735}
+                    {"quantity", 0}
                 }
             },
             {
@@ -284,7 +293,7 @@ public class PlayerData
                 {
                     {"image", "ironore"},
                     {"name", "Iron Ore"},
-                    {"quantity", 735}
+                    {"quantity", 0}
                 }
             },
             {
@@ -292,7 +301,7 @@ public class PlayerData
                 {
                     {"image", "lapislazuliore"},
                     {"name", "Lapis Lazuli Ore"},
-                    {"quantity", 735}
+                    {"quantity", 0}
                 }
             },
         };
@@ -405,49 +414,190 @@ public class PlayerData
         materialReducerRecipes = new Dictionary<string, Dictionary<string, object>>
         {
             {
-                "Coal", new Dictionary<string, object>
+                "Charcoal", new Dictionary<string, object>
                 {
                     {"enabled", true},
-                    {"name", "Coal"},
+                    {"name", "Charcoal"},
                     {
                         "elements", new Dictionary<string, int>
                         {
-                            {"He", 927},
-                            {"Cl", 26},
-                            {"Li", 76}
-                        }
-                    }
-                }
-                },
-            {
-                "Crystal", new Dictionary<string, object>
-                {
-                    {"enabled", true},
-                    {"name", "Crystal"},
-                    {
-                        "elements", new Dictionary<string, int>
-                        {
-                            {"H", 7},
-                            {"O", 28} 
+                            {"C", 7},
+                            {"H", 4},
+                            {"O", 1}
                         }
                     }
                 }
             },
             {
-                "Cane", new Dictionary<string, object>
+                "Clay", new Dictionary<string, object>
                 {
                     {"enabled", true},
-                    {"name", "Cane"},
+                    {"name", "Clay"},
                     {
                         "elements", new Dictionary<string, int>
                         {
-                            {"P", 927},
-                            {"Ti", 26},
-                            {"Al", 76}
+                            {"Si", 77},
+                            {"Al", 17},
+                            {"Fe", 3},
+                            {"Mg", 1},
+                            {"Ca", 1},
+                            {"O", 1},
                         }
                     }
                 }
-            }
+            },    
+            {
+                "Iron Ore", new Dictionary<string, object>
+                {
+                    {"enabled", true},
+                    {"name", "Iron Ore"},
+                    {
+                        "elements", new Dictionary<string, int>
+                        {
+                            {"Fe", 64},
+                            {"Si", 12},
+                            {"O", 24},
+                        }
+                    }
+                }
+            },
+            {
+                "Gold Ore", new Dictionary<string, object>
+                {
+                    {"enabled", true},
+                    {"name", "Gold Ore"},
+                    {
+                        "elements", new Dictionary<string, int>
+                        {
+                            {"Au", 64},
+                            {"Si", 12},
+                            {"O", 24},
+                        }
+                    }
+                }
+            },
+            {
+                "Diamond Ore", new Dictionary<string, object>
+                {
+                    {"enabled", true},
+                    {"name", "Diamond Ore"},
+                    {
+                        "elements", new Dictionary<string, int>
+                        {
+                            {"C", 64},
+                            {"Si", 12},
+                            {"O", 24},
+                        }
+                    }
+                }
+            },
+            {
+                "Lapis Lazuli Ore", new Dictionary<string, object>
+                {
+                    {"enabled", true},
+                    {"name", "Lapis Lazuli Ore"},
+                    {
+                        "elements", new Dictionary<string, int>
+                        {
+                            {"Na", 13},
+                            {"S", 8},
+                            {"Al", 13},
+                            {"O", 53},
+                            {"Si", 13},
+                        }
+                    }
+                }
+            },
+            {
+                "Coal Ore", new Dictionary<string, object>
+                {
+                    {"enabled", true},
+                    {"name", "Coal Ore"},
+                    {
+                        "elements", new Dictionary<string, int>
+                        {
+                            {"H", 6},
+                            {"C", 50},
+                            {"O", 23},
+                            {"N", 1},
+                        }
+                    }
+                }
+            },
+            {
+                "Emerald Ore", new Dictionary<string, object>
+                {
+                    {"enabled", true},
+                    {"name", "Emerald Ore"},
+                    {
+                        "elements", new Dictionary<string, int>
+                        {
+                            {"Al", 15},
+                            {"Be", 25},
+                            {"Si", 20},
+                            {"O", 40},
+                        }
+                    }
+                }
+            },
+            {
+                "Sand", new Dictionary<string, object>
+                {
+                    {"enabled", true},
+                    {"name", "Sand"},
+                    {
+                        "elements", new Dictionary<string, int>
+                        {
+                            {"Si", 33},
+                            {"O", 67},
+                        }
+                    }
+                }
+            },  
+            {
+                "Sand Rock", new Dictionary<string, object>
+                {
+                    {"enabled", true},
+                    {"name", "Sand Rock"},
+                    {
+                        "elements", new Dictionary<string, int>
+                        {
+                            {"Si", 33},
+                            {"O", 67},
+                        }
+                    }
+                }
+            },  
+            {
+                "Stone", new Dictionary<string, object>
+                {
+                    {"enabled", true},
+                    {"name", "Stone"},
+                    {
+                        "elements", new Dictionary<string, int>
+                        {
+                            {"Si", 33},
+                            {"O", 67},
+                        }
+                    }
+                }
+            },  
+            {
+                "Wood", new Dictionary<string, object>
+                {
+                    {"enabled", true},
+                    {"name", "Wood"},
+                    {
+                        "elements", new Dictionary<string, int>
+                        {
+                            {"Ca", 49},
+                            {"H", 6},
+                            {"O", 44},
+                            {"N", 1},
+                        }
+                    }
+                }
+            }, 
         };
         teleports = new Dictionary<string, Dictionary<string, object>>
         {
@@ -456,7 +606,7 @@ public class PlayerData
                 {
                     {
                         "description",
-                        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,\nmolestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum\nnumquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium\noptio, eaque rerum! Provident similique accusantium nemo autem. Veritatis\nobcaecati tenetur iure eiu"
+                        "The classic lab is the original lab of our game. It's the first lab created and it serves it's purpose well"
                     },
                     {"image", "Classic Lab"},
                     {"scene", "Classic Lab"}
@@ -467,7 +617,7 @@ public class PlayerData
                 {
                     {
                         "description",
-                        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,\nmolestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum\nnumquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium\noptio, eaque rerum! Provident similique accusantium nemo autem. Veritatis\nobcaecati tenetur iure eiu"
+                        "This lab is situated in a high tech factory. It's been unattended for a long time. What mysteries hide here?"
                     },
                     {"image", "Industry Lab"},
                     {"scene", "Industry Lab"}
@@ -478,7 +628,8 @@ public class PlayerData
                 {
                     {
                         "description",
-                        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,\nmolestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum\nnumquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium\noptio, eaque rerum! Provident similique accusantium nemo autem. Veritatis\nobcaecati tenetur iure eiu"
+                        "Home sweet lab? Welcome to your home, which has been turned into a lab for your experimenting purposes!"
+                        
                     },
                     {"image", "Home Lab"},
                     {"scene", "Home Lab"}
@@ -501,55 +652,55 @@ public class PlayerData
             {
                 "Forest", new Dictionary<string, object>
                 {
-                    {"description", "Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,\nmolestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum\nnumquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium\noptio, eaque rerum! Provident similique accusantium nemo autem. Veritatis\nobcaecati tenetur iure eiu"},
+                    {"description", "The forest is a quiet place with a lot of trees. Beware of the dragons though!"}
                 }
             },
             {
                 "Swamp Forest", new Dictionary<string, object>
                 {
-                    {"description", "Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,\nmolestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum\nnumquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium\noptio, eaque rerum! Provident similique accusantium nemo autem. Veritatis\nobcaecati tenetur iure eiu"},
+                    {"description", "This is an icky forest where you don't want to spend much of your time in."}
                 }
             },
             {
                 "Savanna", new Dictionary<string, object>
                 {
-                    {"description", "Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,\nmolestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum\nnumquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium\noptio, eaque rerum! Provident similique accusantium nemo autem. Veritatis\nobcaecati tenetur iure eiu"},
+                    {"description", "This is dry and hot place. The spiders are native to this place! Don't get bitten..."}
                 }
             },
             {
                 "Beach", new Dictionary<string, object>
                 {
-                    {"description", "Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,\nmolestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum\nnumquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium\noptio, eaque rerum! Provident similique accusantium nemo autem. Veritatis\nobcaecati tenetur iure eiu"},
+                    {"description", "Time for swimming! Or not? Seriously, don't swim here or you'll sink forever into the sea."}
                 }
             },
             {
                 "Grassland Tundra", new Dictionary<string, object>
                 {
-                    {"description", "Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,\nmolestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum\nnumquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium\noptio, eaque rerum! Provident similique accusantium nemo autem. Veritatis\nobcaecati tenetur iure eiu"},
+                    {"description", "A fresh start."}
                 }
             },
             {
                 "Desert 1", new Dictionary<string, object>
                 {
-                    {"description", "Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,\nmolestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum\nnumquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium\noptio, eaque rerum! Provident similique accusantium nemo autem. Veritatis\nobcaecati tenetur iure eiu"},
+                    {"description", "Hot. Dry. Dangerous."}
                 }
             },
             {
                 "Snowy Tundra", new Dictionary<string, object>
                 {
-                    {"description", "Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,\nmolestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum\nnumquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium\noptio, eaque rerum! Provident similique accusantium nemo autem. Veritatis\nobcaecati tenetur iure eiu"},
+                    {"description", "Beware of freezing to death or burning to death here. Why burning? The dragons love this place!"}
                 }
             },
             {
                 "Highland Tundra", new Dictionary<string, object>
                 {
-                    {"description", "Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,\nmolestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum\nnumquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium\noptio, eaque rerum! Provident similique accusantium nemo autem. Veritatis\nobcaecati tenetur iure eiu"},
+                    {"description", "Experience a different view when you visit this place."}
                 }
             },
             {
                 "Desert 2", new Dictionary<string, object>
                 {
-                    {"description", "Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,\nmolestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum\nnumquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium\noptio, eaque rerum! Provident similique accusantium nemo autem. Veritatis\nobcaecati tenetur iure eiu"},
+                    {"description", "Also very hot, very dry and very easy to die."}
                 }
             },
         };

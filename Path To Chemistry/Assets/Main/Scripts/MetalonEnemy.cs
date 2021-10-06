@@ -91,7 +91,6 @@ public class MetalonEnemy: MonoBehaviour, IEntity
     {
         while (true)
         {
-            print(agent.remainingDistance);
             if (!audioSource.isPlaying && agent.remainingDistance != 0f)
             {
                 audioSource.clip = Resources.Load<AudioClip>("Sounds/Crawl_Sound");
@@ -197,7 +196,6 @@ public class MetalonEnemy: MonoBehaviour, IEntity
         audioSource.Play();
         agent.destination = transform.position;
         PlayerData.Instance().survivalHealth -= damage;
-        print(PlayerData.Instance().survivalHealth);
         yield return new WaitForSeconds(2); //Attack speed
     }
 
@@ -216,15 +214,19 @@ public class MetalonEnemy: MonoBehaviour, IEntity
     {
         DisableAllAnimations();
         animator.SetTrigger("Die");
-        var playerData = PlayerData.Instance();
-        foreach (var elementDrop in drops)
+        while (true)
         {
-            notificationsController.SendTextImageNotification(elementDrop.Key, "+ " + elementDrop.Value, "green");
-            playerData.Inventory[elementDrop.Key] += elementDrop.Value;
-        }
+            yield return new WaitForSeconds(4f);
+            var playerData = PlayerData.Instance();
+            foreach (var elementDrop in drops)
+            {
+                notificationsController.SendTextImageNotification(elementDrop.Key, "+ " + elementDrop.Value, "green");
+                playerData.Inventory[elementDrop.Key] += elementDrop.Value;
+            }
 
-        Destroy(gameObject);
-        yield return null;
+            Destroy(gameObject);
+            yield break;
+        }
     }
 
     public void ChangeState(EntityStates state)

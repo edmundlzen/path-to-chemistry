@@ -34,7 +34,7 @@ public class LaserCollectorWeapon : MonoBehaviour, IUsable
         playerCamera = pCamera;
     }
     
-    void LateUpdate()
+    void Update()
     {
         if (gunEnabled)
         {

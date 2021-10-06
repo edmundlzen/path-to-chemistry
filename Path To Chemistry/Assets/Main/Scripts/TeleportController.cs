@@ -36,9 +36,7 @@ public class TeleportController : MonoBehaviour
         var teleports = playerData.teleports;
         
         //Load scene here later
-        print(teleport.name);
-        Transition.ToScene = teleport.name;
-        SceneManager.LoadScene("Transition");
+        SceneManager.LoadScene(teleport.name);
     }
 
     private void UpdateTeleports()

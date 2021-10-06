@@ -212,16 +212,19 @@ public class DragonBoarEnemy: MonoBehaviour, IEntity
     {
         DisableAllAnimations();
         animator.SetTrigger("Die");
-        yield return new WaitForSeconds(2f);
-        var playerData = PlayerData.Instance();
-        foreach (var elementDrop in drops)
+        while (true)
         {
-            playerData.Inventory[elementDrop.Key] += elementDrop.Value;
-            notificationsController.SendTextImageNotification(elementDrop.Key, "+ " + elementDrop.Value, "green");
-        }
+            yield return new WaitForSeconds(2f);
+            var playerData = PlayerData.Instance();
+            foreach (var elementDrop in drops)
+            {
+                playerData.Inventory[elementDrop.Key] += elementDrop.Value;
+                notificationsController.SendTextImageNotification(elementDrop.Key, "+ " + elementDrop.Value, "green");
+            }
 
-        Destroy(gameObject);
-        yield return null;
+            Destroy(gameObject);
+            yield break;
+        }
     }
 
     public void ChangeState(EntityStates state)

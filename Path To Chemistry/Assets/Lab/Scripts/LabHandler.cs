@@ -348,7 +348,7 @@ public class LabHandler : MonoBehaviour
     public void goLeaderboard()
     {
         player.startPlace = SceneUtility.GetScenePathByBuildIndex(SceneManager.GetActiveScene().buildIndex);
-        StartCoroutine(sleepAnime("Leaderboard"));
+        StartCoroutine(sleepAnime("Nickname"));
     }
 
     private IEnumerator sleepAnime(string Scene)

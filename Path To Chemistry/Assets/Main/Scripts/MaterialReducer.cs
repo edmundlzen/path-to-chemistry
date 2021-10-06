@@ -59,7 +59,6 @@ public class MaterialReducer : MonoBehaviour
 
         foreach (var recipe in materialReducerRecipes)
         {
-            print(Int32.Parse(survivalMaterials[recipe.Key]["quantity"].ToString()));
             if ((bool) recipe.Value["enabled"] && Int32.Parse(survivalMaterials[recipe.Key]["quantity"].ToString()) > 0)
             {
                 var item = survivalMaterials[recipe.Value["name"].ToString()];
@@ -110,8 +109,8 @@ public class MaterialReducer : MonoBehaviour
         recipeInfo.transform.Find("Recipe Name").GetComponent<Text>().text = activeRecipe;
 
         // JObject JmaterialReducerRecipes = (JObject) materialReducerRecipes[activeRecipe]["elements"];
-        // var dictmaterialReducerRecipes = JmaterialReducerRecipes.ToObject<Dictionary<string, int>>();
-        foreach (var element in (Dictionary<string, int>) materialReducerRecipes[activeRecipe]["elements"])
+        var  materialReducerElements = JsonConvert.DeserializeObject<Dictionary<string, int>>(materialReducerRecipes[activeRecipe]["elements"].ToString());
+        foreach (var element in materialReducerElements)
         {
             if (!firstRecipeMaterialContainer.activeSelf)
             {
@@ -146,8 +145,13 @@ public class MaterialReducer : MonoBehaviour
         // var dictRecipeMaterials = JrecipeMaterials.ToObject<Dictionary<string, int>>();
         survivalMaterials[activeRecipe]["quantity"] =
             Int32.Parse(survivalMaterials[activeRecipe]["quantity"].ToString()) - 1;
-        foreach (var element in (Dictionary<string, int>) materialReducerRecipes[activeRecipe]["elements"])
+        notificationsController.SendImageNotification(Resources.Load<Sprite>("Sprites/" + survivalMaterials[activeRecipe]["image"]), "- 1", "red");
+        var returnElements =
+            JsonConvert.DeserializeObject<Dictionary<string, int>>(materialReducerRecipes[activeRecipe]["elements"].ToString());
+        foreach (var element in returnElements)
         {
+            print(element.Key);
+            print(elementInventory.Count);
             elementInventory[element.Key] += 1;
             notificationsController.SendTextImageNotification(element.Key, "+ " + element.Value, "green");
         }

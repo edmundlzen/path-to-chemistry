@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -19,10 +20,17 @@ public class MainMenu : MonoBehaviour
     public Slider progressBar;
     private Task sceneLoadingTask;
     private AsyncOperation sceneLoadingOperation;
+    public GameObject continueButton;
 
     void Start()
     {
         StartCoroutine(Disco());
+        
+        var directory = $"{Application.persistentDataPath}/Data";
+        if (!Directory.Exists(directory))
+        {
+            continueButton.SetActive(false);
+        }
     }
 
     IEnumerator Disco()
@@ -71,31 +79,54 @@ public class MainMenu : MonoBehaviour
 
     public void ContinueGame()
     {
-        if (!(sceneLoadingTask is {Running: true})) return;
+        if ((sceneLoadingTask is {Running: true})) return;
+        sceneLoadingTask = new Task(TransitionToScene());
+        sceneLoadingTask.Start();
     }
 
     public void NewGame()
     {
         if (sceneLoadingTask is {Running: true}) return;
+        var directory = $"{Application.persistentDataPath}/Data";
+        if (Directory.Exists(directory))
+        {
+            Directory.Delete(directory, true);
+        }
         sceneLoadingTask = new Task(TransitionToScene());
         sceneLoadingTask.Start();
     }
 
-    public void Settings()
+    public void Quiz()
     {
-        if (!(sceneLoadingTask is {Running: true})) return;
+        if ((sceneLoadingTask is {Running: true})) return;
+        player.startPlace = SceneUtility.GetScenePathByBuildIndex(SceneManager.GetActiveScene().buildIndex);
+        SceneManager.LoadScene("Quiz");
+    }
+    
+    public void Leaderboard()
+    {
+        if ((sceneLoadingTask is {Running: true})) return;
+        player.startPlace = SceneUtility.GetScenePathByBuildIndex(SceneManager.GetActiveScene().buildIndex);
+        SceneManager.LoadScene("Nickname");
+    }
+    
+    public void Lab()
+    {
+        if ((sceneLoadingTask is {Running: true})) return;
+        player.startPlace = SceneUtility.GetScenePathByBuildIndex(SceneManager.GetActiveScene().buildIndex);
+        SceneManager.LoadScene("Classic Lab");
     }
 
     public void Credits()
     {
-        if (!(sceneLoadingTask is {Running: true})) return;
+        if ((sceneLoadingTask is {Running: true})) return;
 
         SceneManager.LoadScene("Credits");
     }
 
     public void Quit()
     {
-        if (!(sceneLoadingTask is {Running: true})) return;
+        if ((sceneLoadingTask is {Running: true})) return;
         
         Application.Quit();
     }

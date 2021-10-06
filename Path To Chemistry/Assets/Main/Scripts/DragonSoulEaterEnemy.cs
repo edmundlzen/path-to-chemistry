@@ -240,10 +240,10 @@ public class DragonSoulEaterEnemy: MonoBehaviour, IEntity
 
     IEnumerator Dead()
     {
-        while (gameObject.activeSelf)
+        DisableAllAnimations();
+        animator.SetTrigger("Die");
+        while (true)
         {
-            DisableAllAnimations();
-            animator.SetTrigger("Die");
             yield return new WaitForSeconds(4f);
             var playerData = PlayerData.Instance();
             foreach (var elementDrop in drops)
@@ -252,9 +252,8 @@ public class DragonSoulEaterEnemy: MonoBehaviour, IEntity
                 notificationsController.SendTextImageNotification(elementDrop.Key, "+ " + elementDrop.Value, "green");
             }
 
-            gameObject.SetActive(false);
             Destroy(gameObject);
-            yield return null;
+            yield break;
         }
     }
 
