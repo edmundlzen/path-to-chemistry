@@ -4,7 +4,58 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Global/Scenes/Main Menu.unity
+    guid: 83f8e51ebe4e2a145878250d6c4711b6
+  - enabled: 1
+    path: Assets/New Main/Scenes/Terrain.unity
+    guid: a590e3d874a15964ba4f899065db1d73
+  - enabled: 1
+    path: Assets/Lab/Scenes/Useless/AR Lab.unity
+    guid: af48b7610c0ae6341a7ba8b120f961a5
+  - enabled: 1
+    path: Assets/Chemidex/Scenes/Chemidex.unity
+    guid: 3b2b654fbab482748aee9c0b0a8305c2
+  - enabled: 1
+    path: Assets/Lab/Scenes/Classic Lab.unity
+    guid: 4270376cfe08e9c4b9869f1ebf62df6d
+  - enabled: 1
+    path: Assets/Global/Scenes/Credits.unity
+    guid: cd0a7fbed08294d70b1f271e015710e0
+  - enabled: 1
+    path: Assets/Chemidex/Scenes/Inventory.unity
+    guid: 429e5341d834133488fb310a7d5e49fb
+  - enabled: 1
+    path: Assets/Lab/Scenes/Home Lab.unity
+    guid: dc7a80f6b7cdfe846848e37ef372ffc2
+  - enabled: 1
+    path: Assets/Shop/Scenes/Leaderboard.unity
+    guid: 37d4460c0075c3e44820d83ad5f496a9
+  - enabled: 1
+    path: Assets/Chemidex/Scenes/Recipes.unity
+    guid: f68cd330a79cf8644b0c31077e11783d
+  - enabled: 1
+    path: Assets/Chemidex/Scenes/Periodic Table.unity
+    guid: da153caf05ae7f24ba377cb91a1bda2a
+  - enabled: 1
+    path: Assets/Shop/Scenes/Nickname.unity
+    guid: 89594f3338c52c0428a754336d942b8e
+  - enabled: 1
+    path: Assets/Chemidex/Scenes/Molecule Recipes.unity
+    guid: 124d95d0a7e20bd4092dbffbb51fdacc
+  - enabled: 1
+    path: Assets/Lab/Scenes/Quiz.unity
+    guid: 3e0a72aa69637284c870407fd5f8f604
+  - enabled: 1
+    path: Assets/Global/Scenes/Settings.unity
+    guid: eed798e154d5b4638bef8e588183a4ba
+  - enabled: 1
+    path: Assets/Shop/Scenes/Shop.unity
+    guid: 3bf59df2941d3c74ba54329b94c599a7
+  - enabled: 1
+    path: Assets/Lab/Scenes/Transition.unity
+    guid: 62c6dd815b4e8224db3e9fadd5e9bde7
   m_configObjects:
     UnityEditor.XR.ARCore.ARCoreSettings: {fileID: 11400000, guid: 6568def299a24bf4993a8bc2455e1114,
       type: 2}
