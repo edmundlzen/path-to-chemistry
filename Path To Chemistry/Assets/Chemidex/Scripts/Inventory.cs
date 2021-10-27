@@ -506,6 +506,7 @@ public class Inventory : MonoBehaviour
             {
                 playerData.Inventory.Add(elementData.elements.Keys.ElementAt(i - 1), 0);
             }
+            playerData.levelAvailable.Add($"Level {playerData.Level}");
             Directory.CreateDirectory(directory);
             var Settings = new JsonSerializerSettings();
             Settings.Formatting = Formatting.Indented;

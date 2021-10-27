@@ -18,10 +18,7 @@ public class PlayerData
         EXPLevel = 1;
         Nickname = null;
         ID = null;
-        levelAvailable = new List<string>
-        {
-            $"Level {Level}"
-        };
+        levelAvailable = new List<string>();
         Molecule = new Dictionary<string, int>();
         Compound = new Dictionary<string, int>();
         Elements = new Dictionary<string, int>();
@@ -92,6 +89,16 @@ public class PlayerData
                     {"Sugar", 1000},
                     {"Charcoal", 1000},
                     {"Ink Sac", 1000},
+                    {"Flint", 1000},
+                    {"Cane", 1000},
+                }
+            },
+            {
+                "Materials 6", new Dictionary<string, int>()
+                {
+                    {"Coal", 1000},
+                    {"Metal", 1000},
+                    {"Gold", 1000},
                 }
             },
             {
@@ -99,7 +106,6 @@ public class PlayerData
                 {
                     {"Industry Lab", 10000},
                     {"Home Lab", 10000},
-                    {"AR Lab", 10000}
                 }
             }
         };

@@ -42,39 +42,18 @@ public class Player : MonoBehaviour
         }
         if (!player.labPause)
         {
-            var playerData = PlayerData.Instance();
             var mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
             var mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
             xRotation -= mouseY;
             xRotation = Mathf.Clamp(xRotation, -90f, 90f);
             transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
             playerBody.Rotate(Vector3.up * mouseX);
-            var ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
+            var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit))
             {
                 Debug.DrawLine(ray.origin, hit.point, Color.red);
                 player.raycastObject = hit.transform.name;
-                if (player.raycastObject == "Experiments")
-                {
-                    GameObject.Find("Crosshair").GetComponent<Image>().sprite = Resources.Load<Sprite>("Lab/Interactable");
-                    GameObject.Find("Label1").GetComponent<Text>().text = "Experiments";
-                }
-                else if (player.raycastObject == "Element Constructor")
-                {
-                    GameObject.Find("Crosshair").GetComponent<Image>().sprite = Resources.Load<Sprite>("Lab/Interactable");
-                    GameObject.Find("Label1").GetComponent<Text>().text = "Element Constructor";
-                }
-                else if (player.raycastObject == "Compound Creator & Compound Reducer")
-                {
-                    GameObject.Find("Crosshair").GetComponent<Image>().sprite = Resources.Load<Sprite>("Lab/Interactable");
-                    GameObject.Find("Label1").GetComponent<Text>().text = "Compound Creator & Compound Reducer";
-                }
-                else
-                {
-                    GameObject.Find("Crosshair").GetComponent<Image>().sprite = Resources.Load<Sprite>("Lab/Crosshair");
-                    GameObject.Find("Label1").GetComponent<Text>().text = "";
-                }
             }
         }
     }
@@ -97,6 +76,7 @@ public class Player : MonoBehaviour
             {
                 playerData.Inventory.Add(elementData.elements.Keys.ElementAt(i - 1), 0);
             }
+            playerData.levelAvailable.Add($"Level {playerData.Level}");
             Directory.CreateDirectory(directory);
             var Settings = new JsonSerializerSettings();
             Settings.Formatting = Formatting.Indented;
@@ -125,6 +105,7 @@ public class Player : MonoBehaviour
     }
     private void loadPlayerData()
     {
+        print(Application.persistentDataPath);
         var directory = $"{Application.persistentDataPath}/Data";
         var filePath = Path.Combine(directory, "Saves.json");
         var fileContent = File.ReadAllText(filePath);

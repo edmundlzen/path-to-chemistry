@@ -41,7 +41,7 @@ public class ShopHander : MonoBehaviour
             }
             else if (Value == 2)
             {
-                for (int i = 1; i <= 5; i++)
+                for (int i = 1; i <= 6; i++)
                 {
                     ShopData.Section.Add($"Materials {i}");
                 }
@@ -57,7 +57,7 @@ public class ShopHander : MonoBehaviour
     public void Default()
     {
         ShopData.Section.Add("Items");
-        for (int i = 1; i <= 5; i++)
+        for (int i = 1; i <= 6; i++)
         {
             ShopData.Section.Add($"Materials {i}");
         }
@@ -108,7 +108,7 @@ public class ShopHander : MonoBehaviour
         var playerData = PlayerData.Instance();
         for (int i = 1; i <= 6; i++)
         {
-            GameObject.Find($"Image ({i})").GetComponent<Image>().sprite = Resources.Load<Sprite>($"Sprites/Empty");
+            GameObject.Find($"Image ({i})").GetComponent<Image>().sprite = Resources.Load<Sprite>($"Shop/Empty");
             GameObject.Find($"Image ({i})/Image/Product").GetComponent<Text>().text = "";
             GameObject.Find($"Image ({i})/Buy{i}/Price").GetComponent<Text>().text = "";
         }
@@ -116,7 +116,7 @@ public class ShopHander : MonoBehaviour
         {
             var Item = playerData.Shop[ShopData.Section[ShopData.sectionNum - 1]].Keys.ElementAt(i - 1);
             var Price = $"${playerData.Shop[ShopData.Section[ShopData.sectionNum - 1]].Values.ElementAt(i - 1)}";
-            GameObject.Find($"Image ({i})").GetComponent<Image>().sprite = Resources.Load<Sprite>($"Sprites/{Item}");
+            GameObject.Find($"Image ({i})").GetComponent<Image>().sprite = Resources.Load<Sprite>($"Shop/{Item}");
             GameObject.Find($"Image ({i})/Image/Product").GetComponent<Text>().text = Item;
             if (playerData.nonResellable.ContainsKey(Item))
             {
@@ -188,13 +188,13 @@ public class ShopHander : MonoBehaviour
                     else if (playerData.Energy < Cost)
                     {
                         Unaffordable.SetActive(true);
-                        GameObject.Find("Info/Text").GetComponent<Text>().text = $"You are not able to afford for {Item}";
+                        GameObject.Find("Info/Text").GetComponent<Text>().text = $"You have no enough energy to buy {Item}";
                     }
                 }
                 else if (playerData.Energy < Cost)
                 {
                     Unaffordable.SetActive(true);
-                    GameObject.Find("Info/Text").GetComponent<Text>().text = $"You are not able to afford for {Item}";
+                    GameObject.Find("Info/Text").GetComponent<Text>().text = $"You have no enough energy to buy {Item}";
                 }
                 else if (playerData.nonResellable[Item])
                 {
@@ -216,7 +216,7 @@ public class ShopHander : MonoBehaviour
                 else if (playerData.Energy < Cost)
                 {
                     Unaffordable.SetActive(true);
-                    GameObject.Find("Info/Text").GetComponent<Text>().text = $"You are not able to afford for {Item}";
+                    GameObject.Find("Info/Text").GetComponent<Text>().text = $"You have no enough energy to buy {Item}";
                 }
             }
         }

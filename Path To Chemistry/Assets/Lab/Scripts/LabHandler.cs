@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
@@ -511,133 +512,133 @@ public class LabHandler : MonoBehaviour
         var playerData = PlayerData.Instance();
         if (!player.deepPause)
         {
-            if (playerData.Molecule.ContainsKey("H") && playerData.Molecule.ContainsKey("O"))
+            if (playerData.Molecule.ContainsKey("H") && playerData.Molecule.ContainsKey("O") && playerData.Molecule.Count == 2)
             {
                 if (playerData.Molecule["H"] == 2 && playerData.Molecule["O"] == 1)
                 {
                     Product("H2O");
                 }
             }
-            else if (playerData.Molecule.ContainsKey("Na") && playerData.Molecule.ContainsKey("Cl"))
+            else if (playerData.Molecule.ContainsKey("Na") && playerData.Molecule.ContainsKey("Cl") && playerData.Molecule.Count == 2)
             {
                 if (playerData.Molecule["Na"] == 1 && playerData.Molecule["Cl"] == 1)
                 {
                     Product("NaCl");
                 }
             }
-            else if (playerData.Molecule.ContainsKey("H") && playerData.Molecule.ContainsKey("Cl"))
+            else if (playerData.Molecule.ContainsKey("H") && playerData.Molecule.ContainsKey("Cl") && playerData.Molecule.Count == 2)
             {
                 if (playerData.Molecule["H"] == 1 && playerData.Molecule["Cl"] == 1)
                 {
                     Product("HCl");
                 }
             }
-            else if (playerData.Molecule.ContainsKey("N") && playerData.Molecule.ContainsKey("H"))
+            else if (playerData.Molecule.ContainsKey("N") && playerData.Molecule.ContainsKey("H") && playerData.Molecule.Count == 2)
             {
                 if (playerData.Molecule["N"] == 1 && playerData.Molecule["H"] == 3)
                 {
                     Product("NH3");
                 }
             }
-            else if (playerData.Molecule.ContainsKey("H") && playerData.Molecule.ContainsKey("O"))
+            else if (playerData.Molecule.ContainsKey("H") && playerData.Molecule.ContainsKey("O") && playerData.Molecule.Count == 2)
             {
                 if (playerData.Molecule["H"] == 2 && playerData.Molecule["O"] == 2)
                 {
                     Product("H2O2");
                 }
             }
-            else if (playerData.Molecule.ContainsKey("Na") && playerData.Molecule.ContainsKey("I"))
+            else if (playerData.Molecule.ContainsKey("Na") && playerData.Molecule.ContainsKey("I") && playerData.Molecule.Count == 2)
             {
                 if (playerData.Molecule["Na"] == 1 && playerData.Molecule["I"] == 1)
                 {
                     Product("NaI");
                 }
             }
-            else if (playerData.Molecule.ContainsKey("C") && playerData.Molecule.ContainsKey("H") && playerData.Molecule.ContainsKey("Na") && playerData.Molecule.ContainsKey("O"))
+            else if (playerData.Molecule.ContainsKey("C") && playerData.Molecule.ContainsKey("H") && playerData.Molecule.ContainsKey("Na") && playerData.Molecule.ContainsKey("O") && playerData.Molecule.Count == 4)
             {
                 if (playerData.Molecule["C"] == 2 && playerData.Molecule["H"] == 3 && playerData.Molecule["Na"] == 1 && playerData.Molecule["O"] == 2)
                 {
                     Product("C2H3NaO2");
                 }
             }
-            else if (playerData.Molecule.ContainsKey("K") && playerData.Molecule.ContainsKey("I"))
+            else if (playerData.Molecule.ContainsKey("K") && playerData.Molecule.ContainsKey("I") && playerData.Molecule.Count == 2)
             {
                 if (playerData.Molecule["K"] == 1 && playerData.Molecule["I"] == 1)
                 {
                     Product("KI");
                 }
             }
-            else if (playerData.Molecule.ContainsKey("N") && playerData.Molecule.ContainsKey("H"))
+            else if (playerData.Molecule.ContainsKey("N") && playerData.Molecule.ContainsKey("H") && playerData.Molecule.Count == 2)
             {
                 if (playerData.Molecule["N"] == 2 && playerData.Molecule["H"] == 4)
                 {
                     Product("N2H4");
                 }
             }
-            else if (playerData.Molecule.ContainsKey("Ag") && playerData.Molecule.ContainsKey("N") && playerData.Molecule.ContainsKey("O"))
+            else if (playerData.Molecule.ContainsKey("Ag") && playerData.Molecule.ContainsKey("N") && playerData.Molecule.ContainsKey("O") && playerData.Molecule.Count == 3)
             {
                 if (playerData.Molecule["Ag"] == 1 && playerData.Molecule["N"] == 1 && playerData.Molecule["O"] == 3)
                 {
                     Product("AgNO3");
                 }
             }
-            else if (playerData.Molecule.ContainsKey("Na") && playerData.Molecule.ContainsKey("P"))
+            else if (playerData.Molecule.ContainsKey("Na") && playerData.Molecule.ContainsKey("P") && playerData.Molecule.Count == 2)
             {
                 if (playerData.Molecule["Na"] == 3 && playerData.Molecule["P"] == 1)
                 {
                     Product("Na3P");
                 }
             }
-            else if (playerData.Molecule.ContainsKey("Na") && playerData.Molecule.ContainsKey("H"))
+            else if (playerData.Molecule.ContainsKey("Na") && playerData.Molecule.ContainsKey("H") && playerData.Molecule.Count == 2)
             {
                 if (playerData.Molecule["Na"] == 1 && playerData.Molecule["H"] == 1)
                 {
                     Product("NaH");
                 }
             }
-            else if (playerData.Molecule.ContainsKey("I") && playerData.Molecule.ContainsKey("O"))
+            else if (playerData.Molecule.ContainsKey("I") && playerData.Molecule.ContainsKey("O") && playerData.Molecule.Count == 2)
             {
                 if (playerData.Molecule["I"] == 1 && playerData.Molecule["O"] == 3)
                 {
                     Product("IO3");
                 }
             }
-            else if (playerData.Molecule.ContainsKey("C") && playerData.Molecule.ContainsKey("H") && playerData.Molecule.ContainsKey("O"))
+            else if (playerData.Molecule.ContainsKey("C") && playerData.Molecule.ContainsKey("H") && playerData.Molecule.ContainsKey("O") && playerData.Molecule.Count == 3)
             {
                 if (playerData.Molecule["C"] == 3 && playerData.Molecule["H"] == 8 && playerData.Molecule["O"] == 1)
                 {
                     Product("C3H8O");
                 }
             }
-            else if (playerData.Molecule.ContainsKey("H") && playerData.Molecule.ContainsKey("N") && playerData.Molecule.ContainsKey("O"))
+            else if (playerData.Molecule.ContainsKey("H") && playerData.Molecule.ContainsKey("N") && playerData.Molecule.ContainsKey("O") && playerData.Molecule.Count == 3)
             {
                 if (playerData.Molecule["H"] == 1 && playerData.Molecule["N"] == 1 && playerData.Molecule["O"] == 3)
                 {
                     Product("HNO3");
                 }
             }
-            else if (playerData.Molecule.ContainsKey("Na") && playerData.Molecule.ContainsKey("Cl") && playerData.Molecule.ContainsKey("O"))
+            else if (playerData.Molecule.ContainsKey("Na") && playerData.Molecule.ContainsKey("Cl") && playerData.Molecule.ContainsKey("O") && playerData.Molecule.Count == 3)
             {
                 if (playerData.Molecule["Na"] == 1 && playerData.Molecule["Cl"] == 1 && playerData.Molecule["O"] == 1)
                 {
                     Product("NaClO");
                 }
             }
-            else if (playerData.Molecule.ContainsKey("Na") && playerData.Molecule.ContainsKey("S"))
+            else if (playerData.Molecule.ContainsKey("Na") && playerData.Molecule.ContainsKey("S") && playerData.Molecule.Count == 2)
             {
                 if (playerData.Molecule["Na"] == 2 && playerData.Molecule["S"] == 1)
                 {
                     Product("Na2S");
                 }
             }
-            else if (playerData.Molecule.ContainsKey("Na") && playerData.Molecule.ContainsKey("C") && playerData.Molecule.ContainsKey("N"))
+            else if (playerData.Molecule.ContainsKey("Na") && playerData.Molecule.ContainsKey("C") && playerData.Molecule.ContainsKey("N") && playerData.Molecule.Count == 3)
             {
                 if (playerData.Molecule["Na"] == 1 && playerData.Molecule["C"] == 1 && playerData.Molecule["N"] == 1)
                 {
                     Product("NaCN");
                 }
             }
-            else if (playerData.Molecule.ContainsKey("C") && playerData.Molecule.ContainsKey("H") && playerData.Molecule.ContainsKey("Na") && playerData.Molecule.ContainsKey("O"))
+            else if (playerData.Molecule.ContainsKey("C") && playerData.Molecule.ContainsKey("H") && playerData.Molecule.ContainsKey("Na") && playerData.Molecule.ContainsKey("O") && playerData.Molecule.Count == 4)
             {
                 if (playerData.Molecule["C"] == 18 && playerData.Molecule["H"] == 35 && playerData.Molecule["Na"] == 1 && playerData.Molecule["O"] == 2)
                 {
@@ -720,7 +721,8 @@ public class LabHandler : MonoBehaviour
                         AnimeData.animeNum = 1;
                         player.hasAnimated = false;
                         Experience(5);
-                        updateLevel();
+                        updateLevel(1);
+                        return;
                     }
                 }
             }
@@ -733,7 +735,8 @@ public class LabHandler : MonoBehaviour
                         AnimeData.animeNum = 5;
                         player.hasAnimated = false;
                         Experience(5);
-                        updateLevel();
+                        updateLevel(2);
+                        return;
                     }
                 }
             }
@@ -746,7 +749,8 @@ public class LabHandler : MonoBehaviour
                         AnimeData.animeNum = 2;
                         player.hasAnimated = false;
                         Experience(8);
-                        updateLevel();
+                        updateLevel(3);
+                        return;
                     }
                 }
             }
@@ -759,7 +763,8 @@ public class LabHandler : MonoBehaviour
                         AnimeData.animeNum = 4;
                         player.hasAnimated = false;
                         Experience(5);
-                        updateLevel();
+                        updateLevel(4);
+                        return;
                     }
                 }
             }
@@ -772,7 +777,8 @@ public class LabHandler : MonoBehaviour
                         AnimeData.animeNum = 3;
                         player.hasAnimated = false;
                         Experience(6);
-                        updateLevel();
+                        updateLevel(5);
+                        return;
                     }
                 }
             }
@@ -785,7 +791,8 @@ public class LabHandler : MonoBehaviour
                         AnimeData.animeNum = 3;
                         player.hasAnimated = false;
                         Experience(6);
-                        updateLevel();
+                        updateLevel(6);
+                        return;
                     }
                 }
             }
@@ -798,7 +805,8 @@ public class LabHandler : MonoBehaviour
                         AnimeData.animeNum = 5;
                         player.hasAnimated = false;
                         Experience(6);
-                        updateLevel();
+                        updateLevel(7);
+                        return;
                     }
                 }
             }
@@ -811,7 +819,8 @@ public class LabHandler : MonoBehaviour
                         AnimeData.animeNum = 2;
                         player.hasAnimated = false;
                         Experience(7);
-                        updateLevel();
+                        updateLevel(8);
+                        return;
                     }
                 }
             }
@@ -824,7 +833,8 @@ public class LabHandler : MonoBehaviour
                         AnimeData.animeNum = 3;
                         player.hasAnimated = false;
                         Experience(7);
-                        updateLevel();
+                        updateLevel(9);
+                        return;
                     }
                 }
             }
@@ -837,7 +847,8 @@ public class LabHandler : MonoBehaviour
                         AnimeData.animeNum = 3;
                         player.hasAnimated = false;
                         Experience(8);
-                        updateLevel();
+                        updateLevel(10);
+                        return;
                     }
                 }
             }
@@ -850,7 +861,8 @@ public class LabHandler : MonoBehaviour
                         AnimeData.animeNum = 2;
                         player.hasAnimated = false;
                         Experience(8);
-                        updateLevel();
+                        updateLevel(11);
+                        return;
                     }
                 }
             }
@@ -862,7 +874,8 @@ public class LabHandler : MonoBehaviour
                     {
                         addAlert("Animation Under Construction");
                         Experience(7);
-                        updateLevel();
+                        updateLevel(12);
+                        return;
                     }
                 }
             }
@@ -874,7 +887,8 @@ public class LabHandler : MonoBehaviour
                     {
                         addAlert("Animation Under Construction");
                         Experience(9);
-                        updateLevel();
+                        updateLevel(13);
+                        return;
                     }
                 }
             }
@@ -886,7 +900,8 @@ public class LabHandler : MonoBehaviour
                     {
                         addAlert("Animation Under Construction");
                         Experience(9);
-                        updateLevel();
+                        updateLevel(14);
+                        return;
                     }
                 }
             }
@@ -898,7 +913,8 @@ public class LabHandler : MonoBehaviour
                     {
                         addAlert("Animation Under Construction");
                         Experience(9);
-                        updateLevel();
+                        updateLevel(15);
+                        return;
                     }
                 }
             }
@@ -910,10 +926,12 @@ public class LabHandler : MonoBehaviour
                     {
                         addAlert("Animation Under Construction");
                         Experience(11);
-                        updateLevel();
+                        updateLevel(16);
+                        return;
                     }
                 }
             }
+            addAlert("Alert: Nothing happened. Please refer to the recipes in chemidex!");
         }
     }
 
@@ -1104,12 +1122,21 @@ public class LabHandler : MonoBehaviour
             GameObject.Find("Guide").GetComponent<TextMeshPro>().text = "Under Constaruction!";
         }    
     }
-    private void updateLevel()
+    private void updateLevel(int Standard)
     {
+        var nonLevelUp = new List<string>();
         var playerData = PlayerData.Instance();
         playerData.flaskElements.Clear();
-        playerData.Level += 1;
-        playerData.levelAvailable.Add($"Level {playerData.Level}");
+        for (int i = 0; i < playerData.levelAvailable.Count(); i++)
+        {
+            nonLevelUp.Add(playerData.levelAvailable[i]);
+        }
+        nonLevelUp.RemoveAt(playerData.levelAvailable.Count() - 1);
+        if (!nonLevelUp.Contains($"Level {Standard}"))
+        {
+            playerData.Level += 1;
+            playerData.levelAvailable.Add($"Level {playerData.Level}");
+        }
         GameObject.Find("Level").GetComponent<Text>().text = playerData.Level.ToString();
         Guide();
         flaskCheck();

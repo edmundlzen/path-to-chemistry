@@ -87,6 +87,7 @@ public class Animation : MonoBehaviour
         }
         roundFlask.SetActive(false);
         LabData.isAnimationPlaying = false;
+
     }
 
     private void addAlert(string Alert)

@@ -71,7 +71,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7418936084200408381}
-  - component: {fileID: 7418936084200408378}
+  - component: {fileID: 2150443117961032013}
   m_Layer: 0
   m_Name: reactionAnimation
   m_TagString: Untagged
@@ -95,7 +95,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7418936084200408378
+--- !u!114 &2150443117961032013
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -104,7 +104,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7418936084200408380}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3c933704ca6fcba40aa16bb2c9959e30, type: 3}
+  m_Script: {fileID: 11500000, guid: 429938838e5f64d71ad8519d2853792c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Effect1: {fileID: 1828176872806910, guid: 64891a0eb28db934898420d80ca07cb3, type: 3}
@@ -113,7 +113,7 @@ MonoBehaviour:
   Effect4: {fileID: 1273915125232972, guid: 73767e07adddc394d82b994801f89bbb, type: 3}
   Effect5: {fileID: 1735024089641582, guid: 378b2c30ef426554495292cb902cb8f4, type: 3}
   roundFlask: {fileID: 7419392514536962455}
-  animator: {fileID: 0}
+  animator: {fileID: 7418936084312499131}
 --- !u!95 &7418936084312499131
 Animator:
   serializedVersion: 3
