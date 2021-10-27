@@ -68,7 +68,6 @@ public class StandardTreeCollectable : MonoBehaviour, ICollectable
             }
             return;
         }
-        
         Return();
         Destroy(gameObject);
     }

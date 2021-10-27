@@ -11,12 +11,15 @@ public class TreeLODCollectable : MonoBehaviour, ICollectable
     public Dictionary<string, int> returnMaterials { get; set; }
     private List<ParticleSystem> particleSystems = new List<ParticleSystem>();
     private List<GameObject> LODGameObjects = new List<GameObject>();
+    private NotificationsController notificationsController;
     private bool onCollectedInitialized = false;
     private float alphaCT = 0f;
     private bool called = false;
 
-    void Awake()
+    void Start()
     {
+        notificationsController = GameObject.FindGameObjectsWithTag("NotificationsController")[0].transform.GetComponent<NotificationsController>();
+        
         returnMaterials = new Dictionary<string, int>()
         {
             {"Wood", Random.Range(1, 3)},
@@ -62,7 +65,6 @@ public class TreeLODCollectable : MonoBehaviour, ICollectable
     public void Collect()
     {
         if (!onCollectedInitialized) Initialize();
-        
         called = true;
         while (alphaCT < 0.8f)
         {
@@ -76,13 +78,18 @@ public class TreeLODCollectable : MonoBehaviour, ICollectable
 
             return;
         }
-        
         Return();
         Destroy(gameObject);
     }
 
     public void Return()
     {
-        
+        var survivalMaterials = PlayerData.Instance().survivalMaterials;
+        foreach (var material in returnMaterials)
+        {
+            if (material.Value == 0) return;
+            notificationsController.SendImageNotification(Resources.Load<Sprite>("Sprites/" + survivalMaterials[material.Key]["image"]), "+ " + material.Value, "green");
+            survivalMaterials[material.Key]["quantity"] = Int32.Parse(survivalMaterials[material.Key]["quantity"].ToString()) + material.Value;
+        }
     }
 }

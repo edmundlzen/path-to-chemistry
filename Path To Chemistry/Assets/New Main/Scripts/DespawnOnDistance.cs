@@ -17,7 +17,7 @@ public class DespawnOnDistance : MonoBehaviour
         }
     }
 
-    void Start()
+    void OnEnable()
     {
         StartCoroutine(DisableOnDistance());
     }
@@ -31,8 +31,9 @@ public class DespawnOnDistance : MonoBehaviour
                 if (obj == null)
                 {
                     generatedObjects.Remove(obj);
-                    yield break;
+                    continue;
                 }
+                // if (transform.name == "Terrain3") print(Vector3.Distance(player.position, obj.transform.position));
                 if (Vector3.Distance(player.position, obj.transform.position) >= objectGenerationSettings.despawnDistance)
                 {
                     obj.SetActive(false);
