@@ -26,11 +26,12 @@ public class DespawnOnDistance : MonoBehaviour
     {
         while (true)
         {
+            List<GameObject> newGeneratedObjects = generatedObjects;
             foreach (GameObject obj in generatedObjects)
             {
                 if (obj == null)
                 {
-                    generatedObjects.Remove(obj);
+                    newGeneratedObjects.Remove(obj);
                     continue;
                 }
                 // if (transform.name == "Terrain3") print(Vector3.Distance(player.position, obj.transform.position));
@@ -43,6 +44,7 @@ public class DespawnOnDistance : MonoBehaviour
                     obj.SetActive(true);
                 }
             }
+            generatedObjects = newGeneratedObjects;
             yield return new WaitForSeconds(1f);
         }
     }

@@ -5,39 +5,37 @@ using UnityEngine;
 public class EnemyManager : MonoBehaviour
 {
     private GameObject player;
-    private List<GameObject> terrains;
-    public int terrainDespawnDistance;
+    private List<GameObject> enemies;
+    public int enemyDespawnDistance;
     // Start is called before the first frame update
     void Awake()
     {
         player = GameObject.FindGameObjectsWithTag("Player")[0];
-        terrains = new List<GameObject>();
+        enemies = new List<GameObject>();
         foreach (Transform child in transform)
         {
-            if (child.name.Contains("Terrain"))
-            {
-                terrains.Add(child.gameObject);
-            }
+            enemies.Add(child.gameObject);
         }
     }
 
     void Start()
     {
-        new Task(TerrainDespawn()).Start();
+        new Task(EnemyDespawn()).Start();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    IEnumerator TerrainDespawn()
+    IEnumerator EnemyDespawn()
     {
         while (true)
         {
-            foreach (var obj in terrains) {
-                if (Vector3.Distance(player.transform.position, obj.transform.position) >= terrainDespawnDistance)
+            List<GameObject> newEnemies = enemies;
+            foreach (var obj in enemies) {
+                if (obj == null)
+                {
+                    newEnemies.Remove(obj);
+                    continue;
+                }
+                
+                if (Vector3.Distance(player.transform.position, obj.transform.position) >= enemyDespawnDistance)
                 {
                     obj.SetActive(false);
                 }
@@ -47,6 +45,7 @@ public class EnemyManager : MonoBehaviour
                 }
             }
 
+            enemies = newEnemies;
             yield return new WaitForSeconds(1f);
         }
     }

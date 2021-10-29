@@ -70,6 +70,7 @@ public class Definename : MonoBehaviour
             var elementData = ElementData.Instance();
             for (int i = 1; i <= 118; i++)
             {
+                if (playerData.Inventory.ContainsKey(elementData.elements.Keys.ElementAt(i - 1))) continue;
                 playerData.Inventory.Add(elementData.elements.Keys.ElementAt(i - 1), 0);
             }
             playerData.levelAvailable.Add($"Level {playerData.Level}");

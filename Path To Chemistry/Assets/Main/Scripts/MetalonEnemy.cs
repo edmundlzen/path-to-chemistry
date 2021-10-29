@@ -55,6 +55,14 @@ public class MetalonEnemy: MonoBehaviour, IEntity
         agent = GetComponent<NavMeshAgent>();
     }
 
+    private void OnDisable()
+    {
+        if (patrolTask != null) patrolTask.Stop();
+        if (chaseTask != null) chaseTask.Stop();
+        if (investigateTask != null) investigateTask.Stop();
+        if (attackTask != null) attackTask.Stop();
+    }
+
     void Start()
     {
         StartCoroutine(Roar());

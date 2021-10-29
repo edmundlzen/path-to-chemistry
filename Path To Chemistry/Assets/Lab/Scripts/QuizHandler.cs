@@ -39,7 +39,7 @@ public static class QuizData
         },
         {
             new Dictionary<string, string>(){
-                { "Question", "A precipitate is formed when 2 cm³ of an unknown salt solution is added to 2 cm³ of nitric acid and 2 cm³ of barium chloride solution. What anion is present in the unknown salt solution?" },
+                { "Question", "A precipitate is formed when 2 cmï¿½ of an unknown salt solution is added to 2 cmï¿½ of nitric acid and 2 cmï¿½ of barium chloride solution. What anion is present in the unknown salt solution?" },
                 { "correctAnswer", "D" },
                 { "Answer0", "Nitrate ion" },
                 { "Answer1", "Carbonate ion" },
@@ -59,7 +59,7 @@ public static class QuizData
         },
         {
             new Dictionary<string, string>(){
-                { "Question", "Which salts will form gas bubbles when 2 cm³ of sulphuric acid is added to it?" },
+                { "Question", "Which salts will form gas bubbles when 2 cmï¿½ of sulphuric acid is added to it?" },
                 { "correctAnswer", "C" },
                 { "Answer0", "Sodium Chloride" },
                 { "Answer1", "Lead (II) Iodide" },
@@ -109,7 +109,7 @@ public static class QuizData
         },
         {
             new Dictionary<string, string>(){
-                { "Question", "If 2 cm³ of salt X is added to 2 cm³ of nitric acid, colourless gas bubbles are released. What anion is present in salt X?" },
+                { "Question", "If 2 cmï¿½ of salt X is added to 2 cmï¿½ of nitric acid, colourless gas bubbles are released. What anion is present in salt X?" },
                 { "correctAnswer", "C" },
                 { "Answer0", "Iodide ion" },
                 { "Answer1", "Sulphate ion" },
@@ -153,8 +153,8 @@ public static class QuizData
                 { "correctAnswer", "B" },
                 { "Answer0", "-" },
                 { "Answer1", "+" },
-                { "Answer2", "÷" },
-                { "Answer3", "×" },
+                { "Answer2", "ï¿½" },
+                { "Answer3", "ï¿½" },
             }
         },
         {
@@ -569,6 +569,7 @@ public class QuizHandler : MonoBehaviour
             var elementData = ElementData.Instance();
             for (int i = 1; i <= 118; i++)
             {
+                if (playerData.Inventory.ContainsKey(elementData.elements.Keys.ElementAt(i - 1))) continue;
                 playerData.Inventory.Add(elementData.elements.Keys.ElementAt(i - 1), 0);
             }
             playerData.levelAvailable.Add($"Level {playerData.Level}");

@@ -59,6 +59,14 @@ public class DragonSoulEaterEnemy: MonoBehaviour, IEntity
 
         StartCoroutine(Roar());
     }
+    
+    private void OnDisable()
+    {
+        if (patrolTask != null) patrolTask.Stop();
+        if (chaseTask != null) chaseTask.Stop();
+        if (investigateTask != null) investigateTask.Stop();
+        if (attackTask != null) attackTask.Stop();
+    }
 
     void Start()
     { 
